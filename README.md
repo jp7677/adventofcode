@@ -10,3 +10,10 @@ From <https://adventofcode.com/2020>. Likely to late for everya day, but the int
 g++ day0/helloworld.cpp -o bin/helloworld
 ./bin/helloworld
 ```
+
+### Day 1
+
+```bash
+g++ day1/helloworld.cpp -o bin/day1
+./bin/day1
+```
