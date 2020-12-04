@@ -2,7 +2,7 @@
 #include<iostream>
 #include<vector>
 
-#include "./catch_amalgamated.hpp"
+#include "../inc/catch_amalgamated.hpp"
 
 using namespace std;
 

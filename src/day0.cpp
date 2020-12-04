@@ -1,7 +1,7 @@
 #include<iostream>
 
 #define CATCH_CONFIG_MAIN
-#include "./catch_amalgamated.hpp"
+#include "../inc/catch_amalgamated.hpp"
 
 using namespace std;
 
