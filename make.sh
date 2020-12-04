@@ -1,6 +1,6 @@
 #!/bin/bash
 g++ \
-    catch_amalgamated.cpp \
-    day0.cpp \
-    day1.cpp \
+    inc/catch_amalgamated.cpp \
+    src/day0.cpp \
+    src/day1.cpp \
     -o adventofcode
