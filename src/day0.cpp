@@ -1,16 +1,12 @@
-#include<iostream>
-
-#define CATCH_CONFIG_MAIN
 #include "../inc/catch_amalgamated.hpp"
 
 using namespace std;
 
-int helloWorld()
+string helloWorld()
 {
-   cout << "Hello World!\n";
-   return 0;
+   return "Hello World!";
 }
 
 TEST_CASE("Hello World") {
-   REQUIRE( helloWorld() == 0);
+   REQUIRE( helloWorld() == "Hello World!");
 }
