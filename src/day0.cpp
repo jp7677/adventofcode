@@ -2,8 +2,7 @@
 
 using namespace std;
 
-string helloWorld()
-{
+string helloWorld() {
    return "Hello World!";
 }
 
