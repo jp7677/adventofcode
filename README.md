@@ -1,6 +1,6 @@
 # Advent of Code C++
 
-From <https://adventofcode.com/2020>. Likely to late for everya day, but the intention counts ;)
+From <https://adventofcode.com/2020>. Likely to late for every day, but the intention counts ;)
 
 ## Compile & Run
 
