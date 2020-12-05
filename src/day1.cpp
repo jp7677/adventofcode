@@ -1,6 +1,6 @@
-#include<iostream>
+#include <iostream>
 #include <fstream>
-#include<vector>
+#include <vector>
 #include "../inc/catch_amalgamated.hpp"
 
 using namespace std;
@@ -34,7 +34,7 @@ int day1Part1() {
 }
 
 TEST_CASE("Day 1 - Part 1") {
-   REQUIRE( day1Part1() == 964875);
+   REQUIRE(day1Part1() == 964875);
 }
 
 int day1Part2() {
@@ -51,5 +51,5 @@ int day1Part2() {
 }
 
 TEST_CASE("Day 1 - Part 2") {
-   REQUIRE( day1Part2() == 158661360);
+   REQUIRE(day1Part2() == 158661360);
 }
