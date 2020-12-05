@@ -53,3 +53,38 @@ int day2Part1() {
 TEST_CASE("Day 2 - Part 1") {
    REQUIRE(day2Part1() == 422);
 }
+
+int day2Part2() {
+   cout << "Day 2 - Part 2 from https://adventofcode.com/2020/day/2" << endl;
+
+   auto passwordEntries = loadEntriesFromFile();
+
+   auto hits = 0;
+   for (auto const& passwordEntry : passwordEntries) {
+      smatch matches;
+      auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
+      if(!success)
+         assert("Invalid data found");
+
+      auto first = stoi(matches[1].str());
+      auto second = stoi(matches[2].str());
+      auto character = matches[3].str().at(0);
+      auto password = matches[4].str();
+
+      auto match = 0;
+      if (password.at(first - 1) == character)
+         match++; 
+
+      if (password.at(second - 1) == character)
+         match++;
+
+      if (match == 1)
+         hits++;
+   }
+
+   return hits;
+}
+
+TEST_CASE("Day 2 - Part 2") {
+   REQUIRE(day2Part2() == 451);
+}
