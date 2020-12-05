@@ -9,8 +9,8 @@ int day1() {
 
    vector<int> list { 1721, 979, 366, 299, 675, 1456 };
 
-   for (auto const element1 : list)
-      for (auto const element2 : list)
+   for (auto const& element1 : list)
+      for (auto const& element2 : list)
          if (element1 + element2 == 2020)
             return element1 * element2;
 
