@@ -11,7 +11,7 @@ vector<int> loadEntriesFromFile() {
    
    inputStream.open("day1-input.txt",ios::in);
    if (!inputStream.is_open())
-      return entries;
+      throw("file is not open");
 
    string line;
    while(getline(inputStream, line))
@@ -30,7 +30,7 @@ int day1Part1() {
          if (element1 + element2 == 2020)
             return element1 * element2;
 
-   return 0;
+   throw("invalid data");
 }
 
 TEST_CASE("Day 1 - Part 1") {
@@ -47,7 +47,7 @@ int day1Part2() {
             if (element1 + element2 + element3 == 2020)
                return element1 * element2 * element3;
 
-   return 0;
+   throw("invalid data");
 }
 
 TEST_CASE("Day 1 - Part 2") {
