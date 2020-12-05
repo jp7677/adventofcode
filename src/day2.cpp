@@ -11,7 +11,7 @@ vector<string> loadEntriesFromFile() {
    
    inputStream.open("day2-input.txt",ios::in);
    if (!inputStream.is_open())
-      return entries;
+      throw("file is not open");
 
    string line;
    while(getline(inputStream, line))
