@@ -31,7 +31,7 @@ int day2Part1() {
       smatch matches;
       auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
       if(!success)
-         assert("Invalid data found");
+         throw("Invalid data found");
 
       auto minOccurences = stoi(matches[1].str());
       auto maxOccurences = stoi(matches[2].str());
@@ -64,7 +64,7 @@ int day2Part2() {
       smatch matches;
       auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
       if(!success)
-         assert("Invalid data found");
+         throw("Invalid data found");
 
       auto first = stoi(matches[1].str());
       auto second = stoi(matches[2].str());
