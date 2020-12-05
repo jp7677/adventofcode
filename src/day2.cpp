@@ -26,7 +26,7 @@ int day2Part1() {
 
    auto passwordEntries = loadEntriesFromFile();
 
-   auto hits = 0;
+   auto hits = 0U;
    for (auto const& passwordEntry : passwordEntries) {
       smatch matches;
       auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
@@ -38,7 +38,7 @@ int day2Part1() {
       auto character = matches[3].str().at(0);
       auto password = matches[4].str();
 
-      auto count = 0;
+      auto count = 0U;
       for (auto const& passwordCharacter : password)
          if (passwordCharacter == character)
             count++;
@@ -59,7 +59,7 @@ int day2Part2() {
 
    auto passwordEntries = loadEntriesFromFile();
 
-   auto hits = 0;
+   auto hits = 0U;
    for (auto const& passwordEntry : passwordEntries) {
       smatch matches;
       auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
@@ -71,7 +71,7 @@ int day2Part2() {
       auto character = matches[3].str().at(0);
       auto password = matches[4].str();
 
-      auto match = 0;
+      auto match = 0U;
       if (password.at(first - 1) == character)
          match++; 
 
