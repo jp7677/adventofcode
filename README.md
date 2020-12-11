@@ -14,3 +14,9 @@ From <https://adventofcode.com/2020>. Likely to late for every day, but hopefull
 ```bash
 ./run.sh
 ```
+
+## Other cool solutions
+
+- <https://github.com/Dricus/adventofcode>
+- <https://github.com/StefRave/advent-of-code-2020>
+- <https://github.com/ErikSchierboom/advent-of-code>
