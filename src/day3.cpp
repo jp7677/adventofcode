@@ -1,25 +1,8 @@
 #include <iostream>
-#include <fstream>
-#include <algorithm>
 #include "../inc/catch_amalgamated.hpp"
+#include "util.h"
 
 using namespace std;
-
-vector<string> loadGridFromFile() {
-   vector<string> grid;
-   fstream inputStream;
-   
-   inputStream.open("day3-input.txt",ios::in);
-   if (!inputStream.is_open())
-      throw("file is not open");
-
-   string line;
-   while(getline(inputStream, line))
-      grid.push_back(line);
-
-   inputStream.close();
-   return grid;
-}
 
 ulong runSlope(vector<string>* grid, int right, int down) {
    auto width = grid->at(0).size();
@@ -46,7 +29,7 @@ ulong runSlope(vector<string>* grid, int right, int down) {
 int day3Part1() {
    cout << "Day 3 - Part 1 from https://adventofcode.com/2020/day/3" << endl;
 
-   auto grid = loadGridFromFile();
+   auto grid = loadInputFile("day3-input.txt");
    return runSlope(&grid, 3, 1);
 }
 
@@ -57,7 +40,7 @@ TEST_CASE("Day 3 - Part 1") {
 ulong day3Part2() {
    cout << "Day 3 - Part 2 from https://adventofcode.com/2020/day/3" << endl;
 
-   auto grid = loadGridFromFile();
+   auto grid = loadInputFile("day3-input.txt");
    return runSlope(&grid, 1, 1) *
       runSlope(&grid, 3, 1) *
       runSlope(&grid, 5, 1) *
