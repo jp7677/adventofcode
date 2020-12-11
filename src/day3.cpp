@@ -8,22 +8,22 @@ ulong runSlope(vector<string>* grid, int right, int down) {
    auto width = grid->at(0).size();
    auto heigth = grid->size();
    
-   auto hits = 0U;
-   auto posX = 0U;
-   auto posY = 0U;
+   auto trees = 0U;
+   auto x = 0U;
+   auto y = 0U;
 
-   while (posY < heigth) {
-      if (posX >= width)
-         posX = posX - width;
+   while (y < heigth) {
+      if (x >= width)
+         x = x - width;
 
-      if (grid->at(posY).at(posX) == '#')
-         hits++;
+      if (grid->at(y).at(x) == '#')
+         trees++;
 
-      posY = posY + down;
-      posX = posX + right;
+      y = y + down;
+      x = x + right;
    }
    
-   return hits;
+   return trees;
 }
 
 int day3Part1() {
