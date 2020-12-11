@@ -14,13 +14,13 @@ ulong runSlope(vector<string>* grid, int right, int down) {
 
    while (y < heigth) {
       if (x >= width)
-         x = x - width;
+         x -= width;
 
       if (grid->at(y).at(x) == '#')
          trees++;
 
-      y = y + down;
-      x = x + right;
+      y += down;
+      x += right;
    }
    
    return trees;
