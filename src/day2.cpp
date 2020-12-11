@@ -1,30 +1,14 @@
 #include <iostream>
 #include <regex>
-#include <fstream>
 #include "../inc/catch_amalgamated.hpp"
+#include "util.h"
 
 using namespace std;
-
-vector<string> loadEntriesFromFile() {
-   vector<string> entries;
-   fstream inputStream;
-   
-   inputStream.open("day2-input.txt",ios::in);
-   if (!inputStream.is_open())
-      throw("file is not open");
-
-   string line;
-   while(getline(inputStream, line))
-      entries.push_back(line);
-
-   inputStream.close();
-   return entries;
-}
 
 int day2Part1() {
    cout << "Day 2 - Part 1 from https://adventofcode.com/2020/day/2" << endl;
 
-   auto passwordEntries = loadEntriesFromFile();
+   auto passwordEntries = loadInputFile("day2-input.txt");
 
    auto hits = 0U;
    for (auto const& passwordEntry : passwordEntries) {
@@ -57,7 +41,7 @@ TEST_CASE("Day 2 - Part 1") {
 int day2Part2() {
    cout << "Day 2 - Part 2 from https://adventofcode.com/2020/day/2" << endl;
 
-   auto passwordEntries = loadEntriesFromFile();
+   auto passwordEntries = loadInputFile("day2-input.txt");
 
    auto hits = 0U;
    for (auto const& passwordEntry : passwordEntries) {
