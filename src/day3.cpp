@@ -26,7 +26,7 @@ ulong runSlope(vector<string>* grid, int right, int down) {
    return trees;
 }
 
-int day3Part1() {
+ulong day3Part1() {
    cout << "Day 3 - Part 1 from https://adventofcode.com/2020/day/3" << endl;
 
    auto grid = loadInputFile("day3-input.txt");
