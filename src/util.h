@@ -17,3 +17,13 @@ inline vector<string> loadInputFile(string fileName) {
    inputStream.close();
    return grid;
 }
+
+inline vector<string> split(string delimitedString, char delimiter) {
+   istringstream ss(delimitedString);
+	string token;
+   vector<string> result;
+	while(std::getline(ss, token, delimiter))
+		result.push_back(token);
+
+   return result;
+}
