@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../inc/catch_amalgamated.hpp"
+#include "util.h"
 
 using namespace std;
 
