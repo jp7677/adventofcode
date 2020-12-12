@@ -27,3 +27,18 @@ inline vector<string> split(string delimitedString, char delimiter) {
 
    return result;
 }
+
+inline int numberOfDigits(int number)  
+{  
+   number = abs(number);  
+   return (number < 10 ? 1 :   
+      (number < 100 ? 2 :   
+      (number < 1000 ? 3 :   
+      (number < 10000 ? 4 :   
+      (number < 100000 ? 5 :   
+      (number < 1000000 ? 6 :   
+      (number < 10000000 ? 7 :  
+      (number < 100000000 ? 8 :  
+      (number < 1000000000 ? 9 :  
+      10)))))))));  
+}
