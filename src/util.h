@@ -20,10 +20,10 @@ inline vector<string> loadInputFile(string fileName) {
 
 inline vector<string> split(string delimitedString, char delimiter) {
    istringstream ss(delimitedString);
-	string token;
+   string token;
    vector<string> result;
-	while(std::getline(ss, token, delimiter))
-		result.push_back(token);
+   while(std::getline(ss, token, delimiter))
+      result.push_back(token);
 
    return result;
 }
