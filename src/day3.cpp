@@ -6,13 +6,13 @@ using namespace std;
 
 ulong runSlope(vector<string>* grid, int right, int down) {
    auto width = grid->at(0).size();
-   auto heigth = grid->size();
-   
+   auto height = grid->size();
+
    auto trees = 0U;
    auto x = 0U;
    auto y = 0U;
 
-   while (y < heigth) {
+   while (y < height) {
       if (x >= width)
          x -= width;
 
