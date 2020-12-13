@@ -20,10 +20,10 @@ namespace util {
    }
 
    inline vector<string> split(const string delimitedString, const char delimiter) {
-      istringstream ss(delimitedString);
+      istringstream inputStream(delimitedString);
       string token;
       vector<string> result;
-      while(std::getline(ss, token, delimiter))
+      while(getline(inputStream, token, delimiter))
          result.push_back(token);
 
       return result;
