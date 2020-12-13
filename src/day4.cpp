@@ -87,9 +87,9 @@ namespace day4 {
 
             unordered_map<string,string> parsedPassportFields;
             transform(passportFields.begin(), passportFields.end(), inserter(parsedPassportFields, parsedPassportFields.end()),
-               [](string entry) {
-                  auto parsedEntry = util::split(entry, ':');
-                  return make_pair<string,string> ((string)parsedEntry.at(0), (string)parsedEntry.at(1));
+               [](string field) {
+                  auto parsedField = util::split(field, ':');
+                  return make_pair<string,string> ((string)parsedField.at(0), (string)parsedField.at(1));
                });
             return parsedPassportFields;
          });
