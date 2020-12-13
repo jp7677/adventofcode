@@ -29,7 +29,7 @@ namespace util {
       return result;
    }
 
-   inline constexpr int numberOfDigits(const uint number)  
+   inline constexpr ushort numberOfDigits(const uint number)  
    {  
       return (number < 10 ? 1 :   
          (number < 100 ? 2 :   

@@ -6,7 +6,7 @@
 using namespace std;
 
 namespace day1 {
-   int day1Part1() {
+   uint day1Part1() {
       cout << "Day 1 - Part 1 from https://adventofcode.com/2020/day/1" << endl;
 
       auto report = util::loadInputFile("day1-input.txt");
@@ -25,7 +25,7 @@ namespace day1 {
       REQUIRE(day1Part1() == 964875);
    }
 
-   int day1Part2() {
+   uint day1Part2() {
       cout << "Day 1 - Part 2 from https://adventofcode.com/2020/day/1" << endl;
 
       auto report = util::loadInputFile("day1-input.txt");
