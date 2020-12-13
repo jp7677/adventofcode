@@ -8,7 +8,7 @@
 using namespace std;
 
 vector<string> loadPassports() {
-   auto passportData = loadInputFile("day4-input.txt");
+   auto passportData = util::loadInputFile("day4-input.txt");
    
    vector<string> passports(1);
    for(auto const& line : passportData) {
@@ -56,7 +56,7 @@ bool isMatch(string value, string pattern) {
 }
 
 bool isInRange(string value, int min, int max) {
-   auto digits = numberOfDigits(min);
+   auto digits = util::numberOfDigits(min);
    if (!isMatch(value, "^\\d{" + to_string(digits) + "}$"))
       return false;
 
@@ -82,12 +82,12 @@ int day4Part2() {
    vector<unordered_map<string,string>> parsedPassports;
    transform(passports.begin(), passports.end(), back_inserter(parsedPassports),
       [](string passportLine) {
-         auto passportFields = split(passportLine, ' ');
+         auto passportFields = util::split(passportLine, ' ');
 
          unordered_map<string,string> parsedPassportFields;
          transform(passportFields.begin(), passportFields.end(), inserter(parsedPassportFields, parsedPassportFields.end()),
             [](string entry) {
-               auto parsedEntry = split(entry, ':');
+               auto parsedEntry = util::split(entry, ':');
                return make_pair<string,string> ((string)parsedEntry.at(0), (string)parsedEntry.at(1));
             });
          return parsedPassportFields;

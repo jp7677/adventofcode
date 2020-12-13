@@ -8,7 +8,7 @@ using namespace std;
 int day1Part1() {
    cout << "Day 1 - Part 1 from https://adventofcode.com/2020/day/1" << endl;
 
-   auto report = loadInputFile("day1-input.txt");
+   auto report = util::loadInputFile("day1-input.txt");
    for (auto const& element1 : report)
       for (auto const& element2 : report) {
          auto expense1 = stoi(element1);
@@ -27,7 +27,7 @@ TEST_CASE("Day 1 - Part 1") {
 int day1Part2() {
    cout << "Day 1 - Part 2 from https://adventofcode.com/2020/day/1" << endl;
 
-   auto report = loadInputFile("day1-input.txt");
+   auto report = util::loadInputFile("day1-input.txt");
    for (auto const& element1 : report)
       for (auto const& element2 : report)
          for (auto const& element3 : report) {
