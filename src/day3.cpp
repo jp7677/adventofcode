@@ -5,7 +5,7 @@
 using namespace std;
 
 namespace day3 {
-   ulong runSlope(vector<string>* grid, int right, int down) {
+   ulong runSlope(vector<string>* grid, const int right, const int down) {
       auto width = grid->at(0).size();
       auto height = grid->size();
 
