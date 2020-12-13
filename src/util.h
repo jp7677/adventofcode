@@ -4,7 +4,7 @@ using namespace std;
 
 namespace util {
    inline vector<string> loadInputFile(const string fileName) {
-      vector<string> grid;
+      vector<string> data;
       fstream inputStream;
       
       inputStream.open(fileName, ios::in);
@@ -13,10 +13,10 @@ namespace util {
 
       string line;
       while(getline(inputStream, line))
-         grid.push_back(line);
+         data.push_back(line);
 
       inputStream.close();
-      return grid;
+      return data;
    }
 
    inline vector<string> split(const string delimitedString, const char delimiter) {
