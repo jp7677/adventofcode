@@ -78,25 +78,31 @@ int day4Part2() {
    cout << "Day 4 - Part 2 from https://adventofcode.com/2020/day/4" << endl;
 
    auto passports = loadPassports();
-   return count_if(passports.begin(), passports.end(),
+
+   vector<unordered_map<string,string>> parsedPassports;
+   transform(passports.begin(), passports.end(), back_inserter(parsedPassports),
       [](string passportLine) {
-         auto passportEntries = split(passportLine, ' ');
+         auto passportFields = split(passportLine, ' ');
 
-         unordered_map<string,string> structuredPassportEntries(passportEntries.size());
-         transform(passportEntries.begin(), passportEntries.end(), inserter(structuredPassportEntries, structuredPassportEntries.end()),
+         unordered_map<string,string> parsedPassportFields;
+         transform(passportFields.begin(), passportFields.end(), inserter(parsedPassportFields, parsedPassportFields.end()),
             [](string entry) {
-               auto s = split(entry, ':');
-               return make_pair<string,string> ((string)s.at(0), (string)s.at(1));
+               auto parsedEntry = split(entry, ':');
+               return make_pair<string,string> ((string)parsedEntry.at(0), (string)parsedEntry.at(1));
             });
+         return parsedPassportFields;
+      });
 
-         return isValidPassport(structuredPassportEntries) &&
-            isInRange(structuredPassportEntries.find("byr")->second, 1920, 2002) &&
-            isInRange(structuredPassportEntries.find("iyr")->second, 2010, 2020) &&
-            isInRange(structuredPassportEntries.find("eyr")->second, 2020, 2030) &&
-            isValidHeight(structuredPassportEntries.find("hgt")->second) &&
-            isMatch(structuredPassportEntries.find("hcl")->second, "^#[0-9a-f]{6}$") &&
-            isMatch(structuredPassportEntries.find("ecl")->second, "^(amb|blu|brn|gry|grn|hzl|oth)$") &&
-            isMatch(structuredPassportEntries.find("pid")->second, "^\\d{9}$");
+   return count_if(parsedPassports.begin(), parsedPassports.end(),
+      [](unordered_map<string,string> passport) {
+         return isValidPassport(passport) &&
+            isInRange(passport.find("byr")->second, 1920, 2002) &&
+            isInRange(passport.find("iyr")->second, 2010, 2020) &&
+            isInRange(passport.find("eyr")->second, 2020, 2030) &&
+            isValidHeight(passport.find("hgt")->second) &&
+            isMatch(passport.find("hcl")->second, "^#[0-9a-f]{6}$") &&
+            isMatch(passport.find("ecl")->second, "^(amb|blu|brn|gry|grn|hzl|oth)$") &&
+            isMatch(passport.find("pid")->second, "^\\d{9}$");
       });
 }
 
