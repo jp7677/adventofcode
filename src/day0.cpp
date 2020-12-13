@@ -5,7 +5,7 @@
 using namespace std;
 
 namespace day0 {
-   int day0Part1() {
+   uint day0Part1() {
       cout << "Day 0 - Part 1 from https://adventofcode.com/2020/day/0" << endl;
       return 1;
    }
@@ -14,7 +14,7 @@ namespace day0 {
       REQUIRE( day0Part1() == 1);
    }
 
-   int day0Part2() {
+   uint day0Part2() {
       cout << "Day 0 - Part 2 from https://adventofcode.com/2020/day/0" << endl;
       return 2;
    }

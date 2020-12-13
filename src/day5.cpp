@@ -26,7 +26,7 @@ namespace day5 {
       return seatIds;
    }
 
-   int day5Part1() {
+   uint day5Part1() {
       cout << "Day 5 - Part 1 from https://adventofcode.com/2020/day/5" << endl;
 
       auto seatIds = loadSeatIds();
@@ -37,7 +37,7 @@ namespace day5 {
       REQUIRE( day5Part1() == 842);
    }
 
-   int day5Part2() {
+   uint day5Part2() {
       cout << "Day 5 - Part 2 from https://adventofcode.com/2020/day/5" << endl;
 
       auto seatIds = loadSeatIds();

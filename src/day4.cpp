@@ -22,7 +22,7 @@ namespace day4 {
       return passports;
    }
 
-   int day4Part1() {
+   uint day4Part1() {
       cout << "Day 4 - Part 1 from https://adventofcode.com/2020/day/4" << endl;
 
       auto passports = loadPassports();
@@ -61,7 +61,7 @@ namespace day4 {
       if (!isMatch(value, "^\\d{" + to_string(digits) + "}$"))
          return false;
 
-      int number = stoi(value);
+      auto number = stoi(value);
       return number >= min && number <= max;
    }
 
