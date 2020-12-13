@@ -8,7 +8,7 @@ using namespace std;
 int day2Part1() {
    cout << "Day 2 - Part 1 from https://adventofcode.com/2020/day/2" << endl;
 
-   auto passwordEntries = loadInputFile("day2-input.txt");
+   auto passwordEntries = util::loadInputFile("day2-input.txt");
 
    auto hits = 0U;
    for (auto const& passwordEntry : passwordEntries) {
@@ -41,7 +41,7 @@ TEST_CASE("Day 2 - Part 1") {
 int day2Part2() {
    cout << "Day 2 - Part 2 from https://adventofcode.com/2020/day/2" << endl;
 
-   auto passwordEntries = loadInputFile("day2-input.txt");
+   auto passwordEntries = util::loadInputFile("day2-input.txt");
 
    auto hits = 0U;
    for (auto const& passwordEntry : passwordEntries) {

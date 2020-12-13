@@ -26,7 +26,7 @@ ulong runSlope(vector<string>* grid, int right, int down) {
 ulong day3Part1() {
    cout << "Day 3 - Part 1 from https://adventofcode.com/2020/day/3" << endl;
 
-   auto grid = loadInputFile("day3-input.txt");
+   auto grid = util::loadInputFile("day3-input.txt");
    return runSlope(&grid, 3, 1);
 }
 
@@ -37,7 +37,7 @@ TEST_CASE("Day 3 - Part 1") {
 ulong day3Part2() {
    cout << "Day 3 - Part 2 from https://adventofcode.com/2020/day/3" << endl;
 
-   auto grid = loadInputFile("day3-input.txt");
+   auto grid = util::loadInputFile("day3-input.txt");
    return runSlope(&grid, 1, 1) *
       runSlope(&grid, 3, 1) *
       runSlope(&grid, 5, 1) *
