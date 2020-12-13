@@ -3,7 +3,7 @@
 using namespace std;
 
 namespace util {
-   inline vector<string> loadInputFile(string fileName) {
+   inline vector<string> loadInputFile(const string fileName) {
       vector<string> grid;
       fstream inputStream;
       
@@ -19,7 +19,7 @@ namespace util {
       return grid;
    }
 
-   inline vector<string> split(string delimitedString, char delimiter) {
+   inline vector<string> split(const string delimitedString, const char delimiter) {
       istringstream ss(delimitedString);
       string token;
       vector<string> result;
@@ -29,9 +29,8 @@ namespace util {
       return result;
    }
 
-   inline int numberOfDigits(int number)  
+   inline constexpr int numberOfDigits(const uint number)  
    {  
-      number = abs(number);  
       return (number < 10 ? 1 :   
          (number < 100 ? 2 :   
          (number < 1000 ? 3 :   

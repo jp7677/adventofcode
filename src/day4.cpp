@@ -27,7 +27,7 @@ namespace day4 {
 
       auto passports = loadPassports();
       return count_if(passports.begin(), passports.end(),
-         [](string passport) {
+         [](const string passport) {
             return passport.find("byr:") != string::npos && 
                passport.find("iyr:") != string::npos && 
                passport.find("eyr:") != string::npos && 
@@ -52,11 +52,11 @@ namespace day4 {
          passport.find("pid") != passport.end();
    }
 
-   bool isMatch(string value, string pattern) {
+   bool isMatch(const string value, const string pattern) {
       return regex_match(value, regex(pattern));
    }
 
-   bool isInRange(string value, int min, int max) {
+   bool isInRange(const string value, const uint min, const uint max) {
       auto digits = util::numberOfDigits(min);
       if (!isMatch(value, "^\\d{" + to_string(digits) + "}$"))
          return false;
@@ -65,7 +65,7 @@ namespace day4 {
       return number >= min && number <= max;
    }
 
-   bool isValidHeight(string value) {
+   bool isValidHeight(const string value) {
       if (isMatch(value, "^\\d{3}cm$"))
          return isInRange(value.substr(0, 3), 150, 193);
 
@@ -82,12 +82,12 @@ namespace day4 {
 
       vector<unordered_map<string,string>> parsedPassports;
       transform(passports.begin(), passports.end(), back_inserter(parsedPassports),
-         [](string passportLine) {
+         [](const string passportLine) {
             auto passportFields = util::split(passportLine, ' ');
 
             unordered_map<string,string> parsedPassportFields;
             transform(passportFields.begin(), passportFields.end(), inserter(parsedPassportFields, parsedPassportFields.end()),
-               [](string field) {
+               [](const string field) {
                   auto parsedField = util::split(field, ':');
                   return make_pair<string,string> ((string)parsedField.at(0), (string)parsedField.at(1));
                });
