@@ -2,6 +2,7 @@
   "files.exclude": {
     ".vscode/**": true,
     ".github/**": true,
+    ".gitignore": true,
     "*.o": true,
     "adventofcode": true
   },
