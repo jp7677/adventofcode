@@ -1,4 +1,5 @@
 #include <fstream>
+#include <filesystem>
 
 using namespace std;
 
@@ -6,8 +7,8 @@ namespace util {
    inline vector<string> loadInputFile(const string fileName) {
       vector<string> data;
       fstream inputStream;
-      
-      inputStream.open(fileName, ios::in);
+
+      inputStream.open(filesystem::path("data") / fileName, ios::in);
       if (!inputStream.is_open())
          throw("file is not open");
 
