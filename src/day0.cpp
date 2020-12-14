@@ -11,7 +11,7 @@ namespace day0 {
    }
 
    TEST_CASE("Day 0 - Part 1") {
-      REQUIRE( day0Part1() == 1);
+      REQUIRE(day0Part1() == 1);
    }
 
    uint day0Part2() {
@@ -20,6 +20,6 @@ namespace day0 {
    }
 
    TEST_CASE("Day 0 - Part 2") {
-      REQUIRE( day0Part2() == 2);
+      REQUIRE(day0Part2() == 2);
    }
 }
