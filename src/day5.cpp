@@ -11,7 +11,7 @@ namespace day5 {
 
       vector<uint> seatIds;
       transform(seats.begin(), seats.end(), back_inserter(seatIds),
-         [](const string seat) {
+         [](const auto seat) {
             auto row = 0U;
             for(auto i = 0; i <= 6; i++)
                row = (row << 1) + (seat.at(i) == 'B' ? 1 : 0);
