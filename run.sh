@@ -1,5 +1,6 @@
 #!/bin/bash
-g++ catch_amalgamated.o \
+g++ -std=c++17 \
+    catch_amalgamated.o \
     main.o \
     src/day*.cpp \
     -o adventofcode
