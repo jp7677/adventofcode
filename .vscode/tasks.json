@@ -5,7 +5,7 @@
         "type": "shell",
         "label": "g++ build project",
         "command": "/usr/bin/g++",
-        "args": ["-g", "${workspaceFolder}/{inc,src}/*.cpp", "-o", "${workspaceFolder}/adventofcode"],
+        "args": ["-g", "-std=c++17", "${workspaceFolder}/{inc,src}/*.cpp", "-o", "${workspaceFolder}/adventofcode"],
         "problemMatcher": ["$gcc"],
         "group": "build"
       },
@@ -13,7 +13,7 @@
         "type": "shell",
         "label": "g++ build catch",
         "command": "/usr/bin/g++",
-        "args": ["-g", "${workspaceFolder}/inc/catch_amalgamated.cpp", "${workspaceFolder}/src/main.cpp", "-c"],
+        "args": ["-g", "-std=c++17", "${workspaceFolder}/inc/catch_amalgamated.cpp", "${workspaceFolder}/src/main.cpp", "-c"],
         "problemMatcher": ["$gcc"],
         "group": "build"
       },
@@ -21,7 +21,7 @@
         "type": "shell",
         "label": "g++ build tests",
         "command": "/usr/bin/g++",
-        "args": ["-g", "${workspaceFolder}/catch_amalgamated.o", "${workspaceFolder}/main.o", "${workspaceFolder}/src/day*.cpp", "-o", "${workspaceFolder}/adventofcode"],
+        "args": ["-g", "-std=c++17", "${workspaceFolder}/catch_amalgamated.o", "${workspaceFolder}/main.o", "${workspaceFolder}/src/day*.cpp", "-o", "${workspaceFolder}/adventofcode"],
         "problemMatcher": ["$gcc"],
         "group": {
           "kind": "build",
