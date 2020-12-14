@@ -6,7 +6,6 @@
       "label": "g++ build project",
       "command": "/usr/bin/g++",
       "args": [
-        "-g",
         "-std=c++17",
         "${workspaceFolder}/{inc,src}/*.cpp",
         "-o",
@@ -20,7 +19,6 @@
       "label": "g++ build catch",
       "command": "/usr/bin/g++",
       "args": [
-        "-g",
         "-std=c++17",
         "${workspaceFolder}/inc/catch_amalgamated.cpp",
         "${workspaceFolder}/src/main.cpp",
@@ -31,7 +29,7 @@
     },
     {
       "type": "shell",
-      "label": "g++ build tests",
+      "label": "g++ build tests (debug)",
       "command": "/usr/bin/g++",
       "args": [
         "-g",

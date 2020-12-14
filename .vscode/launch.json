@@ -15,7 +15,7 @@
           "ignoreFailures": true
         }
       ],
-      "preLaunchTask": "g++ build tests",
+      "preLaunchTask": "g++ build tests (debug)",
       "miDebuggerPath": "/usr/bin/gdb"
     }
   ]
