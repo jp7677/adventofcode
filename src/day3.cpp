@@ -32,7 +32,7 @@ namespace day3 {
    }
 
    TEST_CASE("Day 3 - Part 1") {
-      REQUIRE( day3Part1() == 265);
+      REQUIRE(day3Part1() == 265);
    }
 
    ulong day3Part2() {
@@ -47,6 +47,6 @@ namespace day3 {
    }
 
    TEST_CASE("Day 3 - Part 2") {
-      REQUIRE( day3Part2() == 3154761400);
+      REQUIRE(day3Part2() == 3154761400);
    }
 }

@@ -39,7 +39,7 @@ namespace day4 {
    }
 
    TEST_CASE("Day 4 - Part 1") {
-      REQUIRE( day4Part1() == 233);
+      REQUIRE(day4Part1() == 233);
    }
 
    bool isValidPassport(unordered_map<string,string> passport) {
@@ -108,6 +108,6 @@ namespace day4 {
    }
 
    TEST_CASE("Day 4 - Part 2") {
-      REQUIRE( day4Part2() == 111);
+      REQUIRE(day4Part2() == 111);
    }
 }

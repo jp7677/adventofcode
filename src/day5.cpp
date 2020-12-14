@@ -34,7 +34,7 @@ namespace day5 {
    }
 
    TEST_CASE("Day 5 - Part 1") {
-      REQUIRE( day5Part1() == 842);
+      REQUIRE(day5Part1() == 842);
    }
 
    uint day5Part2() {
@@ -51,6 +51,6 @@ namespace day5 {
    }
 
    TEST_CASE("Day 5 - Part 2") {
-      REQUIRE( day5Part2() == 617);
+      REQUIRE(day5Part2() == 617);
    }
 }
