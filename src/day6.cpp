@@ -36,7 +36,7 @@ namespace day6 {
    uint day6Part2() {
       cout << "Day 6 - Part 2 from https://adventofcode.com/2020/day/6" << endl;
 
-            auto answers = util::loadInputFile("day6-input.txt");
+      auto answers = util::loadInputFile("day6-input.txt");
       
       vector<vector<string>> groupedAnswers(1);
       for(auto const& line : answers) {
@@ -46,15 +46,15 @@ namespace day6 {
             groupedAnswers.push_back(vector<string>());
       }
 
-      transform(groupedAnswers.begin(), groupedAnswers.end(), groupedAnswers.begin(),
-         [](const auto groupedAnswer) {
-            if (groupedAnswer.size() == 1)
-               return groupedAnswer;
+      return accumulate(groupedAnswers.begin(), groupedAnswers.end(), 0,
+         [](auto sum, const auto answersList) {
+            if (answersList.size() == 1)
+               sum + answersList.at(0).size();
 
-            auto current = groupedAnswer.at(0);
+            auto current = answersList.at(0);
             sort(current.begin(), current.end());
-            for(auto i = 1U; i < groupedAnswer.size(); i++) {
-               auto next = groupedAnswer.at(i);
+            for(auto i = 1U; i < answersList.size(); i++) {
+               auto next = answersList.at(i);
                sort(next.begin(), next.end());
 
                string intersection;
@@ -62,12 +62,7 @@ namespace day6 {
 
                current = intersection;
             }
-            return vector<string>{current};
-         });
-
-      return accumulate(groupedAnswers.begin(), groupedAnswers.end(), 0,
-         [](auto sum, const auto answersList) {
-            return sum + answersList.at(0).size();
+            return sum + current.size();
          });
    }
 
