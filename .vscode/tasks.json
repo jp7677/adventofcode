@@ -11,8 +11,14 @@
         "-o",
         "${workspaceFolder}/adventofcode"
       ],
-      "problemMatcher": ["$gcc"],
-      "group": "build"
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": "build",
+      "presentation": {
+        "clear": true,
+        "showReuseMessage": false
+      }
     },
     {
       "type": "shell",
@@ -24,8 +30,14 @@
         "${workspaceFolder}/src/main.cpp",
         "-c"
       ],
-      "problemMatcher": ["$gcc"],
-      "group": "build"
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": "build",
+      "presentation": {
+        "clear": true,
+        "showReuseMessage": false
+      }
     },
     {
       "type": "shell",
@@ -40,10 +52,16 @@
         "-o",
         "${workspaceFolder}/adventofcode"
       ],
-      "problemMatcher": ["$gcc"],
+      "problemMatcher": [
+        "$gcc"
+      ],
       "group": {
         "kind": "build",
         "isDefault": true
+      },
+      "presentation": {
+        "clear": true,
+        "showReuseMessage": false
       }
     }
   ]
