@@ -12,7 +12,7 @@ namespace day2 {
       auto passwordEntries = util::loadInputFile("day2-input.txt");
 
       auto hits = 0U;
-      for (auto const& passwordEntry : passwordEntries) {
+      for (const auto& passwordEntry : passwordEntries) {
          smatch matches;
          auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
          if(!success)
@@ -24,7 +24,7 @@ namespace day2 {
          auto password = matches[4].str();
 
          auto count = 0U;
-         for (auto const& passwordCharacter : password)
+         for (const auto& passwordCharacter : password)
             if (passwordCharacter == character)
                count++;
 
@@ -45,7 +45,7 @@ namespace day2 {
       auto passwordEntries = util::loadInputFile("day2-input.txt");
 
       auto hits = 0U;
-      for (auto const& passwordEntry : passwordEntries) {
+      for (const auto& passwordEntry : passwordEntries) {
          smatch matches;
          auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
          if(!success)

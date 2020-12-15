@@ -12,7 +12,7 @@ namespace day4 {
       auto passportData = util::loadInputFile("day4-input.txt");
       
       vector<string> passports(1);
-      for(auto const& line : passportData) {
+      for(const auto& line : passportData) {
          if (line != string())
             passports.back() += line + " ";
          else
@@ -27,7 +27,7 @@ namespace day4 {
 
       auto passports = loadPassports();
       return count_if(passports.begin(), passports.end(),
-         [](const auto passport) {
+         [](const auto& passport) {
             return passport.find("byr:") != string::npos && 
                passport.find("iyr:") != string::npos && 
                passport.find("eyr:") != string::npos && 
@@ -42,14 +42,14 @@ namespace day4 {
       REQUIRE(day4Part1() == 233);
    }
 
-   bool isValidPassport(unordered_map<string,string> passport) {
-      return passport.find("byr") != passport.end() &&
-         passport.find("iyr") != passport.end() &&
-         passport.find("eyr") != passport.end() &&
-         passport.find("hgt") != passport.end() &&
-         passport.find("hcl") != passport.end() &&
-         passport.find("ecl") != passport.end() &&
-         passport.find("pid") != passport.end();
+   bool isValidPassport(const unordered_map<string,string>* passport) {
+      return passport->find("byr") != passport->end() &&
+         passport->find("iyr") != passport->end() &&
+         passport->find("eyr") != passport->end() &&
+         passport->find("hgt") != passport->end() &&
+         passport->find("hcl") != passport->end() &&
+         passport->find("ecl") != passport->end() &&
+         passport->find("pid") != passport->end();
    }
 
    bool isMatch(const string value, const string pattern) {
@@ -82,12 +82,12 @@ namespace day4 {
 
       vector<unordered_map<string,string>> parsedPassports;
       transform(passports.begin(), passports.end(), back_inserter(parsedPassports),
-         [](const auto passportLine) {
+         [](const auto& passportLine) {
             auto passportFields = util::split(passportLine, ' ');
 
             unordered_map<string,string> parsedPassportFields;
             transform(passportFields.begin(), passportFields.end(), inserter(parsedPassportFields, parsedPassportFields.end()),
-               [](const auto field) {
+               [](const auto& field) {
                   auto parsedField = util::split(field, ':');
                   return make_pair<string,string> ((string)parsedField.at(0), (string)parsedField.at(1));
                });
@@ -95,8 +95,8 @@ namespace day4 {
          });
 
       return count_if(parsedPassports.begin(), parsedPassports.end(),
-         [](const auto passport) {
-            return isValidPassport(passport) &&
+         [](const auto& passport) {
+            return isValidPassport(&passport) &&
                isInRange(passport.find("byr")->second, 1920, 2002) &&
                isInRange(passport.find("iyr")->second, 2010, 2020) &&
                isInRange(passport.find("eyr")->second, 2020, 2030) &&
