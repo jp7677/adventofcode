@@ -11,7 +11,7 @@ namespace day6 {
       auto answers = util::loadInputFile("day6-input.txt");
       
       vector<string> groupedAnswers(1);
-      for(auto const& line : answers) {
+      for(const auto& line : answers) {
          if (line != string())
             groupedAnswers.back() += line;
          else
@@ -19,7 +19,7 @@ namespace day6 {
       }
 
       return accumulate(groupedAnswers.begin(), groupedAnswers.end(), 0,
-         [](auto sum, auto answers) {
+         [](const auto& sum, auto& answers) {
             sort(answers.begin(), answers.end());
             return sum + distance(answers.begin(), unique(answers.begin(), answers.end()));
          });
@@ -35,7 +35,7 @@ namespace day6 {
       auto answers = util::loadInputFile("day6-input.txt");
       
       vector<vector<string>> groupedAnswers(1);
-      for(auto const& line : answers) {
+      for(const auto& line : answers) {
          if (line != string())
             groupedAnswers.back().push_back(line);
          else
@@ -43,7 +43,7 @@ namespace day6 {
       }
 
       return accumulate(groupedAnswers.begin(), groupedAnswers.end(), 0,
-         [](auto sum, const auto answersList) {
+         [](const auto& sum, const auto& answersList) {
             if (answersList.size() == 1)
                sum + answersList.at(0).size();
 
