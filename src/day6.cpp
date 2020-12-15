@@ -19,7 +19,7 @@ namespace day6 {
       }
 
       return accumulate(groupedAnswers.begin(), groupedAnswers.end(), 0,
-         [](const auto& sum, const auto& answers) {
+         [](const auto sum, const auto& answers) {
             sort(answers.begin(), answers.end());
             return sum + distance(answers.begin(), unique(answers.begin(), answers.end()));
          });
@@ -43,7 +43,7 @@ namespace day6 {
       }
 
       return accumulate(groupedAnswers.begin(), groupedAnswers.end(), 0,
-         [](const auto& sum, const auto& answersList) {
+         [](const auto sum, const auto& answersList) {
             if (answersList.size() == 1)
                sum + answersList.at(0).size();
 
