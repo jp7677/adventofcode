@@ -19,13 +19,9 @@ namespace day6 {
       }
 
       return accumulate(groupedAnswers.begin(), groupedAnswers.end(), 0,
-         [](auto sum, const auto answersLine) {
-            vector<char> answers(0);
-            copy(answersLine.begin(), answersLine.end(), back_inserter(answers));
+         [](auto sum, auto answers) {
             sort(answers.begin(), answers.end());
-            auto last = unique(answers.begin(), answers.end());
-            answers.erase(last, answers.end());
-            return sum + answers.size();
+            return sum + distance(answers.begin(), unique(answers.begin(), answers.end()));
          });
    }
 
