@@ -35,10 +35,43 @@ namespace day6 {
 
    uint day6Part2() {
       cout << "Day 6 - Part 2 from https://adventofcode.com/2020/day/6" << endl;
-      return 2;
+
+            auto answers = util::loadInputFile("day6-input.txt");
+      
+      vector<vector<string>> groupedAnswers(1);
+      for(auto const& line : answers) {
+         if (line != string())
+            groupedAnswers.back().push_back(line);
+         else
+            groupedAnswers.push_back(vector<string>());
+      }
+
+      transform(groupedAnswers.begin(), groupedAnswers.end(), groupedAnswers.begin(),
+         [](const auto groupedAnswer) {
+            if (groupedAnswer.size() == 1)
+               return groupedAnswer;
+
+            auto current = groupedAnswer.at(0);
+            sort(current.begin(), current.end());
+            for(auto i = 1U; i < groupedAnswer.size(); i++) {
+               auto next = groupedAnswer.at(i);
+               sort(next.begin(), next.end());
+
+               string intersection;
+               set_intersection(current.begin(), current.end(), next.begin(), next.end(), back_inserter(intersection));
+
+               current = intersection;
+            }
+            return vector<string>{current};
+         });
+
+      return accumulate(groupedAnswers.begin(), groupedAnswers.end(), 0,
+         [](auto sum, const auto answersList) {
+            return sum + answersList.at(0).size();
+         });
    }
 
    TEST_CASE("Day 6 - Part 2") {
-      REQUIRE(day6Part2() == 2);
+      REQUIRE(day6Part2() == 3351);
    }
 }
