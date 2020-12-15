@@ -55,7 +55,6 @@ namespace day6 {
 
                string intersection;
                set_intersection(current.begin(), current.end(), next.begin(), next.end(), back_inserter(intersection));
-
                current = intersection;
             }
             return sum + current.size();
