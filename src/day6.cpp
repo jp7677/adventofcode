@@ -47,17 +47,17 @@ namespace day6 {
             if (answersList.size() == 1)
                sum + answersList.at(0).size();
 
-            auto current = answersList.at(0);
-            sort(current.begin(), current.end());
+            auto intersected = answersList.at(0);
+            sort(intersected.begin(), intersected.end());
             for(auto i = 1U; i < answersList.size(); i++) {
                auto next = answersList.at(i);
                sort(next.begin(), next.end());
 
                string intersection;
-               set_intersection(current.begin(), current.end(), next.begin(), next.end(), back_inserter(intersection));
-               current = intersection;
+               set_intersection(intersected.begin(), intersected.end(), next.begin(), next.end(), back_inserter(intersection));
+               intersected = intersection;
             }
-            return sum + current.size();
+            return sum + intersected.size();
          });
    }
 
