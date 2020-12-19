@@ -11,7 +11,7 @@ namespace day6 {
       auto answersListInput = util::loadInputFile("day6-input.txt");
       
       vector<string> answersList(1);
-      for(const auto& line : answersListInput) {
+      for (const auto& line : answersListInput) {
          if (line != string())
             answersList.back() += line;
          else
@@ -35,7 +35,7 @@ namespace day6 {
       auto answersListInput = util::loadInputFile("day6-input.txt");
       
       vector<vector<string>> answersList(1);
-      for(const auto& line : answersListInput) {
+      for (const auto& line : answersListInput) {
          if (line != string())
             answersList.back().push_back(line);
          else
@@ -49,7 +49,7 @@ namespace day6 {
 
             auto intersected = answers.at(0);
             sort(intersected.begin(), intersected.end());
-            for(auto i = 1U; i < answers.size(); i++) {
+            for (auto i = 1U; i < answers.size(); i++) {
                auto next = answers.at(i);
                sort(next.begin(), next.end());
 
