@@ -36,7 +36,7 @@ namespace day3 {
    }
 
    ulong day3Part2() {
-      cout << "Day 3 - Part 2 from https://adventofcode.com/2020/day/3" << endl;
+      cout << "Day 3 - Part 2 from https://adventofcode.com/2020/day/3#part2" << endl;
 
       auto gridInput = util::loadInputFile("day3-input.txt");
       return runSlope(&gridInput, 1, 1) *
