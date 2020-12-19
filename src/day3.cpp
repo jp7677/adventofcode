@@ -27,8 +27,8 @@ namespace day3 {
    ulong day3Part1() {
       cout << "Day 3 - Part 1 from https://adventofcode.com/2020/day/3" << endl;
 
-      auto grid = util::loadInputFile("day3-input.txt");
-      return runSlope(&grid, 3, 1);
+      auto gridInput = util::loadInputFile("day3-input.txt");
+      return runSlope(&gridInput, 3, 1);
    }
 
    TEST_CASE("Day 3 - Part 1") {
@@ -38,12 +38,12 @@ namespace day3 {
    ulong day3Part2() {
       cout << "Day 3 - Part 2 from https://adventofcode.com/2020/day/3" << endl;
 
-      auto grid = util::loadInputFile("day3-input.txt");
-      return runSlope(&grid, 1, 1) *
-         runSlope(&grid, 3, 1) *
-         runSlope(&grid, 5, 1) *
-         runSlope(&grid, 7, 1) *
-         runSlope(&grid, 1, 2);
+      auto gridInput = util::loadInputFile("day3-input.txt");
+      return runSlope(&gridInput, 1, 1) *
+         runSlope(&gridInput, 3, 1) *
+         runSlope(&gridInput, 5, 1) *
+         runSlope(&gridInput, 7, 1) *
+         runSlope(&gridInput, 1, 2);
    }
 
    TEST_CASE("Day 3 - Part 2") {
