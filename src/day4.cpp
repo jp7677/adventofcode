@@ -89,7 +89,7 @@ namespace day4 {
             transform(passportFields.begin(), passportFields.end(), inserter(parsedPassportFields, parsedPassportFields.end()),
                [](const auto& field) {
                   auto parsedField = util::split(field, ':');
-                  return make_pair<string,string> ((string)parsedField.at(0), (string)parsedField.at(1));
+                  return make_pair(parsedField.at(0), parsedField.at(1));
                });
             return parsedPassportFields;
          });
