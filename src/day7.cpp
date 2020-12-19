@@ -15,7 +15,7 @@ namespace day7 {
             auto elements = util::split(ruleLine, ' ');
             auto key = elements.at(0) + "-" + elements.at(1);
 
-            const auto containKeyword = string(" contain ");
+            static const string containKeyword = " contain ";
             auto contains = ruleLine.substr(ruleLine.find(containKeyword) + containKeyword.size());
             auto splitted = util::split(contains, ',');
 
