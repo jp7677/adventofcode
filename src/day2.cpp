@@ -9,10 +9,10 @@ namespace day2 {
    uint day2Part1() {
       cout << "Day 2 - Part 1 from https://adventofcode.com/2020/day/2" << endl;
 
-      auto passwordEntries = util::loadInputFile("day2-input.txt");
+      auto passwordEntriesInput = util::loadInputFile("day2-input.txt");
 
       auto hits = 0U;
-      for (const auto& passwordEntry : passwordEntries) {
+      for (const auto& passwordEntry : passwordEntriesInput) {
          smatch matches;
          auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
          if(!success)
@@ -42,10 +42,10 @@ namespace day2 {
    uint day2Part2() {
       cout << "Day 2 - Part 2 from https://adventofcode.com/2020/day/2" << endl;
 
-      auto passwordEntries = util::loadInputFile("day2-input.txt");
+      auto passwordEntriesInput = util::loadInputFile("day2-input.txt");
 
       auto hits = 0U;
-      for (const auto& passwordEntry : passwordEntries) {
+      for (const auto& passwordEntry : passwordEntriesInput) {
          smatch matches;
          auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
          if(!success)

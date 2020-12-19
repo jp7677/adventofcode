@@ -7,10 +7,10 @@ using namespace std;
 
 namespace day5 {
    vector<uint> loadSeatIds() {
-      auto seats = util::loadInputFile("day5-input.txt");
+      auto seatsInput = util::loadInputFile("day5-input.txt");
 
       vector<uint> seatIds;
-      transform(seats.begin(), seats.end(), back_inserter(seatIds),
+      transform(seatsInput.begin(), seatsInput.end(), back_inserter(seatIds),
          [](const auto& seat) {
             auto row = 0U;
             for(auto i = 0U; i <= 6; i++)

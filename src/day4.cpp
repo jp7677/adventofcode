@@ -9,10 +9,10 @@ using namespace std;
 
 namespace day4 {
    vector<string> loadPassports() {
-      auto passportData = util::loadInputFile("day4-input.txt");
+      auto passportsInput = util::loadInputFile("day4-input.txt");
       
       vector<string> passports(1);
-      for(const auto& line : passportData) {
+      for(const auto& line : passportsInput) {
          if (line != string())
             passports.back() += line + " ";
          else
