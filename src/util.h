@@ -4,7 +4,7 @@
 using namespace std;
 
 namespace util {
-   inline vector<string> loadInputFile(const string fileName) {
+   inline vector<string> loadInputFile(const string& fileName) {
       vector<string> data;
       fstream inputStream;
 
@@ -20,12 +20,13 @@ namespace util {
       return data;
    }
 
-   inline vector<string> split(const string delimitedString, const char delimiter) {
+   inline vector<string> split(const string& delimitedString, const char delimiter) {
       istringstream inputStream(delimitedString);
       string token;
       vector<string> result;
       while(getline(inputStream, token, delimiter))
-         result.push_back(token);
+         if(token.size() != 0)
+            result.push_back(token);
 
       return result;
    }
