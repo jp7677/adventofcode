@@ -18,7 +18,7 @@ namespace day6 {
             answersList.push_back(line);
       }
 
-      return accumulate(answersList.begin(), answersList.end(), 0,
+      return accumulate(answersList.begin(), answersList.end(), 0U,
          [](const auto sum, auto& answers) { // We cannot use `const auto& answers`/immmutable because of `unique`
             sort(answers.begin(), answers.end());
             return sum + distance(answers.begin(), unique(answers.begin(), answers.end()));
@@ -42,7 +42,7 @@ namespace day6 {
             answersList.push_back(vector<string>());
       }
 
-      return accumulate(answersList.begin(), answersList.end(), 0,
+      return accumulate(answersList.begin(), answersList.end(), 0U,
          [](const auto sum, const auto& answers) {
             if (answers.size() == 1)
                sum + answers.at(0).size();
