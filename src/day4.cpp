@@ -12,7 +12,7 @@ namespace day4 {
       auto passportsInput = util::loadInputFile("day4-input.txt");
       
       vector<string> passports(1);
-      for(const auto& line : passportsInput) {
+      for (const auto& line : passportsInput) {
          if (line != string())
             passports.back() += line + " ";
          else

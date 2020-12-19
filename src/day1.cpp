@@ -18,7 +18,7 @@ namespace day1 {
                return expense1 * expense2;
          }
 
-      throw("invalid data");
+      throw ("invalid data");
    }
 
    TEST_CASE("Day 1 - Part 1") {
@@ -39,7 +39,7 @@ namespace day1 {
                   return expense1 * expense2 * expense3;
             }
 
-      throw("invalid data");
+      throw ("invalid data");
    }
 
    TEST_CASE("Day 1 - Part 2") {

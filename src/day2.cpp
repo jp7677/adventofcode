@@ -15,7 +15,7 @@ namespace day2 {
       for (const auto& passwordEntry : passwordEntriesInput) {
          smatch matches;
          auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
-         if(!success)
+         if (!success)
             throw("Invalid data found");
 
          auto minOccurences = stoi(matches[1].str());
@@ -48,8 +48,8 @@ namespace day2 {
       for (const auto& passwordEntry : passwordEntriesInput) {
          smatch matches;
          auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
-         if(!success)
-            throw("Invalid data found");
+         if (!success)
+            throw ("Invalid data found");
 
          auto first = stoi(matches[1].str());
          auto second = stoi(matches[2].str());

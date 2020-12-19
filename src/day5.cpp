@@ -13,11 +13,11 @@ namespace day5 {
       transform(seatsInput.begin(), seatsInput.end(), back_inserter(seatIds),
          [](const auto& seat) {
             auto row = 0U;
-            for(auto i = 0U; i <= 6; i++)
+            for (auto i = 0U; i <= 6; i++)
                row = (row << 1) + (seat.at(i) == 'B' ? 1 : 0);
 
             auto id = 0U;
-            for(auto i = 6U; i <= 9; i++)
+            for (auto i = 6U; i <= 9; i++)
                id = (id << 1) + (seat.at(i) == 'R' ? 1 : 0);
 
             return row * 8 + id;
@@ -43,11 +43,11 @@ namespace day5 {
       auto seatIds = loadSeatIds();
       sort(seatIds.begin(), seatIds.end());
 
-      for(auto i = 0U; i <= seatIds.size(); i ++)
+      for (auto i = 0U; i <= seatIds.size(); i ++)
          if (seatIds.at(i) != seatIds.at(i + 1) - 1)
             return seatIds.at(i) + 1;
 
-      throw("Invalid data found");
+      throw ("Invalid data found");
    }
 
    TEST_CASE("Day 5 - Part 2") {
