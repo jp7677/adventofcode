@@ -76,7 +76,7 @@ namespace day4 {
    }
 
    int day4Part2() {
-      cout << "Day 4 - Part 2 from https://adventofcode.com/2020/day/4" << endl;
+      cout << "Day 4 - Part 2 from https://adventofcode.com/2020/day/4#part2" << endl;
 
       auto passports = loadPassports();
 

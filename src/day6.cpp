@@ -30,7 +30,7 @@ namespace day6 {
    }
 
    uint day6Part2() {
-      cout << "Day 6 - Part 2 from https://adventofcode.com/2020/day/6" << endl;
+      cout << "Day 6 - Part 2 from https://adventofcode.com/2020/day/6#part2" << endl;
 
       auto answersListInput = util::loadInputFile("day6-input.txt");
       

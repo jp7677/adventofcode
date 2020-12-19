@@ -26,7 +26,7 @@ namespace day1 {
    }
 
    uint day1Part2() {
-      cout << "Day 1 - Part 2 from https://adventofcode.com/2020/day/1" << endl;
+      cout << "Day 1 - Part 2 from https://adventofcode.com/2020/day/1#part2" << endl;
 
       auto reportInput = util::loadInputFile("day1-input.txt");
       for (const auto& element1 : reportInput)

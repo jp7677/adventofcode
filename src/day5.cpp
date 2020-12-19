@@ -38,7 +38,7 @@ namespace day5 {
    }
 
    uint day5Part2() {
-      cout << "Day 5 - Part 2 from https://adventofcode.com/2020/day/5" << endl;
+      cout << "Day 5 - Part 2 from https://adventofcode.com/2020/day/5#part2" << endl;
 
       auto seatIds = loadSeatIds();
       sort(seatIds.begin(), seatIds.end());

@@ -40,7 +40,7 @@ namespace day2 {
    }
 
    uint day2Part2() {
-      cout << "Day 2 - Part 2 from https://adventofcode.com/2020/day/2" << endl;
+      cout << "Day 2 - Part 2 from https://adventofcode.com/2020/day/2#part2" << endl;
 
       auto passwordEntriesInput = util::loadInputFile("day2-input.txt");
 
