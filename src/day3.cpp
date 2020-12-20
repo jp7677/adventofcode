@@ -1,6 +1,4 @@
-#include <iostream>
-#include "../inc/catch_amalgamated.hpp"
-#include "util.h"
+#include "days_private.h"
 
 using namespace std;
 
