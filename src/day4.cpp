@@ -1,9 +1,4 @@
-#include <iostream>
-#include <unordered_map>
-#include <algorithm>
-#include <regex>
-#include "../inc/catch_amalgamated.hpp"
-#include "util.h"
+#include "days_private.h"
 
 using namespace std;
 
@@ -27,12 +22,12 @@ namespace day4 {
 
       auto result = count_if(passports.begin(), passports.end(),
          [](const auto& passport) {
-            return passport.find("byr:") != string::npos && 
-               passport.find("iyr:") != string::npos && 
-               passport.find("eyr:") != string::npos && 
-               passport.find("hgt:") != string::npos && 
-               passport.find("hcl:") != string::npos && 
-               passport.find("ecl:") != string::npos && 
+            return passport.find("byr:") != string::npos &&
+               passport.find("iyr:") != string::npos &&
+               passport.find("eyr:") != string::npos &&
+               passport.find("hgt:") != string::npos &&
+               passport.find("hcl:") != string::npos &&
+               passport.find("ecl:") != string::npos &&
                passport.find("pid:") != string::npos;
          });
 
