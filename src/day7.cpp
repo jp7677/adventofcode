@@ -17,7 +17,7 @@ namespace day7 {
             auto splitted = util::split(contains, ',');
 
             vector<pair<uint, string>> luagages;
-            transform(splitted.begin(), splitted.end(), inserter(luagages, luagages.end()),
+            transform(splitted.begin(), splitted.end(), back_inserter(luagages),
                [](const auto& value){
                   auto splitted = util::split(value, ' ');
 
