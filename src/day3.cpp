@@ -20,33 +20,27 @@ namespace day3 {
          y += down;
          x += right;
       }
-      
+
       return trees;
    }
 
-   ulong day3Part1() {
-      cout << "Day 3 - Part 1 from https://adventofcode.com/2020/day/3" << endl;
-
+   TEST_CASE("Day 3 - Part 1 from https://adventofcode.com/2020/day/3") {
       auto gridInput = util::loadInputFile("day3-input.txt");
-      return runSlope(&gridInput, 3, 1);
+
+      auto result = runSlope(&gridInput, 3, 1);
+
+      REQUIRE(result == 265);
    }
 
-   TEST_CASE("Day 3 - Part 1") {
-      REQUIRE(day3Part1() == 265);
-   }
-
-   ulong day3Part2() {
-      cout << "Day 3 - Part 2 from https://adventofcode.com/2020/day/3#part2" << endl;
-
+   TEST_CASE("Day 3 - Part 2 from https://adventofcode.com/2020/day/3#part2") {
       auto gridInput = util::loadInputFile("day3-input.txt");
-      return runSlope(&gridInput, 1, 1) *
+
+      auto result = runSlope(&gridInput, 1, 1) *
          runSlope(&gridInput, 3, 1) *
          runSlope(&gridInput, 5, 1) *
          runSlope(&gridInput, 7, 1) *
          runSlope(&gridInput, 1, 2);
-   }
 
-   TEST_CASE("Day 3 - Part 2") {
-      REQUIRE(day3Part2() == 3154761400);
+      REQUIRE(result == 3154761400);
    }
 }

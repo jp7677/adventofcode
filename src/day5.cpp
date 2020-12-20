@@ -26,31 +26,27 @@ namespace day5 {
       return seatIds;
    }
 
-   uint day5Part1() {
-      cout << "Day 5 - Part 1 from https://adventofcode.com/2020/day/5" << endl;
-
+   TEST_CASE("Day 5 - Part 1 from https://adventofcode.com/2020/day/5") {
       auto seatIds = loadSeatIds();
-      return seatIds.at(distance(seatIds.begin(), max_element(seatIds.begin(), seatIds.end())));
+
+      auto result = seatIds.at(distance(seatIds.begin(), max_element(seatIds.begin(), seatIds.end())));
+
+      REQUIRE(result == 842);
    }
 
-   TEST_CASE("Day 5 - Part 1") {
-      REQUIRE(day5Part1() == 842);
-   }
-
-   uint day5Part2() {
-      cout << "Day 5 - Part 2 from https://adventofcode.com/2020/day/5#part2" << endl;
-
+   TEST_CASE("Day 5 - Part 2 from https://adventofcode.com/2020/day/5#part2") {
       auto seatIds = loadSeatIds();
+
       sort(seatIds.begin(), seatIds.end());
 
-      for (auto i = 0U; i <= seatIds.size(); i ++)
-         if (seatIds.at(i) != seatIds.at(i + 1) - 1)
-            return seatIds.at(i) + 1;
+      auto result = [seatIds]{
+         for (auto i = 0U; i <= seatIds.size(); i ++)
+            if (seatIds.at(i) != seatIds.at(i + 1) - 1)
+               return seatIds.at(i) + 1;
 
-      throw ("Invalid data found");
-   }
+         throw ("Invalid data found");
+      }();
 
-   TEST_CASE("Day 5 - Part 2") {
-      REQUIRE(day5Part2() == 617);
+      REQUIRE(result == 617);
    }
 }

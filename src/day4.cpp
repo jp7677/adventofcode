@@ -22,11 +22,10 @@ namespace day4 {
       return passports;
    }
 
-   uint day4Part1() {
-      cout << "Day 4 - Part 1 from https://adventofcode.com/2020/day/4" << endl;
-
+   TEST_CASE("Day 4 - Part 1 from https://adventofcode.com/2020/day/4") {
       auto passports = loadPassports();
-      return count_if(passports.begin(), passports.end(),
+
+      auto result = count_if(passports.begin(), passports.end(),
          [](const auto& passport) {
             return passport.find("byr:") != string::npos && 
                passport.find("iyr:") != string::npos && 
@@ -36,10 +35,8 @@ namespace day4 {
                passport.find("ecl:") != string::npos && 
                passport.find("pid:") != string::npos;
          });
-   }
 
-   TEST_CASE("Day 4 - Part 1") {
-      REQUIRE(day4Part1() == 233);
+      REQUIRE(result == 233);
    }
 
    bool isValidPassport(const unordered_map<string,string>* passport) {
@@ -75,9 +72,7 @@ namespace day4 {
       return false;
    }
 
-   int day4Part2() {
-      cout << "Day 4 - Part 2 from https://adventofcode.com/2020/day/4#part2" << endl;
-
+   TEST_CASE("Day 4 - Part 2 from https://adventofcode.com/2020/day/4#part2") {
       auto passports = loadPassports();
 
       vector<unordered_map<string,string>> parsedPassports;
@@ -94,7 +89,7 @@ namespace day4 {
             return parsedPassportFields;
          });
 
-      return count_if(parsedPassports.begin(), parsedPassports.end(),
+      auto result = count_if(parsedPassports.begin(), parsedPassports.end(),
          [](const auto& passport) {
             return isValidPassport(&passport) &&
                isInRange(passport.find("byr")->second, 1920, 2002) &&
@@ -105,9 +100,7 @@ namespace day4 {
                isMatch(passport.find("ecl")->second, "^(amb|blu|brn|gry|grn|hzl|oth)$") &&
                isMatch(passport.find("pid")->second, "^\\d{9}$");
          });
-   }
 
-   TEST_CASE("Day 4 - Part 2") {
-      REQUIRE(day4Part2() == 111);
+      REQUIRE(result == 111);
    }
 }

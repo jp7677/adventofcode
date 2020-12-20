@@ -5,11 +5,9 @@
 using namespace std;
 
 namespace day6 {
-   uint day6Part1() {
-      cout << "Day 6 - Part 1 from https://adventofcode.com/2020/day/6" << endl;
-
+   TEST_CASE("Day 6 - Part 1 from https://adventofcode.com/2020/day/6") {
       auto answersListInput = util::loadInputFile("day6-input.txt");
-      
+
       vector<string> answersList(1);
       for (const auto& line : answersListInput) {
          if (line != string())
@@ -18,22 +16,18 @@ namespace day6 {
             answersList.push_back(line);
       }
 
-      return accumulate(answersList.begin(), answersList.end(), 0U,
+      auto result = accumulate(answersList.begin(), answersList.end(), 0U,
          [](const auto sum, auto& answers) { // We cannot use `const auto& answers`/immmutable because of `unique`
             sort(answers.begin(), answers.end());
             return sum + distance(answers.begin(), unique(answers.begin(), answers.end()));
          });
+
+      REQUIRE(result == 6504);
    }
 
-   TEST_CASE("Day 6 - Part 1") {
-      REQUIRE(day6Part1() == 6504);
-   }
-
-   uint day6Part2() {
-      cout << "Day 6 - Part 2 from https://adventofcode.com/2020/day/6#part2" << endl;
-
+   TEST_CASE("Day 6 - Part 2 from https://adventofcode.com/2020/day/6#part2") {
       auto answersListInput = util::loadInputFile("day6-input.txt");
-      
+
       vector<vector<string>> answersList(1);
       for (const auto& line : answersListInput) {
          if (line != string())
@@ -42,7 +36,7 @@ namespace day6 {
             answersList.push_back(vector<string>());
       }
 
-      return accumulate(answersList.begin(), answersList.end(), 0U,
+      auto result = accumulate(answersList.begin(), answersList.end(), 0U,
          [](const auto sum, const auto& answers) {
             if (answers.size() == 1)
                sum + answers.at(0).size();
@@ -59,9 +53,7 @@ namespace day6 {
             }
             return sum + intersected.size();
          });
-   }
 
-   TEST_CASE("Day 6 - Part 2") {
-      REQUIRE(day6Part2() == 3351);
+      REQUIRE(result == 3351);
    }
 }
