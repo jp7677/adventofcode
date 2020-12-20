@@ -19,8 +19,8 @@ namespace day7 {
             auto contains = ruleLine.substr(ruleLine.find(containKeyword) + containKeyword.size());
             auto splitted = util::split(contains, ',');
 
-            vector<pair<uint, string>> values;
-            transform(splitted.begin(), splitted.end(), inserter(values, values.end()),
+            vector<pair<uint, string>> luagages;
+            transform(splitted.begin(), splitted.end(), inserter(luagages, luagages.end()),
                [](const auto& value){
                   auto splitted = util::split(value, ' ');
 
@@ -29,7 +29,7 @@ namespace day7 {
                      splitted.at(splitted.size() - 3) + "-" + splitted.at(splitted.size() - 2));
                });
 
-            return make_pair(key, values);
+            return make_pair(key, luagages);
       });
       
       return rules;
