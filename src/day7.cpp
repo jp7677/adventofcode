@@ -50,41 +50,33 @@ namespace day7 {
       return false;
    }
 
-   uint day7Part1() {
-      cout << "Day 7 - Part 1 from https://adventofcode.com/2020/day/7" << endl;
-
+   TEST_CASE("Day 7 - Part 1 from https://adventofcode.com/2020/day/7") {
       auto rules = loadRules();
 
-      return count_if(rules.begin(), rules.end(),
+      auto result = count_if(rules.begin(), rules.end(),
          [rules](const auto& rule) {
             return containsShinyGoldBag(&rules, rule.first);
          });
-   }
 
-   TEST_CASE("Day 7 - Part 1") {
-      REQUIRE(day7Part1() == 268);
+      REQUIRE(result == 268);
    }
 
    uint countBags(const unordered_map<string, vector<pair<uint, string>>>* rules, const string bag) {
       auto it = rules->find(bag);
       if (it == rules->end())
          return 0;
-     
+
       return accumulate(it->second.begin(), it->second.end(), 0U,
          [rules](const auto sum, auto& luagage) {
             return sum + luagage.first + (luagage.first * countBags(rules, luagage.second));
          });
    }
 
-   uint day7Part2() {
-      cout << "Day 7 - Part 2 from https://adventofcode.com/2020/day/7#part2" << endl;
-
+   TEST_CASE("Day 7 - Part 2 from https://adventofcode.com/2020/day/7#part2") {
       auto rules = loadRules();
 
-      return countBags(&rules, "shiny-gold");
-   }
+      auto result = countBags(&rules, "shiny-gold");
 
-   TEST_CASE("Day 7 - Part 2") {
-      REQUIRE(day7Part2() == 7867);
+      REQUIRE(result == 7867);
    }
 }

@@ -6,9 +6,7 @@
 using namespace std;
 
 namespace day2 {
-   uint day2Part1() {
-      cout << "Day 2 - Part 1 from https://adventofcode.com/2020/day/2" << endl;
-
+   TEST_CASE("Day 2 - Part 1 from https://adventofcode.com/2020/day/2") {
       auto passwordEntriesInput = util::loadInputFile("day2-input.txt");
 
       auto hits = 0U;
@@ -32,16 +30,10 @@ namespace day2 {
             hits++;
       }
 
-      return hits;
+      REQUIRE(hits == 422);
    }
 
-   TEST_CASE("Day 2 - Part 1") {
-      REQUIRE(day2Part1() == 422);
-   }
-
-   uint day2Part2() {
-      cout << "Day 2 - Part 2 from https://adventofcode.com/2020/day/2#part2" << endl;
-
+   TEST_CASE("Day 2 - Part 2 from https://adventofcode.com/2020/day/2#part2") {
       auto passwordEntriesInput = util::loadInputFile("day2-input.txt");
 
       auto hits = 0U;
@@ -67,10 +59,6 @@ namespace day2 {
             hits++;
       }
 
-      return hits;
-   }
-
-   TEST_CASE("Day 2 - Part 2") {
-      REQUIRE(day2Part2() == 451);
+      REQUIRE(hits == 451);
    }
 }
