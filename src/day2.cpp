@@ -9,7 +9,7 @@ namespace day2 {
    TEST_CASE("Day 2 - Part 1 from https://adventofcode.com/2020/day/2") {
       auto passwordEntriesInput = util::loadInputFile("day2-input.txt");
 
-      auto hits = 0U;
+      auto result = 0U;
       for (const auto& passwordEntry : passwordEntriesInput) {
          smatch matches;
          auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
@@ -27,16 +27,16 @@ namespace day2 {
                count++;
 
          if (count >= minOccurences && count <= maxOccurences)
-            hits++;
+            result++;
       }
 
-      REQUIRE(hits == 422);
+      REQUIRE(result == 422);
    }
 
    TEST_CASE("Day 2 - Part 2 from https://adventofcode.com/2020/day/2#part2") {
       auto passwordEntriesInput = util::loadInputFile("day2-input.txt");
 
-      auto hits = 0U;
+      auto result = 0U;
       for (const auto& passwordEntry : passwordEntriesInput) {
          smatch matches;
          auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
@@ -56,9 +56,9 @@ namespace day2 {
             match++;
 
          if (match == 1)
-            hits++;
+            result++;
       }
 
-      REQUIRE(hits == 451);
+      REQUIRE(result == 451);
    }
 }
