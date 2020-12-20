@@ -3,7 +3,7 @@
 using namespace std;
 
 namespace day4 {
-   vector<string> loadPassports() {
+   vector<unordered_map<string,string>> loadPassports() {
       auto passportsInput = util::loadInputFile("day4-input.txt");
       
       vector<string> passports(1);
@@ -14,24 +14,21 @@ namespace day4 {
             passports.push_back(line);
       }
 
-      return passports;
-   }
+      vector<unordered_map<string,string>> parsedPassports;
+      transform(passports.begin(), passports.end(), back_inserter(parsedPassports),
+         [](const auto& passportLine) {
+            auto passportFields = util::split(passportLine, ' ');
 
-   TEST_CASE("Day 4 - Part 1 from https://adventofcode.com/2020/day/4") {
-      auto passports = loadPassports();
-
-      auto result = count_if(passports.begin(), passports.end(),
-         [](const auto& passport) {
-            return passport.find("byr:") != string::npos &&
-               passport.find("iyr:") != string::npos &&
-               passport.find("eyr:") != string::npos &&
-               passport.find("hgt:") != string::npos &&
-               passport.find("hcl:") != string::npos &&
-               passport.find("ecl:") != string::npos &&
-               passport.find("pid:") != string::npos;
+            unordered_map<string,string> parsedPassportFields;
+            transform(passportFields.begin(), passportFields.end(), inserter(parsedPassportFields, parsedPassportFields.end()),
+               [](const auto& field) {
+                  auto parsedField = util::split(field, ':');
+                  return make_pair(parsedField.at(0), parsedField.at(1));
+               });
+            return parsedPassportFields;
          });
 
-      REQUIRE(result == 233);
+      return parsedPassports;
    }
 
    bool isValidPassport(const unordered_map<string,string>* passport) {
@@ -42,6 +39,17 @@ namespace day4 {
          passport->find("hcl") != passport->end() &&
          passport->find("ecl") != passport->end() &&
          passport->find("pid") != passport->end();
+   }
+
+   TEST_CASE("Day 4 - Part 1 from https://adventofcode.com/2020/day/4") {
+      auto passports = loadPassports();
+
+      auto result = count_if(passports.begin(), passports.end(),
+         [](const auto& passport) {
+            return isValidPassport(&passport);
+         });
+
+      REQUIRE(result == 233);
    }
 
    bool isMatch(const string value, const string pattern) {
@@ -70,21 +78,7 @@ namespace day4 {
    TEST_CASE("Day 4 - Part 2 from https://adventofcode.com/2020/day/4#part2") {
       auto passports = loadPassports();
 
-      vector<unordered_map<string,string>> parsedPassports;
-      transform(passports.begin(), passports.end(), back_inserter(parsedPassports),
-         [](const auto& passportLine) {
-            auto passportFields = util::split(passportLine, ' ');
-
-            unordered_map<string,string> parsedPassportFields;
-            transform(passportFields.begin(), passportFields.end(), inserter(parsedPassportFields, parsedPassportFields.end()),
-               [](const auto& field) {
-                  auto parsedField = util::split(field, ':');
-                  return make_pair(parsedField.at(0), parsedField.at(1));
-               });
-            return parsedPassportFields;
-         });
-
-      auto result = count_if(parsedPassports.begin(), parsedPassports.end(),
+      auto result = count_if(passports.begin(), passports.end(),
          [](const auto& passport) {
             return isValidPassport(&passport) &&
                isInRange(passport.find("byr")->second, 1920, 2002) &&
