@@ -64,7 +64,7 @@ namespace day7 {
          return 0;
 
       return accumulate(it->second.begin(), it->second.end(), 0U,
-         [rules](const auto sum, auto& luagage) {
+         [rules](const auto sum, const auto& luagage) {
             return sum + luagage.first + (luagage.first * countBags(rules, luagage.second));
          });
    }
