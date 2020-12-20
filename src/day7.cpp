@@ -3,7 +3,7 @@
 using namespace std;
 
 namespace day7 {
-   unordered_map<string, vector<pair<uint, string>>> loadRules() {
+   unordered_map<string, vector<pair<uint, string>>> loadLuagageRules() {
       auto rulesInput = util::loadInputFile("day7-input.txt");
 
       unordered_map<string, vector<pair<uint, string>>> rules;
@@ -48,7 +48,7 @@ namespace day7 {
    }
 
    TEST_CASE("Day 7 - Part 1 from https://adventofcode.com/2020/day/7") {
-      auto rules = loadRules();
+      auto rules = loadLuagageRules();
 
       auto result = count_if(rules.begin(), rules.end(),
          [rules](const auto& rule) {
@@ -70,7 +70,7 @@ namespace day7 {
    }
 
    TEST_CASE("Day 7 - Part 2 from https://adventofcode.com/2020/day/7#part2") {
-      auto rules = loadRules();
+      auto rules = loadLuagageRules();
 
       auto result = countBags(&rules, "shiny-gold");
 
