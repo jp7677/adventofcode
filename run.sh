@@ -7,4 +7,4 @@ g++ -std=c++17 -Werror \
     src/day*.cpp \
     -o adventofcode
 
-./adventofcode
+./adventofcode $@
