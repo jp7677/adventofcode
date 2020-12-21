@@ -24,11 +24,11 @@ namespace day8 {
       auto pos = 0U;
       set<uint> visited;
       while (visited.find(pos) == visited.end()) {
+         visited.insert(pos);
          auto instruction = program.at(pos);
          if (instruction.first == "acc")
             acc += instruction.second;
-
-         visited.insert(pos);
+         
          pos += instruction.first == "jmp" ? instruction.second : 1;
       }
 
@@ -45,14 +45,12 @@ namespace day8 {
          acc = pos = 0;
          visited.clear();
          while (visited.find(pos) == visited.end() && pos < program.size()) {
-            auto instruction = program.at(pos);
-            if (instruction.first == "acc")
-               acc += instruction.second;
-
             visited.insert(pos);
-            if (instruction.first == "acc")
+            auto instruction = program.at(pos);
+            if (instruction.first == "acc") {
+               acc += instruction.second;
                pos++;
-            else
+            } else
                pos += fix != pos && instruction.first == "jmp" ? instruction.second : 1;
          }
          fix++;
