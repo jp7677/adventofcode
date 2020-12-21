@@ -47,11 +47,10 @@ namespace day8 {
          while (visited.find(pos) == visited.end() && pos < program.size()) {
             visited.insert(pos);
             auto instruction = program.at(pos);
-            if (instruction.first == "acc") {
+            if (instruction.first == "acc")
                acc += instruction.second;
-               pos++;
-            } else
-               pos += fix != pos && instruction.first == "jmp" ? instruction.second : 1;
+
+            pos += instruction.first != "acc" && instruction.first == "jmp" && fix != pos ? instruction.second : 1;
          }
          fix++;
       }
