@@ -3,7 +3,7 @@
 using namespace std;
 
 namespace day8 {
-   TEST_CASE("Day 8 - Part 1 from https://adventofcode.com/2020/day/8") {
+   vector<pair<string, int>> loadProgram() {
       auto programmData = util::loadInputFile("day8-input.txt");
 
       vector<pair<string, int>> program;
@@ -13,6 +13,12 @@ namespace day8 {
                programLine.substr(0, 3),
                stoi(programLine.substr(4)));
       });
+
+      return program;
+   }
+
+   TEST_CASE("Day 8 - Part 1 from https://adventofcode.com/2020/day/8") {
+      auto program = loadProgram();
 
       auto acc = 0;
       auto pos = 0U;
@@ -27,5 +33,31 @@ namespace day8 {
       }
 
       REQUIRE(acc == 1810);
+   }
+
+   TEST_CASE("Day 8 - Part 2 from https://adventofcode.com/2020/day/8#part2") {
+      auto program = loadProgram();
+
+      auto acc = 0;
+      auto pos = 0U, fix = 0U;
+      set<uint> visited;
+      while (pos < program.size()) {
+         acc = pos = 0;
+         visited.clear();
+         while (visited.find(pos) == visited.end() && pos < program.size()) {
+            auto instruction = program.at(pos);
+            if (instruction.first == "acc")
+               acc += instruction.second;
+
+            visited.insert(pos);
+            if (instruction.first == "acc")
+               pos++;
+            else
+               pos += fix != pos && instruction.first == "jmp" ? instruction.second : 1;
+         }
+         fix++;
+      }
+
+      REQUIRE(acc == 969);
    }
 }
