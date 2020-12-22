@@ -4,10 +4,10 @@ using namespace std;
 
 namespace day8 {
    vector<pair<string, int>> loadProgram() {
-      auto programmData = util::loadInputFile("day8-input.txt");
+      auto programData = util::loadInputFile("day8-input.txt");
 
       vector<pair<string, int>> program;
-      transform(programmData.begin(), programmData.end(), back_inserter(program),
+      transform(programData.begin(), programData.end(), back_inserter(program),
          [](const auto& programLine) {
             return make_pair(
                programLine.substr(0, 3),
