@@ -20,7 +20,7 @@ namespace day9 {
       static const uint preamble = 25;
 
       auto result = [numbers]{
-         for (auto i = preamble; i <= numbers.size(); i++) {
+         for (auto i = preamble; i < numbers.size(); i++) {
             set<ulong> sums;
             for (auto k = i - preamble ; k < i; k++)
                for (auto l = i - preamble; l < i; l++)
