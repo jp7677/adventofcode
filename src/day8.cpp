@@ -55,7 +55,7 @@ namespace day8 {
             }
          }
 
-         throw ("Invalid data found");
+         throw ("Invalid data");
       }();
 
       REQUIRE(result == 969);
