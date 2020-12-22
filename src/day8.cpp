@@ -20,41 +20,44 @@ namespace day8 {
    TEST_CASE("Day 8 - Part 1 from https://adventofcode.com/2020/day/8") {
       auto program = loadProgram();
 
-      auto acc = 0;
+      auto result = 0;
       auto pos = 0U;
       set<uint> visited;
       while (visited.find(pos) == visited.end()) {
          visited.insert(pos);
          auto instruction = program.at(pos);
          if (instruction.first == "acc")
-            acc += instruction.second;
+            result += instruction.second;
          
          pos += instruction.first == "jmp" ? instruction.second : 1;
       }
 
-      REQUIRE(acc == 1810);
+      REQUIRE(result == 1810);
    }
 
    TEST_CASE("Day 8 - Part 2 from https://adventofcode.com/2020/day/8#part2") {
       auto program = loadProgram();
 
-      auto acc = 0;
-      auto pos = 0U, fix = 0U;
-      set<uint> visited;
-      while (pos < program.size()) {
-         acc = pos = 0;
-         visited.clear();
-         while (visited.find(pos) == visited.end() && pos < program.size()) {
-            visited.insert(pos);
-            auto instruction = program.at(pos);
-            if (instruction.first == "acc")
-               acc += instruction.second;
+      auto result = [program]{
+         for (auto fix = 0U; fix < program.size(); fix++) {
+            auto acc = 0;
+            auto pos = 0U;
+            set<uint> visited;
+            while (visited.find(pos) == visited.end()) {
+               visited.insert(pos);
+               auto instruction = program.at(pos);
+               if (instruction.first == "acc")
+                  acc += instruction.second;
 
-            pos += instruction.first != "acc" && instruction.first == "jmp" && fix != pos ? instruction.second : 1;
+               pos += instruction.first != "acc" && instruction.first == "jmp" && fix != pos ? instruction.second : 1;
+               if (pos >= program.size())
+                  return acc;
+            }
          }
-         fix++;
-      }
 
-      REQUIRE(acc == 969);
+         throw ("Invalid data found");
+      }();
+
+      REQUIRE(result == 969);
    }
 }
