@@ -39,7 +39,10 @@ namespace day8 {
       auto program = loadProgram();
 
       auto result = [program]{
-         for (auto fix = 0U; fix < program.size(); fix++) {
+         for (const auto& fix : program) {
+            if (fix.first == "acc")
+               continue;
+
             auto acc = 0;
             auto pos = 0U;
             set<uint> visited;
@@ -49,7 +52,7 @@ namespace day8 {
                if (instruction.first == "acc")
                   acc += instruction.second;
 
-               pos += instruction.first != "acc" && instruction.first == "jmp" && fix != pos ? instruction.second : 1;
+               pos += instruction.first != "acc" && instruction.first == "jmp" && fix != instruction ? instruction.second : 1;
                if (pos >= program.size())
                   return acc;
             }
