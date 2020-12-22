@@ -43,8 +43,7 @@ namespace day9 {
 
       auto position = [numbers]{
          for (auto i = 0U; i < numbers.size(); i++) {
-            auto sum = numbers.at(i);
-            for (auto offset = 1U; sum < invalid; offset++) {
+            for (auto sum = numbers.at(i), offset = 1UL; sum < invalid; offset++) {
                sum += numbers.at(i + offset);
                if (sum == invalid)
                   return make_pair(i, i + ++offset);
