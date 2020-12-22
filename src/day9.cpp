@@ -44,15 +44,11 @@ namespace day9 {
       auto position = [numbers]{
          for (auto i = 0U; i < numbers.size(); i++) {
             auto sum = numbers.at(i);
-
-            auto offset = 1U;
-            while (sum < invalid) {
+            for (auto offset = 1U; sum < invalid; offset++) {
                sum += numbers.at(i + offset);
-               offset++;
+               if (sum == invalid)
+                  return make_pair(i, i + ++offset);
             }
-
-            if (sum == invalid)
-               return make_pair(i, i + offset);
          }
 
          throw ("Invalid data");
