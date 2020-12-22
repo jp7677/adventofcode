@@ -41,7 +41,7 @@ namespace day0 {
       auto numbers = loadNumbers();
       static const ulong invalid = 1309761972;
 
-      auto positions = [numbers]{
+      auto position = [numbers]{
          for (auto i = 0U; i < numbers.size(); i++) {
             auto sum = numbers.at(i);
 
@@ -58,8 +58,8 @@ namespace day0 {
          throw ("Invalid data");
       }();
 
-      auto elements = minmax_element(numbers.begin() + positions.first, numbers.begin() + positions.second);
-      auto result = *elements.first + *elements.second;
+      auto element = minmax_element(numbers.begin() + position.first, numbers.begin() + position.second);
+      auto result = *element.first + *element.second;
 
       REQUIRE(result == 177989832);
    }
