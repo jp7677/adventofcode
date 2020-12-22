@@ -3,7 +3,7 @@
 using namespace std;
 
 namespace day0 {
-   TEST_CASE("Day 9 - Part 1 from https://adventofcode.com/2020/day/9") {
+   vector<ulong> loadNumbers() {
       auto numbersData = util::loadInputFile("day9-input.txt");
 
       vector<ulong> numbers;
@@ -11,9 +11,15 @@ namespace day0 {
          [](const auto& number) {
             return stol(number);
       });
+
+      return numbers;
+   }
+
+   TEST_CASE("Day 9 - Part 1 from https://adventofcode.com/2020/day/9") {
+      auto numbers = loadNumbers();
       
-      static const uint preamble = 25;
       auto result = [numbers]{
+         static const uint preamble = 25;
          for (auto i = preamble; i <= numbers.size(); i++) {
             set<ulong> sums;
             for (auto k = i - preamble ; k < i; k++)
@@ -29,5 +35,32 @@ namespace day0 {
       }();
 
       REQUIRE(result == 1309761972);
+   }
+
+   TEST_CASE("Day 9 - Part 2 from https://adventofcode.com/2020/day/9#part2") {
+      auto numbers = loadNumbers();
+
+      static const ulong invalid = 1309761972;
+      auto positions = [numbers]{
+         for (auto i = 0U; i < numbers.size(); i++) {
+            auto sum = numbers.at(i);
+
+            auto offset = 1U;
+            while (sum < invalid) {
+               sum += numbers.at(i + offset);
+               offset++;
+            }
+
+            if (sum == invalid)
+               return make_pair(i, i + offset);
+         }
+
+         throw ("Invalid data");
+      }();
+
+      auto elements = minmax_element(numbers.begin() + positions.first, numbers.begin() + positions.second);
+      auto result = *elements.first + *elements.second;
+
+      REQUIRE(result == 177989832);
    }
 }
