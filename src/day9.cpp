@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace day0 {
+namespace day9 {
    vector<ulong> loadNumbers() {
       auto numbersData = util::loadInputFile("day9-input.txt");
 
@@ -58,7 +58,7 @@ namespace day0 {
          throw ("Invalid data");
       }();
 
-      auto element = minmax_element(numbers.begin() + position.first, numbers.begin() + position.second);
+      auto element = minmax_element(next(numbers.begin(), position.first), next(numbers.begin(), position.second));
       auto result = *element.first + *element.second;
 
       REQUIRE(result == 177989832);
