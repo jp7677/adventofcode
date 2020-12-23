@@ -35,10 +35,11 @@ namespace day10 {
 
       vector<uint> diff1groups {1};
       for (auto i = 1U; i < differences.size(); i++) {
-         if (differences.at(i) == 1 && differences.at(i - 1) == 1)
-            diff1groups.back()++;
-         else
-            diff1groups.push_back(1);
+         if (differences.at(i) == 1)
+            if (differences.at(i - 1) == 1)
+               diff1groups.back()++;
+            else
+               diff1groups.push_back(1);
       }
 
       auto result = accumulate(diff1groups.begin(), diff1groups.end(), 1UL,
