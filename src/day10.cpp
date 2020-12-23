@@ -9,7 +9,7 @@ namespace day10 {
       vector<uint> adapters;
       transform(adaptersData.begin(), adaptersData.end(), back_inserter(adapters),
          [](const auto& number) {
-            return stol(number);
+            return stoi(number);
          });
 
       return adapters;
@@ -28,16 +28,8 @@ namespace day10 {
 
       differences.push_back(3);
 
-      auto diff1 = count_if(differences.begin(), differences.end(),
-         [](const auto& diff) {
-            return diff == 1;
-         });
-
-      auto diff3 = count_if(differences.begin(), differences.end(),
-         [](const auto& diff) {
-            return diff == 3;
-         });
-
+      auto diff1 = count(differences.begin(), differences.end(), 1);
+      auto diff3 = count(differences.begin(), differences.end(), 3);
       auto result = diff1 * diff3;
 
       REQUIRE(result == 1876);
