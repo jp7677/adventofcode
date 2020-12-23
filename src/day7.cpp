@@ -27,7 +27,7 @@ namespace day7 {
                });
 
             return make_pair(key, luagages);
-      });
+         });
       
       return rules;
    }

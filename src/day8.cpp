@@ -12,7 +12,7 @@ namespace day8 {
             return make_pair(
                programLine.substr(0, 3),
                stoi(programLine.substr(4)));
-      });
+         });
 
       return program;
    }
