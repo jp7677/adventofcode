@@ -19,17 +19,11 @@ namespace day10 {
       auto adapters = loadAdapters();
 
       sort(adapters.begin(), adapters.end());
+      adjacent_difference(adapters.begin(), adapters.end(), adapters.begin());
+      adapters.push_back(3);
 
-      vector<uint> differences = {adapters.at(0)};
-      transform(next(adapters.begin()), adapters.end(), adapters.begin(), back_inserter(differences),
-         [](const auto& first, const auto& second) {
-            return first - second;
-         });
-
-      differences.push_back(3);
-
-      auto diff1 = count(differences.begin(), differences.end(), 1);
-      auto diff3 = count(differences.begin(), differences.end(), 3);
+      auto diff1 = count(adapters.begin(), adapters.end(), 1);
+      auto diff3 = count(adapters.begin(), adapters.end(), 3);
       auto result = diff1 * diff3;
 
       REQUIRE(result == 1876);
