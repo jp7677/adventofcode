@@ -10,7 +10,7 @@ namespace day9 {
       transform(numbersData.begin(), numbersData.end(), back_inserter(numbers),
          [](const auto& number) {
             return stol(number);
-      });
+         });
 
       return numbers;
    }
@@ -21,13 +21,16 @@ namespace day9 {
 
       auto result = [numbers]{
          for (auto i = preamble; i < numbers.size(); i++) {
-            set<ulong> sums;
-            for (auto k = i - preamble ; k < i; k++)
-               for (auto l = i - preamble; l < i; l++)
-                  if (numbers.at(k) != numbers.at(l))
-                     sums.insert(numbers.at(k) + numbers.at(l));
+            auto found = [numbers, i]{
+               for (auto k = i - preamble ; k < i; k++)
+                  for (auto l = i - preamble; l < i; l++)
+                     if (numbers.at(k) != numbers.at(l) && numbers.at(k) + numbers.at(l) == numbers.at(i))
+                        return true;
 
-            if (sums.find(numbers.at(i)) == sums.end())
+               return false;
+            }();
+
+            if (!found)
                return numbers.at(i);
          }
 
