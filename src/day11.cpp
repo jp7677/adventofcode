@@ -7,7 +7,7 @@ namespace day11 {
       while (true) {
          vector<pair<int, int>> swaps;
          for (auto y = 0; y < map->size(); y++)
-            for (auto x = 0; x < map->at(y).size(); x++)
+            for (auto x = 0; x < map->at(0).size(); x++)
                if (needsSwap(map, x, y))
                   swaps.push_back(make_pair(x, y));
 
