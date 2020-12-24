@@ -94,7 +94,7 @@ namespace day11 {
          return false;
 
       auto occupiedSeats = 0U;
-      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)--;(*y1)--;})) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)--;(*y1)--; })) occupiedSeats++;
       if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*y1)--; })) occupiedSeats++;
       if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)++;(*y1)--; })) occupiedSeats++;
       if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)--; })) occupiedSeats++;
