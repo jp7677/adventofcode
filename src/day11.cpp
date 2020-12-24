@@ -43,23 +43,26 @@ namespace day11 {
       return false;
    }
 
+   void runRules(vector<string>* map) {
+      vector<pair<int, int>> swaps;
+      for (auto y = 0U; y < map->size(); y++)
+         for (auto x = 0U; x < map->at(y).size(); x++)
+            if (needsSwap(map, x, y))
+               swaps.push_back(make_pair(x, y));
+
+      if (swaps.size() == 0)
+         return;
+
+      for (const auto& swap : swaps)
+         map->at(swap.second).at(swap.first) = map->at(swap.second).at(swap.first) == '#' ? 'L' : '#';
+
+      return runRules(map);
+   }
+
    TEST_CASE("Day 11 - Part 1 from https://adventofcode.com/2020/day/11") {
       auto mapData = util::loadInputFile("day11-input.txt");
 
-      while (true) {
-         vector<pair<int, int>> swaps;
-         for (auto y = 0U; y < mapData.size(); y++)
-            for (auto x = 0U; x < mapData.at(y).size(); x++)
-               if (needsSwap(&mapData, x, y))
-                  swaps.push_back(make_pair(x, y));
-
-         if (swaps.size() == 0)
-            break;
-
-         for (const auto& swap : swaps)
-            mapData.at(swap.second).at(swap.first) = mapData.at(swap.second).at(swap.first) == '#' ? 'L' : '#';
-      }
-
+      runRules(&mapData);
       auto result = accumulate(mapData.begin(), mapData.end(), 0U,
          [](const auto sum, auto& line) {
             return sum + count(line.begin(), line.end(), '#');
