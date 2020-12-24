@@ -64,7 +64,7 @@ namespace day11 {
 
       runRounds(&mapData, needsSwapDueToAdjacentSeats);
       auto result = accumulate(mapData.begin(), mapData.end(), 0U,
-         [](const auto sum, auto& line) {
+         [](const auto sum, const auto& line) {
             return sum + count(line.begin(), line.end(), '#');
          });
       
@@ -94,14 +94,14 @@ namespace day11 {
          return false;
 
       auto occupiedSeats = 0U;
-      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)--;(*y1)--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*y1)--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)++;(*y1)--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)--;(*y1)++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*y1)++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)++;(*y1)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)--;(*y1)--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*y1)--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)++;(*y1)--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)--;(*y1)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*y1)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)++;(*y1)++; })) occupiedSeats++;
 
       if (seat == 'L' && occupiedSeats == 0)
          return true;
@@ -117,7 +117,7 @@ namespace day11 {
 
       runRounds(&mapData, needsSwapDueToFirstVisibleSeat);
       auto result = accumulate(mapData.begin(), mapData.end(), 0U,
-         [](const auto sum, auto& line) {
+         [](const auto sum, const auto& line) {
             return sum + count(line.begin(), line.end(), '#');
          });
       
