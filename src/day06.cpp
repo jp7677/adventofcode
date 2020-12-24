@@ -2,9 +2,9 @@
 
 using namespace std;
 
-namespace day6 {
+namespace day06 {
    TEST_CASE("Day 6 - Part 1 from https://adventofcode.com/2020/day/6") {
-      auto answersListInput = util::loadInputFile("day6-input.txt");
+      auto answersListInput = util::loadInputFile("day06-input.txt");
 
       vector<string> answersList(1);
       for (const auto& line : answersListInput) {
@@ -24,7 +24,7 @@ namespace day6 {
    }
 
    TEST_CASE("Day 6 - Part 2 from https://adventofcode.com/2020/day/6#part2") {
-      auto answersListInput = util::loadInputFile("day6-input.txt");
+      auto answersListInput = util::loadInputFile("day06-input.txt");
 
       vector<vector<string>> answersList(1);
       for (const auto& line : answersListInput) {

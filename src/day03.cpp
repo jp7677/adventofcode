@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace day3 {
+namespace day03 {
    ulong runSlope(vector<string>* grid, const uint right, const uint down) {
       auto width = grid->at(0).size();
       auto height = grid->size();
@@ -23,7 +23,7 @@ namespace day3 {
    }
 
    TEST_CASE("Day 3 - Part 1 from https://adventofcode.com/2020/day/3") {
-      auto gridInput = util::loadInputFile("day3-input.txt");
+      auto gridInput = util::loadInputFile("day03-input.txt");
 
       auto result = runSlope(&gridInput, 3, 1);
 
@@ -31,7 +31,7 @@ namespace day3 {
    }
 
    TEST_CASE("Day 3 - Part 2 from https://adventofcode.com/2020/day/3#part2") {
-      auto gridInput = util::loadInputFile("day3-input.txt");
+      auto gridInput = util::loadInputFile("day03-input.txt");
 
       auto result = runSlope(&gridInput, 1, 1) *
          runSlope(&gridInput, 3, 1) *

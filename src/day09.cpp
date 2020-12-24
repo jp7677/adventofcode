@@ -2,9 +2,9 @@
 
 using namespace std;
 
-namespace day9 {
+namespace day09 {
    vector<ulong> loadNumbers() {
-      auto numbersData = util::loadInputFile("day9-input.txt");
+      auto numbersData = util::loadInputFile("day09-input.txt");
 
       vector<ulong> numbers;
       transform(numbersData.begin(), numbersData.end(), back_inserter(numbers),

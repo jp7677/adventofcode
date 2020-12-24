@@ -2,9 +2,9 @@
 
 using namespace std;
 
-namespace day4 {
+namespace day04 {
    vector<unordered_map<string,string>> loadPassports() {
-      auto passportsInput = util::loadInputFile("day4-input.txt");
+      auto passportsInput = util::loadInputFile("day04-input.txt");
       
       vector<string> passports(1);
       for (const auto& line : passportsInput) {

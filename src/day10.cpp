@@ -33,6 +33,35 @@ namespace day10 {
    TEST_CASE("Day 10 - Part 2 from https://adventofcode.com/2020/day/10#part2") {
       auto differences = loadAdapterDifferences();
 
+/*
+
+1 => 1
+
+10, 11, 12
+10, 12
+
+2 => 2
+
+
+4, 5, 6, 7
+4, 5, 7
+4, 6, 7
+4, 7
+
+3 => 4
+
+45, 46, 47, 48, 49
+45, 46, 47, 49
+45, 46, 48, 49
+45, 46, 49
+45, 47, 48, 49,
+45, 47, 49
+45, 48, 49,
+
+4 => 7
+
+*/
+
       vector<uint> diff1groups {1};
       for (auto i = 1U; i < differences.size(); i++) {
          if (differences.at(i) == 1)
