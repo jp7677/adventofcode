@@ -3,7 +3,7 @@
 using namespace std;
 
 namespace day11 {
-   string getAdjacentSeats(vector<string>* map, uint x, uint y) {
+   string getAdjacentSeats(const vector<string>* map, const int x, const int y) {
       string seats;
       if (x > 0 && y > 0)
          seats.push_back(map->at(y - 1).at(x - 1));
@@ -27,7 +27,7 @@ namespace day11 {
       return seats;
    }
 
-   bool needsSwapDueToAdjacentSeats(vector<string>* map, int x, int y) {
+   bool needsSwapDueToAdjacentSeats(vector<string>* map, const int x, const int y) {
       auto seat = map->at(y).at(x);
       if (seat == '.')
          return false;
@@ -43,7 +43,7 @@ namespace day11 {
       return false;
    }
 
-   void runRounds(vector<string>* map, bool needsSwap(vector<string>* map, int x, int y)) {
+   void runRounds(vector<string>* map, bool needsSwap(vector<string>* map, const int x, const int y)) {
       vector<pair<int, int>> swaps;
       for (auto y = 0; y < map->size(); y++)
          for (auto x = 0; x < map->at(y).size(); x++)
@@ -86,7 +86,7 @@ namespace day11 {
       return hasOccupiedSeat(map, x, y, move);
    }
 
-   bool needsSwapDueToFirstVisibleSeat(vector<string>* map, int x, int y) {
+   bool needsSwapDueToFirstVisibleSeat(vector<string>* map, const int x, const int y) {
       auto seat = map->at(y).at(x);
       if (seat == '.')
          return false;
