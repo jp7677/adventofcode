@@ -11,12 +11,10 @@ namespace day11 {
          seats.push_back(map->at(y - 1).at(x));
       if (x < map->at(0).size() - 1 && y > 0)
          seats.push_back(map->at(y - 1).at(x + 1));
-
       if (x > 0)
          seats.push_back(map->at(y).at(x - 1));
       if (x < map->at(0).size() - 1)
          seats.push_back(map->at(y).at(x + 1));
-
       if (x > 0 && y < map->size() - 1)
          seats.push_back(map->at(y + 1).at(x - 1));
       if (y < map->size() - 1)
