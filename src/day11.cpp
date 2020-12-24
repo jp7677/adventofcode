@@ -3,6 +3,22 @@
 using namespace std;
 
 namespace day11 {
+   void runRounds(vector<string>* map, bool needsSwap(vector<string>* map, const int x, const int y)) {
+      vector<pair<int, int>> swaps;
+      for (auto y = 0; y < map->size(); y++)
+         for (auto x = 0; x < map->at(y).size(); x++)
+            if (needsSwap(map, x, y))
+               swaps.push_back(make_pair(x, y));
+
+      if (swaps.size() == 0)
+         return;
+
+      for (const auto& swap : swaps)
+         map->at(swap.second).at(swap.first) = map->at(swap.second).at(swap.first) == '#' ? 'L' : '#';
+
+      return runRounds(map, needsSwap);
+   }
+
    string getAdjacentSeats(const vector<string>* map, const int x, const int y) {
       string seats;
       if (x > 0 && y > 0)
@@ -39,22 +55,6 @@ namespace day11 {
          return true;
 
       return false;
-   }
-
-   void runRounds(vector<string>* map, bool needsSwap(vector<string>* map, const int x, const int y)) {
-      vector<pair<int, int>> swaps;
-      for (auto y = 0; y < map->size(); y++)
-         for (auto x = 0; x < map->at(y).size(); x++)
-            if (needsSwap(map, x, y))
-               swaps.push_back(make_pair(x, y));
-
-      if (swaps.size() == 0)
-         return;
-
-      for (const auto& swap : swaps)
-         map->at(swap.second).at(swap.first) = map->at(swap.second).at(swap.first) == '#' ? 'L' : '#';
-
-      return runRounds(map, needsSwap);
    }
 
    TEST_CASE("Day 11 - Part 1 from https://adventofcode.com/2020/day/11") {
