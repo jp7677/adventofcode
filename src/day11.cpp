@@ -43,7 +43,7 @@ namespace day11 {
       return false;
    }
 
-   void runRules(vector<string>* map) {
+   void runRounds(vector<string>* map) {
       vector<pair<int, int>> swaps;
       for (auto y = 0U; y < map->size(); y++)
          for (auto x = 0U; x < map->at(y).size(); x++)
@@ -56,13 +56,13 @@ namespace day11 {
       for (const auto& swap : swaps)
          map->at(swap.second).at(swap.first) = map->at(swap.second).at(swap.first) == '#' ? 'L' : '#';
 
-      return runRules(map);
+      return runRounds(map);
    }
 
    TEST_CASE("Day 11 - Part 1 from https://adventofcode.com/2020/day/11") {
       auto mapData = util::loadInputFile("day11-input.txt");
 
-      runRules(&mapData);
+      runRounds(&mapData);
       auto result = accumulate(mapData.begin(), mapData.end(), 0U,
          [](const auto sum, auto& line) {
             return sum + count(line.begin(), line.end(), '#');
