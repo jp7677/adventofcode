@@ -2,9 +2,9 @@
 
 using namespace std;
 
-namespace day7 {
+namespace day07 {
    unordered_map<string, vector<pair<uint, string>>> loadLuagageRules() {
-      auto rulesInput = util::loadInputFile("day7-input.txt");
+      auto rulesInput = util::loadInputFile("day07-input.txt");
 
       unordered_map<string, vector<pair<uint, string>>> rules;
       transform(rulesInput.begin(), rulesInput.end(), inserter(rules, rules.end()),

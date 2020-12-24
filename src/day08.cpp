@@ -2,9 +2,9 @@
 
 using namespace std;
 
-namespace day8 {
+namespace day08 {
    vector<pair<string, int>> loadProgram() {
-      auto programData = util::loadInputFile("day8-input.txt");
+      auto programData = util::loadInputFile("day08-input.txt");
 
       vector<pair<string, int>> program;
       transform(programData.begin(), programData.end(), back_inserter(program),

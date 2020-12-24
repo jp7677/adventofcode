@@ -2,9 +2,9 @@
 
 using namespace std;
 
-namespace day2 {
+namespace day02 {
    TEST_CASE("Day 2 - Part 1 from https://adventofcode.com/2020/day/2") {
-      auto passwordEntriesInput = util::loadInputFile("day2-input.txt");
+      auto passwordEntriesInput = util::loadInputFile("day02-input.txt");
 
       auto result = 0U;
       for (const auto& passwordEntry : passwordEntriesInput) {
@@ -31,7 +31,7 @@ namespace day2 {
    }
 
    TEST_CASE("Day 2 - Part 2 from https://adventofcode.com/2020/day/2#part2") {
-      auto passwordEntriesInput = util::loadInputFile("day2-input.txt");
+      auto passwordEntriesInput = util::loadInputFile("day02-input.txt");
 
       auto result = 0U;
       for (const auto& passwordEntry : passwordEntriesInput) {

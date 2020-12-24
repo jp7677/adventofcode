@@ -2,9 +2,9 @@
 
 using namespace std;
 
-namespace day5 {
+namespace day05 {
    vector<uint> loadSeatIds() {
-      auto seatsInput = util::loadInputFile("day5-input.txt");
+      auto seatsInput = util::loadInputFile("day05-input.txt");
 
       vector<uint> seatIds;
       transform(seatsInput.begin(), seatsInput.end(), back_inserter(seatIds),
