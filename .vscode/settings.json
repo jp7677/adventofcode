@@ -51,6 +51,8 @@
     "ostream": "cpp",
     "stdexcept": "cpp",
     "streambuf": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "future": "cpp",
+    "stop_token": "cpp"
   }
 }
