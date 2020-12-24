@@ -46,13 +46,15 @@ namespace day11 {
    TEST_CASE("Day 11 - Part 1 from https://adventofcode.com/2020/day/11") {
       auto mapData = util::loadInputFile("day11-input.txt");
 
-      vector<pair<int, int>> swaps(1);
-      while (swaps.size() != 0) {
-         swaps.clear();
+      while (true) {
+         vector<pair<int, int>> swaps;
          for (auto y = 0U; y < mapData.size(); y++)
             for (auto x = 0U; x < mapData.at(y).size(); x++)
                if (needsSwap(&mapData, x, y))
                   swaps.push_back(make_pair(x, y));
+
+         if (swaps.size() == 0)
+            break;
 
          for (const auto& swap : swaps)
             mapData.at(swap.second).at(swap.first) = mapData.at(swap.second).at(swap.first) == '#' ? 'L' : '#';
