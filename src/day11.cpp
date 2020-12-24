@@ -71,19 +71,21 @@ namespace day11 {
       REQUIRE(result == 2283);
    }
 
-   bool hasOccupiedSeat(vector<string>* map, int x, int y, void move(int* x, int* y)) {
-      move(&x, &y);
+   bool hasOccupiedSeat(vector<string>* map, const int x, const int y, void move(int* x1, int* y1)) {
+      auto x1 = x;
+      auto y1 = y;
+      move(&x1, &y1);
 
-      if (x < 0 || y < 0 || x > map->at(0).size() - 1 || y > map->size() - 1)
+      if (x1 < 0 || y1 < 0 || x1 > map->at(0).size() - 1 || y1 > map->size() - 1)
          return false;
 
-      if (map->at(y).at(x) == '#')
+      if (map->at(y1).at(x1) == '#')
          return true;
 
-      if (map->at(y).at(x) == 'L')
+      if (map->at(y1).at(x1) == 'L')
          return false;
       
-      return hasOccupiedSeat(map, x, y, move);
+      return hasOccupiedSeat(map, x1, y1, move);
    }
 
    bool needsSwapDueToFirstVisibleSeat(vector<string>* map, const int x, const int y) {
@@ -92,14 +94,14 @@ namespace day11 {
          return false;
 
       auto occupiedSeats = 0U;
-      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)--;(*y)--;})) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*y)--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)++;(*y)--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)--;(*y)++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*y)++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)++;(*y)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)--;(*y1)--;})) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*y1)--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)++;(*y1)--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)--;(*y1)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*y1)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x1, int* y1){ (*x1)++;(*y1)++; })) occupiedSeats++;
 
       if (seat == 'L' && occupiedSeats == 0)
          return true;
