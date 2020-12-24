@@ -9,25 +9,25 @@ namespace day11 {
          seats.push_back(map->at(y - 1).at(x - 1));
       if (y > 0)
          seats.push_back(map->at(y - 1).at(x));
-      if (x < map->at(x).size() - 1 && y > 0)
+      if (x < map->at(0).size() - 1 && y > 0)
          seats.push_back(map->at(y - 1).at(x + 1));
 
       if (x > 0)
          seats.push_back(map->at(y).at(x - 1));
-      if (x < map->at(x).size() - 1)
+      if (x < map->at(0).size() - 1)
          seats.push_back(map->at(y).at(x + 1));
 
       if (x > 0 && y < map->size() - 1)
          seats.push_back(map->at(y + 1).at(x - 1));
       if (y < map->size() - 1)
          seats.push_back(map->at(y + 1).at(x));
-      if (x < map->at(x).size() -1 && y < map->size() - 1)
+      if (x < map->at(0).size() -1 && y < map->size() - 1)
          seats.push_back(map->at(y + 1).at(x + 1));
       
       return seats;
    }
 
-   bool needsSwap(vector<string>* map, uint x, uint y) {
+   bool needsSwapDueToAdjacentSeats(vector<string>* map, int x, int y) {
       auto seat = map->at(y).at(x);
       if (seat == '.')
          return false;
@@ -43,10 +43,10 @@ namespace day11 {
       return false;
    }
 
-   void runRounds(vector<string>* map) {
+   void runRounds(vector<string>* map, bool needsSwap(vector<string>* map, int x, int y)) {
       vector<pair<int, int>> swaps;
-      for (auto y = 0U; y < map->size(); y++)
-         for (auto x = 0U; x < map->at(y).size(); x++)
+      for (auto y = 0; y < map->size(); y++)
+         for (auto x = 0; x < map->at(y).size(); x++)
             if (needsSwap(map, x, y))
                swaps.push_back(make_pair(x, y));
 
@@ -56,18 +56,69 @@ namespace day11 {
       for (const auto& swap : swaps)
          map->at(swap.second).at(swap.first) = map->at(swap.second).at(swap.first) == '#' ? 'L' : '#';
 
-      return runRounds(map);
+      return runRounds(map, needsSwap);
    }
 
    TEST_CASE("Day 11 - Part 1 from https://adventofcode.com/2020/day/11") {
       auto mapData = util::loadInputFile("day11-input.txt");
 
-      runRounds(&mapData);
+      runRounds(&mapData, needsSwapDueToAdjacentSeats);
       auto result = accumulate(mapData.begin(), mapData.end(), 0U,
          [](const auto sum, auto& line) {
             return sum + count(line.begin(), line.end(), '#');
          });
       
       REQUIRE(result == 2283);
+   }
+
+   bool hasOccupiedSeat(vector<string>* map, int x, int y, void move(int* x, int* y)) {
+      move(&x, &y);
+
+      if (x < 0 || y < 0 || x > map->at(0).size() - 1 || y > map->size() - 1)
+         return false;
+
+      if (map->at(y).at(x) == '#')
+         return true;
+
+      if (map->at(y).at(x) == 'L')
+         return false;
+      
+      return hasOccupiedSeat(map, x, y, move);
+   }
+
+   bool needsSwapDueToFirstVisibleSeat(vector<string>* map, int x, int y) {
+      auto seat = map->at(y).at(x);
+      if (seat == '.')
+         return false;
+
+      auto occupiedSeats = 0U;
+      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)--;(*y)--;})) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*y)--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)++;(*y)--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)--;(*y)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*y)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](int* x, int* y){ (*x)++;(*y)++; })) occupiedSeats++;
+
+      if (seat == 'L' && occupiedSeats == 0)
+         return true;
+
+      if (seat == '#' && occupiedSeats >= 5)
+         return true;
+
+      return false;
+   }
+
+   TEST_CASE("Day 11 - Part 2 from https://adventofcode.com/2020/day/11#part2") {
+      auto mapData = util::loadInputFile("day11-input.txt");
+
+      runRounds(&mapData, needsSwapDueToFirstVisibleSeat);
+      auto result = accumulate(mapData.begin(), mapData.end(), 0U,
+         [](const auto sum, auto& line) {
+            return sum + count(line.begin(), line.end(), '#');
+         });
+      
+      REQUIRE(result == 2054);
    }
 }
