@@ -3,6 +3,35 @@
 using namespace std;
 
 namespace day12 {
+   struct position {
+      int x = 0;
+      int y = 0;
+      int direction = 90;
+   };
+
+   void move(position* pos, char direction, uint steps) {
+      switch (direction) {
+         case 'N': case 'E':
+            pos->x += direction == 'N' ? 0 - steps : steps;
+            break;
+         case 'S': case 'W':
+            pos->x -= direction == 'S' ? 0 - steps : steps;
+            break;
+      }
+   }
+
+   void move(position* pos, int direction, uint steps) {
+      auto normalized = direction % 360;
+      if (normalized < 0)
+         normalized = 360 - abs(normalized);
+
+      move(pos, normalized == 90 ? 'E' : normalized == 180 ? 'S' : normalized == 270 ? 'W' : 'N', steps);
+   }
+
+   void turn(position* pos, char direction, uint degrees) {
+      pos->direction += direction == 'L' ? 0 - degrees : degrees;
+   }
+
    TEST_CASE("Day 12 - Part 1 from https://adventofcode.com/2020/day/12") {
       auto instructionsData = util::loadInputFile("day12-input.txt");
 
@@ -12,46 +41,22 @@ namespace day12 {
             return make_pair(line.at(0), stoi(line.substr(1)));
          });
 
-      struct position {
-         int x = 0;
-         int y = 0;
-         int direction = 90;
-      };
-
       position pos;
       for(const auto& instruction : instructions)
          switch (instruction.first) {
-            case 'N':
-            case 'E':
-               pos.x += instruction.first == 'N' ? 0 - instruction.second : instruction.second;
+            case 'N': case 'E': case 'S': case 'W':
+               move(&pos, instruction.first, instruction.second);
                break;
-            case 'S':
-            case 'W':
-               pos.x -= instruction.first == 'S' ? 0 - instruction.second : instruction.second;
-               break;
-            case 'L':
-            case 'R':
-               pos.direction += instruction.first == 'L' ? 0 - instruction.second : instruction.second;
-                break;
             case 'F':
-               auto normalized = pos.direction % 360;
-               if (normalized < 0)
-                  normalized = 360 - abs(normalized);
-
-               switch (normalized) {
-                  case 90:
-                  case 270:
-                     pos.x += normalized == 90 ? instruction.second : 0 - instruction.second;
-                     break;
-                  case 0:
-                  case 180:
-                     pos.y += normalized == 0 ? 0 - instruction.second : instruction.second;
-                     break;
-               }
+               move(&pos, pos.direction, instruction.second);
+               break;
+            case 'L': case 'R':
+               turn(&pos, instruction.first, instruction.second);
                break;
          }
 
       auto result = abs(pos.x) + abs(pos.y);
+
       REQUIRE(result == 2458);
    }
 }
