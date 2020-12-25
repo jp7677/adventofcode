@@ -11,11 +11,11 @@ namespace day12 {
 
    void move(position* pos, char direction, uint steps) {
       switch (direction) {
-         case 'N': case 'E':
-            pos->x += direction == 'N' ? 0 - steps : steps;
+         case 'W': case 'E':
+            pos->x += direction == 'W' ? 0 - steps : steps;
             break;
-         case 'S': case 'W':
-            pos->x -= direction == 'S' ? 0 - steps : steps;
+         case 'N': case 'S':
+            pos->y += direction == 'N' ? 0 - steps : steps;
             break;
       }
    }
