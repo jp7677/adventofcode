@@ -13,35 +13,25 @@ namespace day12 {
          });
 
       struct position {
-         int x;
-         int y;
-         int direction;
+         int x = 0;
+         int y = 0;
+         int direction = 90;
       };
 
       position pos;
-      pos.x = 0;
-      pos.y = 0;
-      pos.direction = 90;
-
       for(const auto& instruction : instructions)
          switch (instruction.first) {
             case 'N':
-               pos.y -= instruction.second;
-               break;
             case 'E':
-               pos.x += instruction.second;
+               pos.x += instruction.first == 'N' ? 0 - instruction.second : instruction.second;
                break;
             case 'S':
-               pos.y += instruction.second;
-               break;
             case 'W':
-               pos.x -= instruction.second;
+               pos.x -= instruction.first == 'S' ? 0 - instruction.second : instruction.second;
                break;
             case 'L':
-               pos.direction -= instruction.second;
-                break;
             case 'R':
-               pos.direction += instruction.second;
+               pos.direction += instruction.first == 'L' ? 0 - instruction.second : instruction.second;
                 break;
             case 'F':
                auto normalized = pos.direction % 360;
@@ -49,17 +39,13 @@ namespace day12 {
                   normalized = 360 - abs(normalized);
 
                switch (normalized) {
-                  case 0:
-                     pos.y -= instruction.second;
-                     break;
                   case 90:
-                     pos.x += instruction.second;
-                     break;
-                  case 180:
-                     pos.y += instruction.second;
-                     break;
                   case 270:
-                     pos.x -= instruction.second;
+                     pos.x += normalized == 90 ? instruction.second : 0 - instruction.second;
+                     break;
+                  case 0:
+                  case 180:
+                     pos.y += normalized == 0 ? 0 - instruction.second : instruction.second;
                      break;
                }
                break;
