@@ -9,30 +9,7 @@ namespace day12 {
       int direction = 90;
    };
 
-   void move(position* pos, char direction, uint steps) {
-      switch (direction) {
-         case 'W': case 'E':
-            pos->x += direction == 'W' ? 0 - steps : steps;
-            break;
-         case 'N': case 'S':
-            pos->y += direction == 'N' ? 0 - steps : steps;
-            break;
-      }
-   }
-
-   void move(position* pos, int direction, uint steps) {
-      auto normalized = direction % 360;
-      if (normalized < 0)
-         normalized = 360 - abs(normalized);
-
-      move(pos, normalized == 90 ? 'E' : normalized == 180 ? 'S' : normalized == 270 ? 'W' : 'N', steps);
-   }
-
-   void turn(position* pos, char direction, uint degrees) {
-      pos->direction += direction == 'L' ? 0 - degrees : degrees;
-   }
-
-   TEST_CASE("Day 12 - Part 1 from https://adventofcode.com/2020/day/12") {
+   vector<pair<char, uint>> loadInstructions() {
       auto instructionsData = util::loadInputFile("day12-input.txt");
 
       vector<pair<char, uint>> instructions;
@@ -41,22 +18,95 @@ namespace day12 {
             return make_pair(line.at(0), stoi(line.substr(1)));
          });
 
-      position pos;
+      return instructions;
+   }
+
+   void move(position* pos, const char direction, const uint steps) {
+      switch (direction) {
+         case 'E': case 'W':
+            pos->x += direction == 'W' ? 0 - steps : steps;
+            break;
+         case 'N': case 'S':
+            pos->y += direction == 'S' ? 0 - steps : steps;
+            break;
+      }
+   }
+
+   void move(position* pos, const int direction, const uint steps) {
+      auto absolute = direction % 360;
+      if (absolute < 0)
+         absolute = 360 - abs(absolute);
+
+      move(pos, absolute == 90 ? 'E' : absolute == 180 ? 'S' : absolute == 270 ? 'W' : 'N', steps);
+   }
+
+   void turn(position* pos, const char direction, const uint degrees) {
+      pos->direction += direction == 'L' ? 0 - degrees : degrees;
+   }
+
+   TEST_CASE("Day 12 - Part 1 from https://adventofcode.com/2020/day/12") {
+      auto instructions = loadInstructions();
+
+      position ship;
       for(const auto& instruction : instructions)
          switch (instruction.first) {
             case 'N': case 'E': case 'S': case 'W':
-               move(&pos, instruction.first, instruction.second);
+               move(&ship, instruction.first, instruction.second);
                break;
             case 'F':
-               move(&pos, pos.direction, instruction.second);
+               move(&ship, ship.direction, instruction.second);
                break;
             case 'L': case 'R':
-               turn(&pos, instruction.first, instruction.second);
+               turn(&ship, instruction.first, instruction.second);
                break;
          }
 
-      auto result = abs(pos.x) + abs(pos.y);
+      auto result = abs(ship.x) + abs(ship.y);
 
       REQUIRE(result == 2458);
+   }
+
+   void rotate(position* pos, const char direction, const uint degrees) {
+      auto absolute = direction == 'R' ? degrees : 360 - degrees;
+      switch (absolute) {
+         case 90:
+            swap(pos->x, pos->y);
+            pos->y = pos->y * -1;
+            break;
+         case 180:
+            pos->x = pos->x * -1;
+            pos->y = pos->y * -1;
+            break;
+         case 270:
+            swap(pos->x, pos->y);
+            pos->x = pos->x * -1;
+            break;
+      }
+   }
+
+   TEST_CASE("Day 12 - Part 2 from https://adventofcode.com/2020/day/12#part2") {
+      auto instructions = loadInstructions();
+
+      position ship;
+      position waypoint;
+      waypoint.x = 10;
+      waypoint.y = 1;
+      for(const auto& instruction : instructions)
+         switch (instruction.first) {
+            case 'N': case 'E': case 'S': case 'W':
+               move(&waypoint, instruction.first, instruction.second);
+               break;
+            case 'L': case 'R':
+               rotate(&waypoint, instruction.first, instruction.second);
+               break;
+            case 'F':
+               move(&ship, 'E', waypoint.x * instruction.second);
+               move(&ship, 'N', waypoint.y * instruction.second);
+               break;
+         }
+
+      auto result = abs(ship.x) + abs(ship.y);
+
+      REQUIRE(result == 145117);
    }
 }
