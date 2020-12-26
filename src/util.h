@@ -44,4 +44,8 @@ namespace util {
          (number < 1000000000 ? 9 :  
          10)))))))));  
    }
+
+   inline void negate (int& a) {
+      a *= -1;
+   }
 }

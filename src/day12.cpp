@@ -3,19 +3,6 @@
 using namespace std;
 
 namespace day12 {
-   struct position {
-      int x;
-      int y;
-
-      int getManhattenDistance() {
-         return abs(x) + abs(y);
-      } 
-   };
-
-   struct ship : position {
-      int direction;
-   };
-
    vector<pair<char, uint>> loadInstructions() {
       auto instructionsData = util::loadInputFile("day12-input.txt");
 
@@ -27,6 +14,18 @@ namespace day12 {
 
       return instructions;
    }
+
+   struct position {
+      int x;
+      int y;
+      int getManhattenDistance() {
+         return abs(x) + abs(y);
+      } 
+   };
+
+   struct ship : position {
+      int direction;
+   };
 
    void move(position& pos, const char direction, const uint steps) {
       switch (direction) {
@@ -83,16 +82,12 @@ namespace day12 {
       REQUIRE(result == 2458);
    }
 
-   void negate (int& a) {
-      a *= -1;
-   }
-
    void rotate(position& pos, const char direction, const uint degrees) {
       auto absolute = direction == 'R' ? degrees : 360 - degrees;
       switch (absolute) {
-         case  90: swap(pos.x, pos.y); negate(pos.y); return;
-         case 180: negate(pos.x); negate(pos.y); return;
-         case 270: swap(pos.x, pos.y); negate(pos.x); return;
+         case  90: swap(pos.x, pos.y); util::negate(pos.y); return;
+         case 180: util::negate(pos.x); util::negate(pos.y); return;
+         case 270: swap(pos.x, pos.y); util::negate(pos.x); return;
          default: throw ("invalid data");
       }
    }
