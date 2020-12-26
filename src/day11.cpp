@@ -3,7 +3,7 @@
 using namespace std;
 
 namespace day11 {
-   void runRounds(vector<string>& map, bool needsSwap(vector<string>& map, const int x, const int y)) {
+   void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const int x, const int y)) {
       while (true) {
          vector<pair<int, int>> swaps;
          for (auto y = 0; y < map.size(); y++)
@@ -41,7 +41,7 @@ namespace day11 {
       return seats;
    }
 
-   bool needsSwapDueToAdjacentSeats(vector<string>& map, const int x, const int y) {
+   bool needsSwapDueToAdjacentSeats(const vector<string>& map, const int x, const int y) {
       auto seat = map.at(y).at(x);
       if (seat == '.')
          return false;
@@ -69,7 +69,7 @@ namespace day11 {
       REQUIRE(result == 2283);
    }
 
-   bool hasOccupiedSeat(vector<string>& map, const int x, const int y, void move(int& x1, int& y1)) {
+   bool hasOccupiedSeat(const vector<string>& map, const int x, const int y, void move(int& x1, int& y1)) {
       auto x1 = x;
       auto y1 = y;
       move(x1, y1);
@@ -86,7 +86,7 @@ namespace day11 {
       return hasOccupiedSeat(map, x1, y1, move);
    }
 
-   bool needsSwapDueToFirstVisibleSeat(vector<string>& map, const int x, const int y) {
+   bool needsSwapDueToFirstVisibleSeat(const vector<string>& map, const int x, const int y) {
       auto seat = map.at(y).at(x);
       if (seat == '.')
          return false;
