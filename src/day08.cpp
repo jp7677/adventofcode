@@ -38,7 +38,7 @@ namespace day08 {
    TEST_CASE("Day 8 - Part 2 from https://adventofcode.com/2020/day/8#part2") {
       auto program = loadProgram();
 
-      auto result = [program]{
+      auto result = [&program]{
          for (const auto& fix : program) {
             if (fix.first == "acc")
                continue;
