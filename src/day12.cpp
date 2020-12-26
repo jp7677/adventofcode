@@ -4,9 +4,16 @@ using namespace std;
 
 namespace day12 {
    struct position {
-      int x = 0;
-      int y = 0;
-      int direction = 90;
+      int x;
+      int y;
+
+      int getManhattenDistance() {
+         return abs(x) + abs(y);
+      } 
+   };
+
+   struct ship : position {
+      int direction;
    };
 
    vector<pair<char, uint>> loadInstructions() {
@@ -23,89 +30,94 @@ namespace day12 {
 
    void move(position* pos, const char direction, const uint steps) {
       switch (direction) {
-         case 'E': case 'W':
-            pos->x += direction == 'W' ? 0 - steps : steps;
-            break;
-         case 'N': case 'S':
-            pos->y += direction == 'S' ? 0 - steps : steps;
-            break;
+         case 'E': pos->x += steps; return;
+         case 'W': pos->x -= steps; return;
+         case 'N': pos->y += steps; return;
+         case 'S': pos->y -= steps; return;
+         default: throw ("invalid data");
       }
    }
 
    void move(position* pos, const int direction, const uint steps) {
-      auto absolute = direction % 360;
-      if (absolute < 0)
-         absolute = 360 - abs(absolute);
+      auto normalized = direction % 360;
+      if (normalized < 0)
+         normalized = 360 - abs(normalized);
 
-      move(pos, absolute == 90 ? 'E' : absolute == 180 ? 'S' : absolute == 270 ? 'W' : 'N', steps);
+      switch (normalized) {
+         case   0: move(pos, 'N', steps); return;
+         case  90: move(pos, 'E', steps); return;
+         case 180: move(pos, 'S', steps); return;
+         case 270: move(pos, 'W', steps); return;
+         default: throw ("invalid data");
+      }
    }
 
-   void turn(position* pos, const char direction, const uint degrees) {
-      pos->direction += direction == 'L' ? 0 - degrees : degrees;
+   void turn(ship* ship, const char direction, const uint degrees) {
+      switch (direction) {
+         case 'R': ship->direction += degrees; return;
+         case 'L': ship->direction -= degrees; return;
+         default: throw ("invalid data");
+      }
    }
 
    TEST_CASE("Day 12 - Part 1 from https://adventofcode.com/2020/day/12") {
       auto instructions = loadInstructions();
 
-      position ship;
+      ship ship{ 0, 0, 90 };
       for(const auto& instruction : instructions)
          switch (instruction.first) {
             case 'N': case 'E': case 'S': case 'W':
                move(&ship, instruction.first, instruction.second);
-               break;
+               continue;
             case 'F':
                move(&ship, ship.direction, instruction.second);
-               break;
+               continue;
             case 'L': case 'R':
                turn(&ship, instruction.first, instruction.second);
-               break;
+               continue;
+            default: throw ("invalid data");
          }
 
-      auto result = abs(ship.x) + abs(ship.y);
+      auto result = ship.getManhattenDistance();
 
       REQUIRE(result == 2458);
+   }
+
+   void negate (int& a) {
+      a *= -1;
    }
 
    void rotate(position* pos, const char direction, const uint degrees) {
       auto absolute = direction == 'R' ? degrees : 360 - degrees;
       switch (absolute) {
-         case 90:
-            swap(pos->x, pos->y);
-            pos->y = pos->y * -1;
-            break;
-         case 180:
-            pos->x = pos->x * -1;
-            pos->y = pos->y * -1;
-            break;
-         case 270:
-            swap(pos->x, pos->y);
-            pos->x = pos->x * -1;
-            break;
+         case  90: swap(pos->x, pos->y); negate(pos->y); return;
+         case 180: negate(pos->x); negate(pos->y); return;
+         case 270: swap(pos->x, pos->y); negate(pos->x); return;
+         default: throw ("invalid data");
       }
    }
 
    TEST_CASE("Day 12 - Part 2 from https://adventofcode.com/2020/day/12#part2") {
       auto instructions = loadInstructions();
 
-      position ship;
-      position waypoint;
-      waypoint.x = 10;
-      waypoint.y = 1;
+      position ship{0, 0};
+      position waypoint{10, 1};
       for(const auto& instruction : instructions)
          switch (instruction.first) {
             case 'N': case 'E': case 'S': case 'W':
                move(&waypoint, instruction.first, instruction.second);
-               break;
+               continue;
             case 'L': case 'R':
                rotate(&waypoint, instruction.first, instruction.second);
-               break;
+               continue;
             case 'F':
                move(&ship, 'E', waypoint.x * instruction.second);
                move(&ship, 'N', waypoint.y * instruction.second);
-               break;
+               continue;
+            default: throw ("invalid data");
          }
 
-      auto result = abs(ship.x) + abs(ship.y);
+      auto result = ship.getManhattenDistance();
 
       REQUIRE(result == 145117);
    }
