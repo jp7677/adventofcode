@@ -68,11 +68,11 @@ namespace day12 {
             case 'N': case 'E': case 'S': case 'W':
                move(ship, instruction.first, instruction.second);
                continue;
-            case 'F':
-               move(ship, ship.direction, instruction.second);
-               continue;
             case 'L': case 'R':
                turn(ship, instruction.first, instruction.second);
+               continue;
+            case 'F':
+               move(ship, ship.direction, instruction.second);
                continue;
             default: throw ("invalid data");
          }
