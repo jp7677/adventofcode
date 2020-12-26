@@ -3,11 +3,11 @@
 using namespace std;
 
 namespace day11 {
-   void runRounds(vector<string>* map, bool needsSwap(vector<string>* map, const int x, const int y)) {
+   void runRounds(vector<string>& map, bool needsSwap(vector<string>& map, const int x, const int y)) {
       while (true) {
          vector<pair<int, int>> swaps;
-         for (auto y = 0; y < map->size(); y++)
-            for (auto x = 0; x < map->at(0).size(); x++)
+         for (auto y = 0; y < map.size(); y++)
+            for (auto x = 0; x < map.at(0).size(); x++)
                if (needsSwap(map, x, y))
                   swaps.push_back(make_pair(x, y));
 
@@ -15,34 +15,34 @@ namespace day11 {
             return;
 
          for (const auto& swap : swaps)
-            map->at(swap.second).at(swap.first) = map->at(swap.second).at(swap.first) == '#' ? 'L' : '#';
+            map.at(swap.second).at(swap.first) = map.at(swap.second).at(swap.first) == '#' ? 'L' : '#';
       }
    }
 
-   string getAdjacentSeats(const vector<string>* map, const int x, const int y) {
+   string getAdjacentSeats(const vector<string>& map, const int x, const int y) {
       string seats;
       if (x > 0 && y > 0)
-         seats.push_back(map->at(y - 1).at(x - 1));
+         seats.push_back(map.at(y - 1).at(x - 1));
       if (y > 0)
-         seats.push_back(map->at(y - 1).at(x));
-      if (x < map->at(0).size() - 1 && y > 0)
-         seats.push_back(map->at(y - 1).at(x + 1));
+         seats.push_back(map.at(y - 1).at(x));
+      if (x < map.at(0).size() - 1 && y > 0)
+         seats.push_back(map.at(y - 1).at(x + 1));
       if (x > 0)
-         seats.push_back(map->at(y).at(x - 1));
-      if (x < map->at(0).size() - 1)
-         seats.push_back(map->at(y).at(x + 1));
-      if (x > 0 && y < map->size() - 1)
-         seats.push_back(map->at(y + 1).at(x - 1));
-      if (y < map->size() - 1)
-         seats.push_back(map->at(y + 1).at(x));
-      if (x < map->at(0).size() -1 && y < map->size() - 1)
-         seats.push_back(map->at(y + 1).at(x + 1));
+         seats.push_back(map.at(y).at(x - 1));
+      if (x < map.at(0).size() - 1)
+         seats.push_back(map.at(y).at(x + 1));
+      if (x > 0 && y < map.size() - 1)
+         seats.push_back(map.at(y + 1).at(x - 1));
+      if (y < map.size() - 1)
+         seats.push_back(map.at(y + 1).at(x));
+      if (x < map.at(0).size() -1 && y < map.size() - 1)
+         seats.push_back(map.at(y + 1).at(x + 1));
       
       return seats;
    }
 
-   bool needsSwapDueToAdjacentSeats(vector<string>* map, const int x, const int y) {
-      auto seat = map->at(y).at(x);
+   bool needsSwapDueToAdjacentSeats(vector<string>& map, const int x, const int y) {
+      auto seat = map.at(y).at(x);
       if (seat == '.')
          return false;
 
@@ -60,7 +60,7 @@ namespace day11 {
    TEST_CASE("Day 11 - Part 1 from https://adventofcode.com/2020/day/11") {
       auto mapData = util::loadInputFile("day11-input.txt");
 
-      runRounds(&mapData, needsSwapDueToAdjacentSeats);
+      runRounds(mapData, needsSwapDueToAdjacentSeats);
       auto result = accumulate(mapData.begin(), mapData.end(), 0U,
          [](const auto sum, const auto& line) {
             return sum + count(line.begin(), line.end(), '#');
@@ -69,37 +69,37 @@ namespace day11 {
       REQUIRE(result == 2283);
    }
 
-   bool hasOccupiedSeat(vector<string>* map, const int x, const int y, void move(int* x1, int* y1)) {
+   bool hasOccupiedSeat(vector<string>& map, const int x, const int y, void move(int& x1, int& y1)) {
       auto x1 = x;
       auto y1 = y;
-      move(&x1, &y1);
+      move(x1, y1);
 
-      if (x1 < 0 || y1 < 0 || x1 > map->at(0).size() - 1 || y1 > map->size() - 1)
+      if (x1 < 0 || y1 < 0 || x1 > map.at(0).size() - 1 || y1 > map.size() - 1)
          return false;
 
-      if (map->at(y1).at(x1) == '#')
+      if (map.at(y1).at(x1) == '#')
          return true;
 
-      if (map->at(y1).at(x1) == 'L')
+      if (map.at(y1).at(x1) == 'L')
          return false;
       
       return hasOccupiedSeat(map, x1, y1, move);
    }
 
-   bool needsSwapDueToFirstVisibleSeat(vector<string>* map, const int x, const int y) {
-      auto seat = map->at(y).at(x);
+   bool needsSwapDueToFirstVisibleSeat(vector<string>& map, const int x, const int y) {
+      auto seat = map.at(y).at(x);
       if (seat == '.')
          return false;
 
       auto occupiedSeats = 0U;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)--;(*y1)--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*y1)--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)++;(*y1)--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)--;(*y1)++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*y1)++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ (*x1)++;(*y1)++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1--;y1--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ y1--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1++;y1--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1--;y1++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ y1++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1++;y1++; })) occupiedSeats++;
 
       if (seat == 'L' && occupiedSeats == 0)
          return true;
@@ -113,7 +113,7 @@ namespace day11 {
    TEST_CASE("Day 11 - Part 2 from https://adventofcode.com/2020/day/11#part2") {
       auto mapData = util::loadInputFile("day11-input.txt");
 
-      runRounds(&mapData, needsSwapDueToFirstVisibleSeat);
+      runRounds(mapData, needsSwapDueToFirstVisibleSeat);
       auto result = accumulate(mapData.begin(), mapData.end(), 0U,
          [](const auto sum, const auto& line) {
             return sum + count(line.begin(), line.end(), '#');
