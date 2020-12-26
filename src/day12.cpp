@@ -18,7 +18,7 @@ namespace day12 {
    struct position {
       int x;
       int y;
-      int getManhattenDistance() {
+      uint getManhattenDistance() {
          return abs(x) + abs(y);
       } 
    };
