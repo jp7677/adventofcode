@@ -28,17 +28,17 @@ namespace day12 {
       return instructions;
    }
 
-   void move(position* pos, const char direction, const uint steps) {
+   void move(position& pos, const char direction, const uint steps) {
       switch (direction) {
-         case 'E': pos->x += steps; return;
-         case 'W': pos->x -= steps; return;
-         case 'N': pos->y += steps; return;
-         case 'S': pos->y -= steps; return;
+         case 'E': pos.x += steps; return;
+         case 'W': pos.x -= steps; return;
+         case 'N': pos.y += steps; return;
+         case 'S': pos.y -= steps; return;
          default: throw ("invalid data");
       }
    }
 
-   void move(position* pos, const int direction, const uint steps) {
+   void move(position& pos, const int direction, const uint steps) {
       auto normalized = direction % 360;
       if (normalized < 0)
          normalized = 360 - abs(normalized);
@@ -52,10 +52,10 @@ namespace day12 {
       }
    }
 
-   void turn(ship* ship, const char direction, const uint degrees) {
+   void turn(ship& ship, const char direction, const uint degrees) {
       switch (direction) {
-         case 'R': ship->direction += degrees; return;
-         case 'L': ship->direction -= degrees; return;
+         case 'R': ship.direction += degrees; return;
+         case 'L': ship.direction -= degrees; return;
          default: throw ("invalid data");
       }
    }
@@ -67,13 +67,13 @@ namespace day12 {
       for(const auto& instruction : instructions)
          switch (instruction.first) {
             case 'N': case 'E': case 'S': case 'W':
-               move(&ship, instruction.first, instruction.second);
+               move(ship, instruction.first, instruction.second);
                continue;
             case 'F':
-               move(&ship, ship.direction, instruction.second);
+               move(ship, ship.direction, instruction.second);
                continue;
             case 'L': case 'R':
-               turn(&ship, instruction.first, instruction.second);
+               turn(ship, instruction.first, instruction.second);
                continue;
             default: throw ("invalid data");
          }
@@ -87,12 +87,12 @@ namespace day12 {
       a *= -1;
    }
 
-   void rotate(position* pos, const char direction, const uint degrees) {
+   void rotate(position& pos, const char direction, const uint degrees) {
       auto absolute = direction == 'R' ? degrees : 360 - degrees;
       switch (absolute) {
-         case  90: swap(pos->x, pos->y); negate(pos->y); return;
-         case 180: negate(pos->x); negate(pos->y); return;
-         case 270: swap(pos->x, pos->y); negate(pos->x); return;
+         case  90: swap(pos.x, pos.y); negate(pos.y); return;
+         case 180: negate(pos.x); negate(pos.y); return;
+         case 270: swap(pos.x, pos.y); negate(pos.x); return;
          default: throw ("invalid data");
       }
    }
@@ -105,14 +105,14 @@ namespace day12 {
       for(const auto& instruction : instructions)
          switch (instruction.first) {
             case 'N': case 'E': case 'S': case 'W':
-               move(&waypoint, instruction.first, instruction.second);
+               move(waypoint, instruction.first, instruction.second);
                continue;
             case 'L': case 'R':
-               rotate(&waypoint, instruction.first, instruction.second);
+               rotate(waypoint, instruction.first, instruction.second);
                continue;
             case 'F':
-               move(&ship, 'E', waypoint.x * instruction.second);
-               move(&ship, 'N', waypoint.y * instruction.second);
+               move(ship, 'E', waypoint.x * instruction.second);
+               move(ship, 'N', waypoint.y * instruction.second);
                continue;
             default: throw ("invalid data");
          }

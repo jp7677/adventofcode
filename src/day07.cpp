@@ -32,9 +32,9 @@ namespace day07 {
       return rules;
    }
 
-   bool containsShinyGoldBag(const unordered_map<string, vector<pair<uint, string>>>* rules, const string bag) {
-      auto it = rules->find(bag);
-      if (it == rules->end())
+   bool containsShinyGoldBag(const unordered_map<string, vector<pair<uint, string>>>& rules, const string bag) {
+      auto it = rules.find(bag);
+      if (it == rules.end())
          return false;
 
       for (const auto& luagage : it->second)
@@ -52,15 +52,15 @@ namespace day07 {
 
       auto result = count_if(rules.begin(), rules.end(),
          [rules](const auto& rule) {
-            return containsShinyGoldBag(&rules, rule.first);
+            return containsShinyGoldBag(rules, rule.first);
          });
 
       REQUIRE(result == 268);
    }
 
-   uint countBags(const unordered_map<string, vector<pair<uint, string>>>* rules, const string bag) {
-      auto it = rules->find(bag);
-      if (it == rules->end())
+   uint countBags(const unordered_map<string, vector<pair<uint, string>>>& rules, const string bag) {
+      auto it = rules.find(bag);
+      if (it == rules.end())
          return 0;
 
       return accumulate(it->second.begin(), it->second.end(), 0U,
@@ -72,7 +72,7 @@ namespace day07 {
    TEST_CASE("Day 7 - Part 2 from https://adventofcode.com/2020/day/7#part2") {
       auto rules = loadLuagageRules();
 
-      auto result = countBags(&rules, "shiny-gold");
+      auto result = countBags(rules, "shiny-gold");
 
       REQUIRE(result == 7867);
    }
