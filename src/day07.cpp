@@ -51,7 +51,7 @@ namespace day07 {
       auto rules = loadLuagageRules();
 
       auto result = count_if(rules.begin(), rules.end(),
-         [rules](const auto& rule) {
+         [&rules](const auto& rule) {
             return containsShinyGoldBag(rules, rule.first);
          });
 
@@ -64,7 +64,7 @@ namespace day07 {
          return 0;
 
       return accumulate(it->second.begin(), it->second.end(), 0U,
-         [rules](const auto sum, const auto& luagage) {
+         [&rules](const auto sum, const auto& luagage) {
             return sum + luagage.first + (luagage.first * countBags(rules, luagage.second));
          });
    }

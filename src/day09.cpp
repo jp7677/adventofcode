@@ -19,9 +19,9 @@ namespace day09 {
       auto numbers = loadNumbers();
       static const uint preamble = 25;
 
-      auto result = [numbers]{
+      auto result = [&numbers]{
          for (auto i = preamble; i < numbers.size(); i++) {
-            auto found = [numbers, i]{
+            auto found = [&numbers, i]{
                for (auto k = i - preamble ; k < i; k++)
                   for (auto l = i - preamble; l < i; l++)
                      if (numbers.at(k) != numbers.at(l) && numbers.at(k) + numbers.at(l) == numbers.at(i))
@@ -44,7 +44,7 @@ namespace day09 {
       auto numbers = loadNumbers();
       static const ulong invalid = 1309761972;
 
-      auto position = [numbers]{
+      auto position = [&numbers]{
          for (auto i = 0U; i < numbers.size(); i++) {
             for (auto sum = numbers.at(i), offset = 1UL; sum < invalid; offset++) {
                sum += numbers.at(i + offset);

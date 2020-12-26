@@ -6,7 +6,7 @@ namespace day01 {
    TEST_CASE("Day 1 - Part 1 from https://adventofcode.com/2020/day/1") {
       auto reportInput = util::loadInputFile("day01-input.txt");
 
-      auto result = [reportInput]{
+      auto result = [&reportInput]{
          for (const auto& element1 : reportInput)
             for (const auto& element2 : reportInput) {
                auto expense1 = stoi(element1);
@@ -24,7 +24,7 @@ namespace day01 {
    TEST_CASE("Day 1 - Part 2 from https://adventofcode.com/2020/day/1#part2") {
       auto reportInput = util::loadInputFile("day01-input.txt");
 
-      auto result = [reportInput]{
+      auto result = [&reportInput]{
          for (const auto& element1 : reportInput)
             for (const auto& element2 : reportInput)
                for (const auto& element3 : reportInput) {
