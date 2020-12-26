@@ -85,9 +85,9 @@ namespace day12 {
    void rotate(position& pos, const char direction, const uint degrees) {
       auto absolute = direction == 'R' ? degrees : 360 - degrees;
       switch (absolute) {
-         case  90: swap(pos.x, pos.y); util::negate(pos.y); return;
+         case  90: util::negate(pos.x); swap(pos.x, pos.y); return;
          case 180: util::negate(pos.x); util::negate(pos.y); return;
-         case 270: swap(pos.x, pos.y); util::negate(pos.x); return;
+         case 270: util::negate(pos.y); swap(pos.x, pos.y); return;
          default: throw ("invalid data");
       }
    }
