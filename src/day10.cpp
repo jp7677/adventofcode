@@ -32,7 +32,7 @@ namespace day10 {
    TEST_CASE("Day 10 - Part 2 from https://adventofcode.com/2020/day/10#part2") {
       auto differences = loadAdapterDifferences();
 
-      vector<uint> diff1groups {1};
+      vector<uint> diff1groups{1};
       for (auto i = 1U; i < differences.size(); i++) {
          if (differences.at(i) == 1)
             if (differences.at(i - 1) == 1)
