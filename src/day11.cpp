@@ -4,13 +4,28 @@ using namespace std;
 
 namespace day11 {
    void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const int x, const int y)) {
-      while (true) {
+      static const auto parallels = 4U;
+      auto findSwaps = [&map, &needsSwap](uint start, uint inc) {
          vector<pair<int, int>> swaps;
-         for (auto y = 0; y < map.size(); y++)
+         for (auto y = start; y < map.size(); y += inc)
             for (auto x = 0; x < map.at(0).size(); x++)
                if (needsSwap(map, x, y))
                   swaps.push_back(make_pair(x, y));
 
+         return swaps;
+      };
+
+      while (true) {
+         vector<future<vector<pair<int, int>>>> futures;
+         for (auto offset = 0U; offset < parallels; offset++)
+            futures.push_back(async(launch::async, findSwaps, offset, parallels));
+         
+         vector<pair<int, int>> swaps;
+         for (auto& future : futures) {
+            auto value = future.get();
+            move(value.begin(), value.end(), back_inserter(swaps));
+         }
+         
          if (swaps.size() == 0)
             return;
 
