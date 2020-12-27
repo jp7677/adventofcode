@@ -8,6 +8,7 @@
       "args": [
         "-std=c++17",
         "-Werror",
+        "-pthread",
         "${workspaceFolder}/{inc,src}/*.cpp",
         "-o",
         "${workspaceFolder}/adventofcode"
@@ -28,6 +29,7 @@
       "args": [
         "-std=c++17",
         "-Werror",
+        "-pthread",
         "${workspaceFolder}/inc/catch_amalgamated.cpp",
         "${workspaceFolder}/src/main.cpp",
         "-c"
@@ -49,6 +51,7 @@
         "-g",
         "-std=c++17",
         "-Werror",
+        "-pthread",
         "${workspaceFolder}/catch_amalgamated.o",
         "${workspaceFolder}/main.o",
         "${workspaceFolder}/src/day*.cpp",
