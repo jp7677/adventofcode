@@ -4,7 +4,10 @@ using namespace std;
 
 namespace day11 {
    void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const int x, const int y)) {
-      static const auto parallels = 4U;
+      static const auto parallels = thread::hardware_concurrency() / 2;
+      if (parallels == 0)
+         throw ("Invalid number of CPU cores");
+
       auto findSwaps = [&map, &needsSwap](uint start, uint inc) {
          vector<pair<int, int>> swaps;
          for (auto y = start; y < map.size(); y += inc)
