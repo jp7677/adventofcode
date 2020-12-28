@@ -18,13 +18,13 @@ namespace day11 {
          vector<future<vector<pair<int, int>>>> futures;
          for (auto offset = 0U; offset < util::concurrency(); offset++)
             futures.push_back(async(launch::async, findSwaps, offset, util::concurrency()));
-         
+
          vector<pair<int, int>> swaps;
          for (auto& future : futures) {
             auto value = future.get();
             move(value.begin(), value.end(), back_inserter(swaps));
          }
-         
+
          if (swaps.size() == 0)
             return;
 
@@ -51,7 +51,7 @@ namespace day11 {
          seats.push_back(map.at(y + 1).at(x));
       if (x < map.at(0).size() -1 && y < map.size() - 1)
          seats.push_back(map.at(y + 1).at(x + 1));
-      
+
       return seats;
    }
 
@@ -79,7 +79,7 @@ namespace day11 {
          [](const auto sum, const auto& line) {
             return sum + count(line.begin(), line.end(), '#');
          });
-      
+
       REQUIRE(result == 2283);
    }
 
@@ -96,7 +96,7 @@ namespace day11 {
 
       if (map.at(y1).at(x1) == 'L')
          return false;
-      
+
       return hasOccupiedSeat(map, x1, y1, move);
    }
 
@@ -132,7 +132,7 @@ namespace day11 {
          [](const auto sum, const auto& line) {
             return sum + count(line.begin(), line.end(), '#');
          });
-      
+
       REQUIRE(result == 2054);
    }
 }
