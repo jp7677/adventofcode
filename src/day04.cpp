@@ -44,7 +44,7 @@ namespace day04 {
    TEST_CASE("Day 4 - Part 1 from https://adventofcode.com/2020/day/4") {
       auto passports = loadPassports();
 
-      auto result = count_if(execution::par, passports.begin(), passports.end(),
+      auto result = count_if(passports.begin(), passports.end(),
          [](const auto& passport) {
             return isValidPassport(&passport);
          });
@@ -78,7 +78,7 @@ namespace day04 {
    TEST_CASE("Day 4 - Part 2 from https://adventofcode.com/2020/day/4#part2") {
       auto passports = loadPassports();
 
-      auto result = count_if(execution::par, passports.begin(), passports.end(),
+      auto result = count_if(passports.begin(), passports.end(),
          [](const auto& passport) {
             return isValidPassport(&passport) &&
                isInRange(passport.find("byr")->second, 1920, 2002) &&
