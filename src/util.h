@@ -48,4 +48,9 @@ namespace util {
    inline void negate (int& a) {
       a *= -1;
    }
+
+   static const auto numberOfCpuCores = thread::hardware_concurrency();
+   inline uint concurrency() {
+      return clamp(numberOfCpuCores / 2, 1U, 4U);
+   }
 }

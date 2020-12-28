@@ -4,12 +4,26 @@ using namespace std;
 
 namespace day11 {
    void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const int x, const int y)) {
-      while (true) {
+      auto findSwaps = [&map, &needsSwap](uint offset, uint inc) {
          vector<pair<int, int>> swaps;
-         for (auto y = 0; y < map.size(); y++)
+         for (auto y = offset; y < map.size(); y += inc)
             for (auto x = 0; x < map.at(0).size(); x++)
                if (needsSwap(map, x, y))
                   swaps.push_back(make_pair(x, y));
+
+         return swaps;
+      };
+
+      while (true) {
+         vector<future<vector<pair<int, int>>>> futures;
+         for (auto offset = 0U; offset < util::concurrency(); offset++)
+            futures.push_back(async(launch::async, findSwaps, offset, util::concurrency()));
+
+         vector<pair<int, int>> swaps;
+         for (auto& future : futures) {
+            auto value = future.get();
+            move(value.begin(), value.end(), back_inserter(swaps));
+         }
 
          if (swaps.size() == 0)
             return;
@@ -37,7 +51,7 @@ namespace day11 {
          seats.push_back(map.at(y + 1).at(x));
       if (x < map.at(0).size() -1 && y < map.size() - 1)
          seats.push_back(map.at(y + 1).at(x + 1));
-      
+
       return seats;
    }
 
@@ -65,7 +79,7 @@ namespace day11 {
          [](const auto sum, const auto& line) {
             return sum + count(line.begin(), line.end(), '#');
          });
-      
+
       REQUIRE(result == 2283);
    }
 
@@ -82,7 +96,7 @@ namespace day11 {
 
       if (map.at(y1).at(x1) == 'L')
          return false;
-      
+
       return hasOccupiedSeat(map, x1, y1, move);
    }
 
@@ -118,7 +132,7 @@ namespace day11 {
          [](const auto sum, const auto& line) {
             return sum + count(line.begin(), line.end(), '#');
          });
-      
+
       REQUIRE(result == 2054);
    }
 }
