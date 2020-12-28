@@ -50,7 +50,7 @@ namespace day07 {
    TEST_CASE("Day 7 - Part 1 from https://adventofcode.com/2020/day/7") {
       auto rules = loadLuagageRules();
 
-      auto result = count_if(execution::par, rules.begin(), rules.end(),
+      auto result = count_if(rules.begin(), rules.end(),
          [&rules](const auto& rule) {
             return containsShinyGoldBag(rules, rule.first);
          });
