@@ -4,10 +4,6 @@ using namespace std;
 
 namespace day11 {
    void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const int x, const int y)) {
-      static const auto parallels = thread::hardware_concurrency() / 2;
-      if (parallels == 0)
-         throw ("Invalid number of CPU cores");
-
       auto findSwaps = [&map, &needsSwap](uint start, uint inc) {
          vector<pair<int, int>> swaps;
          for (auto y = start; y < map.size(); y += inc)
@@ -20,8 +16,8 @@ namespace day11 {
 
       while (true) {
          vector<future<vector<pair<int, int>>>> futures;
-         for (auto offset = 0U; offset < parallels; offset++)
-            futures.push_back(async(launch::async, findSwaps, offset, parallels));
+         for (auto offset = 0U; offset < util::concurrency(); offset++)
+            futures.push_back(async(launch::async, findSwaps, offset, util::concurrency()));
          
          vector<pair<int, int>> swaps;
          for (auto& future : futures) {
