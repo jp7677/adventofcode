@@ -4,9 +4,9 @@ using namespace std;
 
 namespace day11 {
    void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const int x, const int y)) {
-      auto findSwaps = [&map, &needsSwap](uint start, uint inc) {
+      auto findSwaps = [&map, &needsSwap](uint offset, uint inc) {
          vector<pair<int, int>> swaps;
-         for (auto y = start; y < map.size(); y += inc)
+         for (auto y = offset; y < map.size(); y += inc)
             for (auto x = 0; x < map.at(0).size(); x++)
                if (needsSwap(map, x, y))
                   swaps.push_back(make_pair(x, y));
