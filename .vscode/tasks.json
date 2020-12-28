@@ -6,6 +6,9 @@
       "label": "g++ build project",
       "command": "/usr/bin/g++",
       "args": [
+        "-O2",
+        "-s",
+        "-DNDEBUG",
         "-std=c++17",
         "-Werror",
         "-pthread",
@@ -27,6 +30,9 @@
       "label": "g++ build catch",
       "command": "/usr/bin/g++",
       "args": [
+        "-O2",
+        "-s",
+        "-DNDEBUG",
         "-std=c++17",
         "-Werror",
         "-pthread",
