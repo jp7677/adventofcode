@@ -42,19 +42,27 @@ namespace day13 {
       }
 
       auto first = busIds.at(0);
-      auto inc = accumulate(busIds.begin(), busIds.end(), (ulong)first.first,
-         [first](const auto product, const auto& id) {
-            if (id.second == first.first || id.second - id.first == first.first)
-               return product * id.first;
-            
-            return product;
+      vector<pair<uint, uint>> incIds;
+      copy_if(busIds.begin(), busIds.end(), back_inserter(incIds),
+         [&first](const auto& id) {
+            return id.second == first.first || id.second - id.first == first.first;
+         });
+
+      remove_if(busIds.begin(), busIds.end(),
+         [&incIds](const auto& id) {
+            return find(incIds.begin(), incIds.end(), id) != incIds.end();
+         });
+
+      auto inc = accumulate(incIds.begin(), incIds.end(), (ulong)first.first,
+         [](const auto product, const auto& id) {
+            return product * id.first;
          });
 
       auto result = inc - first.first;
       while (true) {
          result += inc;
-         for (auto i = 1; i < busIds.size(); i++)
-            if ((result + busIds.at(i).second) % busIds.at(i).first > 0)
+         for (const auto& id : busIds)
+            if ((result + id.second) % id.first > 0)
                goto next;
 
          break;
