@@ -27,7 +27,7 @@ namespace day13 {
       REQUIRE(result == 2545);
    }
 
-   TEST_CASE("Day 13 - Part 2 from https://adventofcode.com/2020/day/13#part2", "[.]" /* Disabled due to very long running test */ ) {
+   TEST_CASE("Day 13 - Part 2 from https://adventofcode.com/2020/day/13#part2") {
       auto notesData = util::loadInputFile("day13-input.txt");
 
       auto busIdData = util::split(notesData.at(1), ',');
@@ -41,20 +41,18 @@ namespace day13 {
          offset++;
       }
 
-      auto product = accumulate(busIds.begin(), busIds.end(), 1UL,
-         [](const auto product, const auto& id) {
-            return product * id.first;
+      auto first = busIds.at(0);
+      auto inc = accumulate(busIds.begin(), busIds.end(), (ulong)first.first,
+         [first](const auto product, const auto& id) {
+            if (id.second == first.first || id.second - id.first == first.first)
+               return product * id.first;
+            
+            return product;
          });
 
-      auto first = busIds.at(0);
-      auto it = find_if(busIds.begin(), busIds.end(),
-         [&first](const auto& id) {
-            return id.second == first.first;
-         });
-      auto inc = first.first * (it != busIds.end() ? (*it).first : 1);
-      auto result = product - first.first;
-      while (result > inc) {
-         result -= inc;
+      auto result = inc - first.first;
+      while (true) {
+         result += inc;
          for (auto i = 1; i < busIds.size(); i++)
             if ((result + busIds.at(i).second) % busIds.at(i).first > 0)
                goto next;
