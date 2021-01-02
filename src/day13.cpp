@@ -27,7 +27,7 @@ namespace day13 {
       REQUIRE(result == 2545);
    }
 
-   TEST_CASE("Day 13 - Part 2 from https://adventofcode.com/2020/day/13#part2", "[.]" /* Disabled */ ) {
+   TEST_CASE("Day 13 - Part 2 from https://adventofcode.com/2020/day/13#part2", "[.]" /* Disabled due to very long running test */ ) {
       auto notesData = util::loadInputFile("day13-input.txt");
 
       auto busIdData = util::split(notesData.at(1), ',');
