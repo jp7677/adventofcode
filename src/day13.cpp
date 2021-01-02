@@ -53,7 +53,7 @@ namespace day13 {
             return find(incIds.begin(), incIds.end(), id) != incIds.end();
          });
 
-      auto inc = accumulate(incIds.begin(), incIds.end(), (ulong)first.first,
+      auto inc = accumulate(incIds.begin(), incIds.end(), static_cast<ulong>(first.first),
          [](const auto product, const auto& id) {
             return product * id.first;
          });
