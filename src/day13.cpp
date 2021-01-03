@@ -48,14 +48,20 @@ namespace day13 {
             return id.second == first.first || id.second - id.first == first.first;
          });
 
-      remove_if(busIds.begin(), busIds.end(),
-         [&incIds](const auto& id) {
-            return find(incIds.begin(), incIds.end(), id) != incIds.end();
-         });
+      busIds.erase(remove_if(busIds.begin(), busIds.end(),
+            [&incIds](const auto& id) {
+               return find(incIds.begin(), incIds.end(), id) != incIds.end();
+            }),
+         busIds.end());
 
       auto inc = accumulate(incIds.begin(), incIds.end(), static_cast<ulong>(first.first),
          [](const auto product, const auto& id) {
             return product * id.first;
+         });
+
+      sort(busIds.begin(), busIds.end(),
+         [](const auto& a, const auto& b) {
+            return a.first > b.first;
          });
 
       auto result = inc - first.first;
