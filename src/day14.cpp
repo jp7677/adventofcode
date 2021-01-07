@@ -22,7 +22,7 @@ namespace day14 {
          }
          else {
             auto address = stoi(programLine.substr(4, programLine.find(']') - 4));
-            auto value = static_cast<ulong>(stoi(programLine.substr(programLine.find('=') + 2)));
+            auto value = stoul(programLine.substr(programLine.find('=') + 2));
 
             bitset<36> valueMask(value);
             valueMask &= zeroMask;
