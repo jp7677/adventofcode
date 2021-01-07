@@ -11,12 +11,11 @@ namespace day14 {
       bitset<36> oneMask;
       for(const auto& programLine : programData) {
          if (programLine.substr(0, 4) == "mask") {
-            string zeroMaskLine(programLine.substr(7));
-            
+            auto zeroMaskLine(programLine.substr(7));
             replace(zeroMaskLine.begin(), zeroMaskLine.end(), 'X', '1');
             zeroMask = bitset<36>(zeroMaskLine);
 
-            string oneMaskLine(programLine.substr(7));
+            auto oneMaskLine(programLine.substr(7));
             replace(oneMaskLine.begin(), oneMaskLine.end(), 'X', '0');
             oneMask = bitset<36>(oneMaskLine);
          }
