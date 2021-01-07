@@ -9,7 +9,7 @@ namespace day14 {
       unordered_map<uint, ulong> memory;
       bitset<36> zeroMask;
       bitset<36> oneMask;
-      for(const auto& programLine : programData) {
+      for(const auto& programLine : programData)
          if (programLine.substr(0, 4) == "mask") {
             auto zeroMaskLine(programLine.substr(7));
             replace(zeroMaskLine.begin(), zeroMaskLine.end(), 'X', '1');
@@ -18,8 +18,7 @@ namespace day14 {
             auto oneMaskLine(programLine.substr(7));
             replace(oneMaskLine.begin(), oneMaskLine.end(), 'X', '0');
             oneMask = bitset<36>(oneMaskLine);
-         }
-         else {
+         } else {
             auto address = stoi(programLine.substr(4, programLine.find(']') - 4));
             auto value = stoul(programLine.substr(programLine.find('=') + 2));
 
@@ -29,7 +28,6 @@ namespace day14 {
 
             memory.insert_or_assign(address, valueMask.to_ulong());
          }
-      }
 
       auto result = accumulate(memory.begin(), memory.end(), 0UL,
          [](const auto sum, const auto& pair) {
