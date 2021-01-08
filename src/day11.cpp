@@ -16,6 +16,7 @@ namespace day11 {
 
       while (true) {
          vector<future<vector<pair<int, int>>>> futures;
+         futures.reserve(util::concurrency());
          for (auto offset = 0U; offset < util::concurrency(); offset++)
             futures.push_back(async(launch::async, findSwaps, offset, util::concurrency()));
 
