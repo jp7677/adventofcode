@@ -61,7 +61,7 @@ namespace day04 {
       if (!isMatch(value, "^\\d{" + to_string(digits) + "}$"))
          return false;
 
-      auto number = stoi(value);
+      auto number = stoul(value);
       return number >= min && number <= max;
    }
 
