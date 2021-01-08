@@ -31,8 +31,8 @@ namespace util {
       return result;
    }
 
-   inline string replaceAll(const string& replacableString, const char a, const char b) {
-      auto replacedString(replacableString);
+   inline string replaceAll(const string& replaceableString, const char a, const char b) {
+      auto replacedString(replaceableString);
       replace(replacedString.begin(), replacedString.end(), a, b);
       return replacedString;
    }

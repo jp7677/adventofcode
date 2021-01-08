@@ -13,8 +13,8 @@ namespace day02 {
          if (!success)
             throw runtime_error("Invalid data found");
 
-         auto minOccurences = stoi(matches[1].str());
-         auto maxOccurences = stoi(matches[2].str());
+         auto minOccurrences = stoi(matches[1].str());
+         auto maxOccurrences = stoi(matches[2].str());
          auto character = matches[3].str().at(0);
          auto password = matches[4].str();
 
@@ -23,7 +23,7 @@ namespace day02 {
             if (passwordCharacter == character)
                count++;
 
-         if (count >= minOccurences && count <= maxOccurences)
+         if (count >= minOccurrences && count <= maxOccurrences)
             result++;
       }
 
