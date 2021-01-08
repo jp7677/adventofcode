@@ -37,7 +37,7 @@ namespace day06 {
       auto result = accumulate(answersList.begin(), answersList.end(), 0U,
          [](const auto sum, const auto& answers) {
             if (answers.size() == 1)
-               sum + answers.at(0).size();
+               return sum + answers.at(0).size();
 
             auto intersected = answers.at(0);
             sort(intersected.begin(), intersected.end());
