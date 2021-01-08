@@ -31,6 +31,12 @@ namespace util {
       return result;
    }
 
+   inline string replaceAll(const string& replacableString, const char a, const char b) {
+      auto replacedString(replacableString);
+      replace(replacedString.begin(), replacedString.end(), a, b);
+      return replacedString;
+   }
+
    inline constexpr ushort numberOfDigits(const uint number)  
    {  
       return (number < 10 ? 1 :   
