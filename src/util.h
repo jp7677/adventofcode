@@ -10,7 +10,7 @@ namespace util {
 
       inputStream.open(filesystem::path("data") / fileName, ios::in);
       if (!inputStream.is_open())
-         throw("file is not open");
+         throw runtime_error("file is not open");
 
       string line;
       while(getline(inputStream, line))
