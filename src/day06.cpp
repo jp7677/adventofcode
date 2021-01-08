@@ -31,7 +31,7 @@ namespace day06 {
          if (!line.empty())
             answersList.back().push_back(line);
          else
-            answersList.push_back(vector<string>());
+            answersList.emplace_back();
       }
 
       auto result = accumulate(answersList.begin(), answersList.end(), 0U,
