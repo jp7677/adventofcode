@@ -44,38 +44,42 @@ namespace day14 {
    TEST_CASE("Day 14 - Part 2 from https://adventofcode.com/2020/day/14#part2") {
       auto programData = util::loadInputFile("day14-input.txt");
 
-      vector<uint> floating;
       pair<bitset<36>, bitset<36>> mask;
+      vector<bitset<36>> actualAdressMasks;
       unordered_map<ulong, ulong> memory;
       for(const auto& programLine : programData)
          if (programLine.substr(0, 4) == "mask") {
             auto maskLine = programLine.substr(7);
             mask = toMaskPair(maskLine);
 
-            floating.clear();
+            vector<uint> floatings;
             for (auto i = 0U; i < maskLine.size(); i++)
                if (maskLine.at(i) == 'X')
-                  floating.push_back(i);
-         }
-         else {
-            auto value = toValue(programLine);
+                  floatings.push_back(i);
+
+            auto count = 0U;
+            for (auto i = 0U; i < floatings.size(); i++)
+               count = (count << 1) + 1;
+
+            actualAdressMasks.clear();
+            for (auto i = 0U; i <= count; i++) {
+               bitset<36> countBits(i);
+               bitset<36> actualAddress;
+               for (auto y = 0U; y < floatings.size(); y++)
+                  if (countBits.test(y))
+                     actualAddress.set(35 - floatings.at(y));
+
+               actualAdressMasks.push_back(actualAddress);
+            }
+         } else {
             bitset<36> address(toAddress(programLine));
             address |= mask.second;
             address &= ~(mask.first ^ mask.second);
 
-            auto count = 0U;
-            for (auto i = 0U; i < floating.size(); i++)
-               count = (count << 1) + 1;
-
-            for (auto i = 0U; i <= count; i++) {
-               bitset<36> countBits(i);
+            for (const auto& actualAddressMask : actualAdressMasks) {
                bitset<36> actualAddress;
-               for (auto y = 0U; y < floating.size(); y++)
-                  if (countBits.test(y))
-                     actualAddress.set(35 - floating.at(y));
-
-               actualAddress |= address;
-               memory.insert_or_assign(actualAddress.to_ulong(), value);
+               actualAddress = actualAddressMask | address;
+               memory.insert_or_assign(actualAddress.to_ulong(), toValue(programLine));
             }
          }
 
