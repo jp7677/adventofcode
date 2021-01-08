@@ -25,7 +25,7 @@ namespace day11 {
             move(value.begin(), value.end(), back_inserter(swaps));
          }
 
-         if (swaps.size() == 0)
+         if (swaps.empty())
             return;
 
          for (const auto& swap : swaps)

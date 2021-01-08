@@ -25,7 +25,7 @@ namespace util {
       string token;
       vector<string> result;
       while(getline(inputStream, token, delimiter))
-         if(token.size() != 0)
+         if(!token.empty())
             result.push_back(token);
 
       return result;

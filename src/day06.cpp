@@ -8,7 +8,7 @@ namespace day06 {
 
       vector<string> answersList(1);
       for (const auto& line : answersListInput) {
-         if (line != string())
+         if (!line.empty())
             answersList.back() += line;
          else
             answersList.push_back(line);
@@ -28,7 +28,7 @@ namespace day06 {
 
       vector<vector<string>> answersList(1);
       for (const auto& line : answersListInput) {
-         if (line != string())
+         if (!line.empty())
             answersList.back().push_back(line);
          else
             answersList.push_back(vector<string>());
