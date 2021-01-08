@@ -17,7 +17,7 @@ namespace day08 {
       return program;
    }
 
-   TEST_CASE("Day 8 - Part 1 from https://adventofcode.com/2020/day/8") {
+   TEST_CASE("Day 08 - Part 1 from https://adventofcode.com/2020/day/8") {
       auto program = loadProgram();
 
       auto result = 0;
@@ -35,7 +35,7 @@ namespace day08 {
       REQUIRE(result == 1810);
    }
 
-   TEST_CASE("Day 8 - Part 2 from https://adventofcode.com/2020/day/8#part2") {
+   TEST_CASE("Day 08 - Part 2 from https://adventofcode.com/2020/day/8#part2") {
       auto program = loadProgram();
 
       auto result = [&program]{

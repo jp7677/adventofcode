@@ -47,8 +47,7 @@ namespace day07 {
       return false;
    }
 
-   TEST_CASE("Day 7 - Part 1 from https://adventofcode.com/2020/day/7") {
-      auto rules = loadLuagageRules();
+   TEST_CASE("Day 07 - Part 1 from https://adventofcode.com/2020/day/7") {
 
       auto result = count_if(rules.begin(), rules.end(),
          [&rules](const auto& rule) {
@@ -69,8 +68,7 @@ namespace day07 {
          });
    }
 
-   TEST_CASE("Day 7 - Part 2 from https://adventofcode.com/2020/day/7#part2") {
-      auto rules = loadLuagageRules();
+   TEST_CASE("Day 07 - Part 2 from https://adventofcode.com/2020/day/7#part2") {
 
       auto result = countBags(rules, "shiny-gold");
 

@@ -23,7 +23,7 @@ namespace day05 {
       return seatIds;
    }
 
-   TEST_CASE("Day 5 - Part 1 from https://adventofcode.com/2020/day/5") {
+   TEST_CASE("Day 05 - Part 1 from https://adventofcode.com/2020/day/5") {
       auto seatIds = loadSeatIds();
 
       auto result = seatIds.at(distance(seatIds.begin(), max_element(seatIds.begin(), seatIds.end())));
@@ -31,7 +31,7 @@ namespace day05 {
       REQUIRE(result == 842);
    }
 
-   TEST_CASE("Day 5 - Part 2 from https://adventofcode.com/2020/day/5#part2") {
+   TEST_CASE("Day 05 - Part 2 from https://adventofcode.com/2020/day/5#part2") {
       auto seatIds = loadSeatIds();
 
       sort(seatIds.begin(), seatIds.end());

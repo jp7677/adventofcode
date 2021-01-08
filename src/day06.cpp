@@ -3,7 +3,7 @@
 using namespace std;
 
 namespace day06 {
-   TEST_CASE("Day 6 - Part 1 from https://adventofcode.com/2020/day/6") {
+   TEST_CASE("Day 06 - Part 1 from https://adventofcode.com/2020/day/6") {
       auto answersListInput = util::loadInputFile("day06-input.txt");
 
       vector<string> answersList(1);
@@ -23,7 +23,7 @@ namespace day06 {
       REQUIRE(result == 6504);
    }
 
-   TEST_CASE("Day 6 - Part 2 from https://adventofcode.com/2020/day/6#part2") {
+   TEST_CASE("Day 06 - Part 2 from https://adventofcode.com/2020/day/6#part2") {
       auto answersListInput = util::loadInputFile("day06-input.txt");
 
       vector<vector<string>> answersList(1);

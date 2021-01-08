@@ -22,7 +22,7 @@ namespace day03 {
       return trees;
    }
 
-   TEST_CASE("Day 3 - Part 1 from https://adventofcode.com/2020/day/3") {
+   TEST_CASE("Day 03 - Part 1 from https://adventofcode.com/2020/day/3") {
       auto gridInput = util::loadInputFile("day03-input.txt");
 
       auto result = runSlope(&gridInput, 3, 1);
@@ -30,7 +30,7 @@ namespace day03 {
       REQUIRE(result == 265);
    }
 
-   TEST_CASE("Day 3 - Part 2 from https://adventofcode.com/2020/day/3#part2") {
+   TEST_CASE("Day 03 - Part 2 from https://adventofcode.com/2020/day/3#part2") {
       auto gridInput = util::loadInputFile("day03-input.txt");
 
       auto result = runSlope(&gridInput, 1, 1) *
