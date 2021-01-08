@@ -8,7 +8,7 @@ namespace day04 {
       
       vector<string> passports(1);
       for (const auto& line : passportsInput) {
-         if (line != string())
+         if (!line.empty())
             passports.back() += line + " ";
          else
             passports.push_back(line);
