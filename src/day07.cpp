@@ -3,7 +3,7 @@
 using namespace std;
 
 namespace day07 {
-   unordered_map<string, vector<pair<uint, string>>> loadLuagageRules() {
+   unordered_map<string, vector<pair<uint, string>>> loadLuggageRules() {
       auto rulesInput = util::loadInputFile("day07-input.txt");
 
       unordered_map<string, vector<pair<uint, string>>> rules;
@@ -16,8 +16,8 @@ namespace day07 {
             auto contains = ruleLine.substr(ruleLine.find(containKeyword) + containKeyword.size());
             auto splitted = util::split(contains, ',');
 
-            vector<pair<uint, string>> luagages;
-            transform(splitted.begin(), splitted.end(), back_inserter(luagages),
+            vector<pair<uint, string>> luggages;
+            transform(splitted.begin(), splitted.end(), back_inserter(luggages),
                [](const auto& value){
                   auto splitted = util::split(value, ' ');
 
@@ -26,7 +26,7 @@ namespace day07 {
                      splitted.at(splitted.size() - 3) + "-" + splitted.at(splitted.size() - 2));
                });
 
-            return make_pair(key, luagages);
+            return make_pair(key, luggages);
          });
       
       return rules;
@@ -37,17 +37,18 @@ namespace day07 {
       if (it == rules.end())
          return false;
 
-      for (const auto& luagage : it->second)
-         if (luagage.second == "shiny-gold")
+      for (const auto& luggage : it->second)
+         if (luggage.second == "shiny-gold")
             return true;
          else
-            if (containsShinyGoldBag(rules, luagage.second))
+            if (containsShinyGoldBag(rules, luggage.second))
                return true;
 
       return false;
    }
 
    TEST_CASE("Day 07 - Part 1 from https://adventofcode.com/2020/day/7") {
+      auto rules = loadLuggageRules();
 
       auto result = count_if(rules.begin(), rules.end(),
          [&rules](const auto& rule) {
@@ -63,12 +64,13 @@ namespace day07 {
          return 0;
 
       return accumulate(it->second.begin(), it->second.end(), 0U,
-         [&rules](const auto sum, const auto& luagage) {
-            return sum + luagage.first + (luagage.first * countBags(rules, luagage.second));
+         [&rules](const auto sum, const auto& luggage) {
+            return sum + luggage.first + (luggage.first * countBags(rules, luggage.second));
          });
    }
 
    TEST_CASE("Day 07 - Part 2 from https://adventofcode.com/2020/day/7#part2") {
+      auto rules = loadLuggageRules();
 
       auto result = countBags(rules, "shiny-gold");
 

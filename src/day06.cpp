@@ -15,7 +15,7 @@ namespace day06 {
       }
 
       auto result = accumulate(answersList.begin(), answersList.end(), 0U,
-         [](const auto sum, auto& answers) { // We cannot use `const auto& answers`/immmutable because of `unique`
+         [](const auto sum, auto& answers) { // We cannot use `const auto& answers`/immutable because of `unique`
             sort(answers.begin(), answers.end());
             return sum + distance(answers.begin(), unique(answers.begin(), answers.end()));
          });
