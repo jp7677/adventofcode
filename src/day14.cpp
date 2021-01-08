@@ -45,7 +45,7 @@ namespace day14 {
       auto programData = util::loadInputFile("day14-input.txt");
 
       pair<bitset<36>, bitset<36>> mask;
-      vector<bitset<36>> actualAdressMasks;
+      vector<bitset<36>> actualAddressMasks;
       unordered_map<ulong, ulong> memory;
       for(const auto& programLine : programData)
          if (programLine.substr(0, 4) == "mask") {
@@ -61,7 +61,7 @@ namespace day14 {
             for (auto i = 0U; i < floatings.size(); i++)
                count = (count << 1) + 1;
 
-            actualAdressMasks.clear();
+            actualAddressMasks.clear();
             for (auto i = 0U; i <= count; i++) {
                bitset<36> countBits(i);
                bitset<36> actualAddress;
@@ -69,14 +69,14 @@ namespace day14 {
                   if (countBits.test(y))
                      actualAddress.set(35 - floatings.at(y));
 
-               actualAdressMasks.push_back(actualAddress);
+               actualAddressMasks.push_back(actualAddress);
             }
          } else {
             bitset<36> address(toAddress(programLine));
             address |= mask.second;
             address &= ~(mask.first ^ mask.second);
 
-            for (const auto& actualAddressMask : actualAdressMasks) {
+            for (const auto& actualAddressMask : actualAddressMasks) {
                bitset<36> actualAddress;
                actualAddress = actualAddressMask | address;
                memory.insert_or_assign(actualAddress.to_ulong(), toValue(programLine));
