@@ -9,7 +9,7 @@ namespace day02 {
       auto result = 0U;
       for (const auto& passwordEntry : passwordEntriesInput) {
          smatch matches;
-         auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
+         auto success = regex_search(passwordEntry, matches, regex(R"((\d+)\-(\d+)\ (\w)\:\s(\w+))"));
          if (!success)
             throw runtime_error("Invalid data found");
 
@@ -36,7 +36,7 @@ namespace day02 {
       auto result = 0U;
       for (const auto& passwordEntry : passwordEntriesInput) {
          smatch matches;
-         auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
+         auto success = regex_search(passwordEntry, matches, regex(R"((\d+)\-(\d+)\ (\w)\:\s(\w+))"));
          if (!success)
             throw runtime_error("Invalid data found");
 
