@@ -37,14 +37,16 @@ namespace day07 {
       if (it == rules.end())
          return false;
 
-      for (const auto& luggage : it->second)
-         if (luggage.second == "shiny-gold")
-            return true;
-         else
-            if (containsShinyGoldBag(rules, luggage.second))
-               return true;
+      return any_of(it->second.begin(), it->second.end(),
+         [&rules](const auto& luggage) {
+            if (luggage.second == "shiny-gold")
+                return true;
 
-      return false;
+            if (containsShinyGoldBag(rules, luggage.second))
+                return true;
+
+            return false;
+         });
    }
 
    TEST_CASE("Day 07 - Part 1 from https://adventofcode.com/2020/day/7") {
