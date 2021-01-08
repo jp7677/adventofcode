@@ -15,7 +15,7 @@ namespace day01 {
                   return expense1 * expense2;
             }
 
-         throw ("invalid data");
+         throw runtime_error("invalid data");
       }();
 
       REQUIRE(result == 964875);
@@ -35,7 +35,7 @@ namespace day01 {
                      return expense1 * expense2 * expense3;
                }
 
-         throw ("invalid data");
+         throw runtime_error("invalid data");
       }();
 
       REQUIRE(result == 158661360);

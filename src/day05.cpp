@@ -41,7 +41,7 @@ namespace day05 {
             if (seatIds.at(i) != seatIds.at(i + 1) - 1)
                return seatIds.at(i) + 1;
 
-         throw ("Invalid data found");
+         throw runtime_error("Invalid data found");
       }();
 
       REQUIRE(result == 617);

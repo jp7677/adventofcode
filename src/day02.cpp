@@ -11,7 +11,7 @@ namespace day02 {
          smatch matches;
          auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
          if (!success)
-            throw("Invalid data found");
+            throw runtime_error("Invalid data found");
 
          auto minOccurences = stoi(matches[1].str());
          auto maxOccurences = stoi(matches[2].str());
@@ -38,7 +38,7 @@ namespace day02 {
          smatch matches;
          auto success = regex_search(passwordEntry, matches, regex("(\\d+)\\-(\\d+)\\ (\\w)\\:\\s(\\w+)"));
          if (!success)
-            throw ("Invalid data found");
+            throw runtime_error("Invalid data found");
 
          auto first = stoi(matches[1].str());
          auto second = stoi(matches[2].str());

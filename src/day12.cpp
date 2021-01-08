@@ -33,7 +33,7 @@ namespace day12 {
          case 'W': pos.x -= steps; return;
          case 'N': pos.y += steps; return;
          case 'S': pos.y -= steps; return;
-         default: throw ("invalid data");
+         default: throw runtime_error("invalid data");
       }
    }
 
@@ -47,7 +47,7 @@ namespace day12 {
          case  90: move(pos, 'E', steps); return;
          case 180: move(pos, 'S', steps); return;
          case 270: move(pos, 'W', steps); return;
-         default: throw ("invalid data");
+         default: throw runtime_error("invalid data");
       }
    }
 
@@ -55,7 +55,7 @@ namespace day12 {
       switch (direction) {
          case 'R': ship.direction += degrees; return;
          case 'L': ship.direction -= degrees; return;
-         default: throw ("invalid data");
+         default: throw runtime_error("invalid data");
       }
    }
 
@@ -74,7 +74,7 @@ namespace day12 {
             case 'F':
                move(ship, ship.direction, instruction.second);
                continue;
-            default: throw ("invalid data");
+            default: throw runtime_error("invalid data");
          }
 
       auto result = ship.getManhattenDistance();
@@ -88,7 +88,7 @@ namespace day12 {
          case  90: util::negate(pos.x); swap(pos.x, pos.y); return;
          case 180: util::negate(pos.x); util::negate(pos.y); return;
          case 270: util::negate(pos.y); swap(pos.x, pos.y); return;
-         default: throw ("invalid data");
+         default: throw runtime_error("invalid data");
       }
    }
 
@@ -109,7 +109,7 @@ namespace day12 {
                move(ship, 'E', waypoint.x * instruction.second);
                move(ship, 'N', waypoint.y * instruction.second);
                continue;
-            default: throw ("invalid data");
+            default: throw runtime_error("invalid data");
          }
 
       auto result = ship.getManhattenDistance();
