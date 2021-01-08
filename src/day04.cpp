@@ -52,11 +52,11 @@ namespace day04 {
       REQUIRE(result == 233);
    }
 
-   bool isMatch(const string value, const string pattern) {
+   bool isMatch(const string& value, const string& pattern) {
       return regex_match(value, regex(pattern));
    }
 
-   bool isInRange(const string value, const uint min, const uint max) {
+   bool isInRange(const string& value, const uint min, const uint max) {
       auto digits = util::numberOfDigits(min);
       if (!isMatch(value, "^\\d{" + to_string(digits) + "}$"))
          return false;
@@ -65,7 +65,7 @@ namespace day04 {
       return number >= min && number <= max;
    }
 
-   bool isValidHeight(const string value) {
+   bool isValidHeight(const string& value) {
       if (isMatch(value, "^\\d{3}cm$"))
          return isInRange(value.substr(0, 3), 150, 193);
 

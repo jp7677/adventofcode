@@ -32,7 +32,7 @@ namespace day07 {
       return rules;
    }
 
-   bool containsShinyGoldBag(const unordered_map<string, vector<pair<uint, string>>>& rules, const string bag) {
+   bool containsShinyGoldBag(const unordered_map<string, vector<pair<uint, string>>>& rules, const string& bag) {
       auto it = rules.find(bag);
       if (it == rules.end())
          return false;
@@ -58,7 +58,7 @@ namespace day07 {
       REQUIRE(result == 268);
    }
 
-   uint countBags(const unordered_map<string, vector<pair<uint, string>>>& rules, const string bag) {
+   uint countBags(const unordered_map<string, vector<pair<uint, string>>>& rules, const string& bag) {
       auto it = rules.find(bag);
       if (it == rules.end())
          return 0;
