@@ -58,7 +58,7 @@ namespace day08 {
             }
          }
 
-         throw ("Invalid data");
+         throw runtime_error("Invalid data");
       }();
 
       REQUIRE(result == 969);

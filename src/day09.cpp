@@ -34,7 +34,7 @@ namespace day09 {
                return numbers.at(i);
          }
 
-         throw ("Invalid data");
+         throw runtime_error("Invalid data");
       }();
 
       REQUIRE(result == 1309761972);
@@ -53,7 +53,7 @@ namespace day09 {
             }
          }
 
-         throw ("Invalid data");
+         throw runtime_error("Invalid data");
       }();
 
       auto element = minmax_element(next(numbers.begin(), position.first), next(numbers.begin(), position.second));
