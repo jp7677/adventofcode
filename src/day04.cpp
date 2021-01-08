@@ -41,7 +41,7 @@ namespace day04 {
          passport->find("pid") != passport->end();
    }
 
-   TEST_CASE("Day 4 - Part 1 from https://adventofcode.com/2020/day/4") {
+   TEST_CASE("Day 04 - Part 1 from https://adventofcode.com/2020/day/4") {
       auto passports = loadPassports();
 
       auto result = count_if(passports.begin(), passports.end(),
@@ -75,7 +75,7 @@ namespace day04 {
       return false;
    }
 
-   TEST_CASE("Day 4 - Part 2 from https://adventofcode.com/2020/day/4#part2") {
+   TEST_CASE("Day 04 - Part 2 from https://adventofcode.com/2020/day/4#part2") {
       auto passports = loadPassports();
 
       auto result = count_if(passports.begin(), passports.end(),
