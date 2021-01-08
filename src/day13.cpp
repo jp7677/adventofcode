@@ -36,7 +36,7 @@ namespace day13 {
       auto offset = 0U;
       for (const auto& id : busIdData) {
          if (id != "x")
-            busIds.push_back(make_pair(stoi(id), offset));
+            busIds.emplace_back(stoi(id), offset);
 
          offset++;
       }

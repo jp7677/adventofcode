@@ -9,7 +9,7 @@ namespace day11 {
          for (auto y = offset; y < map.size(); y += inc)
             for (auto x = 0; x < map.at(0).size(); x++)
                if (needsSwap(map, x, y))
-                  swaps.push_back(make_pair(x, y));
+                  swaps.emplace_back(x, y);
 
          return swaps;
       };
