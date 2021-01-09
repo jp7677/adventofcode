@@ -7,4 +7,4 @@ g++ -std=c++17 -Wall -Wextra -Werror -pthread \
     src/day*.cpp \
     -o adventofcode
 
-./adventofcode $@
+./adventofcode "$@"
