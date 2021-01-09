@@ -3,17 +3,26 @@
 using namespace std;
 
 namespace day01 {
+    vector<int> loadReportInput() {
+        auto reportInputData = util::loadInputFile("day01-input.txt");
+
+        vector<int> reportInput;
+        transform(reportInputData.begin(), reportInputData.end(), back_inserter(reportInput),
+            [](const auto& element) {
+                return stoi(element);
+            });
+
+        return reportInput;
+    }
+
     TEST_CASE("Day 01 - Part 1 from https://adventofcode.com/2020/day/1") {
-        auto reportInput = util::loadInputFile("day01-input.txt");
+        auto reportInput = loadReportInput();
 
         auto result = [&reportInput] {
-            for (const auto& element1 : reportInput)
-                for (const auto& element2 : reportInput) {
-                auto expense1 = stoi(element1);
-                auto expense2 = stoi(element2);
-                if (expense1 + expense2 == 2020)
-                    return expense1 * expense2;
-                }
+            for (const auto& expense1 : reportInput)
+                for (const auto& expense2 : reportInput)
+                    if (expense1 + expense2 == 2020)
+                        return expense1 * expense2;
 
             throw runtime_error("invalid data");
         }();
@@ -22,18 +31,14 @@ namespace day01 {
     }
 
     TEST_CASE("Day 01 - Part 2 from https://adventofcode.com/2020/day/1#part2") {
-        auto reportInput = util::loadInputFile("day01-input.txt");
+        auto reportInput = loadReportInput();
 
         auto result = [&reportInput] {
-            for (const auto& element1 : reportInput)
-                for (const auto& element2 : reportInput)
-                    for (const auto& element3 : reportInput) {
-                        auto expense1 = stoi(element1);
-                        auto expense2 = stoi(element2);
-                        auto expense3 = stoi(element3);
+            for (const auto& expense1 : reportInput)
+                for (const auto& expense2 : reportInput)
+                    for (const auto& expense3 : reportInput)
                         if (expense1 + expense2 + expense3 == 2020)
                             return expense1 * expense2 * expense3;
-                    }
 
             throw runtime_error("invalid data");
         }();
