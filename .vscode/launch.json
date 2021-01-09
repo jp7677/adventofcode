@@ -2,10 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "g++ build and debug tests",
+      "name": "Build and debug",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/adventofcode",
+      "program": "${workspaceFolder}/cmake-build-debug/adventofcode",
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
       "setupCommands": [
@@ -15,7 +15,7 @@
           "ignoreFailures": true
         }
       ],
-      "preLaunchTask": "g++ build tests (debug)",
+      "preLaunchTask": "Build (Debug)",
       "miDebuggerPath": "/usr/bin/gdb"
     }
   ]

@@ -2,14 +2,14 @@
 
 From <https://adventofcode.com/2020>. Likely to late for every day, but hopefully it's the intention that counts ;)
 
-## Compile & run
+## Compile & run (Release)
 
 ```bash
 ./make.sh
-./adventofcode
+./cmake-build-release/adventofcode
 ```
 
-## Recompile days & run
+## Recompile days & run (Release)
 
 ```bash
 ./run.sh
