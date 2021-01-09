@@ -62,7 +62,7 @@ namespace day12 {
    TEST_CASE("Day 12 - Part 1 from https://adventofcode.com/2020/day/12") {
       auto instructions = loadInstructions();
 
-      ship ship{0, 0, 90};
+      ship ship{{0, 0}, 90};
       for(const auto& instruction : instructions)
          switch (instruction.first) {
             case 'N': case 'E': case 'S': case 'W':

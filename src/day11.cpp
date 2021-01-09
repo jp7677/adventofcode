@@ -3,11 +3,21 @@
 using namespace std;
 
 namespace day11 {
+   struct size {
+      int width;
+      int height;
+   };
+
+   size getMapSize(const vector<string>& map) {
+       return size{static_cast<int>(map.at(0).size()), static_cast<int>(map.size())};
+   }
+
    void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const int x, const int y)) {
-      auto findSwaps = [&map, &needsSwap](uint offset, uint inc) {
+      auto size = getMapSize(map);
+      auto findSwaps = [&map, &size, &needsSwap](int offset, uint inc) {
          vector<pair<int, int>> swaps;
-         for (auto y = offset; y < map.size(); y += inc)
-            for (auto x = 0; x < map.at(0).size(); x++)
+         for (auto y = offset; y < size.height; y += inc)
+            for (auto x = 0; x < size.width; x++)
                if (needsSwap(map, x, y))
                   swaps.emplace_back(x, y);
 
@@ -35,22 +45,23 @@ namespace day11 {
    }
 
    string getAdjacentSeats(const vector<string>& map, const int x, const int y) {
+      auto size = getMapSize(map);
       string seats;
       if (x > 0 && y > 0)
          seats.push_back(map.at(y - 1).at(x - 1));
       if (y > 0)
          seats.push_back(map.at(y - 1).at(x));
-      if (x < map.at(0).size() - 1 && y > 0)
+      if (x < size.width - 1 && y > 0)
          seats.push_back(map.at(y - 1).at(x + 1));
       if (x > 0)
          seats.push_back(map.at(y).at(x - 1));
-      if (x < map.at(0).size() - 1)
+      if (x < size.width - 1)
          seats.push_back(map.at(y).at(x + 1));
-      if (x > 0 && y < map.size() - 1)
+      if (x > 0 && y < size.height - 1)
          seats.push_back(map.at(y + 1).at(x - 1));
-      if (y < map.size() - 1)
+      if (y < size.height - 1)
          seats.push_back(map.at(y + 1).at(x));
-      if (x < map.at(0).size() -1 && y < map.size() - 1)
+      if (x < size.width - 1 && y < size.height - 1)
          seats.push_back(map.at(y + 1).at(x + 1));
 
       return seats;
@@ -89,7 +100,8 @@ namespace day11 {
       auto y1 = y;
       move(x1, y1);
 
-      if (x1 < 0 || y1 < 0 || x1 > map.at(0).size() - 1 || y1 > map.size() - 1)
+      auto size = getMapSize(map);
+      if (x1 < 0 || y1 < 0 || x1 > size.width - 1 || y1 > size.height - 1)
          return false;
 
       if (map.at(y1).at(x1) == '#')
@@ -107,14 +119,14 @@ namespace day11 {
          return false;
 
       auto occupiedSeats = 0U;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1--;y1--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ y1--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1++;y1--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1--; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1--;y1++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ y1++; })) occupiedSeats++;
-      if (hasOccupiedSeat(map, x, y, [](auto x1, auto y1){ x1++;y1++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1--;y1--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ y1--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1++;y1--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1--; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1--;y1++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ y1++; })) occupiedSeats++;
+      if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1++;y1++; })) occupiedSeats++;
 
       if (seat == 'L' && occupiedSeats == 0)
          return true;
