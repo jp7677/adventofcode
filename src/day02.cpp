@@ -7,26 +7,25 @@ namespace day02 {
       auto passwordEntriesInput = util::loadInputFile("day02-input.txt");
 
       auto re = regex(R"((\d+)\-(\d+)\ (\w)\:\s(\w+))");
-      auto result = 0U;
-      for (const auto& passwordEntry : passwordEntriesInput) {
-         smatch matches;
-         auto success = regex_search(passwordEntry, matches, re);
-         if (!success)
-            throw runtime_error("Invalid data found");
+      auto result = count_if(passwordEntriesInput.begin(), passwordEntriesInput.end(),
+         [&re](const auto& passwordEntry) {
+            smatch matches;
+            auto success = regex_search(passwordEntry, matches, re);
+            if (!success)
+               throw runtime_error("Invalid data found");
 
-         auto minOccurrences = stoul(matches[1].str());
-         auto maxOccurrences = stoul(matches[2].str());
-         auto character = matches[3].str().at(0);
-         auto password = matches[4].str();
+            auto minOccurrences = stoul(matches[1].str());
+            auto maxOccurrences = stoul(matches[2].str());
+            auto character = matches[3].str().at(0);
+            auto password = matches[4].str();
 
-         auto count = 0U;
-         for (const auto& passwordCharacter : password)
-            if (passwordCharacter == character)
-               count++;
+            auto count = count_if(password.begin(), password.end(),
+               [&character](const auto& passwordCharacter) {
+                  return passwordCharacter == character;
+               });
 
-         if (count >= minOccurrences && count <= maxOccurrences)
-            result++;
-      }
+            return count >= minOccurrences && count <= maxOccurrences;
+         });
 
       REQUIRE(result == 422);
    }
