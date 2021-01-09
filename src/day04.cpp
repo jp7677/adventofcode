@@ -56,11 +56,11 @@ namespace day04 {
         return regex_match(value, pattern);
     }
 
-    static const regex digits2Re("^\\d{2}$");
-    static const regex digits3Re("^\\d{3}$");
-    static const regex digits4Re("^\\d{4}$");
-
     bool isInRange(const string& value, const uint min, const uint max) {
+        static const regex digits2Re("^\\d{2}$");
+        static const regex digits3Re("^\\d{3}$");
+        static const regex digits4Re("^\\d{4}$");
+
         switch (util::numberOfDigits(min)) {
             case 2: if (!isMatch(value, digits2Re)) return false; break;
             case 3: if (!isMatch(value, digits3Re)) return false; break;
@@ -72,10 +72,10 @@ namespace day04 {
         return number >= min && number <= max;
     }
 
-    static const regex cmRe("^\\d{3}cm$");
-    static const regex inRe("^\\d{2}in$");
-
     bool isValidHeight(const string& value) {
+        static const regex cmRe("^\\d{3}cm$");
+        static const regex inRe("^\\d{2}in$");
+
         if (isMatch(value, cmRe))
             return isInRange(value.substr(0, 3), 150, 193);
 
@@ -85,12 +85,12 @@ namespace day04 {
         return false;
     }
 
-    static const regex hclRe("^#[0-9a-f]{6}$");
-    static const regex eclRe("^(amb|blu|brn|gry|grn|hzl|oth)$");
-    static const regex pidRe("^\\d{9}$");
-
     TEST_CASE("Day 04 - Part 2 from https://adventofcode.com/2020/day/4#part2") {
         auto passports = loadPassports();
+
+        static const regex hclRe("^#[0-9a-f]{6}$");
+        static const regex eclRe("^(amb|blu|brn|gry|grn|hzl|oth)$");
+        static const regex pidRe("^\\d{9}$");
 
         auto result = count_if(passports.begin(), passports.end(),
             [](const auto& passport) {
