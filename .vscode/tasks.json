@@ -3,7 +3,7 @@
   "tasks": [
     {
       "type": "shell",
-      "label": "configure (debug)",
+      "label": "Configure (Debug)",
       "command": "/usr/bin/cmake",
       "args": [
         "-DCMAKE_BUILD_TYPE=Debug",
@@ -18,7 +18,7 @@
     },
     {
       "type": "shell",
-      "label": "build (debug)",
+      "label": "Build (Debug)",
       "command": "/usr/bin/cmake",
       "args": [
         "--build",
@@ -43,7 +43,7 @@
     },
     {
       "type": "shell",
-      "label": "configure (release)",
+      "label": "Configure (Release)",
       "command": "/usr/bin/cmake",
       "args": [
         "-DCMAKE_BUILD_TYPE=Release",
@@ -58,7 +58,7 @@
     },
     {
       "type": "shell",
-      "label": "build (release)",
+      "label": "Build (Release)",
       "command": "/usr/bin/cmake",
       "args": [
         "--build",
