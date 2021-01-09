@@ -14,8 +14,8 @@ namespace day02 {
             if (!success)
                throw runtime_error("Invalid data found");
 
-            auto minOccurrences = stoul(matches[1].str());
-            auto maxOccurrences = stoul(matches[2].str());
+            auto minOccurrences = stoi(matches[1].str());
+            auto maxOccurrences = stoi(matches[2].str());
             auto character = matches[3].str().at(0);
             auto password = matches[4].str();
 
