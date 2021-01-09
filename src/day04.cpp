@@ -52,28 +52,42 @@ namespace day04 {
         REQUIRE(result == 233);
     }
 
-    bool isMatch(const string& value, const string& pattern) {
-        return regex_match(value, regex(pattern));
+    bool isMatch(const string& value, const regex& pattern) {
+        return regex_match(value, pattern);
     }
 
+    static const regex digits2Re("^\\d{2}$");
+    static const regex digits3Re("^\\d{3}$");
+    static const regex digits4Re("^\\d{4}$");
+
     bool isInRange(const string& value, const uint min, const uint max) {
-        auto digits = util::numberOfDigits(min);
-        if (!isMatch(value, "^\\d{" + to_string(digits) + "}$"))
-            return false;
+        switch (util::numberOfDigits(min)) {
+            case 2: if (!isMatch(value, digits2Re)) return false; break;
+            case 3: if (!isMatch(value, digits3Re)) return false; break;
+            case 4: if (!isMatch(value, digits4Re)) return false; break;
+            default: throw runtime_error("invalid data");
+        }
 
         auto number = stoul(value);
         return number >= min && number <= max;
     }
 
+    static const regex cmRe("^\\d{3}cm$");
+    static const regex inRe("^\\d{2}in$");
+
     bool isValidHeight(const string& value) {
-        if (isMatch(value, "^\\d{3}cm$"))
+        if (isMatch(value, cmRe))
             return isInRange(value.substr(0, 3), 150, 193);
 
-        if (isMatch(value, "^\\d{2}in$"))
+        if (isMatch(value, inRe))
             return isInRange(value.substr(0, 2), 59, 76);
 
         return false;
     }
+
+    static const regex hclRe("^#[0-9a-f]{6}$");
+    static const regex eclRe("^(amb|blu|brn|gry|grn|hzl|oth)$");
+    static const regex pidRe("^\\d{9}$");
 
     TEST_CASE("Day 04 - Part 2 from https://adventofcode.com/2020/day/4#part2") {
         auto passports = loadPassports();
@@ -85,9 +99,9 @@ namespace day04 {
                     isInRange(passport.find("iyr")->second, 2010, 2020) &&
                     isInRange(passport.find("eyr")->second, 2020, 2030) &&
                     isValidHeight(passport.find("hgt")->second) &&
-                    isMatch(passport.find("hcl")->second, "^#[0-9a-f]{6}$") &&
-                    isMatch(passport.find("ecl")->second, "^(amb|blu|brn|gry|grn|hzl|oth)$") &&
-                    isMatch(passport.find("pid")->second, "^\\d{9}$");
+                    isMatch(passport.find("hcl")->second, hclRe) &&
+                    isMatch(passport.find("ecl")->second, eclRe) &&
+                    isMatch(passport.find("pid")->second, pidRe);
             });
 
         REQUIRE(result == 111);
