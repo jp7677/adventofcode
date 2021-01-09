@@ -3,22 +3,13 @@
   "tasks": [
     {
       "type": "shell",
-      "label": "g++ build project",
-      "command": "/usr/bin/g++",
+      "label": "Configure (Debug)",
+      "command": "/usr/bin/cmake",
       "args": [
-        "-O2",
-        "-s",
-        "-DNDEBUG",
-        "-std=c++17",
-        "-Werror",
-        "-pthread",
-        "${workspaceFolder}/{inc,src}/*.cpp",
-        "-o",
-        "${workspaceFolder}/adventofcode"
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-B./cmake-build-debug"
       ],
-      "problemMatcher": [
-        "$gcc"
-      ],
+      "problemMatcher": [],
       "group": "build",
       "presentation": {
         "clear": true,
@@ -27,42 +18,16 @@
     },
     {
       "type": "shell",
-      "label": "g++ build catch",
-      "command": "/usr/bin/g++",
+      "label": "Build (Debug)",
+      "command": "/usr/bin/cmake",
       "args": [
-        "-O2",
-        "-s",
-        "-DNDEBUG",
-        "-std=c++17",
-        "-Werror",
-        "-pthread",
-        "${workspaceFolder}/inc/catch_amalgamated.cpp",
-        "${workspaceFolder}/src/main.cpp",
-        "-c"
-      ],
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "group": "build",
-      "presentation": {
-        "clear": true,
-        "showReuseMessage": false
-      }
-    },
-    {
-      "type": "shell",
-      "label": "g++ build tests (debug)",
-      "command": "/usr/bin/g++",
-      "args": [
-        "-g",
-        "-std=c++17",
-        "-Werror",
-        "-pthread",
-        "${workspaceFolder}/catch_amalgamated.o",
-        "${workspaceFolder}/main.o",
-        "${workspaceFolder}/src/day*.cpp",
-        "-o",
-        "${workspaceFolder}/adventofcode"
+        "--build",
+        "./cmake-build-debug",
+        "--target",
+        "all",
+        "--",
+        "-j",
+        "9"
       ],
       "problemMatcher": [
         "$gcc"
@@ -71,6 +36,43 @@
         "kind": "build",
         "isDefault": true
       },
+      "presentation": {
+        "clear": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
+      "label": "Configure (Release)",
+      "command": "/usr/bin/cmake",
+      "args": [
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-B./cmake-build-release"
+      ],
+      "problemMatcher": [],
+      "group": "build",
+      "presentation": {
+        "clear": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
+      "label": "Build (Release)",
+      "command": "/usr/bin/cmake",
+      "args": [
+        "--build",
+        "./cmake-build-release",
+        "--target",
+        "all",
+        "--",
+        "-j",
+        "9"
+      ],
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": "build",
       "presentation": {
         "clear": true,
         "showReuseMessage": false

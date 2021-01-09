@@ -1,10 +1,5 @@
 #!/bin/bash
 set -e
 
-g++ -std=c++17 -Wall -Wextra -Werror -pthread \
-    catch_amalgamated.o \
-    main.o \
-    src/day*.cpp \
-    -o adventofcode
-
-./adventofcode "$@"
+cmake --build ./cmake-build-release --target all -- -j 9
+./cmake-build-release/adventofcode "$@"

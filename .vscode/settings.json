@@ -3,6 +3,8 @@
     ".vscode/**": true,
     ".github/**": true,
     ".gitignore": true,
+    "cmake-build-*/**": true,
+    "CMakeLists.txt": true,
     "*.o": true,
     "adventofcode": true
   },
