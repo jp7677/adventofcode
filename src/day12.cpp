@@ -63,7 +63,7 @@ namespace day12 {
         auto instructions = loadInstructions();
 
         ship ship{{0, 0}, 90};
-        for(const auto& instruction : instructions)
+        for (const auto& instruction : instructions)
             switch (instruction.first) {
                 case 'N': case 'E': case 'S': case 'W':
                     move(ship, instruction.first, instruction.second);
@@ -97,7 +97,7 @@ namespace day12 {
 
         position ship{0, 0};
         position waypoint{10, 1};
-        for(const auto& instruction : instructions)
+        for (const auto& instruction : instructions)
             switch (instruction.first) {
                 case 'N': case 'E': case 'S': case 'W':
                     move(waypoint, instruction.first, instruction.second);

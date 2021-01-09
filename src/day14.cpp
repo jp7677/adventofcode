@@ -22,7 +22,7 @@ namespace day14 {
 
         pair<bitset<36>, bitset<36>> mask;
         unordered_map<uint, ulong> memory;
-        for(const auto& programLine : programData)
+        for (const auto& programLine : programData)
             if (programLine.substr(0, 4) == "mask")
                 mask = toMaskPair(programLine.substr(7));
             else {
@@ -47,7 +47,7 @@ namespace day14 {
         pair<bitset<36>, bitset<36>> mask;
         vector<bitset<36>> actualAddressMasks;
         unordered_map<ulong, ulong> memory;
-        for(const auto& programLine : programData)
+        for (const auto& programLine : programData)
             if (programLine.substr(0, 4) == "mask") {
                 auto maskLine = programLine.substr(7);
                 mask = toMaskPair(maskLine);
