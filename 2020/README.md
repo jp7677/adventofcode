@@ -8,6 +8,7 @@ From <https://adventofcode.com/2020>. Better late than never ;)
 - libdw (`dnf install elfutils-devel` or `apt-get install libdw-dev`)
 - libunwind (`dnf install libunwind-devel` or `apt-get install libunwind-dev`)
 - cmake
+- catch2 (`dnf install catch-devel` or `apt install catch2`)
 
 Only Linux/gcc has been tested. Other platforms might just work though.
 
