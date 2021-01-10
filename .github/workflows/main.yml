@@ -127,7 +127,7 @@ jobs:
       - name: Set up packages
         run: |
           sudo apt update
-          sudo apt install -y libdw-dev libunwind-dev
+          sudo apt install -y catch2 libdw-dev libunwind-dev
       - name: Uzip data
         env:
           INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
