@@ -7,7 +7,7 @@ add_compile_options(-Wall -Wextra -Werror)
 include_directories(inc)
 include_directories(src)
 
-FILE(GLOB days src/day*.cpp) # This might be bad idea
+FILE(GLOB days src/day*.cpp) # This might be a bad idea
 
 add_executable(adventofcode
     inc/catch_amalgamated.cpp
