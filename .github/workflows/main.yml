@@ -17,5 +17,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Compile and run
         run: |
+          sudo apt install -y catch2
           ./make.sh
           ./cmake-build-release/adventofcode
