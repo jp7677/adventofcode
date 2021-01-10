@@ -4,6 +4,7 @@
     ".idea/**": true,
     ".github/**": true,
     ".gitignore": true,
+    ".gitattributes": true,
     "cmake-build-*/**": true
   },
   "C_Cpp.errorSquiggles": "Enabled",
