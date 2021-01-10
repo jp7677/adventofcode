@@ -1,21 +1,18 @@
 cmake_minimum_required(VERSION 3.17)
 project(adventofcode)
 
+find_package(Catch2 REQUIRED)
+
 set(CMAKE_CXX_STANDARD 17)
 add_compile_options(-Wall -Wextra -Werror)
 
-include_directories(inc)
 include_directories(src)
 
 FILE(GLOB days src/day*.cpp) # This might be a bad idea
+add_executable(${CMAKE_PROJECT_NAME}
+        src/main.cpp
+        ${days})
 
-add_executable(adventofcode
-    inc/catch_amalgamated.cpp
-    inc/catch_amalgamated.hpp
-    src/main.cpp
-    src/util.h
-    src/days_private.h
-    ${days})
-
-target_link_libraries(adventofcode PRIVATE
-    pthread)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+        pthread
+        Catch2::Catch2)
