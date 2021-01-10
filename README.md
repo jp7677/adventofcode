@@ -2,6 +2,12 @@
 
 From <https://adventofcode.com/2020>. Likely to late for every day, but hopefully it's the intention that counts ;)
 
+## System requirements
+
+- gcc
+- cmake
+- catch2 (`dnf install catch-devel` or `apt install catch2`)
+
 ## Compile & run (Release)
 
 ```bash
