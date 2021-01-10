@@ -7,6 +7,6 @@
 #include <string>
 #include <future>
 
-#include "../inc/catch_amalgamated.hpp"
+#include "../inc/catch.hpp"
 
 #include "util.h"
