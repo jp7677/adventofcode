@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.17)
 project(adventofcode)
 
+find_package(Catch2 REQUIRED)
+
 set(CMAKE_CXX_STANDARD 17)
 add_compile_options(-Wall -Wextra -Werror)
 
@@ -12,4 +14,5 @@ add_executable(${CMAKE_PROJECT_NAME}
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     dw
     unwind
-    pthread)
+    pthread
+    Catch2::Catch2)

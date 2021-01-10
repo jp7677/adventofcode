@@ -8,6 +8,6 @@
 #include <string>
 #include <future>
 
-#include "../inc/catch.hpp"
+#include <catch2/catch.hpp>
 
 #include "util.h"
