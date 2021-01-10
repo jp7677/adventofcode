@@ -5,14 +5,14 @@ From <https://adventofcode.com/2020>. Likely to late for every day, but hopefull
 ## Compile & run (Release)
 
 ```bash
-./make.sh
+./build/make.sh
 ./cmake-build-release/adventofcode
 ```
 
 ## Recompile & run (Debug)
 
 ```bash
-./run.sh
+./build/run.sh
 ```
 
 ## Other cool solutions
