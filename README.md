@@ -9,7 +9,7 @@ From <https://adventofcode.com/2020>. Likely to late for every day, but hopefull
 ./cmake-build-release/adventofcode
 ```
 
-## Recompile days & run (Release)
+## Recompile & run (Debug)
 
 ```bash
 ./run.sh
