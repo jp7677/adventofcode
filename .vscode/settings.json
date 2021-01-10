@@ -4,10 +4,7 @@
     ".idea/**": true,
     ".github/**": true,
     ".gitignore": true,
-    "cmake-build-*/**": true,
-    "CMakeLists.txt": true,
-    "*.o": true,
-    "adventofcode": true
+    "cmake-build-*/**": true
   },
   "C_Cpp.errorSquiggles": "Enabled",
   "files.associations": {
