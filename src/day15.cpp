@@ -14,7 +14,7 @@ namespace day15 {
                 return stoi(number);
             });
 
-        for (int i = numbers.size(); i < 2020; i++) {
+        for (auto i = numbers.size(); i < 2020; i++) {
             auto previous = numbers.at(i - 1);
 
             auto found = find(next(numbers.rbegin()), numbers.rend(), previous);
