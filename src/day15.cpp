@@ -16,20 +16,14 @@ namespace day15 {
 
         for (auto i = numbers.size(); i < 2020; i++) {
             auto previous = numbers.at(i - 1);
-
-            auto found = find(next(numbers.rbegin()), numbers.rend(), previous);
-            if (found == numbers.rend()) {
+            if (find(next(numbers.rbegin()), numbers.rend(), previous) == numbers.rend()) {
                 numbers.push_back(0);
                 continue;
             }
 
             auto last = find(numbers.rbegin(), numbers.rend(), previous);
-            auto lastDistance = numbers.size() - distance(numbers.rbegin(), last);
-
             auto beforeLast = find(next(last), numbers.rend(), previous);
-            auto beforeLastDistance = numbers.size() - distance(numbers.rbegin(), beforeLast);
-
-            numbers.push_back(lastDistance - beforeLastDistance);
+            numbers.push_back(distance(last, beforeLast));
         }
 
         auto result = numbers.back();
