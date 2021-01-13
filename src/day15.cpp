@@ -23,10 +23,7 @@ namespace day15 {
             previousLastSpoken = lastSpoken;
 
             auto last = lasts.find(lastSpoken);
-            if (last == lasts.end())
-                lastSpoken = 0;
-            else
-                lastSpoken = i - last->second - 1;
+            lastSpoken = last != lasts.end() ? i - last->second - 1 : 0;
         }
 
         return lastSpoken;
