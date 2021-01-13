@@ -12,18 +12,18 @@ namespace day15 {
                   return stoi(number);
               });
 
-        unordered_map<uint, uint> lasts(rounds / 10);
-        for (auto i = 0U; i < numbers.size() - 2; i++)
-            lasts.insert_or_assign(numbers.at(i), i);
+        vector<uint> lasts(rounds, 0);
+        for (auto i = 1U; i <= numbers.size() - 2; i++)
+            lasts[numbers.at(i - 1)] = i;
 
         auto previousLastSpoken = *next(numbers.rbegin());
         auto lastSpoken = numbers.back();
-        for (auto i = numbers.size(); i < rounds; i++) {
-            lasts.insert_or_assign(previousLastSpoken, i - 2);
+        for (auto i = numbers.size() + 1; i <= rounds; i++) {
+            lasts[previousLastSpoken] = i - 2;
             previousLastSpoken = lastSpoken;
 
-            auto last = lasts.find(lastSpoken);
-            lastSpoken = last != lasts.end() ? i - last->second - 1 : 0;
+            auto last = lasts.at(lastSpoken);
+            lastSpoken = last != 0 ? i - last - 1 : 0;
         }
 
         return lastSpoken;
