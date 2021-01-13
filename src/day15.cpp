@@ -12,7 +12,7 @@ namespace day15 {
                   return stoi(number);
               });
 
-        unordered_map<uint, uint> lasts;
+        unordered_map<uint, uint> lasts(rounds / 10);
         for (auto i = 0U; i < numbers.size() - 2; i++)
             lasts.insert_or_assign(numbers.at(i), i);
 
