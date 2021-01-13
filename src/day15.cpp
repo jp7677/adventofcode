@@ -8,9 +8,9 @@ namespace day15 {
 
         vector<uint> numbers;
         transform(numbersInput.begin(), numbersInput.end(), back_inserter(numbers),
-              [](const auto& number) {
-                  return stoi(number);
-              });
+            [](const auto& number) {
+                return stoi(number);
+            });
 
         vector<uint> lasts(rounds, 0);
         for (auto i = 1U; i <= numbers.size() - 2; i++)
