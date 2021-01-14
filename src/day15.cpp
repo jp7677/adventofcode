@@ -22,7 +22,7 @@ namespace day15 {
             lasts[previousLastSpoken] = i - 2;
             previousLastSpoken = lastSpoken;
 
-            auto last = lasts.at(lastSpoken);
+            auto last = lasts[lastSpoken];
             lastSpoken = last != 0 ? i - last - 1 : 0;
         }
 
