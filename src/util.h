@@ -20,13 +20,15 @@ namespace util {
         return data;
     }
 
-    inline vector<string> split(const string& delimitedString, const char delimiter) {
-        istringstream inputStream(delimitedString);
-        string token;
+    template<typename... Chars>
+    inline vector<string> split(const string& delimitedString, Chars... delimiters) {
+        string search{delimiters...};
+        size_t begin, position = 0U;
         vector<string> result;
-        while(getline(inputStream, token, delimiter))
-            if(!token.empty())
-                result.push_back(token);
+        while ((begin = delimitedString.find_first_not_of(search, position)) != string::npos) {
+            position = delimitedString.find_first_of(search, begin + 1);
+            result.push_back(delimitedString.substr(begin, position - begin));
+        }
 
         return result;
     }

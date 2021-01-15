@@ -10,30 +10,26 @@ namespace day16 {
         vector<uint> yourTicket;
         vector<vector<uint>> nearbyTickets;
 
-        auto section = 0U;
+        auto notesSection = 0U;
         for (const auto& notesLine : notesData) {
-            switch (section) {
+            switch (notesSection) {
                 case 0: {
                     if (notesLine.empty()) {
-                        section++;
+                        notesSection++;
                         continue;
                     }
 
                     auto lineElements = util::split(notesLine, ':');
-                    auto field = lineElements[0];
-                    auto valueElements = util::split(lineElements[1], ' ');
-                    auto value0 = util::split(valueElements[0], '-');
-                    auto value1 = util::split(valueElements[2], '-');
-                    vector<pair<uint, uint>> values {
-                        make_pair(stoi(value0[0]), stoi(value0[1])),
-                        make_pair(stoi(value1[0]), stoi(value1[1]))
-                    };
-                    fieldValues.emplace(field, values);
+                    auto valueElements = util::split(lineElements[1], ' ', '-');
+                    fieldValues.emplace(lineElements[0], vector<pair<uint, uint>> {
+                        make_pair(stoi(valueElements[0]), stoi(valueElements[1])),
+                        make_pair(stoi(valueElements[3]), stoi(valueElements[4]))
+                    });
                     break;
                 }
                 case 1: {
                     if (notesLine.empty()) {
-                        section++;
+                        notesSection++;
                         continue;
                     }
 
