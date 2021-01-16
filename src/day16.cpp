@@ -143,7 +143,7 @@ namespace day16 {
         }
 
         auto result = 1UL;
-        for (auto i = 0U; i < finalTicketPositions.size(); ++i)
+        for (auto i = 0U; i < finalTicketPositions.size(); i++)
             if (finalTicketPositions.at(i).rfind("departure", 0) == 0)
                 result *= yourTicket.at(i);
 
