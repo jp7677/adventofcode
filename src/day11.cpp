@@ -27,6 +27,7 @@ namespace day11 {
     void runRounds(vector<string>& map, const size& size, bool needsSwap(const vector<string>& map, const struct size& size, const uint x, const uint y)) {
         while (true) {
             vector<pair<int, int>> swaps;
+            swaps.reserve(size.width * size.height);
             for (auto y = 0U; y < size.height; y++)
                 for (auto x = 0U; x < size.width; x++)
                     if (needsSwap(map, size, x, y))
