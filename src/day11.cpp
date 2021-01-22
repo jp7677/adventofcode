@@ -4,12 +4,12 @@ using namespace std;
 
 namespace day11 {
     struct size {
-        int width;
-        int height;
+        size_t width;
+        size_t height;
     };
 
     size getMapSize(const vector<string>& map) {
-        return size{static_cast<int>(map.at(0).size()), static_cast<int>(map.size())};
+        return size{map.at(0).size(), map.size()};
     }
 
     static constexpr array<pair<short, short>, 8> directions{{
@@ -17,12 +17,20 @@ namespace day11 {
         {-1, +0}, {+1, +0},
         {-1, +1}, {+0, +1}, {+1, +1}}};
 
-    void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const int x, const int y)) {
+    bool isValidDirection(const vector<string>& map, const uint x, const uint y, const pair<int, int>& direction) {
         auto size = getMapSize(map);
-        auto findSwaps = [&map, &size, &needsSwap](int offset, uint inc) {
+        return !((x == 0 && direction.first == -1)
+            || (x == size.width - 1 && direction.first == 1)
+            || (y == 0 && direction.second == -1)
+            || (y == size.height - 1 && direction.second == 1));
+    }
+
+    void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const uint x, const uint y)) {
+        auto findSwaps = [&map, &needsSwap](uint offset, uint inc) {
+            auto size = getMapSize(map);
             vector<pair<int, int>> swaps;
             for (auto y = offset; y < size.height; y += inc)
-                for (auto x = 0; x < size.width; x++)
+                for (auto x = 0U; x < size.width; x++)
                     if (needsSwap(map, x, y))
                         swaps.emplace_back(x, y);
 
@@ -49,20 +57,16 @@ namespace day11 {
         }
     }
 
-    string getAdjacentSeats(const vector<string>& map, const int x, const int y) {
-        auto size = getMapSize(map);
+    string getAdjacentSeats(const vector<string>& map, const uint x, const uint y) {
         string seats;
-        for (const auto& direction : directions) {
-            auto x1 = x + direction.first;
-            auto y1 = y + direction.second;
-            if (x1 >= 0 && x1 <= size.width - 1 && y1 >= 0 && y1 <= size.height - 1)
-                seats.push_back(map.at(y1).at(x1));
-        }
+        for (const auto& direction : directions)
+            if (isValidDirection(map, x, y, direction))
+                seats.push_back(map.at(y + direction.second).at(x + direction.first));
 
         return seats;
     }
 
-    bool needsSwapDueToAdjacentSeats(const vector<string>& map, const int x, const int y) {
+    bool needsSwapDueToAdjacentSeats(const vector<string>& map, const uint x, const uint y) {
         auto seat = map.at(y).at(x);
         if (seat == '.')
             return false;
@@ -90,15 +94,12 @@ namespace day11 {
         REQUIRE(result == 2283);
     }
 
-    bool hasOccupiedSeat(const vector<string>& map, const int x, const int y, const function<void(int& x1, int& y1)>& move) {
+    bool hasOccupiedSeat(const vector<string>& map, const uint x, const uint y, const function<bool(uint& x1, uint& y1)>& move) {
         auto x1 = x;
         auto y1 = y;
 
         while (true) {
-            move(x1, y1);
-
-            auto size = getMapSize(map);
-            if (x1 < 0 || y1 < 0 || x1 > size.width - 1 || y1 > size.height - 1)
+            if (!move(x1, y1))
                 return false;
 
             if (map.at(y1).at(x1) == '#')
@@ -109,16 +110,20 @@ namespace day11 {
         }
     }
 
-    bool needsSwapDueToFirstVisibleSeat(const vector<string>& map, const int x, const int y) {
+    bool needsSwapDueToFirstVisibleSeat(const vector<string>& map, const uint x, const uint y) {
         auto seat = map.at(y).at(x);
         if (seat == '.')
             return false;
 
         auto occupiedSeats = 0U;
         for (const auto& direction : directions)
-            if (hasOccupiedSeat(map, x, y, [&direction](auto& x1, auto& y1){
+            if (hasOccupiedSeat(map, x, y, [&map, &direction](auto& x1, auto& y1){
+                    if (!isValidDirection(map, x1, y1, direction))
+                        return false;
+
                     x1 += direction.first;
                     y1 += direction.second;
+                    return true;
                 }))
                 occupiedSeats++;
 
