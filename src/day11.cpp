@@ -26,28 +26,13 @@ namespace day11 {
     }
 
     void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const uint x, const uint y)) {
-        auto findSwaps = [&map, &needsSwap](uint offset, uint inc) {
-            auto size = getMapSize(map);
+        auto size = getMapSize(map);
+        while (true) {
             vector<pair<int, int>> swaps;
-            for (auto y = offset; y < size.height; y += inc)
+            for (auto y = 0U; y < size.height; y++)
                 for (auto x = 0U; x < size.width; x++)
                     if (needsSwap(map, x, y))
                         swaps.emplace_back(x, y);
-
-            return swaps;
-        };
-
-        while (true) {
-            vector<future<vector<pair<int, int>>>> futures;
-            futures.reserve(util::concurrency());
-            for (auto offset = 0U; offset < util::concurrency(); offset++)
-                futures.push_back(async(launch::async, findSwaps, offset, util::concurrency()));
-
-            vector<pair<int, int>> swaps;
-            for (auto& future : futures) {
-                auto value = future.get();
-                move(value.begin(), value.end(), back_inserter(swaps));
-            }
 
             if (swaps.empty())
                 return;
@@ -57,25 +42,23 @@ namespace day11 {
         }
     }
 
-    string getAdjacentSeats(const vector<string>& map, const uint x, const uint y) {
-        string seats;
-        for (const auto& direction : directions)
-            if (isValidDirection(map, x, y, direction))
-                seats.push_back(map.at(y + direction.second).at(x + direction.first));
-
-        return seats;
-    }
-
     bool needsSwapDueToAdjacentSeats(const vector<string>& map, const uint x, const uint y) {
         auto seat = map.at(y).at(x);
         if (seat == '.')
             return false;
 
-        auto adjacentSeats = getAdjacentSeats(map, x, y);
-        if (seat == 'L' && adjacentSeats.find('#') == string::npos)
+        auto occupiedSeats = 0U;
+        for (const auto& direction : directions) {
+            if (isValidDirection(map, x, y, direction) && map.at(y + direction.second).at(x + direction.first) == '#')
+                occupiedSeats++;
+
+            if (occupiedSeats >= 4)
+                break;
+        }
+
+        if (seat == 'L' && occupiedSeats == 0)
             return true;
 
-        auto occupiedSeats = count(adjacentSeats.begin(), adjacentSeats.end(), '#');
         if (seat == '#' && occupiedSeats >= 4)
             return true;
 
@@ -116,8 +99,8 @@ namespace day11 {
             return false;
 
         auto occupiedSeats = 0U;
-        for (const auto& direction : directions)
-            if (hasOccupiedSeat(map, x, y, [&map, &direction](auto& x1, auto& y1){
+        for (const auto& direction : directions) {
+            if (hasOccupiedSeat(map, x, y, [&map, &direction](auto &x1, auto &y1) {
                     if (!isValidDirection(map, x1, y1, direction))
                         return false;
 
@@ -126,6 +109,10 @@ namespace day11 {
                     return true;
                 }))
                 occupiedSeats++;
+
+            if (occupiedSeats >= 5)
+                break;
+        }
 
         if (seat == 'L' && occupiedSeats == 0)
             return true;
