@@ -17,21 +17,19 @@ namespace day11 {
         {-1, +0}, {+1, +0},
         {-1, +1}, {+0, +1}, {+1, +1}}};
 
-    bool isValidDirection(const vector<string>& map, const uint x, const uint y, const pair<int, int>& direction) {
-        auto size = getMapSize(map);
+    bool isValidDirection(const size& size, const uint x, const uint y, const pair<int, int>& direction) {
         return !((x == 0 && direction.first == -1)
             || (x == size.width - 1 && direction.first == 1)
             || (y == 0 && direction.second == -1)
             || (y == size.height - 1 && direction.second == 1));
     }
 
-    void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const uint x, const uint y)) {
-        auto size = getMapSize(map);
+    void runRounds(vector<string>& map, const size& size, bool needsSwap(const vector<string>& map, const struct size& size, const uint x, const uint y)) {
         while (true) {
             vector<pair<int, int>> swaps;
             for (auto y = 0U; y < size.height; y++)
                 for (auto x = 0U; x < size.width; x++)
-                    if (needsSwap(map, x, y))
+                    if (needsSwap(map, size, x, y))
                         swaps.emplace_back(x, y);
 
             if (swaps.empty())
@@ -42,14 +40,14 @@ namespace day11 {
         }
     }
 
-    bool needsSwapDueToAdjacentSeats(const vector<string>& map, const uint x, const uint y) {
+    bool needsSwapDueToAdjacentSeats(const vector<string>& map, const size& size, const uint x, const uint y) {
         auto seat = map.at(y).at(x);
         if (seat == '.')
             return false;
 
         auto occupiedSeats = 0U;
         for (const auto& direction : directions) {
-            if (isValidDirection(map, x, y, direction) && map.at(y + direction.second).at(x + direction.first) == '#')
+            if (isValidDirection(size, x, y, direction) && map.at(y + direction.second).at(x + direction.first) == '#')
                 occupiedSeats++;
 
             if (occupiedSeats >= 4)
@@ -68,7 +66,7 @@ namespace day11 {
     TEST_CASE("Day 11 - Part 1 from https://adventofcode.com/2020/day/11") {
         auto mapData = util::loadInputFile("day11-input.txt");
 
-        runRounds(mapData, needsSwapDueToAdjacentSeats);
+        runRounds(mapData, getMapSize(mapData), needsSwapDueToAdjacentSeats);
         auto result = accumulate(mapData.begin(), mapData.end(), 0U,
             [](const auto sum, const auto& line) {
                 return sum + count(line.begin(), line.end(), '#');
@@ -93,15 +91,15 @@ namespace day11 {
         }
     }
 
-    bool needsSwapDueToFirstVisibleSeat(const vector<string>& map, const uint x, const uint y) {
+    bool needsSwapDueToFirstVisibleSeat(const vector<string>& map, const size& size, const uint x, const uint y) {
         auto seat = map.at(y).at(x);
         if (seat == '.')
             return false;
 
         auto occupiedSeats = 0U;
         for (const auto& direction : directions) {
-            if (hasOccupiedSeat(map, x, y, [&map, &direction](auto &x1, auto &y1) {
-                    if (!isValidDirection(map, x1, y1, direction))
+            if (hasOccupiedSeat(map, x, y, [&size, &direction](auto &x1, auto &y1) {
+                    if (!isValidDirection(size, x1, y1, direction))
                         return false;
 
                     x1 += direction.first;
@@ -126,7 +124,7 @@ namespace day11 {
     TEST_CASE("Day 11 - Part 2 from https://adventofcode.com/2020/day/11#part2") {
         auto mapData = util::loadInputFile("day11-input.txt");
 
-        runRounds(mapData, needsSwapDueToFirstVisibleSeat);
+        runRounds(mapData, getMapSize(mapData), needsSwapDueToFirstVisibleSeat);
         auto result = accumulate(mapData.begin(), mapData.end(), 0U,
             [](const auto sum, const auto& line) {
                 return sum + count(line.begin(), line.end(), '#');
