@@ -37,12 +37,12 @@ namespace day11 {
                 return;
 
             for (const auto& swap : swaps)
-                map.at(swap.second).at(swap.first) = map.at(swap.second).at(swap.first) == '#' ? 'L' : '#';
+                map[swap.second][swap.first] = map[swap.second][swap.first] == '#' ? 'L' : '#';
         }
     }
 
     bool needsSwapDueToAdjacentSeats(const vector<string>& map, const size& size, const uint x, const uint y) {
-        auto seat = map.at(y).at(x);
+        auto seat = map[y][x];
         if (seat == '.')
             return false;
 
@@ -51,7 +51,7 @@ namespace day11 {
             if (!isValidDirection(size, x, y, direction))
                 continue;
 
-            if (map.at(y + direction.second).at(x + direction.first) == '#')
+            if (map[y + direction.second][x + direction.first] == '#')
                 occupiedSeats++;
 
             if (seat == 'L' && occupiedSeats == 1)
@@ -87,16 +87,16 @@ namespace day11 {
             x1 += direction.first;
             y1 += direction.second;
 
-            if (map.at(y1).at(x1) == '#')
+            if (map[y1][x1] == '#')
                 return true;
 
-            if (map.at(y1).at(x1) == 'L')
+            if (map[y1][x1] == 'L')
                 return false;
         }
     }
 
     bool needsSwapDueToFirstVisibleSeat(const vector<string>& map, const size& size, const uint x, const uint y) {
-        auto seat = map.at(y).at(x);
+        auto seat = map[y][x];
         if (seat == '.')
             return false;
 
