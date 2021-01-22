@@ -75,13 +75,16 @@ namespace day11 {
         REQUIRE(result == 2283);
     }
 
-    bool hasOccupiedSeat(const vector<string>& map, const uint x, const uint y, const function<bool(uint& x1, uint& y1)>& move) {
+    bool hasOccupiedSeat(const vector<string>& map, const size& size, const uint x, const uint y, const pair<int, int>& direction) {
         auto x1 = x;
         auto y1 = y;
 
         while (true) {
-            if (!move(x1, y1))
+            if (!isValidDirection(size, x1, y1, direction))
                 return false;
+
+            x1 += direction.first;
+            y1 += direction.second;
 
             if (map.at(y1).at(x1) == '#')
                 return true;
@@ -98,14 +101,7 @@ namespace day11 {
 
         auto occupiedSeats = 0U;
         for (const auto& direction : directions) {
-            if (hasOccupiedSeat(map, x, y, [&size, &direction](auto &x1, auto &y1) {
-                    if (!isValidDirection(size, x1, y1, direction))
-                        return false;
-
-                    x1 += direction.first;
-                    y1 += direction.second;
-                    return true;
-                }))
+            if (hasOccupiedSeat(map, size, x, y, direction))
                 occupiedSeats++;
 
             if (seat == 'L' && occupiedSeats == 1)
