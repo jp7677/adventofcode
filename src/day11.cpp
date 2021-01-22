@@ -12,6 +12,11 @@ namespace day11 {
         return size{static_cast<int>(map.at(0).size()), static_cast<int>(map.size())};
     }
 
+    static constexpr array<pair<short, short>, 8> directions{{
+        {-1, -1}, {+0, -1}, {+1, -1},
+        {-1, +0}, {+1, +0},
+        {-1, +1}, {+0, +1}, {+1, +1}}};
+
     void runRounds(vector<string>& map, bool needsSwap(const vector<string>& map, const int x, const int y)) {
         auto size = getMapSize(map);
         auto findSwaps = [&map, &size, &needsSwap](int offset, uint inc) {
@@ -47,22 +52,12 @@ namespace day11 {
     string getAdjacentSeats(const vector<string>& map, const int x, const int y) {
         auto size = getMapSize(map);
         string seats;
-        if (x > 0 && y > 0)
-            seats.push_back(map.at(y - 1).at(x - 1));
-        if (y > 0)
-            seats.push_back(map.at(y - 1).at(x));
-        if (x < size.width - 1 && y > 0)
-            seats.push_back(map.at(y - 1).at(x + 1));
-        if (x > 0)
-            seats.push_back(map.at(y).at(x - 1));
-        if (x < size.width - 1)
-            seats.push_back(map.at(y).at(x + 1));
-        if (x > 0 && y < size.height - 1)
-            seats.push_back(map.at(y + 1).at(x - 1));
-        if (y < size.height - 1)
-            seats.push_back(map.at(y + 1).at(x));
-        if (x < size.width - 1 && y < size.height - 1)
-            seats.push_back(map.at(y + 1).at(x + 1));
+        for (const auto& direction : directions) {
+            auto x1 = x + direction.first;
+            auto y1 = y + direction.second;
+            if (x1 >= 0 && x1 <= size.width - 1 && y1 >= 0 && y1 <= size.height - 1)
+                seats.push_back(map.at(y1).at(x1));
+        }
 
         return seats;
     }
@@ -95,7 +90,7 @@ namespace day11 {
         REQUIRE(result == 2283);
     }
 
-    bool hasOccupiedSeat(const vector<string>& map, const int x, const int y, void move(int& x1, int& y1)) {
+    bool hasOccupiedSeat(const vector<string>& map, const int x, const int y, const function<void(int& x1, int& y1)>& move) {
         auto x1 = x;
         auto y1 = y;
 
@@ -120,14 +115,12 @@ namespace day11 {
             return false;
 
         auto occupiedSeats = 0U;
-        if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1--;y1--; })) occupiedSeats++;
-        if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ y1--; })) occupiedSeats++;
-        if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1++;y1--; })) occupiedSeats++;
-        if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1--; })) occupiedSeats++;
-        if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1++; })) occupiedSeats++;
-        if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1--;y1++; })) occupiedSeats++;
-        if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ y1++; })) occupiedSeats++;
-        if (hasOccupiedSeat(map, x, y, []([[maybe_unused]] auto x1, [[maybe_unused]] auto y1){ x1++;y1++; })) occupiedSeats++;
+        for (const auto& direction : directions)
+            if (hasOccupiedSeat(map, x, y, [&direction](auto& x1, auto& y1){
+                    x1 += direction.first;
+                    y1 += direction.second;
+                }))
+                occupiedSeats++;
 
         if (seat == 'L' && occupiedSeats == 0)
             return true;
