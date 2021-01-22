@@ -47,20 +47,20 @@ namespace day11 {
 
         auto occupiedSeats = 0U;
         for (const auto& direction : directions) {
-            if (isValidDirection(size, x, y, direction) && map.at(y + direction.second).at(x + direction.first) == '#')
+            if (!isValidDirection(size, x, y, direction))
+                continue;
+
+            if (map.at(y + direction.second).at(x + direction.first) == '#')
                 occupiedSeats++;
 
-            if (occupiedSeats >= 4)
-                break;
+            if (seat == 'L' && occupiedSeats == 1)
+                return false;
+
+            if (seat == '#' && occupiedSeats == 4)
+                return true;
         }
 
-        if (seat == 'L' && occupiedSeats == 0)
-            return true;
-
-        if (seat == '#' && occupiedSeats >= 4)
-            return true;
-
-        return false;
+        return seat == 'L';
     }
 
     TEST_CASE("Day 11 - Part 1 from https://adventofcode.com/2020/day/11") {
@@ -108,17 +108,14 @@ namespace day11 {
                 }))
                 occupiedSeats++;
 
-            if (occupiedSeats >= 5)
-                break;
+            if (seat == 'L' && occupiedSeats == 1)
+                return false;
+
+            if (seat == '#' && occupiedSeats == 5)
+                return true;
         }
 
-        if (seat == 'L' && occupiedSeats == 0)
-            return true;
-
-        if (seat == '#' && occupiedSeats >= 5)
-            return true;
-
-        return false;
+        return seat == 'L';
     }
 
     TEST_CASE("Day 11 - Part 2 from https://adventofcode.com/2020/day/11#part2") {
