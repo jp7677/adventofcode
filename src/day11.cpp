@@ -98,19 +98,20 @@ namespace day11 {
     bool hasOccupiedSeat(const vector<string>& map, const int x, const int y, void move(int& x1, int& y1)) {
         auto x1 = x;
         auto y1 = y;
-        move(x1, y1);
 
-        auto size = getMapSize(map);
-        if (x1 < 0 || y1 < 0 || x1 > size.width - 1 || y1 > size.height - 1)
-            return false;
+        while (true) {
+            move(x1, y1);
 
-        if (map.at(y1).at(x1) == '#')
-            return true;
+            auto size = getMapSize(map);
+            if (x1 < 0 || y1 < 0 || x1 > size.width - 1 || y1 > size.height - 1)
+                return false;
 
-        if (map.at(y1).at(x1) == 'L')
-            return false;
+            if (map.at(y1).at(x1) == '#')
+                return true;
 
-        return hasOccupiedSeat(map, x1, y1, move);
+            if (map.at(y1).at(x1) == 'L')
+                return false;
+        }
     }
 
     bool needsSwapDueToFirstVisibleSeat(const vector<string>& map, const int x, const int y) {
