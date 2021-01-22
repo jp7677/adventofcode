@@ -12,7 +12,7 @@ namespace day13 {
 
         vector<pair<uint, uint>> busWaits;
         transform(busIdData.begin(), busIdData.end(), back_inserter(busWaits),
-            [estimate](const auto& data) {
+            [&estimate](const auto& data) {
                 auto id = stoi(data);
                 auto wait = (((estimate / id) * id) + id) - estimate;
                 return make_pair(id, wait);
