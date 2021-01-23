@@ -17,18 +17,9 @@ namespace day17 {
         }
     };
 
-    static constexpr array<position, 26> neighbourDirections{{
-        {-1, -1, -1}, {+0, -1, -1}, {+1, -1, -1},
-        {-1, +0, -1}, {+0, +0, -1}, {+1, +0, -1},
-        {-1, +1, -1}, {+0, +1, -1}, {+1, +1, -1},
-        {-1, -1, +0}, {+0, -1, +0}, {+1, -1, +0},
-        {-1, +0, +0}, {+1, +0, +0},
-        {-1, +1, +0}, {+0, +1, +0}, {+1, +1, +0},
-        {-1, -1, +1}, {+0, -1, +1}, {+1, -1, +1},
-        {-1, +0, +1}, {+0, +0, +1}, {+1, +0, +1},
-        {-1, +1, +1}, {+0, +1, +1}, {+1, +1, +1}}};
+    static constexpr array<int, 3> moves{{-1, 0, +1}};
 
-    vector<position> runCycle(const vector<position>& activeCubes) {
+    vector<position> runCycle(const vector<position>& activeCubes, vector<position>& neighbourDirections) {
         vector<position> resultingActiveCubes;
         for (auto activeCube : activeCubes) {
             auto activeNeighbours = 0U;
@@ -70,8 +61,15 @@ namespace day17 {
                 if (cubeData[i][j] == '#')
                     activeCubes.emplace_back(position({static_cast<int>(j), static_cast<int>(i), 0}));
 
+        vector<position> directions;
+        for (const auto x : moves)
+            for (const auto y : moves)
+                for (const auto z : moves)
+                    if (!(x == 0 && y == 0 && z == 0))
+                        directions.emplace_back(position({x, y, z}));
+
         for (auto i = 0U; i < 6; i++)
-            activeCubes = runCycle(activeCubes);
+            activeCubes = runCycle(activeCubes, directions);
 
         auto result = activeCubes.size();
 
