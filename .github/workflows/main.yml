@@ -18,4 +18,4 @@ jobs:
       - name: Compile and run
         run: |
           ./build/make.sh
-          ./cmake-build-release/adventofcode
+          time ./cmake-build-release/adventofcode
