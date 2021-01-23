@@ -9,7 +9,7 @@ namespace day12 {
         vector<pair<char, uint>> instructions;
         transform(instructionsData.begin(), instructionsData.end(), back_inserter(instructions),
             [](const auto& line) {
-                return make_pair(line.at(0), stoi(line.substr(1)));
+                return make_pair(line[0], stoi(line.substr(1)));
             });
 
         return instructions;

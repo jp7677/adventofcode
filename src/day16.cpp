@@ -107,9 +107,9 @@ namespace day16 {
         for (const auto& nearbyTicket : nearbyTickets)
             for (auto i = 0U; i < nearbyTicket.size(); i++)
                 for (const auto& ticketField : ticketFields)
-                    if (!isValidTicketValue(nearbyTicket.at(i), ticketField)
-                        && find(ticketFieldOptions.at(i).begin(), ticketFieldOptions.at(i).end(), ticketField.first) == ticketFieldOptions.at(i).end())
-                        ticketFieldOptions.at(i).push_back(ticketField.first);
+                    if (!isValidTicketValue(nearbyTicket[i], ticketField)
+                        && find(ticketFieldOptions[i].begin(), ticketFieldOptions[i].end(), ticketField.first) == ticketFieldOptions[i].end())
+                        ticketFieldOptions[i].push_back(ticketField.first);
 
         vector<string> fieldNames;
         transform(ticketFields.begin(), ticketFields.end(), back_inserter(fieldNames),
@@ -132,8 +132,8 @@ namespace day16 {
                     return fieldPosition.size() == 1;
                 });
 
-            auto fieldName = (*findFinalIt).at(0);
-            finalTicketPositions.at(distance(ticketFieldOptions.begin(), findFinalIt)) = fieldName;
+            auto fieldName = (*findFinalIt)[0];
+            finalTicketPositions[distance(ticketFieldOptions.begin(), findFinalIt)] = fieldName;
 
             for (auto& fieldOption : ticketFieldOptions) {
                 auto findNameIt = find(fieldOption.begin(), fieldOption.end(), fieldName);
@@ -144,8 +144,8 @@ namespace day16 {
 
         auto result = 1UL;
         for (auto i = 0U; i < finalTicketPositions.size(); i++)
-            if (finalTicketPositions.at(i).rfind("departure", 0) == 0)
-                result *= yourTicket.at(i);
+            if (finalTicketPositions[i].rfind("departure", 0) == 0)
+                result *= yourTicket[i];
 
         REQUIRE(result == 1001849322119);
     }

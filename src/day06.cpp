@@ -37,12 +37,12 @@ namespace day06 {
         auto result = accumulate(answersList.begin(), answersList.end(), 0U,
             [](const auto sum, const auto& answers) {
                 if (answers.size() == 1)
-                    return sum + answers.at(0).size();
+                    return sum + answers[0].size();
 
-                auto intersected = answers.at(0);
+                auto intersected = answers[0];
                 sort(intersected.begin(), intersected.end());
                 for (auto i = 1U; i < answers.size(); i++) {
-                    auto next = answers.at(i);
+                    auto next = answers[i];
                     sort(next.begin(), next.end());
 
                     string intersection;

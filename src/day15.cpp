@@ -4,7 +4,7 @@ using namespace std;
 
 namespace day15 {
     uint playRounds(uint rounds) {
-        auto numbersInput = util::split(util::loadInputFile("day15-input.txt").at(0), ',');
+        auto numbersInput = util::split(util::loadInputFile("day15-input.txt")[0], ',');
 
         vector<uint> numbers;
         transform(numbersInput.begin(), numbersInput.end(), back_inserter(numbers),
@@ -14,7 +14,7 @@ namespace day15 {
 
         vector<uint> lasts(rounds, 0);
         for (auto i = 1U; i <= numbers.size() - 2; i++)
-            lasts[numbers.at(i - 1)] = i;
+            lasts[numbers[i - 1]] = i;
 
         auto previousLastSpoken = *next(numbers.rbegin());
         auto lastSpoken = numbers.back();

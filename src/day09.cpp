@@ -24,14 +24,14 @@ namespace day09 {
                 auto found = [&numbers, i] {
                     for (auto k = i - preamble ; k < i; k++)
                         for (auto l = i - preamble; l < i; l++)
-                            if (numbers.at(k) != numbers.at(l) && numbers.at(k) + numbers.at(l) == numbers.at(i))
+                            if (numbers[k] != numbers[l] && numbers[k] + numbers[l] == numbers[i])
                                 return true;
 
                     return false;
                 }();
 
                 if (!found)
-                    return numbers.at(i);
+                    return numbers[i];
             }
 
             throw runtime_error("Invalid data");
@@ -46,8 +46,8 @@ namespace day09 {
 
         auto position = [&numbers] {
             for (auto i = 0U; i < numbers.size(); i++) {
-                for (auto sum = numbers.at(i), offset = 1UL; sum < invalid; offset++) {
-                    sum += numbers.at(i + offset);
+                for (auto sum = numbers[i], offset = 1UL; sum < invalid; offset++) {
+                    sum += numbers[i + offset];
                     if (sum == invalid)
                         return make_pair(i, i + ++offset);
                 }

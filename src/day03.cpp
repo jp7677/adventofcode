@@ -12,7 +12,7 @@ namespace day03 {
         auto y = 0U;
 
         while (y < height) {
-            if (grid->at(y).at(x % width) == '#')
+            if (grid->at(y)[x % width] == '#')
                 trees++;
 
             y += down;

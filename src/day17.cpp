@@ -60,7 +60,7 @@ namespace day17 {
 
         vector<position> activeCubes;
         for (auto i = 0U; i < cubeData.size(); i++)
-            for (auto j = 0U; j < cubeData.at(i).size(); j++)
+            for (auto j = 0U; j < cubeData[i].size(); j++)
                 if (cubeData[i][j] == '#')
                     activeCubes.push_back(position({static_cast<int>(j), static_cast<int>(i), 0}));
 

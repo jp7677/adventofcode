@@ -54,7 +54,7 @@ namespace day14 {
 
                 vector<uint> floatings;
                 for (auto i = 0U; i < maskLine.size(); i++)
-                    if (maskLine.at(i) == 'X')
+                    if (maskLine[i] == 'X')
                         floatings.push_back(i);
 
                 auto count = 0U;
@@ -67,7 +67,7 @@ namespace day14 {
                     bitset<36> actualAddress;
                     for (auto y = 0U; y < floatings.size(); y++)
                         if (countBits.test(y))
-                            actualAddress.set(35 - floatings.at(y));
+                            actualAddress.set(35 - floatings[y]);
 
                     actualAddressMasks.push_back(actualAddress);
                 }

@@ -9,7 +9,7 @@ namespace day11 {
     };
 
     size getMapSize(const vector<string>& map) {
-        return size{map.at(0).size(), map.size()};
+        return size{map[0].size(), map.size()};
     }
 
     static constexpr array<pair<short, short>, 8> directions{{
