@@ -32,7 +32,7 @@ namespace day17 {
         vector<position> resultingActiveCubes;
         for (auto activeCube : activeCubes) {
             auto activeNeighbours = 0U;
-            for (const auto &direction : neighbourDirections) {
+            for (const auto& direction : neighbourDirections) {
                 auto neighbour = activeCube + direction;
                 if (find(activeCubes.begin(), activeCubes.end(), neighbour) != activeCubes.end())
                     activeNeighbours++;
@@ -41,7 +41,7 @@ namespace day17 {
                     continue;
 
                 auto activeNeighboursOfNeighbour = 0U;
-                for (const auto &directionOfNeighbour : neighbourDirections)
+                for (const auto& directionOfNeighbour : neighbourDirections)
                     if (find(activeCubes.begin(), activeCubes.end(), neighbour + directionOfNeighbour) != activeCubes.end())
                         activeNeighboursOfNeighbour++;
 
