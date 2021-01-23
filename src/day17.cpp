@@ -8,8 +8,12 @@ namespace day17 {
         int y;
         int z;
 
-        bool operator==(const position& a) const {
-            return x == a.x && y == a.y && z == a.z;
+        bool operator==(const position& b) const {
+            return x == b.x && y == b.y && z == b.z;
+        }
+
+        position operator+(const position& b) const {
+            return position({x + b.x , y + b.y, z + b.z});
         }
     };
 
@@ -29,7 +33,7 @@ namespace day17 {
         vector<position> affectedCubes(activeCubes);
         for (auto activeCube : activeCubes)
             for (const auto &direction : neighbourDirections) {
-                auto neighbour = position({activeCube.x + direction.x, activeCube.y + direction.y, activeCube.z + direction.z});
+                auto neighbour = activeCube + direction;
                 if (find(affectedCubes.begin(), affectedCubes.end(), neighbour) == affectedCubes.end())
                     affectedCubes.push_back(neighbour);
             }
@@ -38,7 +42,7 @@ namespace day17 {
             auto isActive = find(activeCubes.begin(), activeCubes.end(), affectedCube) != activeCubes.end();
             auto activeNeighbours = 0U;
             for (const auto &direction : neighbourDirections) {
-                auto neighbour = position({affectedCube.x + direction.x, affectedCube.y + direction.y, affectedCube.z + direction.z});
+                auto neighbour = affectedCube + direction;
                 if (find(activeCubes.begin(), activeCubes.end(), neighbour) != activeCubes.end())
                     activeNeighbours++;
             }
