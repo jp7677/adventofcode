@@ -8,12 +8,12 @@ namespace day17 {
         int y;
         int z;
 
-        bool operator==(const position& b) const {
-            return x == b.x && y == b.y && z == b.z;
+        bool operator==(const position &a) const {
+            return x == a.x && y == a.y && z == a.z;
         }
 
-        position operator+(const position& b) const {
-            return position({x + b.x , y + b.y, z + b.z});
+        position operator+(const position &a) const {
+            return position({x + a.x, y + a.y, z + a.z});
         }
     };
 
@@ -30,30 +30,28 @@ namespace day17 {
 
     vector<position> runCycle(const vector<position>& activeCubes) {
         vector<position> resultingActiveCubes;
-        vector<position> affectedCubes(activeCubes);
-        for (auto activeCube : activeCubes)
-            for (const auto &direction : neighbourDirections) {
-                auto neighbour = activeCube + direction;
-                if (find(affectedCubes.begin(), affectedCubes.end(), neighbour) == affectedCubes.end())
-                    affectedCubes.push_back(neighbour);
-            }
-
-        for (auto affectedCube : affectedCubes) {
-            auto isActive = find(activeCubes.begin(), activeCubes.end(), affectedCube) != activeCubes.end();
+        for (auto activeCube : activeCubes) {
             auto activeNeighbours = 0U;
             for (const auto &direction : neighbourDirections) {
-                auto neighbour = affectedCube + direction;
+                auto neighbour = activeCube + direction;
                 if (find(activeCubes.begin(), activeCubes.end(), neighbour) != activeCubes.end())
                     activeNeighbours++;
+
+                if (find(resultingActiveCubes.begin(), resultingActiveCubes.end(), neighbour) != resultingActiveCubes.end())
+                    continue;
+
+                auto activeNeighboursOfNeighbour = 0U;
+                for (const auto &directionOfNeighbour : neighbourDirections)
+                    if (find(activeCubes.begin(), activeCubes.end(), neighbour + directionOfNeighbour) != activeCubes.end())
+                        activeNeighboursOfNeighbour++;
+
+                if (activeNeighboursOfNeighbour == 3)
+                    resultingActiveCubes.emplace_back(neighbour);
             }
 
-            if (isActive && (activeNeighbours == 2 || activeNeighbours == 3))
-                if (find(resultingActiveCubes.begin(), resultingActiveCubes.end(), affectedCube) == resultingActiveCubes.end())
-                    resultingActiveCubes.push_back(affectedCube);
-
-            if (!isActive && activeNeighbours == 3)
-                if (find(resultingActiveCubes.begin(), resultingActiveCubes.end(), affectedCube) == resultingActiveCubes.end())
-                    resultingActiveCubes.push_back(affectedCube);
+            if ((activeNeighbours == 2 || activeNeighbours == 3)
+                && find(resultingActiveCubes.begin(), resultingActiveCubes.end(), activeCube) == resultingActiveCubes.end())
+                resultingActiveCubes.emplace_back(activeCube);
         }
 
         return resultingActiveCubes;
@@ -66,7 +64,7 @@ namespace day17 {
         for (auto i = 0U; i < cubeData.size(); i++)
             for (auto j = 0U; j < cubeData[i].size(); j++)
                 if (cubeData[i][j] == '#')
-                    activeCubes.push_back(position({static_cast<int>(j), static_cast<int>(i), 0}));
+                    activeCubes.emplace_back(position({static_cast<int>(j), static_cast<int>(i), 0}));
 
         for (auto i = 0U; i < 6; i++)
             activeCubes = runCycle(activeCubes);
