@@ -41,9 +41,13 @@ namespace day17 {
                     continue;
 
                 auto activeNeighboursOfNeighbour = 0U;
-                for (const auto& directionOfNeighbour : neighbourDirections)
+                for (const auto& directionOfNeighbour : neighbourDirections) {
                     if (find(activeCubes.begin(), activeCubes.end(), neighbour + directionOfNeighbour) != activeCubes.end())
                         activeNeighboursOfNeighbour++;
+
+                    if (activeNeighboursOfNeighbour == 4)
+                        break;
+                }
 
                 if (activeNeighboursOfNeighbour == 3)
                     resultingActiveCubes.emplace_back(neighbour);
