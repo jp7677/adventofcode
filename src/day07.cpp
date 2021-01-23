@@ -10,7 +10,7 @@ namespace day07 {
         transform(rulesInput.begin(), rulesInput.end(), inserter(rules, rules.end()),
             [](const auto& ruleLine) {
                 auto elements = util::split(ruleLine, ' ');
-                auto key = elements.at(0) + "-" + elements.at(1);
+                auto key = elements[0] + "-" + elements[1];
 
                 static const auto containKeyword = string(" contain ");
                 auto contains = ruleLine.substr(ruleLine.find(containKeyword) + containKeyword.size());
@@ -22,8 +22,8 @@ namespace day07 {
                         auto splitted = util::split(value, ' ');
 
                         return make_pair(
-                            splitted.at(0) == "no" ? 0 : stoi(splitted.at(0)),
-                            splitted.at(splitted.size() - 3) + "-" + splitted.at(splitted.size() - 2));
+                            splitted[0] == "no" ? 0 : stoi(splitted[0]),
+                            splitted[splitted.size() - 3] + "-" + splitted[splitted.size() - 2]);
                     });
 
                 return make_pair(key, luggages);

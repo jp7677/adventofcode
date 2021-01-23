@@ -6,8 +6,8 @@ namespace day13 {
     TEST_CASE("Day 13 - Part 1 from https://adventofcode.com/2020/day/13") {
         auto notesData = util::loadInputFile("day13-input.txt");
 
-        auto estimate = stoi(notesData.at(0));
-        auto busIdData = util::split(notesData.at(1), ',');
+        auto estimate = stoi(notesData[0]);
+        auto busIdData = util::split(notesData[1], ',');
         busIdData.erase(remove(busIdData.begin(), busIdData.end(), "x"), busIdData.end());
 
         vector<pair<uint, uint>> busWaits;
@@ -30,7 +30,7 @@ namespace day13 {
     TEST_CASE("Day 13 - Part 2 from https://adventofcode.com/2020/day/13#part2") {
         auto notesData = util::loadInputFile("day13-input.txt");
 
-        auto busIdData = util::split(notesData.at(1), ',');
+        auto busIdData = util::split(notesData[1], ',');
 
         vector<pair<uint, uint>> busIds;
         auto offset = 0U;
@@ -41,7 +41,7 @@ namespace day13 {
             offset++;
         }
 
-        auto first = busIds.at(0);
+        auto first = busIds[0];
         vector<pair<uint, uint>> incIds;
         copy_if(busIds.begin(), busIds.end(), back_inserter(incIds),
             [&first](const auto& id) {

@@ -16,7 +16,7 @@ namespace day02 {
 
                 auto minOccurrences = stoi(matches[1].str());
                 auto maxOccurrences = stoi(matches[2].str());
-                auto character = matches[3].str().at(0);
+                auto character = matches[3].str()[0];
                 auto password = matches[4].str();
 
                 auto count = count_if(password.begin(), password.end(),
@@ -43,14 +43,14 @@ namespace day02 {
 
                 auto first = stoi(matches[1].str());
                 auto second = stoi(matches[2].str());
-                auto character = matches[3].str().at(0);
+                auto character = matches[3].str()[0];
                 auto password = matches[4].str();
 
                 auto match = 0U;
-                if (password.at(first - 1) == character)
+                if (password[first - 1] == character)
                     match++;
 
-                if (password.at(second - 1) == character)
+                if (password[second - 1] == character)
                     match++;
 
                 return match == 1;

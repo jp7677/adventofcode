@@ -25,7 +25,7 @@ namespace day08 {
         set<uint> visited;
         while (visited.find(pos) == visited.end()) {
             visited.insert(pos);
-            auto instruction = program.at(pos);
+            auto instruction = program[pos];
             if (instruction.first == "acc")
                 result += instruction.second;
          
@@ -48,7 +48,7 @@ namespace day08 {
                 set<uint> visited;
                 while (visited.find(pos) == visited.end()) {
                     visited.insert(pos);
-                    auto instruction = program.at(pos);
+                    auto instruction = program[pos];
                     if (instruction.first == "acc")
                         acc += instruction.second;
 
