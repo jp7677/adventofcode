@@ -26,7 +26,7 @@ namespace day11 {
 
     void runRounds(vector<string>& map, const size& size, bool needsSwap(const vector<string>& map, const struct size& size, const uint x, const uint y)) {
         while (true) {
-            vector<pair<int, int>> swaps;
+            vector<pair<uint, uint>> swaps;
             swaps.reserve(size.width * size.height);
             for (auto y = 0U; y < size.height; y++)
                 for (auto x = 0U; x < size.width; x++)
@@ -54,10 +54,10 @@ namespace day11 {
             if (map[y + direction.second][x + direction.first] == '#')
                 occupiedSeats++;
 
-            if (seat == 'L' && occupiedSeats == 1)
+            if (occupiedSeats == 1 && seat == 'L')
                 return false;
 
-            if (seat == '#' && occupiedSeats == 4)
+            if (occupiedSeats == 4 && seat == '#')
                 return true;
         }
 
@@ -105,10 +105,10 @@ namespace day11 {
             if (hasOccupiedSeat(map, size, x, y, direction))
                 occupiedSeats++;
 
-            if (seat == 'L' && occupiedSeats == 1)
+            if (occupiedSeats == 1 && seat == 'L')
                 return false;
 
-            if (seat == '#' && occupiedSeats == 5)
+            if (occupiedSeats == 5 && seat == '#')
                 return true;
         }
 
