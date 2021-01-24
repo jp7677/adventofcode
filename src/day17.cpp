@@ -3,6 +3,8 @@
 using namespace std;
 
 namespace day17 {
+    static constexpr array<int, 3> moves{{-1, 0, +1}};
+
     struct cube_position {
         int x;
         int y;
@@ -40,8 +42,6 @@ namespace day17 {
             }
         };
     };
-
-    static constexpr array<int, 3> moves{{-1, 0, +1}};
 
     template<typename T, typename H>
     unordered_set<T, H> runCycle(const unordered_set<T, H>& activeCubes, vector<T>& neighbourDirections) {
