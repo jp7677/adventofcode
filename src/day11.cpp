@@ -24,7 +24,7 @@ namespace day11 {
             || (y == size.height - 1 && direction.second == 1));
     }
 
-    void runRounds(vector<string>& map, const size& size, bool needsSwap(const vector<string>& map, const struct size& size, const uint x, const uint y)) {
+    void runRounds(vector<string>& map, const size& size, const function<bool(const vector<string>&, const struct size&, const uint, const uint)>& needsSwap) {
         while (true) {
             vector<pair<uint, uint>> swaps;
             swaps.reserve(size.width * size.height);
