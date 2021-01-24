@@ -43,17 +43,27 @@ namespace day17 {
 
     static constexpr array<int, 3> moves{{-1, 0, +1}};
 
-    template<typename T, typename M>
-    unordered_set<T, M> runCycle(const unordered_set<T, M>& activeCubes, vector<T>& neighbourDirections) {
-        unordered_set<T, M> testedNeighbours;
-        unordered_set<T, M> resultingActiveCubes;
+    template<typename T, typename H>
+    unordered_set<T, H> runCycle(const unordered_set<T, H>& activeCubes, vector<T>& neighbourDirections) {
+        unordered_set<T, H> resultingActiveCubes;
         for (auto activeCube : activeCubes) {
             auto activeNeighbours = 0U;
             for (const auto& direction : neighbourDirections) {
-                auto neighbour = activeCube + direction;
-                if (activeCubes.find(neighbour) != activeCubes.end())
+                if (activeCubes.find(activeCube + direction) != activeCubes.end())
                     activeNeighbours++;
 
+                if (activeNeighbours == 4)
+                    break;
+            }
+
+            if (activeNeighbours == 2 || activeNeighbours == 3)
+                resultingActiveCubes.insert(activeCube);
+        }
+
+        unordered_set<T, H> testedNeighbours;
+        for (auto activeCube : activeCubes) {
+            for (const auto& direction : neighbourDirections) {
+                auto neighbour = activeCube + direction;
                 if (testedNeighbours.find(neighbour) != testedNeighbours.end())
                     continue;
 
@@ -70,9 +80,6 @@ namespace day17 {
                 if (activeNeighboursOfNeighbour == 3)
                     resultingActiveCubes.insert(neighbour);
             }
-
-            if (activeNeighbours == 2 || activeNeighbours == 3)
-                resultingActiveCubes.insert(activeCube);
         }
 
         return resultingActiveCubes;
