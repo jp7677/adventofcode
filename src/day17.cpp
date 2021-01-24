@@ -47,14 +47,10 @@ namespace day17 {
     unordered_set<T, H> runCycle(const unordered_set<T, H>& activeCubes, vector<T>& neighbourDirections) {
         unordered_set<T, H> resultingActiveCubes;
         for (auto activeCube : activeCubes) {
-            auto activeNeighbours = 0U;
-            for (const auto& direction : neighbourDirections) {
-                if (activeCubes.find(activeCube + direction) != activeCubes.end())
-                    activeNeighbours++;
-
-                if (activeNeighbours == 4)
-                    break;
-            }
+            auto activeNeighbours = accumulate(neighbourDirections.begin(), neighbourDirections.end(), 0U,
+                [&activeCubes, &activeCube](const auto sum, const auto& direction){
+                    return sum <= 3 && activeCubes.find(activeCube + direction) != activeCubes.end() ? sum + 1 : sum;
+                });
 
             if (activeNeighbours == 2 || activeNeighbours == 3)
                 resultingActiveCubes.insert(activeCube);
@@ -67,14 +63,10 @@ namespace day17 {
                 if (testedNeighbours.find(neighbour) != testedNeighbours.end())
                     continue;
 
-                auto activeNeighboursOfNeighbour = 0U;
-                for (const auto& directionOfNeighbour : neighbourDirections) {
-                    if (activeCubes.find(neighbour + directionOfNeighbour) != activeCubes.end())
-                        activeNeighboursOfNeighbour++;
-
-                    if (activeNeighboursOfNeighbour == 4)
-                        break;
-                }
+                auto activeNeighboursOfNeighbour = accumulate(neighbourDirections.begin(), neighbourDirections.end(), 0U,
+                    [&activeCubes, &neighbour](const auto sum, const auto& direction){
+                        return sum <= 3 && activeCubes.find(neighbour + direction) != activeCubes.end() ? sum + 1 : sum;
+                    });
 
                 testedNeighbours.insert(neighbour);
                 if (activeNeighboursOfNeighbour == 3)
