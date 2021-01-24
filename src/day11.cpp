@@ -3,19 +3,15 @@
 using namespace std;
 
 namespace day11 {
-    struct size {
-        size_t width;
-        size_t height;
-    };
-
-    size getMapSize(const vector<string>& map) {
-        return size{map[0].size(), map.size()};
-    }
-
     static constexpr array<pair<short, short>, 8> directions{{
         {-1, -1}, {+0, -1}, {+1, -1},
         {-1, +0}, {+1, +0},
         {-1, +1}, {+0, +1}, {+1, +1}}};
+
+    struct size {
+        size_t width;
+        size_t height;
+    };
 
     bool isValidDirection(const size& size, const uint x, const uint y, const pair<int, int>& direction) {
         return !((x == 0 && direction.first == -1)
@@ -67,7 +63,7 @@ namespace day11 {
     TEST_CASE("Day 11 - Part 1 from https://adventofcode.com/2020/day/11") {
         auto mapData = util::loadInputFile("day11-input.txt");
 
-        runRounds(mapData, getMapSize(mapData), needsSwapDueToAdjacentSeats);
+        runRounds(mapData, size{mapData[0].size(), mapData.size()}, needsSwapDueToAdjacentSeats);
         auto result = accumulate(mapData.begin(), mapData.end(), 0U,
             [](const auto sum, const auto& line) {
                 return sum + count(line.begin(), line.end(), '#');
@@ -118,7 +114,7 @@ namespace day11 {
     TEST_CASE("Day 11 - Part 2 from https://adventofcode.com/2020/day/11#part2") {
         auto mapData = util::loadInputFile("day11-input.txt");
 
-        runRounds(mapData, getMapSize(mapData), needsSwapDueToFirstVisibleSeat);
+        runRounds(mapData, size{mapData[0].size(), mapData.size()}, needsSwapDueToFirstVisibleSeat);
         auto result = accumulate(mapData.begin(), mapData.end(), 0U,
             [](const auto sum, const auto& line) {
                 return sum + count(line.begin(), line.end(), '#');
