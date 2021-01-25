@@ -6,9 +6,7 @@ namespace day17 {
     static constexpr array<int, 3> moves{{-1, 0, +1}};
 
     struct cube_position {
-        int x;
-        int y;
-        int z;
+        int x,y,z;
 
         cube_position(int x, int y, int z = 0) {
             this->x = x;
@@ -67,10 +65,10 @@ namespace day17 {
     }
 
     template<typename T, typename H>
-    unordered_set<T, H> runCycle(const unordered_set<T, H>& activeCubes, vector<T>& neighbourDirections) {
+    unordered_set<T, H> runCycle(const unordered_set<T, H>& activeCubes, const vector<T>& directions) {
         unordered_set<T, H> resultingActiveCubes;
         for (auto activeCube : activeCubes) {
-            auto activeNeighbours = accumulate(neighbourDirections.begin(), neighbourDirections.end(), 0U,
+            auto activeNeighbours = accumulate(directions.begin(), directions.end(), 0U,
                 [&activeCubes, &activeCube](const auto sum, const auto& direction){
                     return sum <= 3 && activeCubes.find(activeCube + direction) != activeCubes.end() ? sum + 1 : sum;
                 });
@@ -81,12 +79,12 @@ namespace day17 {
 
         unordered_set<T, H> testedNeighbours;
         for (auto activeCube : activeCubes) {
-            for (const auto& direction : neighbourDirections) {
+            for (const auto& direction : directions) {
                 auto neighbour = activeCube + direction;
                 if (testedNeighbours.find(neighbour) != testedNeighbours.end())
                     continue;
 
-                auto activeNeighboursOfNeighbour = accumulate(neighbourDirections.begin(), neighbourDirections.end(), 0U,
+                auto activeNeighboursOfNeighbour = accumulate(directions.begin(), directions.end(), 0U,
                     [&activeCubes, &neighbour](const auto sum, const auto& direction){
                         return sum <= 3 && activeCubes.find(neighbour + direction) != activeCubes.end() ? sum + 1 : sum;
                     });
@@ -100,6 +98,14 @@ namespace day17 {
         return resultingActiveCubes;
     }
 
+    template<typename T, typename H>
+    uint runCycles(unordered_set<T, H>& activeCubes, const vector<T>& directions) {
+        for (auto i = 0U; i < 6; i++)
+            activeCubes = runCycle(activeCubes, directions);
+
+        return activeCubes.size();
+    }
+
     TEST_CASE("Day 17 - Part 1 https://adventofcode.com/2020/day/17") {
         auto activeCubes = loadActiveCubes<cube_position, cube_position::hash>();
 
@@ -110,10 +116,7 @@ namespace day17 {
                     if (!(x == 0 && y == 0 && z == 0))
                         directions.emplace_back(cube_position(x, y, z));
 
-        for (auto i = 0U; i < 6; i++)
-            activeCubes = runCycle(activeCubes, directions);
-
-        auto result = activeCubes.size();
+        auto result = runCycles(activeCubes, directions);
 
         REQUIRE(result == 391);
     }
@@ -129,10 +132,7 @@ namespace day17 {
                         if (!(x == 0 && y == 0 && z == 0 && w == 0))
                             directions.emplace_back(hypercube_position(x, y, z, w));
 
-        for (auto i = 0U; i < 6; i++)
-            activeCubes = runCycle(activeCubes, directions);
-
-        auto result = activeCubes.size();
+        auto result = runCycles(activeCubes, directions);
 
         REQUIRE(result == 2264);
     }
