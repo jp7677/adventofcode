@@ -16,11 +16,11 @@ namespace day12 {
     }
 
     struct position {
-        int x;
-        int y;
+        int x,y;
+
         [[nodiscard]] uint getManhattenDistance() const {
             return abs(x) + abs(y);
-        } 
+        }
     };
 
     struct ship : position {
