@@ -56,10 +56,10 @@ namespace day17 {
         auto cubeData = util::loadInputFile("day17-input.txt");
 
         unordered_set<T, H> activeCubes;
-        for (auto x = 0U; x < cubeData.size(); x++)
-            for (auto y = 0U; y < cubeData[x].size(); y++)
+        for (auto y = 0U; y < cubeData.size(); y++)
+            for (auto x = 0U; x < cubeData[y].size(); x++)
                 if (cubeData[x][y] == '#')
-                    activeCubes.insert(T(static_cast<int>(y), static_cast<int>(x)));
+                    activeCubes.insert(T(static_cast<int>(x), static_cast<int>(y)));
 
         return activeCubes;
     }
