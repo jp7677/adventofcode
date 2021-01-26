@@ -14,10 +14,10 @@ namespace day11 {
     };
 
     bool isValidDirection(const size& size, const uint x, const uint y, const pair<int, int>& direction) {
-        return !((x == 0 && direction.first == -1)
-            || (x == size.width - 1 && direction.first == 1)
-            || (y == 0 && direction.second == -1)
-            || (y == size.height - 1 && direction.second == 1));
+        return (x != 0 || direction.first != -1)
+            && (y != 0 || direction.second != -1)
+            && (x != size.width - 1 || direction.first != 1)
+            && (y != size.height - 1 || direction.second != 1);
     }
 
     void runRounds(vector<string>& map, const size& size, const function<bool(const vector<string>&, const struct size&, const uint, const uint)>& needsSwap) {
