@@ -7,10 +7,10 @@ namespace day00 {
         auto mathData = util::loadInputFile("day18-input.txt");
 
         auto result = accumulate(mathData.begin(), mathData.end(), 0UL,
-            [](const auto sum, const auto& mathLine) {
+            [](const auto sum, const auto& expression) {
                 stack<pair<ulong, char>> results;
                 results.emplace(0UL, '+');
-                for (const auto token : mathLine) {
+                for (const auto token : expression) {
                     auto number = 0UL;
                     switch (token) {
                         case ' ': continue;
