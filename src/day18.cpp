@@ -39,9 +39,8 @@ namespace day00 {
             if (token == ")") {
                 number = results.top().first;
                 results.pop();
-            } else {
+            } else
                 number = stoi(token);
-            }
 
             results.top().first = results.top().second == '+'
                 ? results.top().first + number
