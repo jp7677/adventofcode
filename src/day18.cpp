@@ -37,7 +37,7 @@ namespace day00 {
                     number = results.top().first;
                     results.pop();
                     break;
-                default :
+                default:
                     number = stoi(token);
             }
 
