@@ -25,26 +25,31 @@ namespace day00 {
         stack<pair<ulong, char>> results;
         results.emplace(0UL, '+');
         for (const auto& token : util::split(formattedExpression, ' ')) {
-            if (token == "+" || token == "*") {
-                results.top().second = token[0];
-                continue;
-            }
-
-            if (token == "(") {
-                results.emplace(0UL, '+');
-                continue;
-            }
-
             ulong number;
-            if (token == ")") {
-                number = results.top().first;
-                results.pop();
-            } else
-                number = stoi(token);
+            switch (token[0]) {
+                case '+': case '*':
+                    results.top().second = token[0];
+                    continue;
+                case '(':
+                    results.emplace(0UL, '+');
+                    continue;
+                case ')':
+                    number = results.top().first;
+                    results.pop();
+                    break;
+                default :
+                    number = stoi(token);
+            }
 
-            results.top().first = results.top().second == '+'
-                ? results.top().first + number
-                : results.top().first * number;
+            switch (results.top().second) {
+                case '+':
+                    results.top().first += number;
+                    break;
+                case '*':
+                    results.top().first *= number;
+                    break;
+                default: throw runtime_error("Invalid data found");
+            }
         }
         return results.top().first;
     }
