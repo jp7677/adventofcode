@@ -25,11 +25,6 @@ namespace day00 {
         stack<pair<ulong, char>> results;
         results.emplace(0UL, '+');
         for (const auto& token : util::split(formattedExpression, ' ')) {
-            ulong number;
-
-            if (token == " ")
-                continue;
-
             if (token == "+" || token == "*") {
                 results.top().second = token[0];
                 continue;
@@ -40,6 +35,7 @@ namespace day00 {
                 continue;
             }
 
+            ulong number;
             if (token == ")") {
                 number = results.top().first;
                 results.pop();
