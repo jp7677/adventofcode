@@ -39,6 +39,18 @@ namespace util {
         return replacedString;
     }
 
+    inline string replaceAll(const string& replaceableString, const string& a, const string& b) {
+        auto replacedString(replaceableString);
+        auto position = replacedString.find(a, 0);
+        while (position != string::npos) {
+            replacedString.erase(position, a.length());
+            replacedString.insert(position, b);
+            position = replacedString.find(a, position + b.length());
+        }
+
+        return replacedString;
+    }
+
     inline constexpr ushort numberOfDigits(const uint number) {
         return (number < 10 ? 1 :
             (number < 100 ? 2 :

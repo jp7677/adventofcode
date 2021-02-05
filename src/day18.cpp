@@ -3,24 +3,8 @@
 using namespace std;
 
 namespace day00 {
-    void surroundAllWithSpace(string& expression, const char token) {
-        auto surrounded = string(" ");
-        surrounded += token;
-        surrounded.append(" ");
-        for (auto position = 0UL; ; position += 3) {
-            position = expression.find(token, position );
-            if (position == string::npos)
-                return;
-
-            expression.erase(position, 1);
-            expression.insert(position, surrounded );
-        }
-    }
-
     ulong evaluateWithSamePrecedence(const string& expression) {
-        auto formattedExpression = expression;
-        surroundAllWithSpace(formattedExpression, '(');
-        surroundAllWithSpace(formattedExpression, ')');
+        auto formattedExpression = util::replaceAll(util::replaceAll(expression, "(", " ( "), ")", " ) ");
 
         stack<pair<ulong, char>> results;
         results.emplace(0UL, '+');
