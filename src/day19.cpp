@@ -3,6 +3,26 @@
 using namespace std;
 
 namespace day19 {
+    void loadRulesAndMessages(vector<string>& rules, vector<string>& messages) {
+        auto rulesAndMessagesData = util::loadInputFile("day19-input.txt");
+
+        auto rulesSection = true;
+        for (const auto &line : rulesAndMessagesData) {
+            if (line.empty())
+                rulesSection = false;
+
+            if (rulesSection) {
+                auto rule = util::split(line, ':');
+                auto index = stoul(rule[0]);
+                if (rules.size() <= index)
+                    rules.resize(index + 1);
+
+                rules[index] = rule[1];
+            } else
+                messages.emplace_back(line);
+        }
+    }
+
     string buildPattern(vector<string>& rules, uint index) {
         auto rule = rules[index];
         if (rule[1] == '"')
@@ -15,34 +35,45 @@ namespace day19 {
                     if (match == "|")
                         return result + match;
 
-                    return result + buildPattern(rules, stoi(match));
+                    return result + buildPattern(rules, stoul(match));
                 }) +
             ")";
     }
 
     TEST_CASE("Day 19 - Part 1 from https://adventofcode.com/2020/day/19") {
-        auto rulesAndMessagesData = util::loadInputFile("day19-input.txt");
-
-        auto rulesSection = true;
-        vector<string> rules(rulesAndMessagesData.size());
+        vector<string> rules;
         vector<string> messages;
-        for (const auto &line : rulesAndMessagesData) {
-            if (line.empty())
-                rulesSection = false;
+        loadRulesAndMessages(rules, messages);
 
-            if (rulesSection) {
-                auto rule = util::split(line, ':');
-                rules[stoi(rule[0])] = rule[1];
-            } else
-                messages.emplace_back(line);
-        }
-
-        const regex pattern("^" + buildPattern(rules, 0) + "$");
+        const regex re("^" + buildPattern(rules, 0) + "$");
         auto result = count_if(messages.begin(), messages.end(),
-            [&pattern](auto const& rule) {
-                return regex_match(rule, pattern);
+            [&re](auto const& rule) {
+                return regex_match(rule, re);
             });
 
         REQUIRE(result == 113);
+    }
+
+    TEST_CASE("Day 19 - Part 2 from https://adventofcode.com/2020/day/19#part2") {
+        vector<string> rules;
+        vector<string> messages;
+        loadRulesAndMessages(rules, messages);
+
+        auto pattern42 = buildPattern(rules, 42);
+        auto pattern31 = buildPattern(rules, 31);
+
+        auto result = 0U;
+        for (auto i = 1U; i <= 4; i++) {
+            auto pattern = "^(" + pattern42 + ")+";
+            pattern += "(" + pattern42 + "){" + to_string(i) + "}";
+            pattern += "(" + pattern31 + "){" + to_string(i) + "}$";
+            const regex re(pattern);
+            result += count_if(messages.begin(), messages.end(),
+                [&re](auto const& rule) {
+                    return regex_match(rule, re);
+                });
+        }
+
+        REQUIRE(result == 253);
     }
 }
