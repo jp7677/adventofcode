@@ -31,7 +31,7 @@ namespace day19 {
         auto subRules = util::split(rule, ' ');
         return "(" +
             accumulate(subRules.begin(), subRules.end(), string(),
-                [&rules](const auto result, const auto match){
+                [&rules](const auto result, const auto match) {
                     if (match == "|")
                         return result + match;
 
@@ -62,17 +62,17 @@ namespace day19 {
         auto pattern42 = buildPattern(rules, 42);
         auto pattern31 = buildPattern(rules, 31);
 
-        auto result = 0U;
-        for (auto i = 1U; i <= 4; i++) {
-            auto pattern = "^(" + pattern42 + ")+";
-            pattern += "(" + pattern42 + "){" + to_string(i) + "}";
-            pattern += "(" + pattern31 + "){" + to_string(i) + "}$";
-            const regex re(pattern);
-            result += count_if(messages.begin(), messages.end(),
-                [&re](auto const& rule) {
-                    return regex_match(rule, re);
-                });
-        }
+        vector<string> repetitions{"1", "2", "3", "4"};
+        auto result = accumulate(repetitions.begin(), repetitions.end(), 0U,
+            [&messages, &pattern42, &pattern31](const auto count, const auto& i) {
+                stringstream pattern;
+                pattern << "^(" << pattern42 << ")+(" << pattern42 << "){" << i << "}(" << pattern31 << "){" << i + "}$";
+                const regex re(pattern.str());
+                return count + count_if(messages.begin(), messages.end(),
+                    [&re](auto const& rule) {
+                        return regex_match(rule, re);
+                    });
+            });
 
         REQUIRE(result == 253);
     }
