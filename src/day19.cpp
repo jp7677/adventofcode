@@ -31,7 +31,7 @@ namespace day19 {
         auto subRules = util::split(rule, ' ');
         return "(" +
             accumulate(subRules.begin(), subRules.end(), string(),
-                [&rules](const auto result, const auto match) {
+                [&rules](const auto result, const auto& match) {
                     if (match == "|")
                         return result + match;
 
