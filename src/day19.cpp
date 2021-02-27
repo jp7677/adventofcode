@@ -61,14 +61,14 @@ namespace day19 {
 
         auto pattern42 = buildPattern(rules, 42);
         auto pattern31 = buildPattern(rules, 31);
-
-        stringstream patternStream("^");
+        auto pattern = stringstream("^");
         for (const auto& i : array<string, 4>{"1", "2", "3", "4"})
-            patternStream << "((" << pattern42 << ")+(" << pattern42 << "){" << i << "}(" << pattern31 << "){" << i << "})|";
+            pattern << "((" << pattern42 << ")+(" << pattern42 << "){" << i << "}(" << pattern31 << "){" << i << "})|";
 
-        patternStream.seekp(-1, stringstream::cur);
-        patternStream << "$";
-        auto re = regex(patternStream.str());
+        pattern.seekp(-1, stringstream::cur);
+        pattern << "$";
+
+        auto re = regex(pattern.str());
         auto result = count_if(messages.begin(), messages.end(),
             [&re](const auto& message) {
                 return regex_match(message, re);
