@@ -40,16 +40,21 @@ namespace day19 {
             ")";
     }
 
+    uint countMatches(vector<string>& messages, string& pattern) {
+        const regex re(pattern);
+        return count_if(messages.begin(), messages.end(),
+            [&re](auto const& rule) {
+                return regex_match(rule, re);
+            });
+    }
+
     TEST_CASE("Day 19 - Part 1 from https://adventofcode.com/2020/day/19") {
         vector<string> rules;
         vector<string> messages;
         loadRulesAndMessages(rules, messages);
 
-        const regex re("^" + buildPattern(rules, 0) + "$");
-        auto result = count_if(messages.begin(), messages.end(),
-            [&re](auto const& rule) {
-                return regex_match(rule, re);
-            });
+        auto pattern = "^" + buildPattern(rules, 0) + "$";
+        auto result = countMatches(messages, pattern);
 
         REQUIRE(result == 113);
     }
@@ -62,17 +67,14 @@ namespace day19 {
         auto pattern42 = buildPattern(rules, 42);
         auto pattern31 = buildPattern(rules, 31);
 
-        vector<string> repetitions{"1", "2", "3", "4"};
-        auto result = accumulate(repetitions.begin(), repetitions.end(), 0U,
-            [&messages, &pattern42, &pattern31](const auto count, const auto& i) {
-                stringstream pattern;
-                pattern << "^(" << pattern42 << ")+(" << pattern42 << "){" << i << "}(" << pattern31 << "){" << i + "}$";
-                const regex re(pattern.str());
-                return count + count_if(messages.begin(), messages.end(),
-                    [&re](auto const& rule) {
-                        return regex_match(rule, re);
-                    });
-            });
+        stringstream patternStream("^");
+        for (const auto& i : array<string, 4>{"1", "2", "3", "4"})
+            patternStream << "((" << pattern42 << ")+(" << pattern42 << "){" << i << "}(" << pattern31 << "){" << i << "})|";
+
+        patternStream.seekp(-1, stringstream::cur);
+        patternStream << "$";
+        auto pattern = patternStream.str();
+        auto result = countMatches(messages, pattern);
 
         REQUIRE(result == 253);
     }
