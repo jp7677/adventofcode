@@ -7,7 +7,7 @@ namespace day19 {
         auto rulesAndMessagesData = util::loadInputFile("day19-input.txt");
 
         auto rulesSection = true;
-        for (const auto &line : rulesAndMessagesData) {
+        for (const auto& line : rulesAndMessagesData) {
             if (line.empty())
                 rulesSection = false;
 
