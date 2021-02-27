@@ -40,21 +40,16 @@ namespace day19 {
             ")";
     }
 
-    uint countMatches(vector<string>& messages, string& pattern) {
-        auto re = regex(pattern);
-        return count_if(messages.begin(), messages.end(),
-            [&re](auto const& message) {
-                return regex_match(message, re);
-            });
-    }
-
     TEST_CASE("Day 19 - Part 1 from https://adventofcode.com/2020/day/19") {
         vector<string> rules;
         vector<string> messages;
         loadRulesAndMessages(rules, messages);
 
-        auto pattern = "^" + buildPattern(rules, 0) + "$";
-        auto result = countMatches(messages, pattern);
+        auto re = regex("^" + buildPattern(rules, 0) + "$");
+        auto result = count_if(messages.begin(), messages.end(),
+            [&re](const auto& message) {
+                return regex_match(message, re);
+            });
 
         REQUIRE(result == 113);
     }
@@ -73,8 +68,11 @@ namespace day19 {
 
         patternStream.seekp(-1, stringstream::cur);
         patternStream << "$";
-        auto pattern = patternStream.str();
-        auto result = countMatches(messages, pattern);
+        auto re = regex(patternStream.str());
+        auto result = count_if(messages.begin(), messages.end(),
+            [&re](const auto& message) {
+                return regex_match(message, re);
+            });
 
         REQUIRE(result == 253);
     }
