@@ -31,11 +31,11 @@ namespace day19 {
         auto subRules = util::split(rule, ' ');
         return "(" +
             accumulate(subRules.begin(), subRules.end(), string(),
-                [&rules](const auto result, const auto& match) {
-                    if (match == "|")
-                        return result + match;
+                [&rules](const auto result, const auto& subRule) {
+                    if (subRule == "|")
+                        return result + subRule;
 
-                    return result + buildPattern(rules, stoul(match));
+                    return result + buildPattern(rules, stoul(subRule));
                 }) +
             ")";
     }
@@ -43,8 +43,8 @@ namespace day19 {
     uint countMatches(vector<string>& messages, string& pattern) {
         const regex re(pattern);
         return count_if(messages.begin(), messages.end(),
-            [&re](auto const& rule) {
-                return regex_match(rule, re);
+            [&re](auto const& message) {
+                return regex_match(message, re);
             });
     }
 
