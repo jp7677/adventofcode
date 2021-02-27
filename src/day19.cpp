@@ -41,7 +41,7 @@ namespace day19 {
     }
 
     uint countMatches(vector<string>& messages, string& pattern) {
-        const regex re(pattern);
+        auto re = regex(pattern);
         return count_if(messages.begin(), messages.end(),
             [&re](auto const& message) {
                 return regex_match(message, re);
