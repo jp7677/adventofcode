@@ -33,11 +33,11 @@ namespace day03 {
     TEST_CASE("Day 03 - Part 2 from https://adventofcode.com/2020/day/3#part2") {
         auto gridInput = util::loadInputFile("day03-input.txt");
 
-        auto result = runSlope(&gridInput, 1, 1) *
-            runSlope(&gridInput, 3, 1) *
-            runSlope(&gridInput, 5, 1) *
-            runSlope(&gridInput, 7, 1) *
-            runSlope(&gridInput, 1, 2);
+        auto result = runSlope(gridInput, 1, 1)
+            * runSlope(gridInput, 3, 1)
+            * runSlope(gridInput, 5, 1)
+            * runSlope(gridInput, 7, 1)
+            * runSlope(gridInput, 1, 2);
 
         REQUIRE(result == 3154761400);
     }
