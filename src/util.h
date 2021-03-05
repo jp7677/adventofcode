@@ -51,6 +51,12 @@ namespace util {
         return replacedString;
     }
 
+    inline string reverse(const string& reversibleString) {
+        auto reversed = reversibleString;
+        reverse(reversed.begin(), reversed.end());
+        return reversed;
+    }
+
     inline constexpr ushort numberOfDigits(const uint number) {
         return (number < 10 ? 1 :
             (number < 100 ? 2 :
