@@ -34,9 +34,9 @@ namespace day00 {
 
     bool anyAdjacentBorder(const string& a, const border& b) {
         return a == b.top || a == util::reverse(b.top)
-               || a == b.right || a == util::reverse(b.right)
-               || a == b.bottom || a == util::reverse(b.bottom)
-               || a == b.left || a == util::reverse(b.left);
+            || a == b.right || a == util::reverse(b.right)
+            || a == b.bottom || a == util::reverse(b.bottom)
+            || a == b.left || a == util::reverse(b.left);
     }
 
     TEST_CASE("Day 20 - Part 1 from https://adventofcode.com/2020/day/20") {
