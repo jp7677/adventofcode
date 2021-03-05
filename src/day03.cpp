@@ -3,16 +3,16 @@
 using namespace std;
 
 namespace day03 {
-    ulong runSlope(vector<string>* grid, const uint right, const uint down) {
-        auto width = grid->at(0).size();
-        auto height = grid->size();
+    ulong runSlope(const vector<string>& grid, const uint right, const uint down) {
+        auto width = grid[0].size();
+        auto height = grid.size();
 
         auto trees = 0U;
         auto x = 0U;
         auto y = 0U;
 
         while (y < height) {
-            if (grid->at(y)[x % width] == '#')
+            if (grid[y][x % width] == '#')
                 trees++;
 
             y += down;
@@ -25,7 +25,7 @@ namespace day03 {
     TEST_CASE("Day 03 - Part 1 from https://adventofcode.com/2020/day/3") {
         auto gridInput = util::loadInputFile("day03-input.txt");
 
-        auto result = runSlope(&gridInput, 3, 1);
+        auto result = runSlope(gridInput, 3, 1);
 
         REQUIRE(result == 265);
     }
