@@ -17,11 +17,11 @@ namespace day00 {
         return border{tile[0], right, tile[tile.size() - 1], left};
     }
 
-    bool anyAdjacentBorder(const string& a, const border& b) {
-        return a == b.top || a == util::reverse(b.top)
-            || a == b.right || a == util::reverse(b.right)
-            || a == b.bottom || a == util::reverse(b.bottom)
-            || a == b.left || a == util::reverse(b.left);
+    bool anyAdjacentBorder(const string& borderLane, const border& otherBorder) {
+        return borderLane == otherBorder.top || borderLane == util::reverse(otherBorder.top)
+            || borderLane == otherBorder.right || borderLane == util::reverse(otherBorder.right)
+            || borderLane == otherBorder.bottom || borderLane == util::reverse(otherBorder.bottom)
+            || borderLane == otherBorder.left || borderLane == util::reverse(otherBorder.left);
     }
 
     TEST_CASE("Day 20 - Part 1 from https://adventofcode.com/2020/day/20") {
