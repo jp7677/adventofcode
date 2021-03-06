@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace day00 {
+namespace day20 {
     struct border {
         string top, right, bottom, left;
     };
