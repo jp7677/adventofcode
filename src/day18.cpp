@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace day00 {
+namespace day18 {
     ulong evaluateWithSamePrecedence(const string& expression) {
         auto formattedExpression = util::replaceAll(util::replaceAll(expression, "(", " ( "), ")", " ) ");
 
