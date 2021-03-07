@@ -81,7 +81,7 @@ namespace day20 {
             }
 
             if (!top && !left)
-                return tile.first;
+                return tile.first; // TODO: only works for the given data sets, we should actually just rotate the first corner tile found here to become the top left corner
         }
 
         throw runtime_error("invalid data");
