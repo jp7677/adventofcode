@@ -98,14 +98,14 @@ namespace day20 {
     }
 
     vector<string> rotate90degrees(const vector<string>& tile, const uint times = 1) {
-        vector<string> orig(tile);
+        vector<string> originalTile(tile);
         vector<string> rotatedTile(tile);
         for (auto t = 0U; t < times; t++) {
-            for (auto y = 0U; y < tile.size(); y++)
-                for (auto x = 0U; x < tile[y].size(); x++)
-                    rotatedTile[x][y] = orig[tile[y].size() - 1 - y][x];
+            for (auto y = 0U; y < originalTile.size(); y++)
+                for (auto x = 0U; x < originalTile[0].size(); x++)
+                    rotatedTile[x][y] = originalTile[originalTile[0].size() - 1 - y][x];
 
-            orig = rotatedTile;
+            originalTile = rotatedTile;
         }
 
         return rotatedTile;
