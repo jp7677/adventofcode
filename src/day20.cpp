@@ -214,7 +214,7 @@ namespace day20 {
     constexpr uint seaMonsterWidth = 21;
     constexpr uint seaMonsterHeight = 3;
 
-    bool hasSeaMonster(vector<string>& image, uint x, uint y) {
+    bool hasSeaMonster(const vector<string>& image, const uint x, const uint y) {
         array<string, 3> water;
         water[0] = image[y].substr(x, seaMonsterWidth);
         water[1] = image[y + 1].substr(x, seaMonsterWidth);
