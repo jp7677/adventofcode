@@ -87,25 +87,21 @@ namespace day20 {
         throw runtime_error("invalid data");
     }
 
-    vector<string> mirror(const vector<string>& tile) {
-        vector<string> mirroredTile;
-        transform(tile.begin(), tile.end(), back_inserter(mirroredTile),
-            [](const auto& line) {
-                return util::reverse(line);
-            });
+    vector<string> orientate(const vector<string>& tile, const bool mirror, const uint times) {
+        vector<string> mirroredTile(tile);
+        if (mirror)
+            transform(mirroredTile.begin(), mirroredTile.end(), mirroredTile.begin(),
+                [](const auto& line) {
+                    return util::reverse(line);
+                });
 
-        return mirroredTile;
-    }
-
-    vector<string> rotate90degrees(const vector<string>& tile, const uint times = 1) {
-        vector<string> originalTile(tile);
-        vector<string> rotatedTile(tile);
+        vector<string> rotatedTile(mirroredTile);
         for (auto t = 0U; t < times; t++) {
-            for (auto y = 0U; y < originalTile.size(); y++)
-                for (auto x = 0U; x < originalTile[0].size(); x++)
-                    rotatedTile[x][y] = originalTile[originalTile[0].size() - 1 - y][x];
+            for (auto y = 0U; y < mirroredTile.size(); y++)
+                for (auto x = 0U; x < mirroredTile[0].size(); x++)
+                    rotatedTile[x][y] = mirroredTile[mirroredTile[0].size() - 1 - y][x];
 
-            originalTile = rotatedTile;
+            mirroredTile = rotatedTile;
         }
 
         return rotatedTile;
@@ -113,48 +109,40 @@ namespace day20 {
 
     vector<string> orientateToLeftBoarderIfNeeded(const vector<string>& tile, const string& leftBoarder) {
         auto boarder = getTileBorder(tile);
-        if (boarder.top == leftBoarder) {
-            auto m = mirror(tile);
-            return rotate90degrees(m, 3);
-        } else if (boarder.right == leftBoarder) {
-            return mirror(tile);
-        } else if (boarder.bottom == leftBoarder) {
-            return rotate90degrees(tile);
-        } else if (util::reverse(boarder.top) == leftBoarder) {
-            return rotate90degrees(tile, 3);
-        } else if (util::reverse(boarder.right) == leftBoarder) {
-            return rotate90degrees(tile, 2);
-        } else if (util::reverse(boarder.bottom) == leftBoarder) {
-            auto m = mirror(tile);
-            return rotate90degrees(m);
-        } else if (util::reverse(boarder.left) == leftBoarder) {
-            auto m = mirror(tile);
-            return rotate90degrees(m, 2);
-        }
+        if (boarder.top == leftBoarder)
+            return orientate(tile, true, 3);
+        else if (boarder.right == leftBoarder)
+            return orientate(tile, true, 0);
+        else if (boarder.bottom == leftBoarder)
+            return orientate(tile, false, 1);
+        else if (util::reverse(boarder.top) == leftBoarder)
+            return orientate(tile, false, 3);
+        else if (util::reverse(boarder.right) == leftBoarder)
+            return orientate(tile, false, 2);
+        else if (util::reverse(boarder.bottom) == leftBoarder)
+            return orientate(tile, true, 1);
+        else if (util::reverse(boarder.left) == leftBoarder)
+            return orientate(tile, true, 2);
 
         return tile;
     }
 
     vector<string> orientateToTopBoarderIfNeeded(const vector<string>& tile, const string& topBoarder) {
         auto boarder = getTileBorder(tile);
-        if (boarder.right == topBoarder) {
-            return rotate90degrees(tile, 3);
-        } else if (boarder.bottom == topBoarder) {
-            auto m = mirror(tile);
-            return rotate90degrees(m, 2);
-        } else if (boarder.left == topBoarder) {
-            auto m = mirror(tile);
-            return rotate90degrees(m, 3);
-        } else if (util::reverse(boarder.top) == topBoarder) {
-            return mirror(tile);
-        } else if (util::reverse(boarder.right) == topBoarder) {
-            auto m = mirror(tile);
-            return rotate90degrees(m);
-        } else if (util::reverse(boarder.bottom) == topBoarder) {
-            return rotate90degrees(tile, 2);
-        } else if (util::reverse(boarder.left) == topBoarder) {
-            return rotate90degrees(tile);
-        }
+        if (boarder.right == topBoarder)
+            return orientate(tile, false, 3);
+        else if (boarder.bottom == topBoarder)
+            return orientate(tile, true, 2);
+        else if (boarder.left == topBoarder)
+            return orientate(tile, true, 3);
+        else if (util::reverse(boarder.top) == topBoarder)
+            return orientate(tile, true, 0);
+        else if (util::reverse(boarder.right) == topBoarder)
+            return orientate(tile, true, 1);
+        else if (util::reverse(boarder.bottom) == topBoarder)
+            return orientate(tile, false, 2);
+        else if (util::reverse(boarder.left) == topBoarder)
+            return orientate(tile, false, 1);
 
         return tile;
     }
@@ -232,7 +220,7 @@ namespace day20 {
 
         auto numberOfSeaMonsters = 0U;
         while (numberOfSeaMonsters == 0) {
-            image = rotate90degrees(image); // TODO: only works for the given data sets, we should also mirror after three attempts and bail out if none was found
+            image = orientate(image, false, 1); // TODO: only works for the given data sets, we should also mirror after three attempts and bail out if none was found
             for (auto y = 0U; y < image.size() - seaMonsterHeight; y++)
                 for (auto x = 0U; x < image[0].size() - seaMonsterWidth; x++)
                     if (hasSeaMonster(image, x, y))
