@@ -45,16 +45,17 @@ namespace day20 {
         auto result = accumulate(tiles.begin(), tiles.end(), 1UL,
             [&tiles](const auto product, const auto& tile) {
                 auto border = getTileBorder(tile.second);
-                auto adjacentBorders = count_if(tiles.begin(), tiles.end(),
-                    [&tile, &border](const auto& other) {
-                        if (tile.first == other.first)
-                            return false;
+                auto adjacentBorders = accumulate(tiles.begin(), tiles.end(), 0U,
+                    [&tile, &border](const auto sum, const auto& other) {
+                        if (tile.first == other.first || sum > 2)
+                            return sum;
 
                         auto otherBorder = getTileBorder(other.second);
                         return anyAdjacentBorder(border.top, otherBorder)
                             || anyAdjacentBorder(border.bottom, otherBorder)
                             || anyAdjacentBorder(border.right, otherBorder)
-                            || anyAdjacentBorder(border.left, otherBorder);
+                            || anyAdjacentBorder(border.left, otherBorder)
+                            ? sum + 1 : sum;
                     });
 
                 return adjacentBorders == 2 ? product * tile.first : product;
