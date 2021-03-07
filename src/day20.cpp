@@ -63,7 +63,7 @@ namespace day20 {
         REQUIRE(result == 7492183537913);
     }
 
-    uint findTopLeftTile(unordered_map<uint, vector<string>>& tiles) {
+    uint findTopLeftTile(const unordered_map<uint, vector<string>>& tiles) {
         for (const auto& tile : tiles) {
             auto border = getTileBorder(tile.second);
 
@@ -87,87 +87,91 @@ namespace day20 {
         throw runtime_error("invalid data");
     }
 
-    void mirror(vector<string>& tile) {
-        transform(tile.begin(), tile.end(), tile.begin(),
+    vector<string> mirror(const vector<string>& tile) {
+        vector<string> mirroredTile;
+        transform(tile.begin(), tile.end(), back_inserter(mirroredTile),
             [](const auto& line) {
                 return util::reverse(line);
             });
+
+        return mirroredTile;
     }
 
-    void rotate90degrees(vector<string>& tile, const uint times = 1) {
+    vector<string> rotate90degrees(const vector<string>& tile, const uint times = 1) {
+        vector<string> orig(tile);
         vector<string> rotatedTile(tile);
         for (auto t = 0U; t < times; t++) {
             for (auto y = 0U; y < tile.size(); y++)
                 for (auto x = 0U; x < tile[y].size(); x++)
-                    rotatedTile[x][y] = tile[tile[y].size() - 1 - y][x];
+                    rotatedTile[x][y] = orig[tile[y].size() - 1 - y][x];
 
-            tile = rotatedTile;
+            orig = rotatedTile;
         }
+
+        return rotatedTile;
     }
 
-    void orientateToLeftBoarderIfNeeded(vector<string>& tile, const string& leftBoarder) {
+    vector<string> orientateToLeftBoarderIfNeeded(const vector<string>& tile, const string& leftBoarder) {
         auto boarder = getTileBorder(tile);
-        if (boarder.left == leftBoarder)
-            return;
-
         if (boarder.top == leftBoarder) {
-            mirror(tile);
-            rotate90degrees(tile, 3);
+            auto m = mirror(tile);
+            return rotate90degrees(m, 3);
         } else if (boarder.right == leftBoarder) {
-            mirror(tile);
+            return mirror(tile);
         } else if (boarder.bottom == leftBoarder) {
-            rotate90degrees(tile);
+            return rotate90degrees(tile);
         } else if (util::reverse(boarder.top) == leftBoarder) {
-            rotate90degrees(tile, 3);
+            return rotate90degrees(tile, 3);
         } else if (util::reverse(boarder.right) == leftBoarder) {
-            rotate90degrees(tile, 2);
+            return rotate90degrees(tile, 2);
         } else if (util::reverse(boarder.bottom) == leftBoarder) {
-            mirror(tile);
-            rotate90degrees(tile);
+            auto m = mirror(tile);
+            return rotate90degrees(m);
         } else if (util::reverse(boarder.left) == leftBoarder) {
-            mirror(tile);
-            rotate90degrees(tile, 2);
+            auto m = mirror(tile);
+            return rotate90degrees(m, 2);
         }
+
+        return tile;
     }
 
-    void orientateToTopBoarderIfNeeded(vector<string>& tile, const string& topBoarder) {
+    vector<string> orientateToTopBoarderIfNeeded(const vector<string>& tile, const string& topBoarder) {
         auto boarder = getTileBorder(tile);
-        if (boarder.top == topBoarder)
-            return;
-
         if (boarder.right == topBoarder) {
-            rotate90degrees(tile, 3);
+            return rotate90degrees(tile, 3);
         } else if (boarder.bottom == topBoarder) {
-            mirror(tile);
-            rotate90degrees(tile, 2);
+            auto m = mirror(tile);
+            return rotate90degrees(m, 2);
         } else if (boarder.left == topBoarder) {
-            mirror(tile);
-            rotate90degrees(tile, 3);
+            auto m = mirror(tile);
+            return rotate90degrees(m, 3);
         } else if (util::reverse(boarder.top) == topBoarder) {
-            mirror(tile);
+            return mirror(tile);
         } else if (util::reverse(boarder.right) == topBoarder) {
-            mirror(tile);
-            rotate90degrees(tile);
+            auto m = mirror(tile);
+            return rotate90degrees(m);
         } else if (util::reverse(boarder.bottom) == topBoarder) {
-            rotate90degrees(tile, 2);
+            return rotate90degrees(tile, 2);
         } else if (util::reverse(boarder.left) == topBoarder) {
-            rotate90degrees(tile);
+            return rotate90degrees(tile);
         }
+
+        return tile;
     }
 
-    vector<string> puzzleImage(unordered_map<uint, vector<string>>& tiles) {
+    vector<string> puzzleImage(const unordered_map<uint, vector<string>>& tiles) {
         auto topLeftCornerTileId = findTopLeftTile(tiles);
 
         vector<string> image;
-        for (auto p = 1U; p < tiles[topLeftCornerTileId].size() - 1; p++)
-            image.push_back(tiles[topLeftCornerTileId][p].substr(1, tiles[topLeftCornerTileId][p].size() - 2));
+        for (auto p = 1U; p < tiles.at(topLeftCornerTileId).size() - 1; p++)
+            image.push_back(tiles.at(topLeftCornerTileId)[p].substr(1, tiles.at(topLeftCornerTileId)[p].size() - 2));
 
         vector<uint> foundTiles(tiles.size());
         foundTiles[0] = topLeftCornerTileId;
-        auto firstInRowId = topLeftCornerTileId;
+        auto topLeftCornerTileBorder = getTileBorder(tiles.at(topLeftCornerTileId));
+        auto firstInRowBottomBorder = topLeftCornerTileBorder.bottom;
+        auto leftBorder = topLeftCornerTileBorder.right;
         for (auto i = 1U; i <= tiles.size(); i++ ) {
-            auto last = foundTiles[i - 1];
-            auto leftBorder = getTileBorder(tiles[last]).right;
             for (const auto& other : tiles) {
                 if (count_if(foundTiles.begin(), foundTiles.end(),
                     [&other](const auto& pos) {
@@ -176,10 +180,11 @@ namespace day20 {
                     continue;
 
                 if (anyAdjacentBorder(leftBorder, getTileBorder(other.second))) {
-                    orientateToLeftBoarderIfNeeded(tiles[other.first], leftBorder);
                     foundTiles[i] = other.first;
-                    for (auto p = 1U; p < other.second.size() - 1; p++)
-                        image[image.size() - other.second.size() + 1 + p] += other.second[p].substr(1, other.second[p].size() - 2);
+                    auto orientedTile = orientateToLeftBoarderIfNeeded(other.second, leftBorder);
+                    leftBorder = getTileBorder(orientedTile).right;
+                    for (auto p = 1U; p < orientedTile.size() - 1; p++)
+                        image[image.size() - orientedTile.size() + 1 + p] += orientedTile[p].substr(1, orientedTile[p].size() - 2);
 
                     break;
                 }
@@ -188,7 +193,6 @@ namespace day20 {
             if (foundTiles[i] != 0)
                 continue;
 
-            auto bottomBorder = getTileBorder(tiles[firstInRowId]).bottom;
             for (const auto& other : tiles) {
                 if (count_if(foundTiles.begin(), foundTiles.end(),
                     [&other](const auto& pos) {
@@ -196,12 +200,14 @@ namespace day20 {
                     }))
                     continue;
 
-                if (anyAdjacentBorder(bottomBorder, getTileBorder(other.second))) {
-                    orientateToTopBoarderIfNeeded(tiles[other.first], bottomBorder);
-                    firstInRowId = other.first;
+                if (anyAdjacentBorder(firstInRowBottomBorder, getTileBorder(other.second))) {
                     foundTiles[i] = other.first;
-                    for (auto p = 1U; p < other.second.size() - 1; p++)
-                        image.push_back(other.second[p].substr(1, other.second[p].size() - 2));
+                    auto orientedTile = orientateToTopBoarderIfNeeded(tiles.at(other.first), firstInRowBottomBorder);
+                    auto orientedTileBorder = getTileBorder(orientedTile);
+                    firstInRowBottomBorder = orientedTileBorder.bottom;
+                    leftBorder = orientedTileBorder.right;
+                    for (auto p = 1U; p < orientedTile.size() - 1; p++)
+                        image.push_back(orientedTile[p].substr(1, orientedTile[p].size() - 2));
 
                     break;
                 }
@@ -232,7 +238,7 @@ namespace day20 {
 
         auto numberOfSeaMonsters = 0U;
         while (numberOfSeaMonsters == 0) {
-            rotate90degrees(image); // TODO: only works for the given data sets, we should also mirror after three attempts and bail out if none was found
+            image = rotate90degrees(image); // TODO: only works for the given data sets, we should also mirror after three attempts and bail out if none was found
             for (auto y = 0U; y < image.size() - seaMonsterHeight; y++)
                 for (auto x = 0U; x < image[0].size() - seaMonsterWidth; x++)
                     if (hasSeaMonster(image, x, y))
