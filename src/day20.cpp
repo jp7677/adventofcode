@@ -66,22 +66,21 @@ namespace day20 {
     uint findTopLeftTile(const unordered_map<uint, vector<string>>& tiles) {
         for (const auto& tile : tiles) {
             auto border = getTileBorder(tile.second);
+            if (find_if(tiles.begin(), tiles.end(),
+                [&tile, &border](const auto& other){
+                    auto otherBorder = getTileBorder(other.second);
+                    return tile.first != other.first && anyAdjacentBorder(border.top, otherBorder);
+                }) != tiles.end())
+                continue;
 
-            bool top = false;
-            bool left = false;
-            for (const auto& other : tiles) {
-                if (tile.first == other.first)
-                    continue;
+            if (find_if(tiles.begin(), tiles.end(),
+                [&tile, &border](const auto& other){
+                    auto otherBorder = getTileBorder(other.second);
+                    return tile.first != other.first && anyAdjacentBorder(border.left, otherBorder);
+                }) != tiles.end())
+                continue;
 
-                auto otherBorder = getTileBorder(other.second);
-                if (anyAdjacentBorder(border.top, otherBorder))
-                    top = true;
-                if (anyAdjacentBorder(border.left, otherBorder))
-                    left  = true;
-            }
-
-            if (!top && !left)
-                return tile.first; // TODO: only works for the given data sets, we should actually just rotate the first corner tile found here to become the top left corner
+            return tile.first; // TODO: only works for the given data sets, we should actually just rotate the first corner tile found here to become the top left corner
         }
 
         throw runtime_error("invalid data");
