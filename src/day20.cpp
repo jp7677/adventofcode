@@ -173,10 +173,7 @@ namespace day20 {
         auto leftBorder = topLeftCornerTileBorder.right;
         for (auto i = 1U; i <= tiles.size(); i++ ) {
             for (const auto& other : tiles) {
-                if (count_if(foundTiles.begin(), foundTiles.end(),
-                    [&other](const auto& pos) {
-                        return pos == other.first;
-                    }))
+                if (find(foundTiles.begin(), foundTiles.end(), other.first) != foundTiles.end())
                     continue;
 
                 if (anyAdjacentBorder(leftBorder, getTileBorder(other.second))) {
@@ -194,10 +191,7 @@ namespace day20 {
                 continue;
 
             for (const auto& other : tiles) {
-                if (count_if(foundTiles.begin(), foundTiles.end(),
-                    [&other](const auto& pos) {
-                        return pos == other.first;
-                    }))
+                if (find(foundTiles.begin(), foundTiles.end(), other.first) != foundTiles.end())
                     continue;
 
                 if (anyAdjacentBorder(firstInRowBottomBorder, getTileBorder(other.second))) {
