@@ -64,26 +64,23 @@ namespace day20 {
     }
 
     uint findTopLeftTile(const unordered_map<uint, vector<string>>& tiles) {
-        for (const auto& tile : tiles) {
-            auto border = getTileBorder(tile.second);
-            if (find_if(tiles.begin(), tiles.end(),
-                [&tile, &border](const auto& other){
-                    auto otherBorder = getTileBorder(other.second);
-                    return tile.first != other.first && anyAdjacentBorder(border.top, otherBorder);
-                }) != tiles.end())
-                continue;
+        auto it = find_if(tiles.begin(), tiles.end(),
+            [&tiles](const auto& tile){
+                auto border = getTileBorder(tile.second);
+                return find_if(tiles.begin(), tiles.end(),
+                        [&tile, &border](const auto& other){
+                            auto otherBorder = getTileBorder(other.second);
+                            return tile.first != other.first && anyAdjacentBorder(border.top, otherBorder);
+                        }) == tiles.end()
+                    && find_if(tiles.begin(), tiles.end(),
+                        [&tile, &border](const auto& other){
+                            auto otherBorder = getTileBorder(other.second);
+                            return tile.first != other.first && anyAdjacentBorder(border.left, otherBorder);
+                        }) == tiles.end();
+            });
 
-            if (find_if(tiles.begin(), tiles.end(),
-                [&tile, &border](const auto& other){
-                    auto otherBorder = getTileBorder(other.second);
-                    return tile.first != other.first && anyAdjacentBorder(border.left, otherBorder);
-                }) != tiles.end())
-                continue;
-
-            return tile.first; // TODO: only works for the given data sets, we should actually just rotate the first corner tile found here to become the top left corner
-        }
-
-        throw runtime_error("invalid data");
+        // TODO: only works for the given data sets, we should actually just rotate the first corner tile found here to become the top left corner
+        return it != tiles.end() ? (*it).first : throw runtime_error("invalid data");
     }
 
     vector<string> orientate(const vector<string>& tile, const bool mirror, const uint times) {
