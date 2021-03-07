@@ -79,7 +79,7 @@ namespace day20 {
                         }) == tiles.end();
             });
 
-        // TODO: only works for the given data sets, we should actually just rotate the first corner tile found here to become the top left corner
+        // the given data sets contain a top left corner, we should actually just rotate the first corner tile found here to become a top left corner
         return it != tiles.end() ? (*it).first : throw runtime_error("invalid data");
     }
 
@@ -216,7 +216,8 @@ namespace day20 {
 
         auto numberOfSeaMonsters = 0U;
         while (numberOfSeaMonsters == 0) {
-            image = orientate(image, false, 1); // TODO: only works for the given data sets, we should also mirror after three attempts and bail out if none was found
+            // rotate only works for the given data sets, we should actually also mirror when searching for the correct orientation
+            image = orientate(image, false, 1);
             for (auto y = 0U; y < image.size() - seaMonsterHeight; y++)
                 for (auto x = 0U; x < image[0].size() - seaMonsterWidth; x++)
                     if (hasSeaMonster(image, x, y))
