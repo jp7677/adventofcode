@@ -64,7 +64,7 @@ namespace day20 {
         REQUIRE(result == 7492183537913);
     }
 
-    uint findTopLeftTile(const unordered_map<uint, vector<string>>& tiles) {
+    pair<uint, vector<string>> findTopLeftTile(const unordered_map<uint, vector<string>>& tiles) {
         auto it = find_if(tiles.begin(), tiles.end(),
             [&tiles](const auto& tile){
                 auto border = getTileBorder(tile.second);
@@ -81,7 +81,7 @@ namespace day20 {
             });
 
         // the given data sets contain a top left corner, we should actually just rotate the first corner tile found here to become a top left corner
-        return it != tiles.end() ? (*it).first : throw runtime_error("invalid data");
+        return it != tiles.end() ? *it : throw runtime_error("invalid data");
     }
 
     vector<string> orientate(const vector<string>& tile, const bool mirror, const uint times) {
@@ -129,14 +129,14 @@ namespace day20 {
     }
 
     vector<string> puzzleImage(const unordered_map<uint, vector<string>>& tiles) {
-        auto topLeftCornerTileId = findTopLeftTile(tiles);
+        auto topLeftCornerTile = findTopLeftTile(tiles);
 
         vector<string> image;
-        for (auto p = 1U; p < tiles.at(topLeftCornerTileId).size() - 1; p++)
-            image.push_back(tiles.at(topLeftCornerTileId)[p].substr(1, tiles.at(topLeftCornerTileId)[p].size() - 2));
+        for (auto p = 1U; p < topLeftCornerTile.second.size() - 1; p++)
+            image.push_back(topLeftCornerTile.second[p].substr(1, topLeftCornerTile.second[p].size() - 2));
 
-        vector<uint> foundTiles{topLeftCornerTileId};
-        auto topLeftCornerTileBorder = getTileBorder(tiles.at(topLeftCornerTileId));
+        vector<uint> foundTiles{topLeftCornerTile.first};
+        auto topLeftCornerTileBorder = getTileBorder(topLeftCornerTile.second);
         auto firstInRowBottomBoarder = topLeftCornerTileBorder.bottom;
         auto lastRightBorder = topLeftCornerTileBorder.right;
         while (true) {
