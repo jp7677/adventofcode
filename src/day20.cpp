@@ -141,40 +141,39 @@ namespace day20 {
         auto firstInRowBottomBoarder = topLeftCornerTileBorder.bottom;
         auto lastRightBorder = topLeftCornerTileBorder.right;
         while (foundTiles.size() != tiles.size()) {
-            auto it = find_if(tiles.begin(), tiles.end(),
+            unordered_map<uint, vector<string>>::const_iterator itLeft, itBottom;
+            itLeft = find_if(tiles.begin(), tiles.end(),
                 [&foundTiles, &lastRightBorder](const auto tile) {
                     return find(foundTiles.begin(), foundTiles.end(), tile.first) == foundTiles.end()
                         && anyAdjacentBorder(lastRightBorder, getTileBorder(tile.second));
                 });
 
-            if (it != tiles.end()) {
-                auto foundTile = *it;
-                foundTiles.push_back(foundTile.first);
-                auto orientedTile = orientateToBoarder(foundTile.second, util::reverse(lastRightBorder), left);
-                lastRightBorder = getTileBorder(orientedTile).right;
-                for (auto p = 1U; p < orientedTile.size() - 1; p++)
-                    image[image.size() - orientedTile.size() + 1 + p] += orientedTile[p].substr(1, orientedTile[p].size() - 2);
+            if (itLeft == tiles.end())
+                itBottom = find_if(tiles.begin(), tiles.end(),
+                    [&foundTiles, &firstInRowBottomBoarder](const auto tile) {
+                        return find(foundTiles.begin(), foundTiles.end(), tile.first) == foundTiles.end()
+                            && anyAdjacentBorder(firstInRowBottomBoarder, getTileBorder(tile.second));
+                    });
 
-                continue;
-            }
-
-            it = find_if(tiles.begin(), tiles.end(),
-                [&foundTiles, &firstInRowBottomBoarder](const auto tile) {
-                    return find(foundTiles.begin(), foundTiles.end(), tile.first) == foundTiles.end()
-                        && anyAdjacentBorder(firstInRowBottomBoarder, getTileBorder(tile.second));
-                });
-
-            if (it == tiles.end())
+            if (itLeft == tiles.end() && itBottom == tiles.end())
                 break;
 
-            auto foundTile = *it;
+            auto foundTile = itLeft != tiles.end() ? *itLeft : *itBottom;
             foundTiles.push_back(foundTile.first);
-            auto orientedTile = orientateToBoarder(tiles.at(foundTile.first), util::reverse(firstInRowBottomBoarder), top);
+            auto orientedTile = itLeft != tiles.end()
+                ? orientateToBoarder(foundTile.second, util::reverse(lastRightBorder), left)
+                : orientateToBoarder(foundTile.second, util::reverse(firstInRowBottomBoarder), top);
+
             auto orientedTileBorder = getTileBorder(orientedTile);
-            firstInRowBottomBoarder = orientedTileBorder.bottom;
             lastRightBorder = orientedTileBorder.right;
+            if (itLeft == tiles.end())
+                firstInRowBottomBoarder = orientedTileBorder.bottom;
+
             for (auto p = 1U; p < orientedTile.size() - 1; p++)
-                image.push_back(orientedTile[p].substr(1, orientedTile[p].size() - 2));
+                if (itLeft != tiles.end())
+                    image[image.size() - orientedTile.size() + 1 + p] += orientedTile[p].substr(1, orientedTile[p].size() - 2);
+                else
+                    image.push_back(orientedTile[p].substr(1, orientedTile[p].size() - 2));
         }
 
         return image;
