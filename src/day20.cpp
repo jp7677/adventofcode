@@ -162,7 +162,6 @@ namespace day20 {
             auto orientedTile = itLeft != tiles.end()
                 ? orientateToBoarder(foundTile.second, util::reverse(lastRightBorder), left)
                 : orientateToBoarder(foundTile.second, util::reverse(firstInRowBottomBoarder), top);
-
             auto orientedTileBorder = getTileBorder(orientedTile);
             lastRightBorder = orientedTileBorder.right;
             if (itLeft == tiles.end())
