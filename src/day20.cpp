@@ -135,8 +135,7 @@ namespace day20 {
         for (auto p = 1U; p < tiles.at(topLeftCornerTileId).size() - 1; p++)
             image.push_back(tiles.at(topLeftCornerTileId)[p].substr(1, tiles.at(topLeftCornerTileId)[p].size() - 2));
 
-        vector<uint> foundTiles;
-        foundTiles.push_back(topLeftCornerTileId);
+        vector<uint> foundTiles{topLeftCornerTileId};
         auto topLeftCornerTileBorder = getTileBorder(tiles.at(topLeftCornerTileId));
         auto firstInRowBottomBoarder = topLeftCornerTileBorder.bottom;
         auto lastRightBorder = topLeftCornerTileBorder.right;
