@@ -139,7 +139,7 @@ namespace day20 {
         auto topLeftCornerTileBorder = getTileBorder(tiles.at(topLeftCornerTileId));
         auto firstInRowBottomBoarder = topLeftCornerTileBorder.bottom;
         auto lastRightBorder = topLeftCornerTileBorder.right;
-        while (foundTiles.size() != tiles.size()) {
+        while (true) {
             unordered_map<uint, vector<string>>::const_iterator itLeft, itBottom;
             itLeft = find_if(tiles.begin(), tiles.end(),
                 [&foundTiles, &lastRightBorder](const auto tile) {
