@@ -29,7 +29,7 @@ namespace day20 {
             left += lane[0];
             right += lane[lane.size() - 1];
         }
-        return border{tile[0], right, tile[tile.size() - 1], left};
+        return border{tile[0], right, util::reverse(tile[tile.size() - 1]), util::reverse(left)};
     }
 
     bool anyAdjacentBorder(const string& borderLane, const border& otherBorder) {
@@ -104,44 +104,28 @@ namespace day20 {
         return rotatedTile;
     }
 
-    vector<string> orientateToLeftBoarderIfNeeded(const vector<string>& tile, const string& leftBoarder) {
+    enum orientation { top, left };
+
+    vector<string> orientateToBoarder(const vector<string>& tile, const string& boarderLane, orientation orientation) {
         auto boarder = getTileBorder(tile);
-        if (boarder.top == leftBoarder)
-            return orientate(tile, true, 3);
-        else if (boarder.right == leftBoarder)
-            return orientate(tile, true, 0);
-        else if (boarder.bottom == leftBoarder)
-            return orientate(tile, false, 1);
-        else if (util::reverse(boarder.top) == leftBoarder)
-            return orientate(tile, false, 3);
-        else if (util::reverse(boarder.right) == leftBoarder)
-            return orientate(tile, false, 2);
-        else if (util::reverse(boarder.bottom) == leftBoarder)
-            return orientate(tile, true, 1);
-        else if (util::reverse(boarder.left) == leftBoarder)
-            return orientate(tile, true, 2);
+        if (boarder.top == boarderLane)
+            return orientate(tile, false, orientation == left ? 3 : 0);
+        else if (boarder.right == boarderLane)
+            return orientate(tile, false, orientation == left ? 2 : 3);
+        else if (boarder.bottom == boarderLane)
+            return orientate(tile, false, orientation == left ? 1 : 2);
+        else if (boarder.left == boarderLane)
+            return orientate(tile, false, orientation == left ? 0 : 1);
+        else if (util::reverse(boarder.top) == boarderLane)
+            return orientate(tile, true, orientation == left ? 3 : 0);
+        else if (util::reverse(boarder.right) == boarderLane)
+            return orientate(tile, true, orientation == left ? 0 : 1);
+        else if (util::reverse(boarder.bottom) == boarderLane)
+            return orientate(tile, true, orientation == left ? 1 : 2);
+        else if (util::reverse(boarder.left) == boarderLane)
+            return orientate(tile, true, orientation == left ? 2 : 3);
 
-        return tile;
-    }
-
-    vector<string> orientateToTopBoarderIfNeeded(const vector<string>& tile, const string& topBoarder) {
-        auto boarder = getTileBorder(tile);
-        if (boarder.right == topBoarder)
-            return orientate(tile, false, 3);
-        else if (boarder.bottom == topBoarder)
-            return orientate(tile, true, 2);
-        else if (boarder.left == topBoarder)
-            return orientate(tile, true, 3);
-        else if (util::reverse(boarder.top) == topBoarder)
-            return orientate(tile, true, 0);
-        else if (util::reverse(boarder.right) == topBoarder)
-            return orientate(tile, true, 1);
-        else if (util::reverse(boarder.bottom) == topBoarder)
-            return orientate(tile, false, 2);
-        else if (util::reverse(boarder.left) == topBoarder)
-            return orientate(tile, false, 1);
-
-        return tile;
+        throw runtime_error("invalid data");
     }
 
     vector<string> puzzleImage(const unordered_map<uint, vector<string>>& tiles) {
@@ -154,17 +138,17 @@ namespace day20 {
         vector<uint> foundTiles(tiles.size());
         foundTiles[0] = topLeftCornerTileId;
         auto topLeftCornerTileBorder = getTileBorder(tiles.at(topLeftCornerTileId));
-        auto firstInRowBottomBorder = topLeftCornerTileBorder.bottom;
-        auto leftBorder = topLeftCornerTileBorder.right;
+        auto firstInRowBottomBoarder = topLeftCornerTileBorder.bottom;
+        auto lastRightBorder = topLeftCornerTileBorder.right;
         for (auto i = 1U; i <= tiles.size(); i++ ) {
             for (const auto& other : tiles) {
                 if (find(foundTiles.begin(), foundTiles.end(), other.first) != foundTiles.end())
                     continue;
 
-                if (anyAdjacentBorder(leftBorder, getTileBorder(other.second))) {
+                if (anyAdjacentBorder(lastRightBorder, getTileBorder(other.second))) {
                     foundTiles[i] = other.first;
-                    auto orientedTile = orientateToLeftBoarderIfNeeded(other.second, leftBorder);
-                    leftBorder = getTileBorder(orientedTile).right;
+                    auto orientedTile = orientateToBoarder(other.second, util::reverse(lastRightBorder), left);
+                    lastRightBorder = getTileBorder(orientedTile).right;
                     for (auto p = 1U; p < orientedTile.size() - 1; p++)
                         image[image.size() - orientedTile.size() + 1 + p] += orientedTile[p].substr(1, orientedTile[p].size() - 2);
 
@@ -179,12 +163,12 @@ namespace day20 {
                 if (find(foundTiles.begin(), foundTiles.end(), other.first) != foundTiles.end())
                     continue;
 
-                if (anyAdjacentBorder(firstInRowBottomBorder, getTileBorder(other.second))) {
+                if (anyAdjacentBorder(firstInRowBottomBoarder, getTileBorder(other.second))) {
                     foundTiles[i] = other.first;
-                    auto orientedTile = orientateToTopBoarderIfNeeded(tiles.at(other.first), firstInRowBottomBorder);
+                    auto orientedTile = orientateToBoarder(tiles.at(other.first), util::reverse(firstInRowBottomBoarder), top);
                     auto orientedTileBorder = getTileBorder(orientedTile);
-                    firstInRowBottomBorder = orientedTileBorder.bottom;
-                    leftBorder = orientedTileBorder.right;
+                    firstInRowBottomBoarder = orientedTileBorder.bottom;
+                    lastRightBorder = orientedTileBorder.right;
                     for (auto p = 1U; p < orientedTile.size() - 1; p++)
                         image.push_back(orientedTile[p].substr(1, orientedTile[p].size() - 2));
 
