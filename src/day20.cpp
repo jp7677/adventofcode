@@ -135,46 +135,46 @@ namespace day20 {
         for (auto p = 1U; p < tiles.at(topLeftCornerTileId).size() - 1; p++)
             image.push_back(tiles.at(topLeftCornerTileId)[p].substr(1, tiles.at(topLeftCornerTileId)[p].size() - 2));
 
-        vector<uint> foundTiles(tiles.size());
-        foundTiles[0] = topLeftCornerTileId;
+        vector<uint> foundTiles;
+        foundTiles.push_back(topLeftCornerTileId);
         auto topLeftCornerTileBorder = getTileBorder(tiles.at(topLeftCornerTileId));
         auto firstInRowBottomBoarder = topLeftCornerTileBorder.bottom;
         auto lastRightBorder = topLeftCornerTileBorder.right;
-        for (auto i = 1U; i <= tiles.size(); i++ ) {
-            for (const auto& other : tiles) {
-                if (find(foundTiles.begin(), foundTiles.end(), other.first) != foundTiles.end())
-                    continue;
+        while (foundTiles.size() != tiles.size()) {
+            auto it = find_if(tiles.begin(), tiles.end(),
+                [&foundTiles, &lastRightBorder](const auto tile) {
+                    return find(foundTiles.begin(), foundTiles.end(), tile.first) == foundTiles.end()
+                        && anyAdjacentBorder(lastRightBorder, getTileBorder(tile.second));
+                });
 
-                if (anyAdjacentBorder(lastRightBorder, getTileBorder(other.second))) {
-                    foundTiles[i] = other.first;
-                    auto orientedTile = orientateToBoarder(other.second, util::reverse(lastRightBorder), left);
-                    lastRightBorder = getTileBorder(orientedTile).right;
-                    for (auto p = 1U; p < orientedTile.size() - 1; p++)
-                        image[image.size() - orientedTile.size() + 1 + p] += orientedTile[p].substr(1, orientedTile[p].size() - 2);
+            if (it != tiles.end()) {
+                auto foundTile = *it;
+                foundTiles.push_back(foundTile.first);
+                auto orientedTile = orientateToBoarder(foundTile.second, util::reverse(lastRightBorder), left);
+                lastRightBorder = getTileBorder(orientedTile).right;
+                for (auto p = 1U; p < orientedTile.size() - 1; p++)
+                    image[image.size() - orientedTile.size() + 1 + p] += orientedTile[p].substr(1, orientedTile[p].size() - 2);
 
-                    break;
-                }
-            }
-
-            if (foundTiles[i] != 0)
                 continue;
-
-            for (const auto& other : tiles) {
-                if (find(foundTiles.begin(), foundTiles.end(), other.first) != foundTiles.end())
-                    continue;
-
-                if (anyAdjacentBorder(firstInRowBottomBoarder, getTileBorder(other.second))) {
-                    foundTiles[i] = other.first;
-                    auto orientedTile = orientateToBoarder(tiles.at(other.first), util::reverse(firstInRowBottomBoarder), top);
-                    auto orientedTileBorder = getTileBorder(orientedTile);
-                    firstInRowBottomBoarder = orientedTileBorder.bottom;
-                    lastRightBorder = orientedTileBorder.right;
-                    for (auto p = 1U; p < orientedTile.size() - 1; p++)
-                        image.push_back(orientedTile[p].substr(1, orientedTile[p].size() - 2));
-
-                    break;
-                }
             }
+
+            it = find_if(tiles.begin(), tiles.end(),
+                [&foundTiles, &firstInRowBottomBoarder](const auto tile) {
+                    return find(foundTiles.begin(), foundTiles.end(), tile.first) == foundTiles.end()
+                        && anyAdjacentBorder(firstInRowBottomBoarder, getTileBorder(tile.second));
+                });
+
+            if (it == tiles.end())
+                break;
+
+            auto foundTile = *it;
+            foundTiles.push_back(foundTile.first);
+            auto orientedTile = orientateToBoarder(tiles.at(foundTile.first), util::reverse(firstInRowBottomBoarder), top);
+            auto orientedTileBorder = getTileBorder(orientedTile);
+            firstInRowBottomBoarder = orientedTileBorder.bottom;
+            lastRightBorder = orientedTileBorder.right;
+            for (auto p = 1U; p < orientedTile.size() - 1; p++)
+                image.push_back(orientedTile[p].substr(1, orientedTile[p].size() - 2));
         }
 
         return image;
