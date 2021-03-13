@@ -42,7 +42,7 @@ namespace day21 {
             [&ingredientsWithAllergen](auto sum, const auto& foodByIngredient) {
                 return sum + count_if(foodByIngredient.begin() , foodByIngredient.end(),
                     [&ingredientsWithAllergen](const auto& ingredient) {
-                        return find(ingredientsWithAllergen.begin(), ingredientsWithAllergen.end(), ingredient.first) == ingredientsWithAllergen.end();
+                        return ingredientsWithAllergen.find(ingredient.first) == ingredientsWithAllergen.end();
                     });
             });
 
