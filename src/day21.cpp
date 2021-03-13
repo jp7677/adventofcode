@@ -3,14 +3,11 @@
 using namespace std;
 
 namespace day21 {
-    TEST_CASE("Day 21 - Part 1 from https://adventofcode.com/2020/day/21") {
+    void loadFoods(vector<unordered_map<string, set<string>>>& foodsByIngredient, unordered_multimap<string, set<string>>& foodsByAllergen) {
         auto foodsData = util::loadInputFile("day21-input.txt");
-
-        vector<unordered_map<string, vector<string>>> foodsByIngredient;
-        unordered_multimap<string, vector<string>> foodsByAllergen;
         for (const auto& foodDataLine : foodsData) {
             auto foodData = util::split(foodDataLine, '(');
-            auto ingredientsData = util::split(foodData[0], ' ');
+            auto ingredientsData = vector<string>(util::split(foodData[0], ' '));
             auto allergensData = util::split(foodData[1].substr(8), ',');
             transform(allergensData.begin(), allergensData.end(), allergensData.begin(),
                 [](const auto& allergen) {
@@ -19,14 +16,22 @@ namespace day21 {
                         : util::trim(allergen);
                 });
 
-            foodsByIngredient.emplace_back(unordered_map<string, vector<string>>());
+            foodsByIngredient.emplace_back(unordered_map<string, set<string>>());
             for (const auto& ingredient : ingredientsData)
                 for (const auto &allergen : allergensData)
-                    foodsByIngredient.back()[ingredient].emplace_back(allergen);
+                    foodsByIngredient.back()[ingredient].insert(allergen);
 
+            set<string> ingredients;
+            copy(ingredientsData.begin(), ingredientsData.end(), inserter(ingredients, ingredients.begin()));
             for (const auto& allergen : allergensData)
-                foodsByAllergen.emplace(allergen, ingredientsData);
+                foodsByAllergen.emplace(allergen, ingredients);
         }
+    }
+
+    TEST_CASE("Day 21 - Part 1 from https://adventofcode.com/2020/day/21") {
+        vector<unordered_map<string, set<string>>> foodsByIngredient;
+        unordered_multimap<string, set<string>> foodsByAllergen;
+        loadFoods(foodsByIngredient, foodsByAllergen);
 
         set<string> inertIngredients;
         for (const auto& foodByAllergen : foodsByAllergen)
@@ -34,8 +39,8 @@ namespace day21 {
                 if (find_if(foodsByAllergen.begin(), foodsByAllergen.end(),
                     [&foodByAllergen, &ingredient](const auto& otherFoodByAllergen) {
                         return otherFoodByAllergen.first == foodByAllergen.first
-                            && find(otherFoodByAllergen.second.begin(), otherFoodByAllergen.second.end(), ingredient) == otherFoodByAllergen.second.end();
-                    }) == foodsByAllergen.end())
+                            && otherFoodByAllergen.second.find(ingredient) == otherFoodByAllergen.second.end();
+                        }) == foodsByAllergen.end())
                     inertIngredients.insert(ingredient);
 
         auto result = accumulate(foodsByIngredient.begin(), foodsByIngredient.end(), 0U,
@@ -47,5 +52,49 @@ namespace day21 {
             });
 
         REQUIRE(result == 2389);
+    }
+
+    TEST_CASE("Day 21 - Part 2 from https://adventofcode.com/2020/day/21#part2") {
+        vector<unordered_map<string, set<string>>> _;
+        unordered_multimap<string, set<string>> foodsByAllergen;
+        loadFoods(_, foodsByAllergen);
+
+        map<string, set<string>> ingredientsByAllergen;
+        for (const auto& foodByAllergen : foodsByAllergen) {
+            set<string> ingredients;
+            for (const auto &ingredient : foodByAllergen.second)
+                if (find_if(foodsByAllergen.begin(), foodsByAllergen.end(),
+                    [&foodByAllergen, &ingredient](const auto& otherFoodByAllergen) {
+                        return otherFoodByAllergen.first == foodByAllergen.first
+                            && otherFoodByAllergen.second.find(ingredient) == otherFoodByAllergen.second.end();
+                        }) == foodsByAllergen.end())
+                    ingredients.insert(ingredient);
+
+            ingredientsByAllergen.emplace(foodByAllergen.first, ingredients);
+        }
+
+        auto numberOfAllergens = ingredientsByAllergen.size();
+        map<string, string> ingredientsWithAllergen;
+        while (ingredientsWithAllergen.size() != numberOfAllergens) {
+            auto it = find_if(ingredientsByAllergen.begin(), ingredientsByAllergen.end(),
+                [](const auto& ingredientByAllergen) {
+                    return ingredientByAllergen.second.size() == 1;
+                });
+
+            auto pair = *it;
+            ingredientsWithAllergen.emplace(pair.first, *pair.second.begin());
+            ingredientsByAllergen.erase(it);
+
+            for (auto& ingredientByAllergen : ingredientsByAllergen)
+                ingredientByAllergen.second.erase(*pair.second.begin());
+        }
+
+        auto result = accumulate(ingredientsWithAllergen.begin(), ingredientsWithAllergen.end(), string(),
+            [](auto result, const auto& ingredientWithAllergen) {
+                return result + ingredientWithAllergen.second + ",";
+            });
+        result = util::trim(result, ",");
+
+        REQUIRE(result == "fsr,skrxt,lqbcg,mgbv,dvjrrkv,ndnlm,xcljh,zbhp");
     }
 }
