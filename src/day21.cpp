@@ -73,20 +73,19 @@ namespace day21 {
             ingredientsByAllergen.emplace(foodByAllergen.first, ingredients);
         }
 
-        auto numberOfAllergens = ingredientsByAllergen.size();
         map<string, string> ingredientsWithAllergen;
-        while (ingredientsWithAllergen.size() != numberOfAllergens) {
+        while (!ingredientsByAllergen.empty()) {
             auto it = find_if(ingredientsByAllergen.begin(), ingredientsByAllergen.end(),
                 [](const auto& ingredientByAllergen) {
                     return ingredientByAllergen.second.size() == 1;
                 });
 
-            auto pair = *it;
-            ingredientsWithAllergen.emplace(pair.first, *pair.second.begin());
+            auto ingredientWithAllergen = *it;
+            auto ingredient = *ingredientWithAllergen.second.begin();
+            ingredientsWithAllergen.emplace(ingredientWithAllergen.first, ingredient);
             ingredientsByAllergen.erase(it);
-
             for (auto& ingredientByAllergen : ingredientsByAllergen)
-                ingredientByAllergen.second.erase(*pair.second.begin());
+                ingredientByAllergen.second.erase(ingredient);
         }
 
         auto result = accumulate(ingredientsWithAllergen.begin(), ingredientsWithAllergen.end(), string(),
