@@ -28,7 +28,7 @@ namespace day21 {
                 foodsByAllergen.emplace(allergen, ingredientsData);
         }
 
-        set<string> ingredientsWithAllergen;
+        set<string> inertIngredients;
         for (const auto& foodByAllergen : foodsByAllergen)
             for (const auto& ingredient : foodByAllergen.second)
                 if (find_if(foodsByAllergen.begin(), foodsByAllergen.end(),
@@ -36,13 +36,13 @@ namespace day21 {
                         return otherFoodByAllergen.first == foodByAllergen.first
                             && find(otherFoodByAllergen.second.begin(), otherFoodByAllergen.second.end(), ingredient) == otherFoodByAllergen.second.end();
                     }) == foodsByAllergen.end())
-                    ingredientsWithAllergen.insert(ingredient);
+                    inertIngredients.insert(ingredient);
 
         auto result = accumulate(foodsByIngredient.begin(), foodsByIngredient.end(), 0U,
-            [&ingredientsWithAllergen](auto sum, const auto& foodByIngredient) {
+            [&inertIngredients](auto sum, const auto& foodByIngredient) {
                 return sum + count_if(foodByIngredient.begin() , foodByIngredient.end(),
-                    [&ingredientsWithAllergen](const auto& ingredient) {
-                        return ingredientsWithAllergen.find(ingredient.first) == ingredientsWithAllergen.end();
+                    [&inertIngredients](const auto& ingredient) {
+                        return inertIngredients.find(ingredient.first) == inertIngredients.end();
                     });
             });
 
