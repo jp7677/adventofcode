@@ -3,35 +3,39 @@
 using namespace std;
 
 namespace day21 {
-    void loadFoods(vector<unordered_map<string, set<string>>>& foodsByIngredient, unordered_multimap<string, set<string>>& foodsByAllergen) {
-        auto foodsData = util::loadInputFile("day21-input.txt");
-        for (const auto& foodDataLine : foodsData) {
-            auto foodData = util::split(foodDataLine, '(');
-            auto ingredientsData = vector<string>(util::split(foodData[0], ' '));
-            auto allergensData = util::split(foodData[1].substr(8), ',');
-            transform(allergensData.begin(), allergensData.end(), allergensData.begin(),
-                [](const auto& allergen) {
-                    return (allergen[allergen.size() - 1] == ')')
-                        ? util::trim(allergen.substr(0, allergen.size() - 1))
-                        : util::trim(allergen);
-                });
+    tuple<vector<string>, vector<string>> getFoodData(const string& foodDataLine) {
+        auto foodData = util::split(foodDataLine, '(');
+        auto ingredientsData = vector<string>(util::split(foodData[0], ' '));
+        auto allergensData = util::split(foodData[1].substr(8), ',');
+        transform(allergensData.begin(), allergensData.end(), allergensData.begin(),
+            [](const auto& allergen) {
+                return (allergen[allergen.size() - 1] == ')')
+                    ? util::trim(allergen.substr(0, allergen.size() - 1))
+                    : util::trim(allergen);
+            });
 
-            foodsByIngredient.emplace_back(unordered_map<string, set<string>>());
+        return {ingredientsData, allergensData};
+    }
+
+    TEST_CASE("Day 21 - Part 1 from https://adventofcode.com/2020/day/21") {
+        auto foodsData = util::loadInputFile("day21-input.txt");
+
+        vector<set<string>> foods;
+        unordered_multimap<string, set<string>> foodsByAllergen;
+        for (const auto& foodDataLine : foodsData) {
+            auto foodData = getFoodData(foodDataLine);
+            auto ingredientsData = get<0>(foodData);
+            auto allergensData = get<1>(foodData);
+
+            foods.emplace_back(set<string>());
             for (const auto& ingredient : ingredientsData)
-                for (const auto &allergen : allergensData)
-                    foodsByIngredient.back()[ingredient].insert(allergen);
+                foods.back().insert(ingredient);
 
             set<string> ingredients;
             copy(ingredientsData.begin(), ingredientsData.end(), inserter(ingredients, ingredients.begin()));
             for (const auto& allergen : allergensData)
                 foodsByAllergen.emplace(allergen, ingredients);
         }
-    }
-
-    TEST_CASE("Day 21 - Part 1 from https://adventofcode.com/2020/day/21") {
-        vector<unordered_map<string, set<string>>> foodsByIngredient;
-        unordered_multimap<string, set<string>> foodsByAllergen;
-        loadFoods(foodsByIngredient, foodsByAllergen);
 
         set<string> inertIngredients;
         for (const auto& foodByAllergen : foodsByAllergen)
@@ -43,11 +47,11 @@ namespace day21 {
                         }) == foodsByAllergen.end())
                     inertIngredients.insert(ingredient);
 
-        auto result = accumulate(foodsByIngredient.begin(), foodsByIngredient.end(), 0U,
+        auto result = accumulate(foods.begin(), foods.end(), 0U,
             [&inertIngredients](auto sum, const auto& foodByIngredient) {
                 return sum + count_if(foodByIngredient.begin() , foodByIngredient.end(),
                     [&inertIngredients](const auto& ingredient) {
-                        return inertIngredients.find(ingredient.first) == inertIngredients.end();
+                        return inertIngredients.find(ingredient) == inertIngredients.end();
                     });
             });
 
@@ -55,9 +59,19 @@ namespace day21 {
     }
 
     TEST_CASE("Day 21 - Part 2 from https://adventofcode.com/2020/day/21#part2") {
-        vector<unordered_map<string, set<string>>> _;
+        auto foodsData = util::loadInputFile("day21-input.txt");
+
         unordered_multimap<string, set<string>> foodsByAllergen;
-        loadFoods(_, foodsByAllergen);
+        for (const auto& foodDataLine : foodsData) {
+            auto foodData = getFoodData(foodDataLine);
+            auto ingredientsData = get<0>(foodData);
+            auto allergensData = get<1>(foodData);
+
+            set<string> ingredients;
+            copy(ingredientsData.begin(), ingredientsData.end(), inserter(ingredients, ingredients.begin()));
+            for (const auto& allergen : allergensData)
+                foodsByAllergen.emplace(allergen, ingredients);
+        }
 
         map<string, set<string>> ingredientsByAllergen;
         for (const auto& foodByAllergen : foodsByAllergen) {
