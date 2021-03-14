@@ -76,7 +76,7 @@ namespace day21 {
         map<string, set<string>> ingredientsByAllergen;
         for (const auto& foodByAllergen : foodsByAllergen) {
             set<string> ingredients;
-            for (const auto &ingredient : foodByAllergen.second)
+            for (const auto& ingredient : foodByAllergen.second)
                 if (find_if(foodsByAllergen.begin(), foodsByAllergen.end(),
                     [&foodByAllergen, &ingredient](const auto& otherFoodByAllergen) {
                         return otherFoodByAllergen.first == foodByAllergen.first
