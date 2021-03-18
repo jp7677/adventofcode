@@ -53,20 +53,20 @@ namespace day22 {
     }
 
     bool playGame(vector<uint>& player1Cards, vector<uint>& player2Cards) {
-        vector<pair<vector<uint>, vector<uint>>> previousGames;
+        set<string> previousGames;
 
         while (!player1Cards.empty() && !player2Cards.empty()) {
-            auto previouslyPlayed = false;
-            for (const auto& previousGame : previousGames)
-                if (equal(previousGame.first.begin(), previousGame.first.end(), player1Cards.begin())
-                    && equal(previousGame.second.begin(), previousGame.second.end(), player2Cards.begin())) {
-                    previouslyPlayed = true;
-                    break;
-                }
+            auto game = accumulate(player1Cards.begin(), player1Cards.end(), string(),
+                                   [](const auto result, const auto player1Card) {
+                    return result + to_string(player1Card);
+                });
+            game += "-";
+            game += accumulate(player1Cards.begin(), player1Cards.end(), string(),
+                               [](const auto result, const auto player1Card) {
+                    return result + to_string(player1Card);
+                });
 
-            previousGames.emplace_back(make_pair(player1Cards, player2Cards));
-
-            if (previouslyPlayed)
+            if (previousGames.find(game) != previousGames.end())
                 return true;
 
             auto player1Wins = false;
@@ -87,6 +87,7 @@ namespace day22 {
 
             player1Cards.erase(player1Cards.begin(), next(player1Cards.begin()));
             player2Cards.erase(player2Cards.begin(), next(player2Cards.begin()));
+            previousGames.insert(game);
         }
 
         return !player1Cards.empty();
