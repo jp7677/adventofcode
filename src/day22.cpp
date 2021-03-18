@@ -53,13 +53,12 @@ namespace day22 {
     }
 
     bool playGame(vector<uint>& player1Cards, vector<uint>& player2Cards) {
-        set<string> previousGames;
+        set<uint> previousGames;
 
         while (!player1Cards.empty() && !player2Cards.empty()) {
-            auto game = accumulate(player1Cards.begin(), player1Cards.end(), string(),
-                [](const auto result, const auto player1Card) {
-                    return result + to_string(player1Card);
-                });
+            auto game = player1Cards.size();
+            for (const auto& player1Card : player1Cards)
+                game ^= player1Card + 0x9e3779b9 + (game << 6) + (game >> 2);
 
             if (previousGames.find(game) != previousGames.end())
                 return true;
