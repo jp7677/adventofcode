@@ -57,12 +57,7 @@ namespace day22 {
 
         while (!player1Cards.empty() && !player2Cards.empty()) {
             auto game = accumulate(player1Cards.begin(), player1Cards.end(), string(),
-                                   [](const auto result, const auto player1Card) {
-                    return result + to_string(player1Card);
-                });
-            game += "-";
-            game += accumulate(player1Cards.begin(), player1Cards.end(), string(),
-                               [](const auto result, const auto player1Card) {
+                [](const auto result, const auto player1Card) {
                     return result + to_string(player1Card);
                 });
 
