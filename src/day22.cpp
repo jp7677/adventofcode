@@ -52,14 +52,19 @@ namespace day22 {
         REQUIRE(result == 34664);
     }
 
+    size_t hash(vector<uint>& cards) {
+        auto game = 0U;
+        for (auto i = 0U; i < cards.size(); i++)
+            game ^= (cards[i] << (i * 4)); // Beware there be dragons.
+
+        return game;
+    }
+
     bool playGame(vector<uint>& player1Cards, vector<uint>& player2Cards) {
-        set<uint> previousGames;
+        set<size_t> previousGames;
 
         while (!player1Cards.empty() && !player2Cards.empty()) {
-            auto game = player1Cards.size();
-            for (const auto& player1Card : player1Cards)
-                game ^= player1Card + 0x9e3779b9 + (game << 6) + (game >> 2);
-
+            auto game = hash(player1Cards);
             if (previousGames.find(game) != previousGames.end())
                 return true;
 
