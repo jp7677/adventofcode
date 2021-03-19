@@ -20,15 +20,12 @@ namespace day23 {
             for (const auto v : pickup)
                 values.erase(find(values.begin(), values.end(), v), next(find(values.begin(), values.end(), v)));
 
-            auto destination = currentValue - 1;
-            if (destination < *min_element(values.begin(), values.end()))
-                destination = *max_element(values.begin(), values.end());
-            auto it = find(pickup.begin(), pickup.end(), destination);
+            auto destination = currentValue;
+            auto it = pickup.begin();
             while (it != pickup.end()) {
-                destination--;
-                if (destination < *min_element(values.begin(), values.end()))
-                    destination = *max_element(values.begin(), values.end());
-
+                destination = destination - 1 < *min_element(values.begin(), values.end())
+                    ? *max_element(values.begin(), values.end())
+                    : destination - 1;
                 it = find(pickup.begin(), pickup.end(), destination);
             }
 
