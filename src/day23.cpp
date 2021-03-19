@@ -16,9 +16,11 @@ namespace day23 {
             auto current = round % values.size();
             auto currentValue = values[current];
 
-            vector<uint> pickup{values[(current + 1) % values.size()], values[(current + 2) % values.size()], values[(current + 3) % values.size()]};
-            for (const auto v : pickup)
-                values.erase(find(values.begin(), values.end(), v), next(find(values.begin(), values.end(), v)));
+            array<uint, 3> pickup{values[(current + 1) % values.size()], values[(current + 2) % values.size()], values[(current + 3) % values.size()]};
+            for (const auto pickupValue : pickup) {
+                auto it = find(values.begin(), values.end(), pickupValue);
+                values.erase(it, next(it));
+            }
 
             auto destination = currentValue;
             auto it = pickup.begin();
@@ -29,9 +31,9 @@ namespace day23 {
                 it = find(pickup.begin(), pickup.end(), destination);
             }
 
-            it = find(values.begin(), values.end(), destination);
+            auto it2 = find(values.begin(), values.end(), destination);
             for (auto i = pickup.size(); i > 0; i--)
-                values.insert(next(it), pickup[i - 1]);
+                values.insert(next(it2), pickup[i - 1]);
 
             while (currentValue != values[current]) {
                 values.push_back(values.front());
