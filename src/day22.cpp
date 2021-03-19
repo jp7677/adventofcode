@@ -3,7 +3,7 @@
 using namespace std;
 
 namespace day22 {
-    void loadDecks(vector<uint>& player1Cards, vector<uint>& player2Cards) {
+    void loadDecks(deque<uint>& player1Cards, deque<uint>& player2Cards) {
         auto decksData = util::loadInputFile("day22-input.txt");
 
         bool player2Section = false;
@@ -21,7 +21,7 @@ namespace day22 {
         }
     }
 
-    uint calculateScore(vector<uint>& winningCards) {
+    uint calculateScore(deque<uint>& winningCards) {
         auto score = 0U;
         for (auto i = winningCards.size(); i > 0; i--)
             score += winningCards[winningCards.size() - i] * i;
@@ -30,8 +30,8 @@ namespace day22 {
     }
 
     TEST_CASE("Day 22 - Part 1 from https://adventofcode.com/2020/day/22") {
-        vector<uint> player1Cards;
-        vector<uint> player2Cards;
+        deque<uint> player1Cards;
+        deque<uint> player2Cards;
         loadDecks(player1Cards, player2Cards);
 
         while (!player1Cards.empty() && !player2Cards.empty()) {
@@ -43,8 +43,8 @@ namespace day22 {
                 player2Cards.push_back(player1Cards.front());
             }
 
-            player1Cards.erase(player1Cards.begin(), next(player1Cards.begin()));
-            player2Cards.erase(player2Cards.begin(), next(player2Cards.begin()));
+            player1Cards.pop_front();
+            player2Cards.pop_front();
         }
 
         auto result = calculateScore(!player1Cards.empty() ? player1Cards : player2Cards);
@@ -52,7 +52,7 @@ namespace day22 {
         REQUIRE(result == 34664);
     }
 
-    size_t hash(vector<uint>& cards) {
+    size_t hash(deque<uint>& cards) {
         auto game = 0U;
         for (auto i = 0U; i < cards.size(); i++)
             game ^= (cards[i] << (i * 4)); // Beware there be dragons.
@@ -60,7 +60,7 @@ namespace day22 {
         return game;
     }
 
-    bool playGame(vector<uint>& player1Cards, vector<uint>& player2Cards) {
+    bool playGame(deque<uint>& player1Cards, deque<uint>& player2Cards) {
         set<size_t> previousGames;
 
         while (!player1Cards.empty() && !player2Cards.empty()) {
@@ -70,8 +70,8 @@ namespace day22 {
 
             auto player1Wins = false;
             if (player1Cards.size() - 1 >= player1Cards.front() && player2Cards.size() - 1 >= player2Cards.front()) {
-                auto player1CardsCopy = vector<uint>(player1Cards.begin() + 1, player1Cards.begin() + player1Cards.front() + 1);
-                auto player2CardsCopy = vector<uint>(player2Cards.begin() + 1, player2Cards.begin() + player2Cards.front() + 1);
+                auto player1CardsCopy = deque<uint>(next(player1Cards.begin()), next(player1Cards.begin() + player1Cards.front()));
+                auto player2CardsCopy = deque<uint>(next(player2Cards.begin()), next(player2Cards.begin() + player2Cards.front()));
                 player1Wins = playGame(player1CardsCopy, player2CardsCopy);
             } else if (player1Cards.front() > player2Cards.front())
                 player1Wins = true;
@@ -84,8 +84,8 @@ namespace day22 {
                 player2Cards.push_back(player1Cards.front());
             }
 
-            player1Cards.erase(player1Cards.begin(), next(player1Cards.begin()));
-            player2Cards.erase(player2Cards.begin(), next(player2Cards.begin()));
+            player1Cards.pop_front();
+            player2Cards.pop_front();
             previousGames.insert(game);
         }
 
@@ -93,8 +93,8 @@ namespace day22 {
     }
 
     TEST_CASE("Day 22 - Part 2 from https://adventofcode.com/2020/day/22#part2") {
-        vector<uint> player1Cards;
-        vector<uint> player2Cards;
+        deque<uint> player1Cards;
+        deque<uint> player2Cards;
         loadDecks(player1Cards, player2Cards);
 
         auto player1Wins = playGame(player1Cards, player2Cards);
