@@ -31,14 +31,14 @@ namespace day04 {
         return parsedPassports;
     }
 
-    bool isValidPassport(const unordered_map<string,string>* passport) {
-        return passport->find("byr") != passport->end()
-            && passport->find("iyr") != passport->end()
-            && passport->find("eyr") != passport->end()
-            && passport->find("hgt") != passport->end()
-            && passport->find("hcl") != passport->end()
-            && passport->find("ecl") != passport->end()
-            && passport->find("pid") != passport->end();
+    bool isValidPassport(const unordered_map<string,string>& passport) {
+        return passport.find("byr") != passport.end()
+            && passport.find("iyr") != passport.end()
+            && passport.find("eyr") != passport.end()
+            && passport.find("hgt") != passport.end()
+            && passport.find("hcl") != passport.end()
+            && passport.find("ecl") != passport.end()
+            && passport.find("pid") != passport.end();
     }
 
     TEST_CASE("Day 04 - Part 1 from https://adventofcode.com/2020/day/4") {
@@ -46,7 +46,7 @@ namespace day04 {
 
         auto result = count_if(passports.begin(), passports.end(),
             [](const auto& passport) {
-                return isValidPassport(&passport);
+                return isValidPassport(passport);
             });
 
         REQUIRE(result == 233);
@@ -94,7 +94,7 @@ namespace day04 {
 
         auto result = count_if(passports.begin(), passports.end(),
             [](const auto& passport) {
-                return isValidPassport(&passport)
+                return isValidPassport(passport)
                     && isInRange(passport.find("byr")->second, 1920, 2002)
                     && isInRange(passport.find("iyr")->second, 2010, 2020)
                     && isInRange(passport.find("eyr")->second, 2020, 2030)
