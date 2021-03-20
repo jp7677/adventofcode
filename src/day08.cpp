@@ -22,7 +22,7 @@ namespace day08 {
 
         auto result = 0;
         auto pos = 0U;
-        set<uint> visited;
+        unordered_set<uint> visited;
         while (visited.find(pos) == visited.end()) {
             visited.insert(pos);
             auto instruction = program[pos];
@@ -45,7 +45,7 @@ namespace day08 {
 
                 auto acc = 0;
                 auto pos = 0U;
-                set<uint> visited;
+                unordered_set<uint> visited;
                 while (visited.find(pos) == visited.end()) {
                     visited.insert(pos);
                     auto instruction = program[pos];

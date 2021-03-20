@@ -61,7 +61,7 @@ namespace day22 {
     }
 
     bool playGame(deque<uint>& player1Cards, deque<uint>& player2Cards) {
-        set<size_t> previousGames;
+        unordered_set<size_t> previousGames;
 
         while (!player1Cards.empty() && !player2Cards.empty()) {
             auto game = hash(player1Cards);
