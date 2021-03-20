@@ -20,24 +20,24 @@ namespace day21 {
     TEST_CASE("Day 21 - Part 1 from https://adventofcode.com/2020/day/21") {
         auto foodsData = util::loadInputFile("day21-input.txt");
 
-        vector<set<string>> foods;
-        unordered_multimap<string, set<string>> foodsByAllergen;
+        vector<unordered_set<string>> foods;
+        unordered_multimap<string, unordered_set<string>> foodsByAllergen;
         for (const auto& foodDataLine : foodsData) {
             auto foodData = getFoodData(foodDataLine);
             auto ingredientsData = get<0>(foodData);
             auto allergensData = get<1>(foodData);
 
-            foods.emplace_back(set<string>());
+            foods.emplace_back(unordered_set<string>());
             for (const auto& ingredient : ingredientsData)
                 foods.back().insert(ingredient);
 
-            set<string> ingredients;
+            unordered_set<string> ingredients;
             copy(ingredientsData.begin(), ingredientsData.end(), inserter(ingredients, ingredients.begin()));
             for (const auto& allergen : allergensData)
                 foodsByAllergen.emplace(allergen, ingredients);
         }
 
-        set<string> inertIngredients;
+        unordered_set<string> inertIngredients;
         for (const auto& foodByAllergen : foodsByAllergen)
             for (const auto& ingredient : foodByAllergen.second)
                 if (find_if(foodsByAllergen.begin(), foodsByAllergen.end(),
@@ -61,21 +61,21 @@ namespace day21 {
     TEST_CASE("Day 21 - Part 2 from https://adventofcode.com/2020/day/21#part2") {
         auto foodsData = util::loadInputFile("day21-input.txt");
 
-        unordered_multimap<string, set<string>> foodsByAllergen;
+        unordered_multimap<string, unordered_set<string>> foodsByAllergen;
         for (const auto& foodDataLine : foodsData) {
             auto foodData = getFoodData(foodDataLine);
             auto ingredientsData = get<0>(foodData);
             auto allergensData = get<1>(foodData);
 
-            set<string> ingredients;
+            unordered_set<string> ingredients;
             copy(ingredientsData.begin(), ingredientsData.end(), inserter(ingredients, ingredients.begin()));
             for (const auto& allergen : allergensData)
                 foodsByAllergen.emplace(allergen, ingredients);
         }
 
-        map<string, set<string>> ingredientsByAllergen;
+        unordered_map<string, unordered_set<string>> ingredientsByAllergen;
         for (const auto& foodByAllergen : foodsByAllergen) {
-            set<string> ingredients;
+            unordered_set<string> ingredients;
             for (const auto& ingredient : foodByAllergen.second)
                 if (find_if(foodsByAllergen.begin(), foodsByAllergen.end(),
                     [&foodByAllergen, &ingredient](const auto& otherFoodByAllergen) {
