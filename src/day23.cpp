@@ -66,7 +66,7 @@ namespace day23 {
         playRounds(cups, 10000000);
 
         auto it = find(cups.begin(), cups.end(), 1);
-        auto result = (ulong)*next(it) * *next(it, 2);
+        auto result = static_cast<ulong>(*next(it) * *next(it, 2));
 
         REQUIRE(result == 90481418730);
     }
