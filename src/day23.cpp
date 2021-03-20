@@ -3,55 +3,71 @@
 using namespace std;
 
 namespace day23 {
-    TEST_CASE("Day 23 - Part 1 from https://adventofcode.com/2020/day/23") {
-        auto cup = util::loadInputFile("day23-input.txt");
+    vector<uint> loadCups() {
+        auto cupLabeling = util::loadInputFile("day23-input.txt");
 
-        vector<uint> values;
-        transform(cup[0].begin(), cup[0].end(), back_inserter(values),
-            [](const auto& value) {
-                return value - '0';
+        vector<uint> cups;
+        transform(cupLabeling[0].begin(), cupLabeling[0].end(), back_inserter(cups),
+            [](const auto& label) {
+                return label - '0';
             });
 
-        for (auto round = 0U; round < 100; round ++) {
-            auto current = round % values.size();
-            auto currentValue = values[current];
+        return cups;
+    }
 
-            array<uint, 3> pickup{values[(current + 1) % values.size()], values[(current + 2) % values.size()], values[(current + 3) % values.size()]};
-            for (const auto pickupValue : pickup) {
-                auto it = find(values.begin(), values.end(), pickupValue);
-                values.erase(it, next(it));
+    void playRounds(vector<uint>& cups, uint numberOfRounds) {
+        auto offset = 0U;
+        for (auto round = 0U; round < numberOfRounds; round++) {
+            auto currentIndex = (round + offset) % cups.size();
+            auto current = cups[currentIndex];
+
+            rotate(cups.begin(), cups.begin() + currentIndex + 4, cups.end());
+
+            auto destination = current;
+            auto it = cups.begin();
+            while (it != cups.end()) {
+                destination = destination == 1 ? cups.size() : destination - 1;
+                it = find(cups.end() - 3, cups.end(), destination);
             }
 
-            auto destination = currentValue;
-            auto it = pickup.begin();
-            while (it != pickup.end()) {
-                destination = destination - 1 < *min_element(values.begin(), values.end())
-                    ? *max_element(values.begin(), values.end())
-                    : destination - 1;
-                it = find(pickup.begin(), pickup.end(), destination);
-            }
+            if (destination != cups[cups.size() - 4])
+                rotate(cups.begin(), find(cups.begin(), cups.end(), destination) + 1, cups.end() - 3);
 
-            auto it2 = find(values.begin(), values.end(), destination);
-            for (auto i = pickup.size(); i > 0; i--)
-                values.insert(next(it2), pickup[i - 1]);
-
-            while (currentValue != values[current]) {
-                values.push_back(values.front());
-                values.erase(values.begin(),next(values.begin()));
-            }
+            offset = distance(cups.begin() + round, find(cups.begin(), cups.end(), current));
         }
+    }
+
+    TEST_CASE("Day 23 - Part 1 from https://adventofcode.com/2020/day/23") {
+        auto cups = loadCups();
+
+        playRounds(cups, 100);
 
         string result;
-        auto it = find(values.begin(), values.end(), 1);
-        transform(next(it), values.end(), back_inserter(result),
-            [](const auto& value){
-                return to_string(value)[0];
+        auto it = find(cups.begin(), cups.end(), 1);
+        transform(next(it), cups.end(), back_inserter(result),
+            [](const auto& label){
+                return to_string(label)[0];
             });
-        transform(values.begin(), it, back_inserter(result),
-            [](const auto& value){
-                return to_string(value)[0];
+        transform(cups.begin(), it, back_inserter(result),
+            [](const auto& label){
+                return to_string(label)[0];
             });
 
         REQUIRE(result == "36472598");
+    }
+
+    TEST_CASE("Day 23 - Part 2 from https://adventofcode.com/2020/day/23#part2","[.skip-due-to-horrible-performance]") {
+        auto initialCups = loadCups();
+
+        auto cups = vector<uint>(initialCups);
+        for (auto i = initialCups.size() + 1; i <= 1000000; i++)
+            cups.push_back(i);
+
+        playRounds(cups, 10000000);
+
+        auto it = find(cups.begin(), cups.end(), 1);
+        auto result = (ulong)*next(it) * *next(it, 2);
+
+        REQUIRE(result == 90481418730);
     }
 }
