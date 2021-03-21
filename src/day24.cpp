@@ -17,14 +17,14 @@ namespace day24 {
                         directions.push_back(direction::e);
                     else if (tile[i] == 'w')
                         directions.push_back(direction::w);
-                    else if (tile[i] == 's' && tile[i + 1] == 'e')
-                        directions.push_back(direction::se);
-                    else if (tile[i] == 's' && tile[i + 1] == 'w')
-                        directions.push_back(direction::sw);
                     else if (tile[i] == 'n' && tile[i + 1] == 'e')
                         directions.push_back(direction::ne);
                     else if (tile[i] == 'n' && tile[i + 1] == 'w')
                         directions.push_back(direction::nw);
+                    else if (tile[i] == 's' && tile[i + 1] == 'e')
+                        directions.push_back(direction::se);
+                    else if (tile[i] == 's' && tile[i + 1] == 'w')
+                        directions.push_back(direction::sw);
 
                     if (tile[i] == 'n' || tile[i] == 's')
                         i++;
