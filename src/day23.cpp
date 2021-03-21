@@ -21,7 +21,7 @@ namespace day23 {
             auto currentIndex = (round + offset) % cups.size();
             auto current = cups[currentIndex];
 
-            rotate(cups.begin(), cups.begin() + currentIndex + 4, cups.end());
+            rotate(cups.begin(), cups.begin() + (currentIndex + 4) % cups.size(), cups.end());
 
             auto destination = current;
             auto it = cups.begin();
