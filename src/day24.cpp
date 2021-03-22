@@ -40,26 +40,22 @@ namespace day24 {
 
         unordered_set<pair<int, int>, hash> flippedTiles;
         for (const auto& tileStep : tileSteps) {
-            pair<int, int> tile(0, 0);
-            for (const auto& tileDirection : tileStep) {
-                if (tileDirection == direction::e)
-                    tile.first++;
-                else if (tileDirection == direction::w)
-                    tile.first--;
-                else if (tileDirection == direction::ne) {
-                    tile.first = tile.second % 2 == 0 ? tile.first + 1 : tile.first;
-                    tile.second++;
-                } else if (tileDirection == direction::nw) {
-                    tile.first = tile.second % 2 == 0 ? tile.first : tile.first - 1;
-                    tile.second++;
-                } else if (tileDirection == direction::se) {
-                    tile.first = tile.second % 2 == 0 ? tile.first + 1 : tile.first;
-                    tile.second--;
-                } else if (tileDirection == direction::sw) {
-                    tile.first = tile.second % 2 == 0 ? tile.first : tile.first - 1;
-                    tile.second--;
-                }
-            }
+            auto tile = accumulate(tileStep.begin(), tileStep.end(), pair<int, int>(0, 0),
+                [](const auto tile, const auto& tileDirection){
+                    if (tileDirection == direction::e)
+                        return pair<int, int>(tile.first + 1, tile.second);
+                    if (tileDirection == direction::w)
+                        return pair<int, int>(tile.first - 1, tile.second);
+                    if (tileDirection == direction::ne)
+                        return pair<int, int>(tile.second % 2 == 0 ? tile.first + 1 : tile.first, tile.second + 1);
+                    if (tileDirection == direction::nw)
+                        return pair<int, int>(tile.second % 2 == 0 ? tile.first: tile.first - 1, tile.second + 1);
+                    if (tileDirection == direction::se)
+                        return pair<int, int>(tile.second % 2 == 0 ? tile.first + 1 : tile.first, tile.second - 1);
+                    if (tileDirection == direction::sw)
+                        return pair<int, int>(tile.second % 2 == 0 ? tile.first: tile.first - 1, tile.second - 1);
+                    throw runtime_error("invalid data");
+                });
 
             if (flippedTiles.find(tile) == flippedTiles.end())
                 flippedTiles.insert(tile);
