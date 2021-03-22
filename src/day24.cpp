@@ -42,19 +42,15 @@ namespace day24 {
         for (const auto& tileStep : tileSteps) {
             auto tile = accumulate(tileStep.begin(), tileStep.end(), pair<int, int>(0, 0),
                 [](const auto tile, const auto& tileDirection){
-                    if (tileDirection == direction::e)
-                        return pair<int, int>(tile.first + 1, tile.second);
-                    if (tileDirection == direction::w)
-                        return pair<int, int>(tile.first - 1, tile.second);
-                    if (tileDirection == direction::ne)
-                        return pair<int, int>(tile.second % 2 == 0 ? tile.first + 1 : tile.first, tile.second + 1);
-                    if (tileDirection == direction::nw)
-                        return pair<int, int>(tile.second % 2 == 0 ? tile.first: tile.first - 1, tile.second + 1);
-                    if (tileDirection == direction::se)
-                        return pair<int, int>(tile.second % 2 == 0 ? tile.first + 1 : tile.first, tile.second - 1);
-                    if (tileDirection == direction::sw)
-                        return pair<int, int>(tile.second % 2 == 0 ? tile.first: tile.first - 1, tile.second - 1);
-                    throw runtime_error("invalid data");
+                    switch (tileDirection) {
+                        case direction::e : return pair<int, int>(tile.first + 1, tile.second);
+                        case direction::w : return pair<int, int>(tile.first - 1, tile.second);
+                        case direction::ne: return pair<int, int>(tile.second % 2 == 0 ? tile.first + 1 : tile.first, tile.second + 1);
+                        case direction::nw: return pair<int, int>(tile.second % 2 == 0 ? tile.first : tile.first - 1, tile.second + 1);
+                        case direction::se: return pair<int, int>(tile.second % 2 == 0 ? tile.first + 1 : tile.first, tile.second - 1);
+                        case direction::sw: return pair<int, int>(tile.second % 2 == 0 ? tile.first : tile.first - 1, tile.second - 1);
+                        default: throw runtime_error("invalid data");
+                    }
                 });
 
             if (flippedTiles.find(tile) == flippedTiles.end())
