@@ -92,13 +92,12 @@ namespace day24 {
     void flipTiles(unordered_set<pair<int, int>, hash>& tiles) {
         unordered_set<pair<int, int>, hash> whiteTiles;
         unordered_set<pair<int, int>, hash> blackTiles(tiles);
-        for (const auto& blackTile : blackTiles)
+        for (const auto& blackTile : blackTiles) {
+            auto adjacentTiles = getAdjacentTiles(blackTile);
             for (const auto& adjacentTile : getAdjacentTiles(blackTile))
                 if (blackTiles.find(adjacentTile) == blackTiles.end())
                     whiteTiles.insert(adjacentTile);
 
-        for (const auto& blackTile : blackTiles) {
-            auto adjacentTiles = getAdjacentTiles(blackTile);
             auto adjacentBlackTiles = count_if(adjacentTiles.begin(), adjacentTiles.end(),
                 [&blackTiles](const auto& adjacentTile){
                     return blackTiles.find(adjacentTile) != blackTiles.end();
