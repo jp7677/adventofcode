@@ -9,16 +9,12 @@ namespace day25 {
         auto cardKey = stoul(keys[0]);
         auto doorKey = stoul(keys[1]);
 
-        auto cardLoopSize = 0U;
+        auto result = 1U;
         auto value = 1U;
         while (value != cardKey) {
             value = (value * 7) % 20201227;
-            cardLoopSize++;
-        }
-
-        auto result = 1U;
-        for (auto i = 0U; i < cardLoopSize; i++)
             result = (result * doorKey) % 20201227;
+        }
 
         REQUIRE(result == 8740494);
     }
