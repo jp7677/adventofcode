@@ -74,15 +74,13 @@ namespace day24 {
 
     set<pair<int, int>> getAdjacentTiles(pair<int, int> tile) {
         auto even = tile.second % 2 == 0;
-        set<pair<int, int>> adjacentTiles;
-        adjacentTiles.insert({tile.first + 1, tile.second});
-        adjacentTiles.insert({tile.first - 1, tile.second});
-        adjacentTiles.insert({even ? tile.first + 1 : tile.first, tile.second + 1});
-        adjacentTiles.insert({even ? tile.first : tile.first - 1, tile.second + 1});
-        adjacentTiles.insert({even ? tile.first + 1 : tile.first, tile.second - 1});
-        adjacentTiles.insert({even ? tile.first : tile.first - 1, tile.second - 1});
-
-        return adjacentTiles;
+        return set<pair<int, int>>{
+            {tile.first + 1, tile.second},
+            {tile.first - 1, tile.second},
+            {even ? tile.first + 1 : tile.first, tile.second + 1},
+            {even ? tile.first : tile.first - 1, tile.second + 1},
+            {even ? tile.first + 1 : tile.first, tile.second - 1},
+            {even ? tile.first : tile.first - 1, tile.second - 1}};
     }
 
     void flipTiles(set<pair<int, int>>& tiles) {
@@ -94,20 +92,22 @@ namespace day24 {
                     whiteTiles.insert(adjacentTile);
 
         for (const auto& blackTile : blackTiles) {
-            auto adjacentBlackTiles = 0U;
-            for (const auto& adjacentTile : getAdjacentTiles(blackTile))
-                if (blackTiles.find(adjacentTile) != blackTiles.end())
-                    adjacentBlackTiles++;
+            auto adjacentTiles = getAdjacentTiles(blackTile);
+            auto adjacentBlackTiles = count_if(adjacentTiles.begin(), adjacentTiles.end(),
+                [&blackTiles](const auto& adjacentTile){
+                    return blackTiles.find(adjacentTile) != blackTiles.end();
+                });
 
             if (adjacentBlackTiles == 0 || adjacentBlackTiles > 2)
                 tiles.erase(blackTile);
         }
 
         for (const auto& whiteTile : whiteTiles) {
-            auto adjacentBlackTiles = 0U;
-            for (const auto& adjacentTile : getAdjacentTiles(whiteTile))
-                if (blackTiles.find(adjacentTile) != blackTiles.end())
-                    adjacentBlackTiles++;
+            auto adjacentTiles = getAdjacentTiles(whiteTile);
+            auto adjacentBlackTiles = count_if(adjacentTiles.begin(), adjacentTiles.end(),
+                [&blackTiles](const auto& adjacentTile){
+                    return blackTiles.find(adjacentTile) != blackTiles.end();
+                });
 
             if (adjacentBlackTiles == 2)
                 tiles.insert(whiteTile);
