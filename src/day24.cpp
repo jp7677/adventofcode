@@ -93,15 +93,13 @@ namespace day24 {
         unordered_set<pair<int, int>, hash> whiteTiles;
         unordered_set<pair<int, int>, hash> blackTiles(tiles);
         for (const auto& blackTile : blackTiles) {
+            auto adjacentBlackTiles = 0U;
             auto adjacentTiles = getAdjacentTiles(blackTile);
             for (const auto& adjacentTile : getAdjacentTiles(blackTile))
                 if (blackTiles.find(adjacentTile) == blackTiles.end())
                     whiteTiles.insert(adjacentTile);
-
-            auto adjacentBlackTiles = count_if(adjacentTiles.begin(), adjacentTiles.end(),
-                [&blackTiles](const auto& adjacentTile){
-                    return blackTiles.find(adjacentTile) != blackTiles.end();
-                });
+                else
+                    adjacentBlackTiles++;
 
             if (adjacentBlackTiles == 0 || adjacentBlackTiles > 2)
                 tiles.erase(blackTile);
