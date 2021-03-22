@@ -5,11 +5,11 @@ using namespace std;
 namespace day24 {
     enum direction { e, se, sw, w, nw, ne };
 
-    TEST_CASE("Day 24 - Part 1 from https://adventofcode.com/2020/day/24") {
-        auto floorData = util::loadInputFile("day24-input.txt");
+    set<pair<int, int>> loadBlackTiles() {
+        auto floor = util::loadInputFile("day24-input.txt");
 
         vector<vector<direction>> tileSteps;
-        transform(floorData.begin(), floorData.end(), back_inserter(tileSteps),
+        transform(floor.begin(), floor.end(), back_inserter(tileSteps),
             [](const auto& tile) {
                 vector<direction> directions;
                 for (auto i = 0U; i < tile.size(); i++) {
@@ -61,8 +61,67 @@ namespace day24 {
                 flippedTiles.erase(tile);
         }
 
-        auto result = flippedTiles.size();
+        return flippedTiles;
+    }
+
+    TEST_CASE("Day 24 - Part 1 from https://adventofcode.com/2020/day/24") {
+        auto blackTiles = loadBlackTiles();
+
+        auto result = blackTiles.size();
 
         REQUIRE(result == 373);
+    }
+
+    set<pair<int, int>> getAdjacentTiles(pair<int, int> tile) {
+        auto even = tile.second % 2 == 0;
+        set<pair<int, int>> adjacentTiles;
+        adjacentTiles.insert({tile.first + 1, tile.second});
+        adjacentTiles.insert({tile.first - 1, tile.second});
+        adjacentTiles.insert({even ? tile.first + 1 : tile.first, tile.second + 1});
+        adjacentTiles.insert({even ? tile.first : tile.first - 1, tile.second + 1});
+        adjacentTiles.insert({even ? tile.first + 1 : tile.first, tile.second - 1});
+        adjacentTiles.insert({even ? tile.first : tile.first - 1, tile.second - 1});
+
+        return adjacentTiles;
+    }
+
+    void flipTiles(set<pair<int, int>>& tiles) {
+        set<pair<int, int>> whiteTiles;
+        set<pair<int, int>> blackTiles(tiles);
+        for (const auto& blackTile : blackTiles)
+            for (const auto& adjacentTile : getAdjacentTiles(blackTile))
+                if (blackTiles.find(adjacentTile) == blackTiles.end())
+                    whiteTiles.insert(adjacentTile);
+
+        for (const auto& blackTile : blackTiles) {
+            auto adjacentBlackTiles = 0U;
+            for (const auto& adjacentTile : getAdjacentTiles(blackTile))
+                if (blackTiles.find(adjacentTile) != blackTiles.end())
+                    adjacentBlackTiles++;
+
+            if (adjacentBlackTiles == 0 || adjacentBlackTiles > 2)
+                tiles.erase(blackTile);
+        }
+
+        for (const auto& whiteTile : whiteTiles) {
+            auto adjacentBlackTiles = 0U;
+            for (const auto& adjacentTile : getAdjacentTiles(whiteTile))
+                if (blackTiles.find(adjacentTile) != blackTiles.end())
+                    adjacentBlackTiles++;
+
+            if (adjacentBlackTiles == 2)
+                tiles.insert(whiteTile);
+        }
+    }
+
+    TEST_CASE("Day 24 - Part 2 from https://adventofcode.com/2020/day/24#part2") {
+        auto blackTiles = loadBlackTiles();
+
+        for (auto i = 0; i < 100; i++)
+            flipTiles(blackTiles);
+
+        auto result = blackTiles.size();
+
+        REQUIRE(result == 3917);
     }
 }
