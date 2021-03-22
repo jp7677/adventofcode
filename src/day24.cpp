@@ -5,7 +5,13 @@ using namespace std;
 namespace day24 {
     enum direction { e, se, sw, w, nw, ne };
 
-    set<pair<int, int>> loadBlackTiles() {
+    struct hash {
+        size_t operator() (const pair<int, int>& a) const {
+            return a.first ^ (a.second << 4); // Beware there be dragons.
+        }
+    };
+
+    unordered_set<pair<int, int>, hash> loadBlackTiles() {
         auto floor = util::loadInputFile("day24-input.txt");
 
         vector<vector<direction>> tileSteps;
@@ -32,7 +38,7 @@ namespace day24 {
                 return directions;
             });
 
-        set<pair<int, int>> flippedTiles;
+        unordered_set<pair<int, int>, hash> flippedTiles;
         for (const auto& tileStep : tileSteps) {
             pair<int, int> tile(0, 0);
             for (const auto& tileDirection : tileStep) {
@@ -72,9 +78,9 @@ namespace day24 {
         REQUIRE(result == 373);
     }
 
-    set<pair<int, int>> getAdjacentTiles(pair<int, int> tile) {
+    unordered_set<pair<int, int>, hash> getAdjacentTiles(pair<int, int> tile) {
         auto even = tile.second % 2 == 0;
-        return set<pair<int, int>>{
+        return unordered_set<pair<int, int>, hash>{
             {tile.first + 1, tile.second},
             {tile.first - 1, tile.second},
             {even ? tile.first + 1 : tile.first, tile.second + 1},
@@ -83,9 +89,9 @@ namespace day24 {
             {even ? tile.first : tile.first - 1, tile.second - 1}};
     }
 
-    void flipTiles(set<pair<int, int>>& tiles) {
-        set<pair<int, int>> whiteTiles;
-        set<pair<int, int>> blackTiles(tiles);
+    void flipTiles(unordered_set<pair<int, int>, hash>& tiles) {
+        unordered_set<pair<int, int>, hash> whiteTiles;
+        unordered_set<pair<int, int>, hash> blackTiles(tiles);
         for (const auto& blackTile : blackTiles)
             for (const auto& adjacentTile : getAdjacentTiles(blackTile))
                 if (blackTiles.find(adjacentTile) == blackTiles.end())
