@@ -177,6 +177,7 @@ namespace day20 {
         return image;
     }
 
+    constexpr uint seaMonsterParts = 15;
     constexpr uint seaMonsterWidth = 21;
     constexpr uint seaMonsterHeight = 3;
 
@@ -214,7 +215,7 @@ namespace day20 {
                     });
             });
 
-        auto result = waterRoughness - (numberOfSeaMonsters * 15);
+        auto result = waterRoughness - (numberOfSeaMonsters * seaMonsterParts);
 
         REQUIRE(result == 2323);
     }
