@@ -112,7 +112,7 @@ namespace day24 {
     TEST_CASE("Day 24 - Part 2 from https://adventofcode.com/2020/day/24#part2") {
         auto blackTiles = loadBlackTiles();
 
-        for (auto i = 0; i < 100; i++)
+        for (auto i = 0U; i < 100; i++)
             flipTiles(blackTiles);
 
         auto result = blackTiles.size();
