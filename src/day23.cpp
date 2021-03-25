@@ -21,19 +21,19 @@ namespace day23 {
             auto currentIndex = (round + offset) % cups.size();
             auto current = cups[currentIndex];
 
-            rotate(cups.begin(), cups.begin() + (currentIndex + 4) % cups.size(), cups.end());
+            rotate(cups.begin(), next(cups.begin(), (currentIndex + 4) % cups.size()), cups.end());
 
             auto destination = current;
             auto it = cups.begin();
             while (it != cups.end()) {
                 destination = destination == 1 ? cups.size() : destination - 1;
-                it = find(cups.end() - 3, cups.end(), destination);
+                it = find(prev(cups.end(), 3), cups.end(), destination);
             }
 
             if (destination != cups[cups.size() - 4])
-                rotate(cups.begin(), find(cups.begin(), cups.end(), destination) + 1, cups.end() - 3);
+                rotate(cups.begin(), next(find(cups.begin(), cups.end(), destination)), prev(cups.end(), 3));
 
-            offset = distance(cups.begin() + round, find(cups.begin(), cups.end(), current));
+            offset = distance(next(cups.begin(), round), find(cups.begin(), cups.end(), current));
         }
     }
 
