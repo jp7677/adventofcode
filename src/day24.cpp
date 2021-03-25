@@ -41,7 +41,7 @@ namespace day24 {
         unordered_set<pair<int, int>, hash> flippedTiles;
         for (const auto& tileStep : tileSteps) {
             auto tile = accumulate(tileStep.begin(), tileStep.end(), pair<int, int>(0, 0),
-                [](const auto tile, const auto& tileDirection){
+                [](const auto tile, const auto& tileDirection) {
                     switch (tileDirection) {
                         case direction::e : return pair<int, int>(tile.first + 1, tile.second);
                         case direction::w : return pair<int, int>(tile.first - 1, tile.second);
@@ -100,7 +100,7 @@ namespace day24 {
         for (const auto& whiteTile : whiteTiles) {
             auto adjacentTiles = getAdjacentTiles(whiteTile);
             auto adjacentBlackTiles = count_if(adjacentTiles.begin(), adjacentTiles.end(),
-                [&blackTiles](const auto& adjacentTile){
+                [&blackTiles](const auto& adjacentTile) {
                     return blackTiles.find(adjacentTile) != blackTiles.end();
                 });
 
@@ -112,7 +112,7 @@ namespace day24 {
     TEST_CASE("Day 24 - Part 2 from https://adventofcode.com/2020/day/24#part2") {
         auto blackTiles = loadBlackTiles();
 
-        for (auto i = 0; i < 100; i++)
+        for (auto i = 0U; i < 100; i++)
             flipTiles(blackTiles);
 
         auto result = blackTiles.size();
