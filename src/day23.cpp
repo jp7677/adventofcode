@@ -15,7 +15,7 @@ namespace day23 {
         return cups;
     }
 
-    void playRoundsWithRotations(vector<uint>& cups, uint numberOfRounds) {
+    void playRoundsWithRotations(vector<uint>& cups, const uint numberOfRounds) {
         auto offset = 0U;
         for (auto round = 0U; round < numberOfRounds; round++) {
             auto currentIndex = (round + offset) % cups.size();
@@ -58,7 +58,7 @@ namespace day23 {
 
     constexpr uint numberOfCups = 1000000;
 
-    uint nextCup(array<uint, numberOfCups + 1>& cups, uint current, uint steps = 1) {
+    uint nextCup(const array<uint, numberOfCups + 1>& cups, const uint current, const uint steps = 1) {
         auto next = cups[current];
         for (auto i = 1U; i < steps; i++)
             next = cups[next];
@@ -66,8 +66,7 @@ namespace day23 {
         return next;
     }
 
-    void playRoundsWithLinkedElements(array<uint, numberOfCups + 1>& cups, uint first, uint numberOfRounds) {
-        auto current = first;
+    void playRoundsWithLinkedElements(array<uint, numberOfCups + 1>& cups, uint current, const uint numberOfRounds) {
         array<uint, 3> pickup{0, 0, 0};
         for (auto round = 0U; round < numberOfRounds; round++) {
             for (auto i = 0U; i < 3; i++)
