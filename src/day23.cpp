@@ -58,15 +58,15 @@ namespace day23 {
 
     constexpr uint numberOfCups = 1000000;
 
-    uint nextCup(array<pair<uint, uint>, numberOfCups + 1>& cups, uint current, uint steps = 1) {
-        auto it = cups[current];
+    uint nextCup(array<uint, numberOfCups + 1>& cups, uint current, uint steps = 1) {
+        auto next = cups[current];
         for (auto i = 1U; i < steps; i++)
-            it = cups[it.second];
+            next = cups[next];
 
-        return it.second;
+        return next;
     }
 
-    void playRoundsWithLinkedElements(array<pair<uint, uint>, numberOfCups + 1>& cups, uint first, uint numberOfRounds) {
+    void playRoundsWithLinkedElements(array<uint, numberOfCups + 1>& cups, uint first, uint numberOfRounds) {
         auto current = first;
         array<uint, 3> pickup{0, 0, 0};
         for (auto round = 0U; round < numberOfRounds; round++) {
@@ -80,30 +80,23 @@ namespace day23 {
                 it = find(pickup.begin(), pickup.end(), destination);
             }
 
-            cups[current].second = nextCup(cups, current, 4);
-            cups[nextCup(cups, current)].first = current;
-            cups[pickup[2]].second = nextCup(cups, destination);
-            cups[nextCup(cups, destination)].first = pickup[2];
-            cups[destination].second = pickup[0];
-            cups[pickup[0]].first = destination;
+            cups[current] = nextCup(cups, current, 4);
+            cups[pickup[2]] = nextCup(cups, destination);
+            cups[destination] = pickup[0];
 
-            current = cups[current].second;
+            current = cups[current];
         }
     }
 
     TEST_CASE("Day 23 - Part 2 from https://adventofcode.com/2020/day/23#part2") {
         auto initialCups = loadCups();
 
-        array<pair<uint, uint>, numberOfCups + 1> cups{{{0, 0}}};
+        array<uint, numberOfCups + 1> cups{0};
         for (auto i = 0U; i < initialCups.size(); i++)
-            cups[initialCups[i]] = {
-                    i > 0 ? initialCups[i - 1] : numberOfCups,
-                    i + 1 < initialCups.size() ? initialCups[i + 1] : i + 2};
+            cups[initialCups[i]] = i + 1 < initialCups.size() ? initialCups[i + 1] : i + 2;
 
         for (auto i = initialCups.size() + 1; i <= numberOfCups; i++)
-            cups[i] = {
-                    i - 1 > initialCups.size() ? i - 1 : initialCups[initialCups.size() - 1],
-                    i < numberOfCups ? i + 1 : initialCups[0]};
+            cups[i] = i < numberOfCups ? i + 1 : initialCups[0];
 
         playRoundsWithLinkedElements(cups, initialCups[0], 10000000);
 
