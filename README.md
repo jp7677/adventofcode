@@ -28,7 +28,7 @@ The command line arguments for the test runner (see above) are passed by the `ru
 
 ## Results
 
-Enjoying the stars...
+Enjoying all the stars...
 
 ![Final AoC map](https://github.com/jp7677/adventofcode/raw/main/map.png)
 
