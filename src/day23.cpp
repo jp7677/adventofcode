@@ -91,11 +91,11 @@ namespace day23 {
         auto initialCups = loadCups();
 
         array<uint, numberOfCups + 1> cups{0};
-        for (auto i = 0U; i < initialCups.size(); i++)
-            cups[initialCups[i]] = i + 1 < initialCups.size() ? initialCups[i + 1] : i + 2;
-
-        for (auto i = initialCups.size() + 1; i <= numberOfCups; i++)
-            cups[i] = i < numberOfCups ? i + 1 : initialCups[0];
+        for (auto i = 0U; i <= numberOfCups; i++)
+            if (i < initialCups.size())
+                cups[initialCups[i]] = i + 1 < initialCups.size() ? initialCups[i + 1] : i + 2;
+            else if (i > initialCups.size())
+                cups[i] = i < numberOfCups ? i + 1 : initialCups[0];
 
         playRoundsWithLinkedElements(cups, initialCups[0], 10000000);
 
