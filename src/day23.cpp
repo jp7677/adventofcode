@@ -15,21 +15,26 @@ namespace day23 {
         return cups;
     }
 
-    void playRounds(vector<uint>& cups, uint numberOfRounds) {
-        auto offset = 0U;
+    template<typename T>
+    uint getDestination(const T begin, const T end, const uint current, const uint max) {
+        auto destination = current;
+        auto it = begin;
+        while (it != end) {
+            destination = destination == 1 ? max : destination - 1;
+            it = find(begin, end, destination);
+        }
+
+        return destination;
+    }
+
+    void playRoundsWithRotations(vector<uint>& cups, uint offset, const uint numberOfRounds) {
         for (auto round = 0U; round < numberOfRounds; round++) {
             auto currentIndex = (round + offset) % cups.size();
             auto current = cups[currentIndex];
 
             rotate(cups.begin(), next(cups.begin(), (currentIndex + 4) % cups.size()), cups.end());
 
-            auto destination = current;
-            auto it = cups.begin();
-            while (it != cups.end()) {
-                destination = destination == 1 ? cups.size() : destination - 1;
-                it = find(prev(cups.end(), 3), cups.end(), destination);
-            }
-
+            auto destination = getDestination(prev(cups.end(), 3), cups.end(), current, cups.size());
             if (destination != cups[cups.size() - 4])
                 rotate(cups.begin(), next(find(cups.begin(), cups.end(), destination)), prev(cups.end(), 3));
 
@@ -40,7 +45,7 @@ namespace day23 {
     TEST_CASE("Day 23 - Part 1 from https://adventofcode.com/2020/day/23") {
         auto cups = loadCups();
 
-        playRounds(cups, 100);
+        playRoundsWithRotations(cups, 0, 100);
 
         string result;
         auto it = find(cups.begin(), cups.end(), 1);
@@ -56,17 +61,44 @@ namespace day23 {
         REQUIRE(result == "36472598");
     }
 
-    TEST_CASE("Day 23 - Part 2 from https://adventofcode.com/2020/day/23#part2","[.skip-due-to-horrible-performance]") {
+    constexpr uint numberOfCups = 1000000;
+
+    uint nextCup(const array<uint, numberOfCups + 1>& cups, const uint current, const uint steps = 1) {
+        auto next = cups[current];
+        for (auto i = 1U; i < steps; i++)
+            next = cups[next];
+
+        return next;
+    }
+
+    void playRoundsWithLinkedElements(array<uint, numberOfCups + 1>& cups, uint current, const uint numberOfRounds) {
+        array<uint, 3> pickup{0, 0, 0};
+        for (auto round = 0U; round < numberOfRounds; round++) {
+            for (auto i = 0U; i < 3; i++)
+                pickup[i] = nextCup(cups, current, i + 1);
+
+            auto destination = getDestination(pickup.begin(), pickup.end(), current, numberOfCups);
+            cups[current] = nextCup(cups, current, 4);
+            cups[pickup[2]] = nextCup(cups, destination);
+            cups[destination] = pickup[0];
+
+            current = cups[current];
+        }
+    }
+
+    TEST_CASE("Day 23 - Part 2 from https://adventofcode.com/2020/day/23#part2") {
         auto initialCups = loadCups();
 
-        auto cups = vector<uint>(initialCups);
-        for (auto i = initialCups.size() + 1; i <= 1000000; i++)
-            cups.push_back(i);
+        array<uint, numberOfCups + 1> cups{0};
+        for (auto i = 0U; i <= numberOfCups; i++)
+            if (i < initialCups.size())
+                cups[initialCups[i]] = i + 1 < initialCups.size() ? initialCups[i + 1] : i + 2;
+            else if (i > initialCups.size())
+                cups[i] = i < numberOfCups ? i + 1 : initialCups[0];
 
-        playRounds(cups, 10000000);
+        playRoundsWithLinkedElements(cups, initialCups[0], 10000000);
 
-        auto it = find(cups.begin(), cups.end(), 1);
-        auto result = static_cast<ulong>(*next(it) * *next(it, 2));
+        auto result = static_cast<ulong>(nextCup(cups, 1)) * nextCup(cups, 1, 2);
 
         REQUIRE(result == 90481418730);
     }
