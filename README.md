@@ -1,6 +1,6 @@
 # Advent of Code C++
 
-From <https://adventofcode.com/2020>. Likely to late for every day, but hopefully it's the intention that counts ;)
+From <https://adventofcode.com/2020>. Better late than never ;)
 
 ## System requirements
 
@@ -25,6 +25,12 @@ The command line arguments from <https://github.com/catchorg/Catch2/blob/devel/d
 ```
 
 The command line arguments for the test runner (see above) are passed by the `run.sh` script to the executable.
+
+## Results
+
+Enjoying the stars...
+
+![Final AoC map](https://github.com/jp7677/adventofcode/raw/main/map.png)
 
 ## Other cool solutions
 
