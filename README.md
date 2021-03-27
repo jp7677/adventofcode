@@ -1,4 +1,4 @@
-# Advent of Code C++
+# Advent of Code 2020 C++
 
 From <https://adventofcode.com/2020>. Better late than never ;)
 
