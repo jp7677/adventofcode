@@ -15,6 +15,18 @@ namespace day23 {
         return cups;
     }
 
+    template<typename T>
+    uint getDestination(const T begin, const T end, const uint current, const uint max) {
+        auto destination = current;
+        auto it = begin;
+        while (it != end) {
+            destination = destination == 1 ? max : destination - 1;
+            it = find(begin, end, destination);
+        }
+
+        return destination;
+    }
+
     void playRoundsWithRotations(vector<uint>& cups, const uint numberOfRounds) {
         auto offset = 0U;
         for (auto round = 0U; round < numberOfRounds; round++) {
@@ -23,13 +35,7 @@ namespace day23 {
 
             rotate(cups.begin(), next(cups.begin(), (currentIndex + 4) % cups.size()), cups.end());
 
-            auto destination = current;
-            auto it = cups.begin();
-            while (it != cups.end()) {
-                destination = destination == 1 ? cups.size() : destination - 1;
-                it = find(prev(cups.end(), 3), cups.end(), destination);
-            }
-
+            auto destination = getDestination(prev(cups.end(), 3), cups.end(), current, cups.size());
             if (destination != cups[cups.size() - 4])
                 rotate(cups.begin(), next(find(cups.begin(), cups.end(), destination)), prev(cups.end(), 3));
 
@@ -72,13 +78,7 @@ namespace day23 {
             for (auto i = 0U; i < 3; i++)
                 pickup[i] = nextCup(cups, current, i + 1);
 
-            auto destination = current;
-            auto it = pickup.begin();
-            while (it != pickup.end()) {
-                destination = destination == 1 ? numberOfCups : destination - 1;
-                it = find(pickup.begin(), pickup.end(), destination);
-            }
-
+            auto destination = getDestination(pickup.begin(), pickup.end(), current, numberOfCups);
             cups[current] = nextCup(cups, current, 4);
             cups[pickup[2]] = nextCup(cups, destination);
             cups[destination] = pickup[0];
