@@ -64,7 +64,7 @@ namespace day20 {
         REQUIRE(result == 7492183537913);
     }
 
-    pair<uint, vector<string>> findTopLeftTile(const unordered_map<uint, const vector<string>>& tiles) {
+    pair<uint, vector<string>> findTopLeftTile(const unordered_map<uint, vector<string>>& tiles) {
         auto it = find_if(tiles.begin(), tiles.end(),
             [&tiles](const auto& tile){
                 auto border = getTileBorder(tile.second);
