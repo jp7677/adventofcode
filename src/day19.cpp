@@ -23,7 +23,7 @@ namespace day19 {
         }
     }
 
-    string buildPattern(vector<string>& rules, uint index) {
+    string buildPattern(const vector<string>& rules, const uint index) {
         auto rule = rules[index];
         if (rule[1] == '"')
             return string(1, rule[2]);
