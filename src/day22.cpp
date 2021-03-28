@@ -21,7 +21,7 @@ namespace day22 {
         }
     }
 
-    uint calculateScore(deque<uint>& winningCards) {
+    uint calculateScore(const deque<uint>& winningCards) {
         auto score = 0U;
         for (auto i = winningCards.size(); i > 0; i--)
             score += winningCards[winningCards.size() - i] * i;
@@ -52,7 +52,7 @@ namespace day22 {
         REQUIRE(result == 34664);
     }
 
-    size_t hash(deque<uint>& cards) {
+    size_t hash(const deque<uint>& cards) {
         auto game = 0U;
         for (auto i = 0U; i < cards.size(); i++)
             game ^= (cards[i] << (i * 4)); // Beware there be dragons.
