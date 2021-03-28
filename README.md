@@ -7,7 +7,7 @@ From <https://adventofcode.com/2020>. Better late than never ;)
 - build-essentials (gcc)
 - cmake
 
-Only Linux/gcc has been tested. other platforms might just work though.
+Only Linux/gcc has been tested. Other platforms might just work though.
 
 ## Compile & run (Release)
 
