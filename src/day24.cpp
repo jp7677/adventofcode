@@ -70,7 +70,7 @@ namespace day24 {
         REQUIRE(result == 373);
     }
 
-    unordered_set<pair<int, int>, hash> getAdjacentTiles(pair<int, int> tile) {
+    unordered_set<pair<int, int>, hash> getAdjacentTiles(const pair<int, int> tile) {
         auto even = tile.second % 2 == 0;
         return unordered_set<pair<int, int>, hash>{
             {tile.first + 1, tile.second},

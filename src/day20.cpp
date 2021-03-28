@@ -106,7 +106,7 @@ namespace day20 {
 
     enum orientation { top, left };
 
-    vector<string> orientateToBoarder(const vector<string>& tile, const string& boarderLane, orientation orientation) {
+    vector<string> orientateToBoarder(const vector<string>& tile, const string& boarderLane, const orientation orientation) {
         auto boarder = getTileBorder(tile);
         if (boarder.top == boarderLane)
             return orientate(tile, false, orientation == left ? 3 : 0);
