@@ -29,13 +29,14 @@ namespace day23 {
 
     void playRoundsWithRotations(vector<uint>& cups, uint offset, const uint numberOfRounds) {
         for (auto round = 0U; round < numberOfRounds; round++) {
-            auto currentIndex = (round + offset) % cups.size();
+            auto size = static_cast<uint>(cups.size());
+            auto currentIndex = (round + offset) % size;
             auto current = cups[currentIndex];
 
-            rotate(cups.begin(), next(cups.begin(), (currentIndex + 4) % cups.size()), cups.end());
+            rotate(cups.begin(), next(cups.begin(), (currentIndex + 4) % size), cups.end());
 
-            auto destination = getDestination(prev(cups.end(), 3), cups.end(), current, cups.size());
-            if (destination != cups[cups.size() - 4])
+            auto destination = getDestination(prev(cups.end(), 3), cups.end(), current, size);
+            if (destination != cups[size - 4])
                 rotate(cups.begin(), next(find(cups.begin(), cups.end(), destination)), prev(cups.end(), 3));
 
             offset = distance(next(cups.begin(), round), find(cups.begin(), cups.end(), current));

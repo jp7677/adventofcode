@@ -3,10 +3,10 @@
 using namespace std;
 
 namespace day12 {
-    vector<pair<char, uint>> loadInstructions() {
+    vector<pair<char, int>> loadInstructions() {
         auto instructionsData = util::loadInputFile("day12-input.txt");
 
-        vector<pair<char, uint>> instructions;
+        vector<pair<char, int>> instructions;
         transform(instructionsData.begin(), instructionsData.end(), back_inserter(instructions),
             [](const auto& line) {
                 return make_pair(line[0], stoi(line.substr(1)));
@@ -27,7 +27,7 @@ namespace day12 {
         int direction;
     };
 
-    void move(position& pos, const char direction, const uint steps) {
+    void move(position& pos, const char direction, const int steps) {
         switch (direction) {
             case 'E': pos.x += steps; return;
             case 'W': pos.x -= steps; return;
@@ -37,7 +37,7 @@ namespace day12 {
         }
     }
 
-    void move(position& pos, const int direction, const uint steps) {
+    void move(position& pos, const int direction, const int steps) {
         auto normalized = direction % 360;
         if (normalized < 0)
             normalized = 360 - abs(normalized);
@@ -51,7 +51,7 @@ namespace day12 {
         }
     }
 
-    void turn(ship& ship, const char direction, const uint degrees) {
+    void turn(ship& ship, const char direction, const int degrees) {
         switch (direction) {
             case 'R': ship.direction += degrees; return;
             case 'L': ship.direction -= degrees; return;

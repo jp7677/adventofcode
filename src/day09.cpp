@@ -3,10 +3,10 @@
 using namespace std;
 
 namespace day09 {
-    vector<ulong> loadNumbers() {
+    vector<uint> loadNumbers() {
         auto numbersData = util::loadInputFile("day09-input.txt");
 
-        vector<ulong> numbers;
+        vector<uint> numbers;
         transform(numbersData.begin(), numbersData.end(), back_inserter(numbers),
             [](const auto& number) {
                 return stol(number);
@@ -46,7 +46,7 @@ namespace day09 {
 
         auto position = [&numbers] {
             for (auto i = 0U; i < numbers.size(); i++) {
-                for (auto sum = numbers[i], offset = 1UL; sum < invalid; offset++) {
+                for (auto sum = numbers[i], offset = 1U; sum < invalid; offset++) {
                     sum += numbers[i + offset];
                     if (sum == invalid)
                         return make_pair(i, i + ++offset);
