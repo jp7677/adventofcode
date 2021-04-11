@@ -27,9 +27,8 @@ namespace day23 {
         return destination;
     }
 
-    void playRoundsWithRotations(vector<uint>& cups, uint offset, const uint numberOfRounds) {
+    void playRoundsWithRotations(vector<uint>& cups, uint size, uint offset, const uint numberOfRounds) {
         for (auto round = 0U; round < numberOfRounds; round++) {
-            auto size = static_cast<uint>(cups.size());
             auto currentIndex = (round + offset) % size;
             auto current = cups[currentIndex];
 
@@ -46,7 +45,7 @@ namespace day23 {
     TEST_CASE("Day 23 - Part 1 from https://adventofcode.com/2020/day/23") {
         auto cups = loadCups();
 
-        playRoundsWithRotations(cups, 0, 100);
+        playRoundsWithRotations(cups, cups.size(), 0, 100);
 
         string result;
         auto it = find(cups.begin(), cups.end(), 1);
