@@ -69,12 +69,12 @@ namespace day20 {
             [&tiles](const auto& tile){
                 auto border = getTileBorder(tile.second);
                 return find_if(tiles.begin(), tiles.end(),
-                        [&tile, &border](const auto& other){
+                        [&tile, &border](const auto& other) {
                             auto otherBorder = getTileBorder(other.second);
                             return tile.first != other.first && anyAdjacentBorder(border.top, otherBorder);
                         }) == tiles.end()
                     && find_if(tiles.begin(), tiles.end(),
-                        [&tile, &border](const auto& other){
+                        [&tile, &border](const auto& other) {
                             auto otherBorder = getTileBorder(other.second);
                             return tile.first != other.first && anyAdjacentBorder(border.left, otherBorder);
                         }) == tiles.end();
@@ -208,9 +208,9 @@ namespace day20 {
         }
 
         auto waterRoughness = accumulate(image.begin(), image.end(), 0U,
-            [](const auto sum, const auto& line){
+            [](const auto sum, const auto& line) {
                 return sum + count_if(line.begin(), line.end(),
-                    [](const auto& character){
+                    [](const auto& character) {
                         return character == '#';
                     });
             });
