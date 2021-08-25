@@ -10,24 +10,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  ci-2020:
+  AoC2019:
     runs-on: ubuntu-20.04
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+      - name: Compile and run AoC2019
+        run: |
+          cd 2019
+          ./gradlew build
+          time ./gradlew test
+
+  AoC2020:
+    runs-on: ubuntu-20.04
+    steps:
       - uses: actions/checkout@v2
       - name: Compile and run AoC2020
         run: |
           cd 2020
           ./build/make.sh
           time ./cmake-build-release/adventofcode
-
-  ci-2019:
-    runs-on: ubuntu-20.04
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v2
-      - name: Compile and run AoC2020
-        run: |
-          cd 2019
-          ./gradlew build
-          time ./gradlew test
