@@ -10,21 +10,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  AoC2019:
+  AoC-2019:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Compile and run AoC2019
+      - name: Compile and run AoC 2019
         run: |
           cd 2019
           ./gradlew build
           time ./gradlew test
 
-  AoC2020:
+  AoC-2020:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Compile and run AoC2020
+      - name: Compile and run AoC 2020
         run: |
           cd 2020
           ./build/make.sh
