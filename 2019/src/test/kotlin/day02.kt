@@ -10,15 +10,16 @@ class Day02 {
 
         program[1] = 12
         program[2] = 2
-        for (i in 0..program.size step 4) {
-            if (program[i] == 99)
-                break
-
-            val operator: Int.(Int) -> Int = if (program[i] == 1) Int::plus else Int::times
-            val input1 = program[program[i + 1]]
-            val input2 = program[program[i + 2]]
-            program[program[i + 3]] = operator(input1, input2)
-        }
+        program
+            .toList()
+            .chunked(4)
+            .takeWhile { it[0] != 99 }
+            .forEach {
+                val operation: Int.(Int) -> Int = if (it[0] == 1) Int::plus else Int::times
+                val input1 = program[it[1]]
+                val input2 = program[it[2]]
+                program[it[3]] = operation(input1, input2)
+            }
 
         val result = program.first()
         Asserter.assertEquals("wrong result", 5866663, result)
