@@ -2,6 +2,8 @@ import kotlin.test.Test
 import kotlin.test.junit5.JUnit5Asserter as Asserter
 
 class Day02 {
+    private val plus: Int.(Int) -> Int = Int::plus
+    private val times: Int.(Int) -> Int = Int::times
 
     @Test
     fun runPart01() {
@@ -15,7 +17,7 @@ class Day02 {
             .chunked(4)
             .takeWhile { it[0] != 99 }
             .forEach {
-                val operation: Int.(Int) -> Int = if (it[0] == 1) Int::plus else Int::times
+                val operation = if (it[0] == 1) plus else times
                 val input1 = program[it[1]]
                 val input2 = program[it[2]]
                 program[it[3]] = operation(input1, input2)
