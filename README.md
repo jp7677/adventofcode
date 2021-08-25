@@ -8,3 +8,9 @@ From <https://adventofcode.com/>. Better late than never ;)
 - Advent of Code 2020 C++ <https://github.com/jp7677/adventofcode/tree/main/2020>
 
 Enjoy the stars...
+
+## Other cool solutions
+
+- <https://github.com/Dricus/adventofcode>
+- <https://github.com/StefRave/advent-of-code-2020>
+- <https://github.com/ErikSchierboom/advent-of-code>

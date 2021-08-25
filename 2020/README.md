@@ -31,9 +31,3 @@ The command line arguments for the test runner (see above) are passed by the `ru
 Enjoying all the stars...
 
 ![Final AoC map](https://github.com/jp7677/adventofcode/raw/main/map.png)
-
-## Other cool solutions
-
-- <https://github.com/Dricus/adventofcode>
-- <https://github.com/StefRave/advent-of-code-2020>
-- <https://github.com/ErikSchierboom/advent-of-code>
