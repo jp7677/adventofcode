@@ -1,0 +1,82 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "Configure (Debug)",
+      "command": "/usr/bin/cmake",
+      "args": [
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-B./cmake-build-debug"
+      ],
+      "problemMatcher": [],
+      "group": "build",
+      "presentation": {
+        "clear": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
+      "label": "Build (Debug)",
+      "command": "/usr/bin/cmake",
+      "args": [
+        "--build",
+        "./cmake-build-debug",
+        "--target",
+        "all",
+        "--",
+        "-j",
+        "9"
+      ],
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "clear": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
+      "label": "Configure (Release)",
+      "command": "/usr/bin/cmake",
+      "args": [
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-B./cmake-build-release"
+      ],
+      "problemMatcher": [],
+      "group": "build",
+      "presentation": {
+        "clear": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "type": "shell",
+      "label": "Build (Release)",
+      "command": "/usr/bin/cmake",
+      "args": [
+        "--build",
+        "./cmake-build-release",
+        "--target",
+        "all",
+        "--",
+        "-j",
+        "9"
+      ],
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": "build",
+      "presentation": {
+        "clear": true,
+        "showReuseMessage": false
+      }
+    }
+  ]
+}
