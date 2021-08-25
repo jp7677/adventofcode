@@ -15,7 +15,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
-      - name: Compile and run
+      - name: Compile and run AoC2020
         run: |
-          ./build/make.sh
-          time ./cmake-build-release/adventofcode
+          ./2020/build/make.sh
+          time ./2020/cmake-build-release/adventofcode
