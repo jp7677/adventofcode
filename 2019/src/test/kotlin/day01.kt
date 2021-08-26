@@ -1,5 +1,5 @@
 import kotlin.test.Test
-import kotlin.test.junit5.JUnit5Asserter as Asserter
+import kotlin.test.assertEquals
 
 class Day01 {
 
@@ -8,7 +8,7 @@ class Day01 {
         val result = Util.getInputAsListOfInt("day01-input.txt")
             .sumOf { (it / 3) - 2 }
 
-        Asserter.assertEquals("wrong result", 3239503, result)
+        assertEquals(3239503, result)
     }
 
     @Test
@@ -16,7 +16,7 @@ class Day01 {
         val result = Util.getInputAsListOfInt("day01-input.txt")
             .sumOf { calculateFuel(it) }
 
-        Asserter.assertEquals("wrong result", 4856390, result)
+        assertEquals(4856390, result)
     }
 
     private tailrec fun calculateFuel(mass: Int, sum: Int = 0): Int {
