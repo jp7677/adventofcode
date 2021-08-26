@@ -5,29 +5,26 @@ class Day02 {
 
     @Test
     fun runPart01() {
-        val memory = Util.getInputAsListOfInt("day02-input.txt", ",")
-            .toTypedArray()
+        val program = Util.getInputAsListOfInt("day02-input.txt", ",")
 
-        val result = runProgram(memory, 1202)
+        val result = runProgram(program, 1202)
         assertEquals (5866663, result)
     }
 
     @Test
     fun runPart02() {
-        val memory = Util.getInputAsListOfInt("day02-input.txt", ",")
-            .toTypedArray()
+        val program = Util.getInputAsListOfInt("day02-input.txt", ",")
 
         val result = (0..9999)
-            .dropWhile { runProgram(memory.copyOf(), it) != 19690720 }
+            .dropWhile { runProgram(program.toList(), it) != 19690720 }
             .first()
 
         assertEquals (4259, result)
     }
 
-    private val add: Int.(Int) -> Int = Int::plus
-    private val multiply: Int.(Int) -> Int = Int::times
+    private fun runProgram(program: List<Int>, nounVerb: Int): Int {
+        val memory = program.toTypedArray()
 
-    private fun runProgram(memory: Array<Int>, nounVerb: Int): Int {
         memory[1] = (nounVerb - nounVerb % 100) / 100
         memory[2] = nounVerb % 100
         memory
@@ -43,4 +40,7 @@ class Day02 {
 
         return memory.first()
     }
+
+    private val add: Int.(Int) -> Int = Int::plus
+    private val multiply: Int.(Int) -> Int = Int::times
 }
