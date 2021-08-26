@@ -1,5 +1,5 @@
 import kotlin.test.Test
-import kotlin.test.junit5.JUnit5Asserter as Asserter
+import kotlin.test.assertEquals
 
 class Day02 {
     private val plus: Int.(Int) -> Int = Int::plus
@@ -24,6 +24,6 @@ class Day02 {
             }
 
         val result = program.first()
-        Asserter.assertEquals("wrong result", 5866663, result)
+        assertEquals (5866663, result)
     }
 }
