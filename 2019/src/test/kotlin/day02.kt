@@ -7,7 +7,7 @@ class Day02 {
     fun runPart01() {
         val program = Util.getInputAsListOfInt("day02-input.txt", ",")
 
-        val result = runProgram(program, 1202)
+        val result = runProgram(program, 12, 2)
         assertEquals (5866663, result)
     }
 
@@ -15,16 +15,21 @@ class Day02 {
     fun runPart02() {
         val program = Util.getInputAsListOfInt("day02-input.txt", ",")
 
-        val result = (0..9999)
-            .first { runProgram(program.toList(), it) == 19690720 }
+        val result = (0..99)
+            .crossJoin()
+            .first { runProgram(program, it.first, it.second) == 19690720 }
+            .let { it.first * 100 + it.second }
 
         assertEquals (4259, result)
     }
 
-    private fun runProgram(program: List<Int>, nounVerb: Int): Int {
+    private fun IntRange.crossJoin(): List<Pair<Int, Int>> =
+        this.flatMap { it1 -> this.map { it2 -> it1 to it2} }
+
+    private fun runProgram(program: List<Int>, noun: Int, verb: Int): Int {
         val memory = program.toTypedArray()
-        memory[1] = (nounVerb - nounVerb % 100) / 100
-        memory[2] = nounVerb % 100
+        memory[1] = noun
+        memory[2] = verb
 
         memory
             .toList()
