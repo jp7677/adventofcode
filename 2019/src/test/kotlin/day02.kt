@@ -16,17 +16,16 @@ class Day02 {
         val program = Util.getInputAsListOfInt("day02-input.txt", ",")
 
         val result = (0..9999)
-            .dropWhile { runProgram(program.toList(), it) != 19690720 }
-            .first()
+            .first { runProgram(program.toList(), it) == 19690720 }
 
         assertEquals (4259, result)
     }
 
     private fun runProgram(program: List<Int>, nounVerb: Int): Int {
         val memory = program.toTypedArray()
-
         memory[1] = (nounVerb - nounVerb % 100) / 100
         memory[2] = nounVerb % 100
+
         memory
             .toList()
             .chunked(4)
