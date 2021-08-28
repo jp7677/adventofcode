@@ -7,20 +7,20 @@ class Day02 {
     fun runPart01() {
         val program = Util.getInputAsListOfInt("day02-input.txt", ",")
 
-        val result = runProgram(program, 12, 2)
-        assertEquals (5866663, result)
+        val value = runProgram(program, 12, 2)
+        assertEquals (5866663, value)
     }
 
     @Test
     fun runPart02() {
         val program = Util.getInputAsListOfInt("day02-input.txt", ",")
 
-        val result = (0..99)
+        val nounVerb = (0..99)
             .crossJoin()
             .first { runProgram(program, it.first, it.second) == 19690720 }
             .let { it.first * 100 + it.second }
 
-        assertEquals (4259, result)
+        assertEquals (4259, nounVerb)
     }
 
     private fun IntRange.crossJoin(): List<Pair<Int, Int>> =

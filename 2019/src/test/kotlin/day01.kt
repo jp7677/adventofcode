@@ -5,18 +5,18 @@ class Day01 {
 
     @Test
     fun runPart01() {
-        val result = Util.getInputAsListOfInt("day01-input.txt")
+        val fuel = Util.getInputAsListOfInt("day01-input.txt")
             .sumOf { (it / 3) - 2 }
 
-        assertEquals(3239503, result)
+        assertEquals(3239503, fuel)
     }
 
     @Test
     fun runPart02() {
-        val result = Util.getInputAsListOfInt("day01-input.txt")
+        val fuel = Util.getInputAsListOfInt("day01-input.txt")
             .sumOf { calculateFuel(it) }
 
-        assertEquals(4856390, result)
+        assertEquals(4856390, fuel)
     }
 
     private tailrec fun calculateFuel(mass: Int, sum: Int = 0): Int {
