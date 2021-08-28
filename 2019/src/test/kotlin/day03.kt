@@ -32,7 +32,7 @@ class Day03 {
         val distance = wireLocations.first()
             .intersect(wireLocations.last())
             .filter { it != Location(0, 0) }
-            .map { wireLocations.first().indexOf(it) + wireLocations.last().indexOf(it) + 2 }
+            .map { wireLocations.first().indexOf(it) + wireLocations.last().indexOf(it) }
             .minOf{ it }
 
         assertEquals(48262, distance)
