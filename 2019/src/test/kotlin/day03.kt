@@ -13,10 +13,9 @@ class Day03 {
     fun runPart01() {
         val wires = Util.getInputAsListOfString("day03-input.txt")
 
-        val wireLocations = walkPaths(wires)
+        val locations = walkPaths(wires)
 
-        val distance = wireLocations.first()
-            .intersect(wireLocations.last())
+        val distance = (locations.first() intersect locations.last())
             .filter { it != Location(0, 0) }
             .minOf { it.toManhattenDistance() }
 
@@ -27,12 +26,11 @@ class Day03 {
     fun runPart02() {
         val wires = Util.getInputAsListOfString("day03-input.txt")
 
-        val wireLocations = walkPaths(wires)
+        val locations = walkPaths(wires)
 
-        val distance = wireLocations.first()
-            .intersect(wireLocations.last())
+        val distance = (locations.first() intersect locations.last())
             .filter { it != Location(0, 0) }
-            .minOf { wireLocations.first().indexOf(it) + wireLocations.last().indexOf(it) }
+            .minOf { locations.first().indexOf(it) + locations.last().indexOf(it) }
 
         assertEquals(48262, distance)
     }
