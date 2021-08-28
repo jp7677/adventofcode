@@ -17,6 +17,7 @@ class Day03 {
 
         val distance = wireLocations.first()
             .intersect(wireLocations.last())
+            .filter { it != Location(0, 0) }
             .minOf { it.toManhattenDistance() }
 
         assertEquals(245, distance)
@@ -30,6 +31,7 @@ class Day03 {
 
         val distance = wireLocations.first()
             .intersect(wireLocations.last())
+            .filter { it != Location(0, 0) }
             .map { wireLocations.first().indexOf(it) + wireLocations.last().indexOf(it) + 2 }
             .minOf{ it }
 
@@ -44,7 +46,6 @@ class Day03 {
                 .fold(listOf(Location(0, 0))) { locations, path ->
                     locations + walk(locations.last(), path)
                 }
-                .filter { it != Location(0, 0) }
         }
 
     private fun String.toPath(): Path = Path(
