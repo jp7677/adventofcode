@@ -13,7 +13,7 @@ class Day03 {
     fun runPart01() {
         val wires = Util.getInputAsListOfString("day03-input.txt")
 
-        val locations = walkPaths(wires)
+        val locations = trace(wires)
 
         val distance = (locations.first() intersect locations.last())
             .filter { it != Location(0, 0) }
@@ -26,7 +26,7 @@ class Day03 {
     fun runPart02() {
         val wires = Util.getInputAsListOfString("day03-input.txt")
 
-        val locations = walkPaths(wires)
+        val locations = trace(wires)
 
         val distance = (locations.first() intersect locations.last())
             .filter { it != Location(0, 0) }
@@ -35,15 +35,22 @@ class Day03 {
         assertEquals(48262, distance)
     }
 
-    private fun walkPaths(wires: List<String>) = wires
+    private fun trace(wires: List<String>) = wires
         .map { wire ->
             wire
                 .split(",")
                 .map { it.toPath() }
                 .fold(listOf(Location(0, 0))) { locations, path ->
-                    locations + walk(locations.last(), path)
+                    locations + traverse(locations.last(), path)
                 }
         }
+
+    private fun traverse(start: Location, path: Path): List<Location> = when (path.direction){
+        Direction.R -> (1..path.length).map { Location(start.x + it, start.y) }
+        Direction.L -> (1..path.length).map { Location(start.x - it, start.y) }
+        Direction.U -> (1..path.length).map { Location(start.x, start.y + it) }
+        Direction.D -> (1..path.length).map { Location(start.x, start.y - it) }
+    }
 
     private fun String.toPath(): Path = Path(
         when (this[0]) {
@@ -55,11 +62,4 @@ class Day03 {
         },
         this.substring(1).toInt()
     )
-
-    private fun walk(start: Location, path: Path): List<Location> = when (path.direction){
-        Direction.R -> (1..path.length).map { Location(start.x + it, start.y) }
-        Direction.L -> (1..path.length).map { Location(start.x - it, start.y) }
-        Direction.U -> (1..path.length).map { Location(start.x, start.y + it) }
-        Direction.D -> (1..path.length).map { Location(start.x, start.y - it) }
-    }
 }
