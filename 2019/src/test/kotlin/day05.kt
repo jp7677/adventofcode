@@ -8,8 +8,7 @@ class Day05 {
 
     @Test
     fun runPart01() {
-        val memory = Util.getInputAsListOfInt("day05-input.txt", ",")
-            .toTypedArray()
+        val memory = Util.getInputAsListOfInt("day05-input.txt", ",").toTypedArray()
 
         val output = runProgram(memory, 1)
 
@@ -18,8 +17,7 @@ class Day05 {
 
     @Test
     fun runPart02() {
-        val memory = Util.getInputAsListOfInt("day05-input.txt", ",")
-            .toTypedArray()
+        val memory = Util.getInputAsListOfInt("day05-input.txt", ",").toTypedArray()
 
         val output = runProgram(memory, 5)
 
@@ -32,9 +30,9 @@ class Day05 {
         while (true) {
             val instr = mem[idx].toInstruction()
             when (instr.op) {
-                Op.ESC  -> break
-                Op.OUT  -> output = mem[mem[idx + 1]]
-                Op.IN   -> mem[mem[idx + 1]] = input
+                Op.ESC -> break
+                Op.OUT -> output = mem[mem[idx + 1]]
+                Op.IN  -> mem[mem[idx + 1]] = input
                 else -> {
                     val param1Value = if (instr.param1Mode == Mode.POSITION) mem[mem[idx + 1]] else mem[idx + 1]
                     val param2Value = if (instr.param2Mode == Mode.POSITION) mem[mem[idx + 2]] else mem[idx + 2]
