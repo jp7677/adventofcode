@@ -60,7 +60,7 @@ class Day05 {
         return output
     }
 
-    private fun Int.toInstruction(): Instruction = this.toString()
+    private fun Int.toInstruction() = this.toString()
         .padStart(5, '0')
         .map { it.toString().toInt() }
         .let { digits ->

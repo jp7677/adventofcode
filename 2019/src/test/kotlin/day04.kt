@@ -40,6 +40,5 @@ class Day04 {
                 )
             }
 
-    private fun Int.digits(): List<Int> = this.toString()
-        .map { it.toString().toInt() }
+    private fun Int.digits() = this.toString().map { it.toString().toInt() }
 }

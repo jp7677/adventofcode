@@ -23,8 +23,7 @@ class Day02 {
         assertEquals (4259, nounVerb)
     }
 
-    private fun IntRange.crossJoin(): List<Pair<Int, Int>> =
-        this.flatMap { it1 -> this.map { it2 -> it1 to it2} }
+    private fun IntRange.crossJoin() = this.flatMap { it1 -> this.map { it2 -> it1 to it2} }
 
     private fun runProgram(program: List<Int>, noun: Int, verb: Int): Int {
         val memory = program.toTypedArray()

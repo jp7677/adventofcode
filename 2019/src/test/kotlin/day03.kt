@@ -45,14 +45,14 @@ class Day03 {
                 }
         }
 
-    private fun traverse(start: Location, path: Path): List<Location> = when (path.direction){
+    private fun traverse(start: Location, path: Path) = when (path.direction){
         Direction.R -> (1..path.length).map { Location(start.x + it, start.y) }
         Direction.L -> (1..path.length).map { Location(start.x - it, start.y) }
         Direction.U -> (1..path.length).map { Location(start.x, start.y + it) }
         Direction.D -> (1..path.length).map { Location(start.x, start.y - it) }
     }
 
-    private fun String.toPath(): Path = Path(
+    private fun String.toPath() = Path(
         when (this[0]) {
             'R' -> Direction.R
             'L' -> Direction.L
