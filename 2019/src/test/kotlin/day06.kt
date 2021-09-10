@@ -31,5 +31,5 @@ class Day06 {
 
     private fun getInputAsMap() = Util.getInputAsListOfString("day06-input.txt")
         .map { it.split(")") }
-        .map { Pair(it[0], it[1]) }
+        .map { Pair(it.first(), it.last()) }
 }
