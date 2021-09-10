@@ -53,13 +53,13 @@ class Day03 {
     }
 
     private fun String.toPath() = Path(
-        when (this[0]) {
+        when (get(0)) {
             'R' -> Direction.R
             'L' -> Direction.L
             'U' -> Direction.U
             'D' -> Direction.D
             else -> throw IllegalArgumentException()
         },
-        this.substring(1).toInt()
+        substring(1).toInt()
     )
 }
