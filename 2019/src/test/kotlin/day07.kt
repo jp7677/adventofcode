@@ -10,9 +10,8 @@ class Day07 {
         val signal = listOf(0, 1, 2 ,3 , 4)
             .permutations()
             .maxOf {
-                it.fold(0) { input, phase ->
-                    IntCodeComputer(memory, phase).run(input) }
-                }
+                it.fold(0) { input, phase -> IntCodeComputer(memory, phase).run(input) }
+            }
 
         assertEquals (18812, signal)
     }
@@ -28,14 +27,10 @@ class Day07 {
                     .map { IntCodeComputer(memory.copyOf(), it).apply { pauseOnOutput = true } }
                     .let { amps ->
                         generateSequence (0) {
-                            val signal = amps.fold(it) { input, amp ->
-                                amp.run(input)
-                            }
-
-                            if (amps.any { amp -> amp.exited }) null else signal
-                        }
+                            val signal = amps.fold(it) { input, amp -> amp.run(input) }
+                            if (amps.none { amp -> amp.exited }) signal else null
+                        }.last()
                     }
-                    .last()
             }
 
         assertEquals (25534964, signal)
