@@ -2,23 +2,14 @@ class IntCodeComputer(private var mem: Array<Int>, private val phase: Int? = nul
     private enum class Mode { POSITION, IMMEDIATE }
     private enum class Op(val code: Int) { ADD(1), MUL(2), IN(3), OUT(4), JNZ(5), JZ(6), SETL(7), SETE(8), ESC(99) }
     private class Instruction(val op: Op, val param1Mode: Mode, val param2Mode: Mode)
-
     private var phaseSet = false
     private var idx = 0
 
     var pauseOnOutput = false
+    var exited = false; private set
 
-    var exited = false
-        private set
-
-    var noun
-        get() = mem[1]
-        set(value) { mem[1] = value}
-
-    var verb
-        get() = mem[2]
-        set(value) { mem[2] = value}
-
+    var noun get() = mem[1]; set(value) { mem[1] = value}
+    var verb get() = mem[2]; set(value) { mem[2] = value}
     val positionZero get() = mem.first()
 
     fun run(input: Int = 0): Int {

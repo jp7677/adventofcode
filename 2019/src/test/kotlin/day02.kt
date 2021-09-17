@@ -8,8 +8,7 @@ class Day02 {
         val program = Util.getInputAsListOfInt("day02-input.txt", ",")
 
         val value = IntCodeComputer(program.toTypedArray())
-            .apply { noun = 12 }
-            .apply { verb = 2 }
+            .apply { noun = 12; verb = 2 }
             .also { it.run() }
             .positionZero
 
@@ -24,8 +23,7 @@ class Day02 {
             .crossJoin()
             .first {
                 IntCodeComputer(program.toTypedArray())
-                    .apply { noun = it.first }
-                    .apply { verb = it.second }
+                    .apply { noun = it.first; verb = it.second }
                     .also { it.run() }
                     .positionZero == 19690720
             }
