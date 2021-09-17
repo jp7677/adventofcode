@@ -7,7 +7,13 @@ class Day05 {
     fun runPart01() {
         val memory = Util.getInputAsListOfInt("day05-input.txt", ",").toTypedArray()
 
-        val output = IntCodeComputer(memory).run(1)
+        val output = IntCodeComputer(memory)
+            .let { program ->
+                generateSequence(1) {
+                    val signal = program.run(it)
+                    if (program.running) signal else null
+                }.last()
+            }
 
         assertEquals (4601506, output)
     }
@@ -16,7 +22,13 @@ class Day05 {
     fun runPart02() {
         val memory = Util.getInputAsListOfInt("day05-input.txt", ",").toTypedArray()
 
-        val output = IntCodeComputer(memory).run(5)
+        val output = IntCodeComputer(memory)
+            .let { program ->
+                generateSequence(5) {
+                    val signal = program.run(it)
+                    if (program.running) signal else null
+                }.last()
+            }
 
         assertEquals (5525561, output)
     }
