@@ -6,6 +6,11 @@ class IntCodeComputer(private var mem: Array<Int>, private val phase: Int? = nul
     private var phaseSet = false
     private var idx = 0
 
+    var pauseOnOutput = false
+
+    var exited = false
+        private set
+
     var noun
         get() = mem[1]
         set(value) { mem[1] = value}
@@ -17,11 +22,11 @@ class IntCodeComputer(private var mem: Array<Int>, private val phase: Int? = nul
     val positionZero get() = mem.first()
 
     fun run(input: Int = 0): Int {
-        var output = 0
+        var output = input
         while (true) {
             val instr = mem[idx].toInstruction()
             when (instr.op) {
-                Op.ESC -> break
+                Op.ESC -> exited = true
                 Op.OUT -> output = mem[mem[idx + 1]]
                 Op.IN  -> mem[mem[idx + 1]] = if (phase != null && !phaseSet) phase.also { phaseSet = true } else input
                 else -> {
@@ -44,9 +49,10 @@ class IntCodeComputer(private var mem: Array<Int>, private val phase: Int? = nul
                 Op.IN, Op.OUT                    -> 2
                 else                             -> 0
             }
-        }
 
-        return output
+            if (instr.op == Op.ESC || (instr.op == Op.OUT && pauseOnOutput))
+                return output
+        }
     }
 
     private fun Int.toInstruction() = toString()

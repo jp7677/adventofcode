@@ -16,4 +16,28 @@ class Day07 {
 
         assertEquals (18812, signal)
     }
+
+    @Test
+    fun runPart02() {
+        val memory = Util.getInputAsListOfInt("day07-input.txt", ",").toTypedArray()
+
+        val signal = listOf(9, 7, 8 ,5 , 6)
+            .permutations()
+            .maxOf { phases ->
+                phases
+                    .map { IntCodeComputer(memory.copyOf(), it).apply { pauseOnOutput = true } }
+                    .let { amps ->
+                        generateSequence (0) {
+                            val signal = amps.fold(it) { input, amp ->
+                                amp.run(input)
+                            }
+
+                            if (amps.any { amp -> amp.exited }) null else signal
+                        }
+                    }
+                    .last()
+            }
+
+        assertEquals (25534964, signal)
+    }
 }
