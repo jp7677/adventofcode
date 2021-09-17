@@ -5,25 +5,24 @@ class IntCodeComputer(private var mem: Array<Int>, private val phase: Int? = nul
     private var phaseSet = false
     private var idx = 0
 
-    var pauseOnOutput = false
-    var exited = false; private set
-
+    var running = false; private set
     var noun get() = mem[1]; set(value) { mem[1] = value}
     var verb get() = mem[2]; set(value) { mem[2] = value}
     val positionZero get() = mem.first()
 
+    @Suppress("NON_EXHAUSTIVE_WHEN")
     fun run(input: Int = 0): Int {
+        running = true
         var output = input
         while (true) {
             val instr = mem[idx].toInstruction()
             when (instr.op) {
-                Op.ESC -> exited = true
+                Op.ESC -> running = false
                 Op.OUT -> output = mem[mem[idx + 1]]
                 Op.IN  -> mem[mem[idx + 1]] = if (phase != null && !phaseSet) phase.also { phaseSet = true } else input
                 else -> {
                     val param1Value = if (instr.param1Mode == Mode.POSITION) mem[mem[idx + 1]] else mem[idx + 1]
                     val param2Value = if (instr.param2Mode == Mode.POSITION) mem[mem[idx + 2]] else mem[idx + 2]
-                    @Suppress("NON_EXHAUSTIVE_WHEN")
                     when (instr.op) {
                         Op.ADD  -> mem[mem[idx + 3]] = param1Value + param2Value
                         Op.MUL  -> mem[mem[idx + 3]] = param1Value * param2Value
@@ -41,8 +40,9 @@ class IntCodeComputer(private var mem: Array<Int>, private val phase: Int? = nul
                 else                             -> 0
             }
 
-            if (instr.op == Op.ESC || (instr.op == Op.OUT && pauseOnOutput))
-                return output
+            when (instr.op) {
+                Op.ESC, Op.OUT -> return output
+            }
         }
     }
 

@@ -24,11 +24,11 @@ class Day07 {
             .permutations()
             .maxOf { phases ->
                 phases
-                    .map { IntCodeComputer(memory.copyOf(), it).apply { pauseOnOutput = true } }
+                    .map { IntCodeComputer(memory.copyOf(), it) }
                     .let { amps ->
                         generateSequence (0) {
                             val signal = amps.fold(it) { input, amp -> amp.run(input) }
-                            if (amps.none { amp -> amp.exited }) signal else null
+                            if (amps.all { amp -> amp.running }) signal else null
                         }.last()
                     }
             }
