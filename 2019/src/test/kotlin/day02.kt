@@ -5,24 +5,24 @@ class Day02 {
 
     @Test
     fun runPart01() {
-        val program = Util.getInputAsListOfInt("day02-input.txt", ",")
+        val memory = Util.getInputAsListOfInt("day02-input.txt", ",")
 
-        val value = IntCodeComputer(program.toTypedArray())
+        val positionZero = IntCodeComputer(memory.toTypedArray())
             .apply { noun = 12; verb = 2 }
             .also { it.runUntilExit() }
             .positionZero
 
-        assertEquals (5866663, value)
+        assertEquals (5866663, positionZero)
     }
 
     @Test
     fun runPart02() {
-        val program = Util.getInputAsListOfInt("day02-input.txt", ",")
+        val memory = Util.getInputAsListOfInt("day02-input.txt", ",")
 
         val nounVerb = (0..99)
             .crossJoin()
             .first {
-                IntCodeComputer(program.toTypedArray())
+                IntCodeComputer(memory.toTypedArray())
                     .apply { noun = it.first; verb = it.second }
                     .also { it.runUntilExit() }
                     .positionZero == 19690720
