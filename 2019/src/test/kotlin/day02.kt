@@ -9,7 +9,7 @@ class Day02 {
 
         val value = IntCodeComputer(program.toTypedArray())
             .apply { noun = 12; verb = 2 }
-            .also { it.run() }
+            .also { it.runUntilExit() }
             .positionZero
 
         assertEquals (5866663, value)
@@ -24,7 +24,7 @@ class Day02 {
             .first {
                 IntCodeComputer(program.toTypedArray())
                     .apply { noun = it.first; verb = it.second }
-                    .also { it.run() }
+                    .also { it.runUntilExit() }
                     .positionZero == 19690720
             }
             .let { it.first * 100 + it.second }

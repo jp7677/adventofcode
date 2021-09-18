@@ -46,6 +46,11 @@ class IntCodeComputer(private var mem: Array<Int>, private val phase: Int? = nul
         }
     }
 
+    fun runUntilExit(input: Int = 0) = generateSequence(input) {
+        val signal = run(it)
+        if (running) signal else null
+    }.toList()
+
     private fun Int.toInstruction() = toString()
         .padStart(5, '0')
         .map { it.toString().toInt() }
