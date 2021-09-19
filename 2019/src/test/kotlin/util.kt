@@ -12,6 +12,12 @@ class Util {
     }
 }
 
+fun String.replaceMultiple(vararg pairs: Pair<String, String>): String {
+    var result = this
+    pairs.forEach { (from, to) -> result = result.replace(from, to) }
+    return result
+}
+
 fun <V> List<V>.permutations(): List<List<V>> {
     val listOfPermutations: MutableList<List<V>> = mutableListOf()
 
