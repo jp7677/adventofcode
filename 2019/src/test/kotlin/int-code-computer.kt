@@ -1,31 +1,25 @@
 class IntCodeComputer(private var mem: LongArray, private val phase: Long? = null) {
-    private enum class Mode(val code: Int) { POSITION(0), IMMEDIATE(1), RELATIVE(2) }
     private enum class Op(val code: Int) {
-        ADD(1), MUL(2), IN(3), OUT(4),
-        JNZ(5), JZ(6), SETL(7), SETE(8),
-        STD(9), ESC(99) }
+        ADD(1), MUL(2), IN(3), OUT(4), JNZ(5), JZ(6), SETL(7), SETE(8), STD(9),
+        ESC(99)
+    }
+    private enum class Mode(val code: Int) { POSITION(0), IMMEDIATE(1), RELATIVE(2) }
     private class Instruction(val op: Op, val param1Mode: Mode, val param2Mode: Mode, val param3Mode: Mode)
     private var phaseSet = false
     private var idx = 0
     private var relativeBase = 0L
 
-    init {
-        mem += LongArray(Short.MAX_VALUE.toInt())
-    }
-
-    var running = false; private set
-    var noun get() = mem[1]; set(value) { mem[1] = value}
-    var verb get() = mem[2]; set(value) { mem[2] = value}
+    var noun get() = mem[1]; set(value) { mem[1] = value }
+    var verb get() = mem[2]; set(value) { mem[2] = value }
     val positionZero get() = mem.first()
 
     @Suppress("NON_EXHAUSTIVE_WHEN")
-    fun run(input: Long = 0): Long {
+    fun run(input: Long = 0): Long? {
         var output = 0L
-        running = true
         while (true) {
             val instr = mem[idx].toInstruction()
             when (instr.op) {
-                Op.ESC -> running = false
+                Op.ESC -> return null
                 else -> {
                     val param1Idx = getParamIndex(instr.param1Mode, 1)
                     when (instr.op) {
@@ -39,6 +33,7 @@ class IntCodeComputer(private var mem: LongArray, private val phase: Long? = nul
                                 Op.JZ  -> idx = if (mem[param1Idx] == 0L) mem[param2Index].toInt() else idx + 3
                                 else -> {
                                     val param3Index = getParamIndex(instr.param3Mode, 3)
+                                    if (param3Index >= mem.size) mem += LongArray(param3Index - mem.size + 1)
                                     when (instr.op) {
                                         Op.ADD  -> mem[param3Index] = mem[param1Idx] + mem[param2Index]
                                         Op.MUL  -> mem[param3Index] = mem[param1Idx] * mem[param2Index]
@@ -58,16 +53,12 @@ class IntCodeComputer(private var mem: LongArray, private val phase: Long? = nul
                 else                             -> 0
             }
 
-            when (instr.op) {
-                Op.ESC, Op.OUT -> return output
-            }
+            if (instr.op == Op.OUT) return output
         }
     }
 
-    fun runUntilExit(input: Long = 0) = generateSequence(input) {
-        val signal = run(it)
-        if (running) signal else null
-    }.toList().drop(1)
+    fun runUntilExit(input: Long = 0) = generateSequence(input) { run(it) }
+        .toList().drop(1)
 
     private fun Long.toInstruction() = toString()
         .padStart(5, '0')
