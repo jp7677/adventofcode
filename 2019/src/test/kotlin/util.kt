@@ -9,6 +9,9 @@ class Util {
 
         fun getInputAsListOfInt(name: String, separator: String = System.lineSeparator()) =
             getInputAsListOfString(name, separator).map(String::toInt)
+
+        fun getInputAsListOfLong(name: String, separator: String = System.lineSeparator()) =
+            getInputAsListOfString(name, separator).map(String::toLong)
     }
 }
 

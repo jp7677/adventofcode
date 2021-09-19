@@ -1,9 +1,17 @@
-class IntCodeComputer(private var mem: Array<Int>, private val phase: Int? = null) {
-    private enum class Mode { POSITION, IMMEDIATE }
-    private enum class Op(val code: Int) { ADD(1), MUL(2), IN(3), OUT(4), JNZ(5), JZ(6), SETL(7), SETE(8), ESC(99) }
-    private class Instruction(val op: Op, val param1Mode: Mode, val param2Mode: Mode)
+class IntCodeComputer(private var mem: LongArray, private val phase: Long? = null) {
+    private enum class Mode(val code: Int) { POSITION(0), IMMEDIATE(1), RELATIVE(2) }
+    private enum class Op(val code: Int) {
+        ADD(1), MUL(2), IN(3), OUT(4),
+        JNZ(5), JZ(6), SETL(7), SETE(8),
+        STD(9), ESC(99) }
+    private class Instruction(val op: Op, val param1Mode: Mode, val param2Mode: Mode, val param3Mode: Mode)
     private var phaseSet = false
     private var idx = 0
+    private var relativeBase = 0L
+
+    init {
+        mem += LongArray(Short.MAX_VALUE.toInt())
+    }
 
     var running = false; private set
     var noun get() = mem[1]; set(value) { mem[1] = value}
@@ -11,32 +19,42 @@ class IntCodeComputer(private var mem: Array<Int>, private val phase: Int? = nul
     val positionZero get() = mem.first()
 
     @Suppress("NON_EXHAUSTIVE_WHEN")
-    fun run(input: Int = 0): Int {
+    fun run(input: Long = 0): Long {
+        var output = 0L
         running = true
-        var output = input
         while (true) {
             val instr = mem[idx].toInstruction()
             when (instr.op) {
                 Op.ESC -> running = false
-                Op.OUT -> output = mem[mem[idx + 1]]
-                Op.IN  -> mem[mem[idx + 1]] = if (phase != null && !phaseSet) phase.also { phaseSet = true } else input
                 else -> {
-                    val param1Value = if (instr.param1Mode == Mode.POSITION) mem[mem[idx + 1]] else mem[idx + 1]
-                    val param2Value = if (instr.param2Mode == Mode.POSITION) mem[mem[idx + 2]] else mem[idx + 2]
+                    val param1Idx = getParamIndex(instr.param1Mode, 1)
                     when (instr.op) {
-                        Op.ADD  -> mem[mem[idx + 3]] = param1Value + param2Value
-                        Op.MUL  -> mem[mem[idx + 3]] = param1Value * param2Value
-                        Op.SETL -> mem[mem[idx + 3]] = if (param1Value < param2Value) 1 else 0
-                        Op.SETE -> mem[mem[idx + 3]] = if (param1Value == param2Value) 1 else 0
-                        Op.JNZ  -> idx = if (param1Value != 0) param2Value else idx + 3
-                        Op.JZ   -> idx = if (param1Value == 0) param2Value else idx + 3
+                        Op.IN  -> mem[param1Idx] = if (phase != null && !phaseSet) phase.also { phaseSet = true } else input
+                        Op.OUT -> output = mem[param1Idx]
+                        Op.STD -> relativeBase += mem[param1Idx]
+                        else -> {
+                            val param2Index = getParamIndex(instr.param2Mode, 2)
+                            when (instr.op) {
+                                Op.JNZ -> idx = if (mem[param1Idx] != 0L) mem[param2Index].toInt() else idx + 3
+                                Op.JZ  -> idx = if (mem[param1Idx] == 0L) mem[param2Index].toInt() else idx + 3
+                                else -> {
+                                    val param3Index = getParamIndex(instr.param3Mode, 3)
+                                    when (instr.op) {
+                                        Op.ADD  -> mem[param3Index] = mem[param1Idx] + mem[param2Index]
+                                        Op.MUL  -> mem[param3Index] = mem[param1Idx] * mem[param2Index]
+                                        Op.SETL -> mem[param3Index] = if (mem[param1Idx] < mem[param2Index]) 1 else 0
+                                        Op.SETE -> mem[param3Index] = if (mem[param1Idx] == mem[param2Index]) 1 else 0
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
 
             idx += when (instr.op) {
+                Op.IN, Op.OUT, Op.STD            -> 2
                 Op.ADD, Op.MUL, Op.SETL, Op.SETE -> 4
-                Op.IN, Op.OUT                    -> 2
                 else                             -> 0
             }
 
@@ -46,19 +64,27 @@ class IntCodeComputer(private var mem: Array<Int>, private val phase: Int? = nul
         }
     }
 
-    fun runUntilExit(input: Int = 0) = generateSequence(input) {
+    fun runUntilExit(input: Long = 0) = generateSequence(input) {
         val signal = run(it)
         if (running) signal else null
-    }.toList()
+    }.toList().drop(1)
 
-    private fun Int.toInstruction() = toString()
+    private fun Long.toInstruction() = toString()
         .padStart(5, '0')
         .map { it.toString().toInt() }
         .let { digits ->
             Instruction(
                 Op.values().single { it.code == "${digits[3]}${digits[4]}".toInt() },
-                if (digits[2] == 0) Mode.POSITION else Mode.IMMEDIATE,
-                if (digits[1] == 0) Mode.POSITION else Mode.IMMEDIATE
+                Mode.values().single { it.code == digits[2] },
+                Mode.values().single { it.code == digits[1] },
+                Mode.values().single { it.code == digits[0] }
             )
+        }
+
+    private fun getParamIndex(mode: Mode, offset: Int) =
+        when (mode) {
+            Mode.POSITION  -> mem[idx + offset].toInt()
+            Mode.IMMEDIATE -> idx + offset
+            Mode.RELATIVE  -> (mem[idx + offset] + relativeBase).toInt()
         }
 }
