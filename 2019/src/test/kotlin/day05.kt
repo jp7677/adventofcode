@@ -5,7 +5,7 @@ class Day05 {
 
     @Test
     fun runPart01() {
-        val memory = Util.getInputAsListOfInt("day05-input.txt", ",").toTypedArray()
+        val memory = Util.getInputAsListOfLong("day05-input.txt", ",").toLongArray()
 
         val output = IntCodeComputer(memory).runUntilExit(1).last()
 
@@ -14,7 +14,7 @@ class Day05 {
 
     @Test
     fun runPart02() {
-        val memory = Util.getInputAsListOfInt("day05-input.txt", ",").toTypedArray()
+        val memory = Util.getInputAsListOfLong("day05-input.txt", ",").toLongArray()
 
         val output = IntCodeComputer(memory).runUntilExit(5).last()
 
