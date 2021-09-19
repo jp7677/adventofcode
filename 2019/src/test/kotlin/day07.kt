@@ -10,7 +10,7 @@ class Day07 {
         val signal = listOf(0L, 1L, 2L, 3L , 4L)
             .permutations()
             .maxOf {
-                it.fold(0L) { input, phase -> IntCodeComputer(memory, phase).run(input) }
+                it.fold(0L) { input, phase -> IntCodeComputer(memory, phase).run(input) ?: throw IllegalStateException() }
             }
 
         assertEquals (18812, signal)
@@ -26,9 +26,8 @@ class Day07 {
                 phases
                     .map { IntCodeComputer(memory.copyOf(), it) }
                     .let { amps ->
-                        generateSequence (0L) {
-                            val signal = amps.fold(it) { input, amp -> amp.run(input) }
-                            if (amps.all { amp -> amp.running }) signal else null
+                        generateSequence(0L) {
+                            amps.fold(it as? Long) { input, amp -> if (input != null) amp.run(input) else amp.run() }
                         }.last()
                     }
             }
