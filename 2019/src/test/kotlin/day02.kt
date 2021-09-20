@@ -5,11 +5,11 @@ class Day02 {
 
     @Test
     fun runPart01() {
-        val memory = Util.getInputAsListOfLong("day02-input.txt", ",")
+        val program = Util.getInputAsListOfLong("day02-input.txt", ",")
 
-        val positionZero = IntCodeComputer(memory.toLongArray())
+        val positionZero = IntCodeComputer(program.toLongArray())
             .apply { noun = 12; verb = 2 }
-            .also { it.runUntilExit() }
+            .also { it.run() }
             .positionZero
 
         assertEquals (5866663, positionZero)
@@ -17,14 +17,14 @@ class Day02 {
 
     @Test
     fun runPart02() {
-        val memory = Util.getInputAsListOfLong("day02-input.txt", ",")
+        val program = Util.getInputAsListOfLong("day02-input.txt", ",")
 
         val nounVerb = (0L..99L)
             .crossJoin()
             .first {
-                IntCodeComputer(memory.toLongArray())
+                IntCodeComputer(program.toLongArray())
                     .apply { noun = it.first; verb = it.second }
-                    .also { it.runUntilExit() }
+                    .also { it.run() }
                     .positionZero == 19690720L
             }
             .let { it.first * 100 + it.second }
