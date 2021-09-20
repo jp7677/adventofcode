@@ -15,7 +15,7 @@ class IntCodeComputer(private var mem: LongArray, private val phase: Long? = nul
     val positionZero get() = mem.first()
 
     fun run(input: Long = 0) = generateSequence(input) { runWithBreakOnOutput(it) }
-        .toList().drop(1) // drop seed from generateSequence
+        .toList().drop(1) // drop seed
 
     fun runWithBreakOnOutput(input: Long = 0): Long? {
         while (true) {
