@@ -1,36 +1,19 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-plugins {
-    kotlin("jvm") version "1.5.30"
-    id("com.adarshr.test-logger") version "3.0.0"
-    application
-}
-
 group = "me.jp7677"
 version = "0.1-SNAPSHOT"
 
-repositories {
-    mavenCentral()
+plugins {
+    application
+    kotlin("jvm") version "1.5.31"
+    id("com.adarshr.test-logger") version "3.0.0"
 }
 
+repositories { mavenCentral() }
 dependencies {
-    testImplementation(kotlin("test"))
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.31")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
+tasks.test { useJUnitPlatform() }
+tasks.compileKotlin { kotlinOptions.jvmTarget = "11" }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
-}
-
-application {
-    mainClass.set("MainKt")
-}
-
-tasks.jar {
-    manifest {
-        attributes["Main-Class"] = "MainKt"
-    }
-}
+application { mainClass.set("MainKt") }
+tasks.jar { manifest { attributes["Main-Class"] = "MainKt" } }
