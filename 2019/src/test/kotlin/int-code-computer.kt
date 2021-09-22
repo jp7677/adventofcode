@@ -1,4 +1,4 @@
-import java.lang.IllegalStateException
+import kotlin.IllegalStateException
 
 class IntCodeComputer(private var mem: LongArray, private val phase: Long? = null) {
     private enum class Op(val code: Int) {
