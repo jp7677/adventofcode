@@ -12,8 +12,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.31")
 }
 
-tasks.test { useJUnitPlatform() }
-tasks.compileKotlin { kotlinOptions.jvmTarget = "11" }
-
 application { mainClass.set("MainKt") }
 tasks.jar { manifest { attributes["Main-Class"] = "MainKt" } }
+tasks.compileKotlin { kotlinOptions.jvmTarget = "11" }
+tasks.test { useJUnitPlatform() }
