@@ -1,5 +1,5 @@
-import org.junit.jupiter.api.Test
-import java.lang.IllegalStateException
+import kotlin.IllegalStateException
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day08 {

@@ -1,6 +1,6 @@
-import java.lang.IllegalArgumentException
+import kotlin.IllegalArgumentException
 import kotlin.math.absoluteValue
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day03 {
