@@ -1,4 +1,4 @@
-# Advent of Code 2019 Koltin
+# Advent of Code 2019 Kotlin
 
 From <https://adventofcode.com/2019>. Better late than never ;)
 
