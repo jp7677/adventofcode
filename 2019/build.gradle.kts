@@ -13,6 +13,7 @@ dependencies {
 }
 
 application { mainClass.set("MainKt") }
+testlogger { theme = com.adarshr.gradle.testlogger.theme.ThemeType.PLAIN }
 tasks.jar { manifest { attributes["Main-Class"] = "MainKt" } }
 tasks.compileKotlin { kotlinOptions.jvmTarget = "11" }
 tasks.compileTestKotlin { kotlinOptions.jvmTarget = "11" }
