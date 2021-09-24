@@ -23,24 +23,19 @@ class Day10 {
     }
 
     private fun isVisible(asteroid: Pair<Int, Int>, other: Pair<Int, Int>, coords: List<Pair<Int, Int>>) =
-        (getPointsBetween(asteroid, other) intersect coords).isEmpty()
+        (positionsBetween(asteroid, other) intersect coords).isEmpty()
 
-    private fun getPointsBetween(p: Pair<Int, Int>, q: Pair<Int, Int>) =
-        if (q.first > p.first)
-            plotRange(p.first + 1 until q.first, p, q)
-        else if (q.first < p.first)
-            plotRange(q.first + 1 until p.first, q, p)
+    private fun positionsBetween(p: Pair<Int, Int>, q: Pair<Int, Int>) =
+        if (q.first != p.first)
+            (p.first towards q.first)
+                .trim(1)
+                .map { Pair(it, getY(it.toDouble(), p, q)) }
+                .filter { it.second.isWholeNumber() }
+                .map { Pair(it.first, it.second.toInt()) }
         else
-            if (p.second < q.second)
-                (p.second + 1 until q.second).map { Pair(p.first, it) }
-            else
-                (q.second + 1 until p.second).map { Pair(p.first, it) }
-
-    private fun plotRange(rangeX: Iterable<Int>, p: Pair<Int, Int>, q: Pair<Int, Int>) =
-        rangeX
-            .map { Pair(it, getY(it.toDouble(), p, q)) }
-            .filter { it.second - it.second.toInt() == 0.0 }
-            .map { Pair(it.first, it.second.toInt()) }
+            (p.second towards q.second)
+                .trim(1)
+                .map { Pair(p.first, it) }
 
     private fun getY(x: Double, p: Pair<Int,Int>, q: Pair<Int,Int>) =
         p.second + (x - p.first) / (q.first - p.first) * (q.second - p.second)

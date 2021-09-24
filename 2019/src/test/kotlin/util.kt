@@ -21,6 +21,12 @@ fun String.replaceMultiple(vararg pairs: Pair<String, String>): String {
     return result
 }
 
+fun Double.isWholeNumber() = this.compareTo(this.toInt()) == 0
+
+infix fun Int.towards(to: Int) = IntProgression.fromClosedRange(this, to, if (this > to) -1 else 1)
+
+fun <T> Iterable<T>.trim(n: Int): List<T> = this.drop(n).dropLast(n)
+
 fun <V> List<V>.permutations(): List<List<V>> {
     val listOfPermutations: MutableList<List<V>> = mutableListOf()
 
