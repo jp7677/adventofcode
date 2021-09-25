@@ -1,3 +1,4 @@
+import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -61,7 +62,7 @@ class Day10 {
         }
 
     private fun Coord.angleTo(other: Coord) =
-        Math.toDegrees(kotlin.math.atan2((other.y - this.y).toDouble(), (other.x - this.x).toDouble()))
+        Math.toDegrees(atan2((other.y - this.y).toDouble(), (other.x - this.x).toDouble()))
             .plus(90)
             .let { if (it < 0) it + 360 else it }
 
