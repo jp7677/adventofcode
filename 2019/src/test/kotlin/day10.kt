@@ -29,7 +29,7 @@ class Day10 {
         if (q.first != p.first)
             (p.first towards q.first)
                 .trim(1)
-                .map { Pair(it, getY(it.toDouble(), p, q)) }
+                .map { Pair(it, solveLinearEquationFromTwoPoints(it.toDouble(), p, q)) }
                 .filter { it.second.isWholeNumber() }
                 .map { Pair(it.first, it.second.toInt()) }
         else
@@ -37,6 +37,6 @@ class Day10 {
                 .trim(1)
                 .map { Pair(p.first, it) }
 
-    private fun getY(x: Double, p: Pair<Int,Int>, q: Pair<Int,Int>) =
+    private fun solveLinearEquationFromTwoPoints(x: Double, p: Pair<Int,Int>, q: Pair<Int,Int>) =
         p.second + (x - p.first) / (q.first - p.first) * (q.second - p.second)
 }
