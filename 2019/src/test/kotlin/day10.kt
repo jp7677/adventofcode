@@ -1,10 +1,9 @@
+import kotlin.math.hypot
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day10 {
-    data class Coord(val x: Double, val y: Double) {
-        constructor(x: Int, y: Int): this(x.toDouble(), y.toDouble())
-    }
+    data class Coord(val x: Int, val y: Int)
 
     @Test
     fun runPart01() {
@@ -13,7 +12,8 @@ class Day10 {
         val detected = coords.maxOf {
             coords
                 .filter { other -> it != other }
-                .count { other -> it.isVisibleFor(other, coords) }
+                .groupBy { other -> it.angleTo(other) }
+                .count()
         }
 
         assertEquals(274, detected)
@@ -26,7 +26,8 @@ class Day10 {
         val laser = coords.maxByOrNull {
             coords
                 .filter { other -> it != other }
-                .count { other -> it.isVisibleFor(other, coords) }
+                .groupBy { other -> it.angleTo(other) }
+                .count()
         } ?: throw IllegalStateException()
 
         val asteroids = coords
@@ -55,21 +56,14 @@ class Day10 {
         .map { Coord(it.first, it.second) }
 
     private fun Coord.isVisibleFor(other: Coord, coords: List<Coord>) =
-        (this.pathTo(other).trim() intersect coords).isEmpty()
+        coords.none {
+            other.angleTo(this) == other.angleTo(it) && other.distanceTo(it) < other.distanceTo(this)
+        }
 
-    private fun Coord.pathTo(other: Coord) =
-        if (this.x != other.x)
-            (this.x towards other.x)
-                .map { Coord(it, solveLinearEquationFromTwoPoints(it, this, other)) }
-                .filter { it.y.isWholeNumber() }
-        else
-            (this.y towards other.y).map { Coord(this.x, it) }
-
-    private fun solveLinearEquationFromTwoPoints(x: Double, p: Coord, q: Coord) =
-        p.y + (x - p.x) / (q.x - p.x) * (q.y - p.y)
-
-    private fun Coord.angleTo(asteroid: Coord) =
-        Math.toDegrees(kotlin.math.atan2(asteroid.y - this.y, asteroid.x - this.x))
+    private fun Coord.angleTo(other: Coord) =
+        Math.toDegrees(kotlin.math.atan2((other.y - this.y).toDouble(), (other.x - this.x).toDouble()))
             .plus(90)
             .let { if (it < 0) it + 360 else it }
+
+    private fun Coord.distanceTo(other: Coord) = hypot((this.x - other.x).toDouble(), (this.y - other.y).toDouble())
 }
