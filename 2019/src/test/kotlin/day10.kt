@@ -2,41 +2,37 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day10 {
+    data class Coord(val x: Double, val y: Double) {
+        constructor(x: Int, y: Int): this(x.toDouble(), y.toDouble())
+    }
 
     @Test
     fun runPart01() {
-        val map = Util.getInputAsListOfString("day10-input.txt")
-
-        val coords = map
+        val coords = Util.getInputAsListOfString("day10-input.txt")
             .flatMapIndexed { indexY, line -> line.mapIndexed { indexX, char -> Triple(indexX, indexY, char) } }
             .filter { it.third == '#' }
-            .map { Pair(it.first, it.second) }
+            .map { Coord(it.first, it.second) }
 
-        val detected = coords
-            .maxOf {
-                coords
-                    .filter { c -> c != it }
-                    .count{ other -> isVisible(it, other, coords) }
-            }
+        val detected = coords.maxOf {
+            coords
+                .filter { other -> it != other }
+                .count { other -> it.isVisibleFor(other, coords) }
+        }
 
         assertEquals(274, detected)
     }
 
-    private fun isVisible(asteroid: Pair<Int, Int>, other: Pair<Int, Int>, coords: List<Pair<Int, Int>>) =
-        (positionsBetween(asteroid, other) intersect coords).isEmpty()
+    private fun Coord.isVisibleFor(other: Coord, coords: List<Coord>) =
+        (this.pathTo(other).trim() intersect coords).isEmpty()
 
-    private fun positionsBetween(p: Pair<Int, Int>, q: Pair<Int, Int>) =
-        if (q.first != p.first)
-            (p.first towards q.first)
-                .trim(1)
-                .map { Pair(it, solveLinearEquationFromTwoPoints(it.toDouble(), p, q)) }
-                .filter { it.second.isWholeNumber() }
-                .map { Pair(it.first, it.second.toInt()) }
+    private fun Coord.pathTo(other: Coord) =
+        if (this.x != other.x)
+            (this.x towards other.x)
+                .map { Coord(it, solveLinearEquationFromTwoPoints(it, this, other)) }
+                .filter { it.y.isWholeNumber() }
         else
-            (p.second towards q.second)
-                .trim(1)
-                .map { Pair(p.first, it) }
+            (this.y towards other.y).map { Coord(this.x, it) }
 
-    private fun solveLinearEquationFromTwoPoints(x: Double, p: Pair<Int,Int>, q: Pair<Int,Int>) =
-        p.second + (x - p.first) / (q.first - p.first) * (q.second - p.second)
+    private fun solveLinearEquationFromTwoPoints(x: Double, p: Coord, q: Coord) =
+        p.y + (x - p.x) / (q.x - p.x) * (q.y - p.y)
 }
