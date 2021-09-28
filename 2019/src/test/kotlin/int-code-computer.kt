@@ -24,23 +24,25 @@ class IntCodeComputer(private var mem: LongArray, private val phase: Long? = nul
                 Op.ESC -> return null
                 else -> {
                     val param1Idx = readParamIndex(instr.param1Mode)
+                    if (param1Idx >= mem.size) mem += LongArray(param1Idx - mem.size + 1)
                     when (instr.op) {
                         Op.OUT -> return mem[param1Idx]
                         Op.STD -> relativeBase += mem[param1Idx]
                         Op.IN  -> mem[param1Idx] = if (phase != null && !phaseSet) phase.also { phaseSet = true } else input
                         else -> {
-                            val param2Index = readParamIndex(instr.param2Mode)
+                            val param2Idx = readParamIndex(instr.param2Mode)
+                            if (param2Idx >= mem.size) mem += LongArray(param2Idx - mem.size + 1)
                             when (instr.op) {
-                                Op.JNZ -> if (mem[param1Idx] != 0L) idx = mem[param2Index].toInt()
-                                Op.JZ  -> if (mem[param1Idx] == 0L) idx = mem[param2Index].toInt()
+                                Op.JNZ -> if (mem[param1Idx] != 0L) idx = mem[param2Idx].toInt()
+                                Op.JZ  -> if (mem[param1Idx] == 0L) idx = mem[param2Idx].toInt()
                                 else -> {
-                                    val param3Index = readParamIndex(instr.param3Mode)
-                                    if (param3Index >= mem.size) mem += LongArray(param3Index - mem.size + 1)
+                                    val param3Idx = readParamIndex(instr.param3Mode)
+                                    if (param3Idx >= mem.size) mem += LongArray(param3Idx - mem.size + 1)
                                     when (instr.op) {
-                                        Op.ADD  -> mem[param3Index] = mem[param1Idx] + mem[param2Index]
-                                        Op.MUL  -> mem[param3Index] = mem[param1Idx] * mem[param2Index]
-                                        Op.SETL -> mem[param3Index] = if (mem[param1Idx] < mem[param2Index]) 1 else 0
-                                        Op.SETE -> mem[param3Index] = if (mem[param1Idx] == mem[param2Index]) 1 else 0
+                                        Op.ADD  -> mem[param3Idx] = mem[param1Idx] + mem[param2Idx]
+                                        Op.MUL  -> mem[param3Idx] = mem[param1Idx] * mem[param2Idx]
+                                        Op.SETL -> mem[param3Idx] = if (mem[param1Idx] < mem[param2Idx]) 1 else 0
+                                        Op.SETE -> mem[param3Idx] = if (mem[param1Idx] == mem[param2Idx]) 1 else 0
                                         else -> throw IllegalStateException()
                                     }
                                 }
