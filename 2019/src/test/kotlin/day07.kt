@@ -11,7 +11,7 @@ class Day07 {
             .permutations()
             .maxOf {
                 it.fold(0L) { input, phase ->
-                    IntCodeComputer(program, phase).runWithBreakOnOutput(input) ?: throw IllegalStateException()
+                    IntCodeComputer(program, phase).run(input) ?: throw IllegalStateException()
                 }
             }
 
@@ -30,7 +30,7 @@ class Day07 {
                     .let { amps ->
                         generateSequence(0L) {
                             amps.fold(it as? Long) { input, amp ->
-                                if (input != null) amp.runWithBreakOnOutput(input) else amp.runWithBreakOnOutput()
+                                if (input != null) amp.run(input) else amp.run()
                             }
                         }.last()
                     }
