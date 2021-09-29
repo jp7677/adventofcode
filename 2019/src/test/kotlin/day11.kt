@@ -7,8 +7,9 @@ class Day11 {
 
     @Test
     fun runPart01() {
-        val result = getPaintedPanels()
-            .groupBy { Pair(it.x, it.y) }
+        val program = Util.getInputAsListOfLong("day11-input.txt", ",").toLongArray()
+
+        val result = getPanels(IntCodeComputer(program))
             .count()
 
         assertEquals(2041, result)
@@ -16,13 +17,13 @@ class Day11 {
 
     @Test
     fun runPart02() {
-        val panels = getPaintedPanels(1)
+        val program = Util.getInputAsListOfLong("day11-input.txt", ",").toLongArray()
+
+        val panels = getPanels(IntCodeComputer(program),1)
         val minX = panels.minOf { it.x }
         val maxX = panels.maxOf { it.x }
 
         val id = panels
-            .groupBy { Pair(it.x, it.y) }
-            .map { it.value.last() }
             .filter { it.color == 1L }
             .groupBy { it.y }
             .toSortedMap()
@@ -42,44 +43,45 @@ class Day11 {
         assertEquals(" #### #  # #### #    #  # #### #### #  #  ", id[5])
     }
 
-    private fun getPaintedPanels(initialPanelColor: Long = 0L): List<Panel> {
-        val program = Util.getInputAsListOfLong("day11-input.txt", ",").toLongArray()
-        val brain = IntCodeComputer(program)
+    private fun getPanels(robot: IntCodeComputer, initialPanelColor: Long = 0L) =
+        mutableListOf(Panel(0, 0, initialPanelColor))
+            .also {
+                var direction = Direction.UP
+                while (true) {
+                    it.last().color = robot.runWithBreakOnOutput(it.last().color) ?: break
+                    direction = turn(direction, robot.runWithBreakOnOutput() ?: throw IllegalStateException())
 
-        var direction = Direction.UP
-        val painted = mutableListOf(Panel(0, 0, initialPanelColor))
-        while (true) {
-            painted.last().color = brain.runWithBreakOnOutput(painted.last().color) ?: break
-            val turn = brain.runWithBreakOnOutput() ?: throw IllegalStateException()
-
-            direction = when (direction) {
-                Direction.UP -> if (turn == 0L) Direction.LEFT else Direction.RIGHT
-                Direction.RIGHT -> if (turn == 0L) Direction.UP else Direction.DOWN
-                Direction.DOWN -> if (turn == 0L) Direction.RIGHT else Direction.LEFT
-                Direction.LEFT -> if (turn == 0L) Direction.DOWN else Direction.UP
+                    val nextX = getNextX(direction, it.last().x)
+                    val nextY = getNextY(direction, it.last().y)
+                    val nextColor = it.findLast { p -> p.x == nextX && p.y == nextY }?.color ?: 0
+                    it.add(Panel(nextX, nextY, nextColor))
+                }
             }
+            .dropLast(1)
+            .groupBy { Pair(it.x, it.y) }
+            .map { it.value.last() }
 
-            val nextX = when (direction) {
-                Direction.RIGHT -> painted.last().x + 1
-                Direction.LEFT -> painted.last().x - 1
-                Direction.UP,
-                Direction.DOWN -> painted.last().x
-            }
-
-            val nextY = when (direction) {
-                Direction.UP -> painted.last().y + 1
-                Direction.DOWN -> painted.last().y - 1
-                Direction.RIGHT,
-                Direction.LEFT -> painted.last().y
-            }
-
-            val nextColor = painted.findLast { p -> p.x == nextX && p.y == nextY }
-                ?.color
-                ?: 0
-
-            painted.add(Panel(nextX, nextY, nextColor))
+    private fun turn(currentDirection: Direction, turn: Long) =
+        when (currentDirection) {
+            Direction.UP    -> if (turn == 0L) Direction.LEFT  else Direction.RIGHT
+            Direction.RIGHT -> if (turn == 0L) Direction.UP    else Direction.DOWN
+            Direction.DOWN  -> if (turn == 0L) Direction.RIGHT else Direction.LEFT
+            Direction.LEFT  -> if (turn == 0L) Direction.DOWN  else Direction.UP
         }
 
-        return painted.dropLast(1)
-    }
+    private fun getNextX(direction: Direction, currentX: Int) =
+        when (direction) {
+            Direction.RIGHT -> currentX + 1
+            Direction.LEFT  -> currentX - 1
+            Direction.UP,
+            Direction.DOWN  -> currentX
+        }
+
+    private fun getNextY(direction: Direction, currentY: Int) =
+        when (direction) {
+            Direction.UP    -> currentY + 1
+            Direction.DOWN  -> currentY - 1
+            Direction.RIGHT,
+            Direction.LEFT  -> currentY
+        }
 }
