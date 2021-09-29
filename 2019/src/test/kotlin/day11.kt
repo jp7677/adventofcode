@@ -48,8 +48,8 @@ class Day11 {
             .also {
                 var direction = Direction.UP
                 while (true) {
-                    it.last().color = robot.runWithBreakOnOutput(it.last().color) ?: break
-                    direction = turn(direction, robot.runWithBreakOnOutput() ?: throw IllegalStateException())
+                    it.last().color = robot.run(it.last().color) ?: break
+                    direction = turn(direction, robot.run() ?: throw IllegalStateException())
 
                     val nextX = getNextX(direction, it.last().x)
                     val nextY = getNextY(direction, it.last().y)

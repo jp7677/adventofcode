@@ -9,7 +9,7 @@ class Day02 {
 
         val positionZero = IntCodeComputer(program.toLongArray())
             .apply { noun = 12; verb = 2 }
-            .also { it.run() }
+            .also { it.runToCompletion() }
             .positionZero
 
         assertEquals (5866663, positionZero)
@@ -24,7 +24,7 @@ class Day02 {
             .first {
                 IntCodeComputer(program.toLongArray())
                     .apply { noun = it.first; verb = it.second }
-                    .also { it.run() }
+                    .also { it.runToCompletion() }
                     .positionZero == 19690720L
             }
             .let { it.first * 100 + it.second }

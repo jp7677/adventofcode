@@ -14,10 +14,10 @@ class IntCodeComputer(private var mem: LongArray, private val phase: Long? = nul
     var verb get() = mem[2]; set(value) { mem[2] = value }
     val positionZero get() = mem.first()
 
-    fun run(input: Long = 0) = generateSequence(input) { runWithBreakOnOutput(it) }
+    fun runToCompletion(input: Long = 0) = generateSequence(input) { run(it) }
         .toList().drop(1) // drop seed
 
-    fun runWithBreakOnOutput(input: Long = 0): Long? {
+    fun run(input: Long = 0): Long? {
         while (true) {
             val instr = readInstruction()
             when (instr.op) {
