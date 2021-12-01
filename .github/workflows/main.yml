@@ -37,6 +37,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'temurin'
       - name: Compile and run AoC 20221
         run: |
           cd 2021
