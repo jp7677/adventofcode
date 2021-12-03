@@ -17,8 +17,7 @@ class Day03 {
     private fun List<String>.getPowerRating(type: RateType) =
         this
             .first()
-            .indices
-            .map { this.getCriteriaFromIndex(it, type).toString() }
+            .mapIndexed { index, _ -> this.getBitFromIndex(index, type).toString() }
             .toInt()
 
     @Test
@@ -36,28 +35,32 @@ class Day03 {
 
         this
             .first()
-            .indices
-            .map { index ->
-                val criteria = filtered.getCriteriaFromIndex(index, type)
+            .forEachIndexed { index, _ ->
+                val criteria = filtered.getBitFromIndex(index, type)
                 filtered = filtered.filter { it[index] == criteria }
             }
 
         return filtered.toInt()
     }
 
-    private fun List<String>.getCriteriaFromIndex(index: Int, type: RateType): Char {
+    private fun List<String>.getBitFromIndex(index: Int, type: RateType): Char {
         val grouped = this
             .map { it[index] }
             .joinToString("")
             .groupingBy { it }
             .eachCount()
+            .entries
 
-        val criteria = if (type == RateType.GAMMA || type == RateType.OXYGEN)
-            grouped.entries.sortedByDescending { it.key }.maxByOrNull { it.value }?.key
+        return if (type == RateType.GAMMA || type == RateType.OXYGEN)
+            grouped
+                .sortedByDescending { it.key }
+                .maxByOrNull { it.value }
+                ?.key ?: throw IllegalStateException()
         else
-            grouped.entries.sortedBy { it.key }.minByOrNull { it.value }?.key
-
-        return criteria ?: throw IllegalStateException()
+            grouped
+                .sortedBy { it.key }
+                .minByOrNull { it.value }
+                ?.key ?: throw IllegalStateException()
     }
 
     private fun List<String>.toInt() = this
