@@ -47,8 +47,8 @@ class Day03 {
         .groupingBy { it }
         .eachCount()
         .entries
-        .sortedBy { if (type == RateType.EPSILON || type == RateType.CO2) it.key else it.key * -1 }
-        .maxByOrNull { if (type == RateType.GAMMA || type == RateType.OXYGEN) it.value else it.value * -1 }
+        .sortedBy { if (type == RateType.EPSILON || type == RateType.CO2) it.key else it.key.unaryMinus() }
+        .maxByOrNull { if (type == RateType.GAMMA || type == RateType.OXYGEN) it.value else it.value.unaryMinus() }
         ?.key?.digitToChar() ?: throw IllegalStateException()
 
     private fun List<String>.toInt() = this
