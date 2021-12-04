@@ -14,6 +14,25 @@ class Day04 {
 
     @Test
     fun `run part 01`() {
+        val (size, numbers, boards) = getGame()
+
+        val finishedBoards = playGame(size, numbers, boards)
+        val score = calcScore(finishedBoards.first(), numbers)
+
+        assertEquals(55770, score)
+    }
+
+    @Test
+    fun `run part 02`() {
+        val (size, numbers, boards) = getGame()
+
+        val finishedBoards = playGame(size, numbers, boards)
+        val score = calcScore(finishedBoards.last(), numbers)
+
+        assertEquals(2980, score)
+    }
+
+    private fun getGame(): Triple<Int, List<Int>, List<Board>> {
         val bingoSubSystem = Util.getInputAsListOfString("day04-input.txt")
 
         val size = bingoSubSystem[4].toRow().size
@@ -24,25 +43,32 @@ class Day04 {
             .chunked(size)
             .map { Board(it.map { s -> s.toRow() }) }
 
-        var drawnNumbers: List<Int> = listOf()
-        var winningBoard: Board? = null
+        return Triple(size, numbers, boards)
+    }
+
+    private fun playGame(size: Int, numbers: List<Int>, boards: List<Board>): MutableList<Pair<Board, Int>> {
+        val finishedBoards: MutableList<Pair<Board, Int>> = mutableListOf()
 
         (size..numbers.size)
-            .first { draw ->
-                drawnNumbers = numbers.take(draw)
+            .onEach { draw ->
+                val drawnNumbers = numbers.take(draw)
                 boards
                     .filter {
                         it.rows.any { r -> drawnNumbers.containsAll(r) }
                         || it.cols.any { r -> drawnNumbers.containsAll(r) }
                     }
-                    .onEach { winningBoard = it }
-                    .isNotEmpty()
+                    .onEach {
+                        if (finishedBoards.none { f -> f.first == it })
+                            finishedBoards.add(Pair(it, drawnNumbers.last()))
+                    }
             }
 
-        val score = winningBoard
-            ?.let { b -> b.numbers.filterNot { drawnNumbers.contains(it) }.sum() * drawnNumbers.last() }
+        return finishedBoards
+    }
 
-        assertEquals(55770, score)
+    private fun calcScore(winningBoard: Pair<Board, Int>, numbers: List<Int>): Int {
+        val drawnNumbers = numbers.takeWhile { it != winningBoard.second } + winningBoard.second
+        return winningBoard.first.numbers.filterNot { drawnNumbers.contains(it) }.sum() * winningBoard.second
     }
 
     private fun String.toNumbers() = this
