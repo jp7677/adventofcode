@@ -9,71 +9,67 @@ class Day04 {
             List(rows.first().size) { index -> rows.map { it[index] } }
         )
 
-        val numbers get() = rows.flatten()
+        val all get() = rows.flatten()
     }
 
     @Test
     fun `run part 01`() {
-        val (size, numbers, boards) = getGame()
+        val (boards, numbers) = getGame()
 
-        val finishedBoards = playGame(size, numbers, boards)
-        val score = calcScore(finishedBoards.first(), numbers)
+        val winningBoard = playGame(boards, numbers).first()
+        val score = calcScore(winningBoard, numbers)
 
         assertEquals(55770, score)
     }
 
     @Test
     fun `run part 02`() {
-        val (size, numbers, boards) = getGame()
+        val (boards, numbers) = getGame()
 
-        val finishedBoards = playGame(size, numbers, boards)
-        val score = calcScore(finishedBoards.last(), numbers)
+        val winningBoard = playGame(boards, numbers).last()
+        val score = calcScore(winningBoard, numbers)
 
         assertEquals(2980, score)
     }
 
-    private fun getGame(): Triple<Int, List<Int>, List<Board>> {
+    private fun getGame(): Pair<List<Board>, List<Int>> {
         val bingoSubSystem = Util.getInputAsListOfString("day04-input.txt")
 
-        val size = bingoSubSystem[4].toRow().size
-        val numbers = bingoSubSystem.first().toNumbers()
+        val numbers = bingoSubSystem.first()
+            .split(",")
+            .map { Integer.parseInt(it) }
+        val size = bingoSubSystem[2].toRow().size
         val boards = bingoSubSystem
             .drop(1)
             .filter { it.isNotBlank() }
             .chunked(size)
             .map { Board(it.map { s -> s.toRow() }) }
 
-        return Triple(size, numbers, boards)
+        return Pair(boards, numbers)
     }
 
-    private fun playGame(size: Int, numbers: List<Int>, boards: List<Board>): MutableList<Pair<Board, Int>> {
-        val finishedBoards: MutableList<Pair<Board, Int>> = mutableListOf()
+    private fun playGame(boards: List<Board>, numbers: List<Int>) = numbers.indices
+        .flatMap { draw ->
+            numbers
+                .take(draw)
+                .let { drawnNumbers ->
+                    boards
+                        .filter {
+                            it.rows.any { r -> drawnNumbers.containsAll(r) }
+                                || it.cols.any { c -> drawnNumbers.containsAll(c) }
+                        }
+                        .map { Pair(it, drawnNumbers.last()) }
+                }
+        }
+        .distinctBy { it.first }
 
-        (size..numbers.size)
-            .onEach { draw ->
-                val drawnNumbers = numbers.take(draw)
-                boards
-                    .filter {
-                        it.rows.any { r -> drawnNumbers.containsAll(r) }
-                        || it.cols.any { r -> drawnNumbers.containsAll(r) }
-                    }
-                    .onEach {
-                        if (finishedBoards.none { f -> f.first == it })
-                            finishedBoards.add(Pair(it, drawnNumbers.last()))
-                    }
-            }
+    private fun calcScore(winningBoard: Pair<Board, Int>, numbers: List<Int>) = winningBoard.first
+        .all
+        .filterNot { numbers.takeUntil(winningBoard.second).contains(it) }
+        .sum() * winningBoard.second
 
-        return finishedBoards
-    }
-
-    private fun calcScore(winningBoard: Pair<Board, Int>, numbers: List<Int>): Int {
-        val drawnNumbers = numbers.takeWhile { it != winningBoard.second } + winningBoard.second
-        return winningBoard.first.numbers.filterNot { drawnNumbers.contains(it) }.sum() * winningBoard.second
-    }
-
-    private fun String.toNumbers() = this
-        .split(",")
-        .map { Integer.parseInt(it) }
+    private fun List<Int>.takeUntil(last: Int): List<Int> = this
+        .takeWhile { it != last } + last
 
     private fun String.toRow() = this
         .split("\\s".toRegex())
