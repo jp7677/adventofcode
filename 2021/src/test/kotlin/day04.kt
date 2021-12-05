@@ -45,7 +45,7 @@ class Day04 {
             .chunked(size)
             .map { Board(it.map { s -> s.toRow() }) }
 
-        return Pair(boards, numbers)
+        return boards to numbers
     }
 
     private fun playGame(boards: List<Board>, numbers: List<Int>) = numbers.indices
@@ -58,7 +58,7 @@ class Day04 {
                             it.rows.any { r -> drawnNumbers.containsAll(r) }
                                 || it.cols.any { c -> drawnNumbers.containsAll(c) }
                         }
-                        .map { Pair(it, drawnNumbers.last()) }
+                        .map { it to drawnNumbers.last() }
                 }
         }
         .distinctBy { it.first }
