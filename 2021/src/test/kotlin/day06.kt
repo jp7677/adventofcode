@@ -5,43 +5,30 @@ class Day06 {
 
     @Test
     fun `run part 01`() {
-        val countOfAllFish = getPopulation()
-            .runDays(80)
-            .sum()
+        val count = runDays(80)
 
-        assertEquals(350917, countOfAllFish)
+        assertEquals(350917, count)
     }
 
     @Test
     fun `run part 02`() {
-        val countOfAllFish = getPopulation()
-            .runDays(256)
-            .sum()
+        val count = runDays(256)
 
-        assertEquals(1592918715629, countOfAllFish)
+        assertEquals(1592918715629, count)
     }
 
-    private fun getPopulation(): LongArray {
-        val ages = Util.getInputAsString("day06-input.txt")
-            .split(",").map { it.toInt() }
-            .toList()
-
-        return LongArray(9) { index -> ages.count { it == index }.toLong() }
-    }
-
-    private fun LongArray.runDays(days: Int): LongArray {
-        repeat(days) {
-            val last = this.copyOf()
-            this[8] = last[0]
-            this[7] = last[8]
-            this[6] = last[7] + last[0]
-            this[5] = last[6]
-            this[4] = last[5]
-            this[3] = last[4]
-            this[2] = last[3]
-            this[1] = last[2]
-            this[0] = last[1]
+    private fun runDays(days: Int) = Util.getInputAsString("day06-input.txt")
+        .split(",")
+        .map { it.toInt() }
+        .let { ages ->
+            LongArray(9) { index -> ages.count { it == index }.toLong() }
         }
-        return this
-    }
+        .also {
+            repeat(days) { _ ->
+                val new = it[0]
+                it.indices.onEach { index -> it[index] = if (index == 8) new else it[index + 1] }
+                it[6] += new
+            }
+        }
+        .sum()
 }
