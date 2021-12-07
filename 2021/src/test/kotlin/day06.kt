@@ -17,9 +17,7 @@ class Day06 {
         assertEquals(1592918715629, count)
     }
 
-    private fun runDays(days: Int) = Util.getInputAsString("day06-input.txt")
-        .split(",")
-        .map { it.toInt() }
+    private fun runDays(days: Int) = Util.getInputAsListOfInt("day06-input.txt", ",")
         .let { ages ->
             LongArray(9) { index -> ages.count { it == index }.toLong() }
         }
