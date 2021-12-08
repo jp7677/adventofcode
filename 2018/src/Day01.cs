@@ -33,7 +33,7 @@ namespace aoc2018
                     frequency += frequencyChange;
                     if (frequencies.Contains(frequency))
                         goto done;
-                    
+
                     frequencies.Add(frequency);
                 }
             }
