@@ -65,7 +65,7 @@ class Day09 {
         .single { it.coord.x == coord.x && it.coord.y == coord.y }
 
     private fun List<Location>.getAdjacents(current: Coord, step: Coord) =
-        this.firstOrNull { it.coord.x == current.x + step.x &&  it.coord.y == current.y + step.y}
+        this.firstOrNull { it.coord.x == current.x + step.x &&  it.coord.y == current.y + step.y }
 
     private fun getHeatmap() = Util.getInputAsListOfString("day09-input.txt")
         .map { it.map { c -> c.digitToInt() } }
