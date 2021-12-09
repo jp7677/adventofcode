@@ -2,23 +2,23 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day09 {
-    data class Move (val x: Int, val y: Int)
-    private val adjacents = listOf(Move(-1, 0), Move(1, 0), Move(0, -1), Move(0, 1))
+    data class Coord (val x: Int, val y: Int)
+    data class Location (val coord: Coord, val height: Int)
+    private val moves = listOf(Coord(-1, 0), Coord(1, 0), Coord(0, -1), Coord(0, 1))
 
     @Test
     fun `run part 01`() {
-        val heatmap = Util.getInputAsListOfString("day09-input.txt")
-            .map { it.map { c -> c.digitToInt() }.toTypedArray() }
-            .toTypedArray()
+        val heatmap = getHeatmap()
 
-        val riskLevel = heatmap.indices
-            .sumOf { y ->
-                heatmap.first().indices.sumOf { x ->
-                    val current = heatmap[y][x]
-                    if (adjacents.all {
-                        heatmap.move(x, y, it) ?.let { adjacent -> adjacent > current } != false
-                    })
-                        current + 1
+        val riskLevel = heatmap
+            .sumOf {
+                it.height.let { height ->
+                    if (moves.all { step ->
+                            heatmap
+                                .getAdjacents(it.coord, step)
+                                ?.let { adjacent -> adjacent.height > height } != false
+                        })
+                        height + 1
                     else
                         0
                 }
@@ -26,12 +26,57 @@ class Day09 {
 
         assertEquals(600, riskLevel)
     }
-}
 
-private fun Array<Array<Int>>.move(x: Int, y: Int, step: Day09.Move) =
-    if (x + step.x < 0 || x + step.x > this.first().count() - 1)
-        null
-    else if (y + step.y < 0 || y + step.y > this.count() - 1)
-        null
-    else
-        this[y + step.y][x + step.x]
+    @Test
+    fun `run part 02`() {
+        val heatmap = getHeatmap()
+        val basins = mutableListOf<List<Coord>>()
+
+        heatmap
+            .onEach {
+                if (it.height != 9 && basins.none { b -> b.contains(it.coord) })
+                    basins.add(getAdjacentLowPoints(heatmap, it.coord).map { l -> l.coord })
+            }
+
+        val result = basins
+            .sortedByDescending { it.count() }
+            .take(3)
+            .fold(1) { acc, it -> acc * it.count() }
+
+        assertEquals(987840, result)
+    }
+
+    private fun getAdjacentLowPoints(
+        heatmap: List<Location>,
+        coord: Coord,
+        visited: MutableList<Coord> = mutableListOf()
+    ): List<Location> {
+        if (visited.contains(coord) || heatmap.from(coord).height == 9)
+            return mutableListOf()
+
+        visited.add(coord)
+        return moves
+            .mapNotNull { heatmap.getAdjacents(coord, it) }
+            .flatMap { getAdjacentLowPoints(heatmap, it.coord, visited) }
+            .toMutableList() + heatmap.from(coord)
+    }
+
+    private fun List<Location>.from(coord: Coord) = this
+        .single { it.coord.x == coord.x && it.coord.y == coord.y }
+
+    private fun List<Location>.getAdjacents(current: Coord, step: Coord) =
+        this.firstOrNull { it.coord.x == current.x + step.x &&  it.coord.y == current.y + step.y}
+
+    private fun getHeatmap() = Util.getInputAsListOfString("day09-input.txt")
+        .map { it.map { c -> c.digitToInt() } }
+        .let {
+            it
+                .first()
+                .indices
+                .flatMap { x ->
+                    it.indices.map { y ->
+                        Location(Coord(x, y), it[y][x])
+                    }
+                }
+        }
+}
