@@ -71,9 +71,7 @@ class Day10 {
     private fun String.getIncomplete(): String {
         var line = this
         while (re.containsMatchIn(line)) {
-            re.findAll(line)
-                .toList()
-                .onEach { line = line.replace(it.value, "") }
+            line = re.replace(line, "")
         }
 
         return line
