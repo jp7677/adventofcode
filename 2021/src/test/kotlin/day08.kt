@@ -54,8 +54,16 @@ class Day08 {
     }
 
     private fun MutableMap<String, String>.deduceBySegmentCountOverAllDigits(patterns: List<String>) {
-        val segmentsWithUniqueCountOverAllDigits = listOf("b", "e", "f")
-        val otherSegments = listOf("a", "c", "d", "g")
+        val segmentsWithUniqueCountOverAllDigits = displays.joinToString("") { it.segments }
+            .groupingBy { it }.eachCount()
+            .toList()
+            .groupBy { it.second }
+            .filterValues { it.size == 1 }
+            .map { it.value.first().first.toString() }
+
+        val otherSegments = displays.joinToString("") { it.segments }
+            .map { it.toString() }
+            .distinct() - segmentsWithUniqueCountOverAllDigits.toSet()
 
         segmentsWithUniqueCountOverAllDigits
             .onEach { segment ->
