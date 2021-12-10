@@ -47,36 +47,37 @@ class Day10 {
         assertEquals(3969823589, middleScore)
     }
 
-    private fun String.getCorruptedClosingChar(): Char? {
-        var line = this
-        while (re.containsMatchIn(line)) {
-            re.findAll(line)
-                .firstNotNullOfOrNull {
-                    line = line.replace(it.value, "")
-                    if (!it.value.isValidPair())
-                        it.value.last()
+    private fun String.getCorruptedClosingChar(): Char? =
+        generateSequence(this) {
+            re.find(it)
+                ?.let { match ->
+                    if (match.value.isValidPair())
+                        it.replace(match.value, "")
                     else
                         null
                 }
-                ?.let { return it }
         }
-
-        return null
-    }
+            .last()
+            .let {
+                re.find(it)
+                    ?.let { match ->
+                        if (match.value.last() in listOf(')', '}', ']', '>'))
+                            match.value.last()
+                        else
+                            null
+                    }
+            }
 
     private fun String.isValidPair() = this.first().reversed() == this.last()
 
-    private fun String.getMissingClosingChars(): String {
-        var line = this
-        while (re.containsMatchIn(line)) {
-            line = re.replace(line, "")
+    private fun String.getMissingClosingChars() =
+        generateSequence(this) {
+            if (re.containsMatchIn(it)) re.replace(it, "") else null
         }
-
-        return line
+            .last()
             .reversed()
             .map { it.reversed() }
             .joinToString("")
-    }
 
     private fun Char.reversed() = when (this) {
         '(' -> ')'
