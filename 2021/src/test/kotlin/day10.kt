@@ -68,7 +68,7 @@ class Day10 {
                     }
             }
 
-    private fun String.isValidPair() = this.first().reversed() == this.last()
+    private fun String.isValidPair() = this.first().toClosingChar() == this.last()
 
     private fun String.getMissingClosingChars() =
         generateSequence(this) {
@@ -76,10 +76,10 @@ class Day10 {
         }
             .last()
             .reversed()
-            .map { it.reversed() }
+            .map { it.toClosingChar() }
             .joinToString("")
 
-    private fun Char.reversed() = when (this) {
+    private fun Char.toClosingChar() = when (this) {
         '(' -> ')'
         '[' -> ']'
         '{' -> '}'
