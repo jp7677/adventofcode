@@ -2,13 +2,14 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day10 {
+    private val re = "[(\\[{<][)\\]}>]".toRegex()
 
     @Test
     fun `run part 01`() {
-        val input = Util.getInputAsListOfString("day10-input.txt")
+        val lines = Util.getInputAsListOfString("day10-input.txt")
 
-        val errorScore = input
-            .mapNotNull { it.getCorrupted() }
+        val errorScore = lines
+            .mapNotNull { it.getCorruptedClosingChar() }
             .sumOf {
                 when (it) {
                     ')' -> 3
@@ -24,13 +25,13 @@ class Day10 {
 
     @Test
     fun `run part 02`() {
-        val input = Util.getInputAsListOfString("day10-input.txt")
+        val lines = Util.getInputAsListOfString("day10-input.txt")
 
-        val middleScore = input
-            .filter { it.getCorrupted() == null }
-            .map { it.getIncomplete() }
-            .map { incompletes ->
-                incompletes.fold(0.toLong()) { acc, it ->
+        val middleScore = lines
+            .filter { it.getCorruptedClosingChar() == null }
+            .map { it.getMissingClosingChars() }
+            .map { missing ->
+                missing.fold(0.toLong()) { acc, it ->
                     when (it) {
                         ')' -> 1
                         ']' -> 2
@@ -46,15 +47,13 @@ class Day10 {
         assertEquals(3969823589, middleScore)
     }
 
-    private val re = "[(\\[{<][)\\]}>]".toRegex()
-
-    private fun String.getCorrupted(): Char? {
+    private fun String.getCorruptedClosingChar(): Char? {
         var line = this
         while (re.containsMatchIn(line)) {
             re.findAll(line)
                 .firstNotNullOfOrNull {
                     line = line.replace(it.value, "")
-                    if (!it.value.isMatchingClosingChar())
+                    if (!it.value.isValidPair())
                         it.value.last()
                     else
                         null
@@ -65,10 +64,9 @@ class Day10 {
         return null
     }
 
-    private fun String.isMatchingClosingChar() =
-        this.first().code in (this.last().code - 2) until this.last().code
+    private fun String.isValidPair() = this.first().reversed() == this.last()
 
-    private fun String.getIncomplete(): String {
+    private fun String.getMissingClosingChars(): String {
         var line = this
         while (re.containsMatchIn(line)) {
             line = re.replace(line, "")
@@ -76,15 +74,15 @@ class Day10 {
 
         return line
             .reversed()
-            .map {
-                when (it) {
-                    '(' -> ')'
-                    '[' -> ']'
-                    '{' -> '}'
-                    '<' -> '>'
-                    else -> throw IllegalStateException()
-                }
-            }
+            .map { it.reversed() }
             .joinToString("")
+    }
+
+    private fun Char.reversed() = when (this) {
+        '(' -> ')'
+        '[' -> ']'
+        '{' -> '}'
+        '<' -> '>'
+        else -> throw IllegalStateException()
     }
 }
