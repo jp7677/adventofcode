@@ -62,9 +62,7 @@ class Day11 {
                 .first()
                 .indices
                 .flatMap { x ->
-                    it.indices.map { y ->
-                        Octopus(Coord(x, y), it[y][x])
-                    }
+                    List(it.size) { y -> Octopus(Coord(x, y), it[y][x]) }
                 }
         }
 }

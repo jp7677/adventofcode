@@ -71,9 +71,7 @@ class Day09 {
                 .first()
                 .indices
                 .flatMap { x ->
-                    it.indices.map { y ->
-                        Location(Coord(x, y), it[y][x])
-                    }
+                    List(it.size) { y -> Location(Coord(x, y), it[y][x]) }
                 }
         }
 }
