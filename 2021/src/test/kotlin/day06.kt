@@ -24,7 +24,7 @@ class Day06 {
         .also {
             repeat(days) { _ ->
                 val new = it[0]
-                it.indices.onEach { index -> it[index] = if (index == 8) new else it[index + 1] }
+                it.indices.forEach { index -> it[index] = if (index == 8) new else it[index + 1] }
                 it[6] += new
             }
         }
