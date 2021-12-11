@@ -40,7 +40,7 @@ class Day11 {
         while (true) {
             this.firstOrNull { it.energy == 10 }
                 ?.let {
-                    flashArea.onEach { coord ->
+                    flashArea.forEach { coord ->
                         this
                             .firstOrNull { adjacent ->
                                 adjacent.coord.x == it.coord.x + coord.x && adjacent.coord.y == it.coord.y + coord.y
