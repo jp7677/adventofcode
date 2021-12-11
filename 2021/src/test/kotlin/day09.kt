@@ -19,8 +19,7 @@ class Day09 {
                                 ?.let { adjacent -> adjacent.height > height } != false
                         })
                         height + 1
-                    else
-                        0
+                    else 0
                 }
             }
 
