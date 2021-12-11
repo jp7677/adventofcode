@@ -15,11 +15,19 @@ class Day11 {
         val grid = getGrid()
 
         var flashes = 0
-        repeat(100) {
-            flashes += runDay(grid)
-        }
+        repeat(100) { flashes += runDay(grid) }
 
         assertEquals(1601, flashes)
+    }
+
+    @Test
+    fun `run part 02`() {
+        val grid = getGrid()
+
+        var days = 0
+        do { days++ } while(runDay(grid) != grid.count())
+
+        assertEquals(368, days)
     }
 
     private fun runDay(grid: List<Octupus>): Int {
