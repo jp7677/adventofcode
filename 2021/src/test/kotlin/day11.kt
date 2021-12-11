@@ -7,7 +7,7 @@ class Day11 {
     private val flashArea =
         listOf(
             Coord(-1, -1), Coord(0, -1), Coord(1, -1),
-            Coord(-1, 0), Coord(1, 0),
+            Coord(-1, 0), Coord(0, 0), Coord(1, 0),
             Coord(-1, 1), Coord(0, 1), Coord(1, 1))
 
     @Test
@@ -31,29 +31,29 @@ class Day11 {
 
     private fun runDay(grid: List<Octopus>) = grid
         .onEach { it.energy++ }
-        .also { processFlashing(it) }
+        .also { it.processFlashing() }
         .filter { it.energy > 9 }
         .onEach { it.energy = 0 }
         .count()
 
-    private fun processFlashing(grid: List<Octopus>) = generateSequence(grid) { intermediateGrid ->
-        intermediateGrid
-            .firstOrNull { it.energy == 10 }
-            ?.let {
-                it.energy = 11
-                flashArea.onEach { coord ->
-                    intermediateGrid
-                        .firstOrNull { adjacent ->
-                            adjacent.coord.x == it.coord.x + coord.x && adjacent.coord.y == it.coord.y + coord.y
-                        }
-                        ?.let { octopus ->
-                            octopus.energy = if (octopus.energy == 10) 10 else octopus.energy + 1
-                        }
-                }
-                intermediateGrid
-            }
+    private fun List<Octopus>.processFlashing() {
+        while (true) {
+            this.firstOrNull { it.energy == 10 }
+                ?.let {
+                    flashArea.onEach { coord ->
+                        this
+                            .firstOrNull { adjacent ->
+                                adjacent.coord.x == it.coord.x + coord.x && adjacent.coord.y == it.coord.y + coord.y
+                            }
+                            ?.let { octopus ->
+                                octopus.energy = if (octopus == it) 11
+                                    else if (octopus.energy == 10) 10
+                                    else octopus.energy + 1
+                            }
+                    }
+                } ?: return
+        }
     }
-        .last()
 
     private fun getGrid() = Util.getInputAsListOfString("day11-input.txt")
         .map { it.map { c -> c.digitToInt() } }
