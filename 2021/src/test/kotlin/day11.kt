@@ -66,24 +66,4 @@ class Day11 {
                     }
                 }
         }
-
-    private fun List<Octupus>.println(padding: Int = 0) = this
-        .map { it.coord.y }
-        .distinct()
-        .sorted()
-        .onEach { y ->
-            this
-                .filter { it.coord.y == y }
-                .map { it.coord.x }
-                .sorted()
-                .onEach { x ->
-                    print(
-                        this
-                            .first { it.coord.x == x && it.coord.y == y }
-                            .energy.toString()
-                            .padStart(padding, ' '))
-                }
-                .also { kotlin.io.println() }
-        }
-        .also { kotlin.io.println() }
 }
