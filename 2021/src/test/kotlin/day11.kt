@@ -3,7 +3,7 @@ import kotlin.test.assertEquals
 
 class Day11 {
     data class Coord(val x: Int, val y: Int)
-    data class Octupus(val coord: Coord, var energy: Int)
+    data class Octopus(val coord: Coord, var energy: Int)
     private val flashArea =
         listOf(
             Coord(-1, -1), Coord(0, -1), Coord(1, -1),
@@ -14,8 +14,7 @@ class Day11 {
     fun `run part 01`() {
         val grid = getGrid()
 
-        var flashes = 0
-        repeat(100) { flashes += runDay(grid) }
+        val flashes = (1..100).sumOf { runDay(grid) }
 
         assertEquals(1601, flashes)
     }
@@ -24,35 +23,37 @@ class Day11 {
     fun `run part 02`() {
         val grid = getGrid()
 
-        var days = 0
-        do { days++ } while(runDay(grid) != grid.count())
+        val day = generateSequence(1) { if (runDay(grid) != grid.count()) it + 1 else null }
+            .last()
 
-        assertEquals(368, days)
+        assertEquals(368, day)
     }
 
-    private fun runDay(grid: List<Octupus>): Int {
-        var intermediateGrid = grid
-        intermediateGrid.onEach { it.energy++ }
-        intermediateGrid = processFlashing(intermediateGrid).last()
-        return intermediateGrid
-            .filter { it.energy > 9 }
-            .onEach { it.energy = 0 }
-            .count()
-    }
+    private fun runDay(grid: List<Octopus>) = grid
+        .onEach { it.energy++ }
+        .also { processFlashing(it) }
+        .filter { it.energy > 9 }
+        .onEach { it.energy = 0 }
+        .count()
 
-    private fun processFlashing(grid: List<Octupus>) = generateSequence(grid) { intermediateGrid ->
+    private fun processFlashing(grid: List<Octopus>) = generateSequence(grid) { intermediateGrid ->
         intermediateGrid
             .firstOrNull { it.energy == 10 }
             ?.let {
                 it.energy = 11
-                flashArea.onEach { n ->
+                flashArea.onEach { coord ->
                     intermediateGrid
-                        .firstOrNull { f -> f.coord.x == it.coord.x + n.x && f.coord.y == it.coord.y + n.y }
-                        ?.let { o -> o.energy = if (o.energy == 10) 10 else o.energy +1 }
+                        .firstOrNull { adjacent ->
+                            adjacent.coord.x == it.coord.x + coord.x && adjacent.coord.y == it.coord.y + coord.y
+                        }
+                        ?.let { octopus ->
+                            octopus.energy = if (octopus.energy == 10) 10 else octopus.energy + 1
+                        }
                 }
                 intermediateGrid
             }
     }
+        .last()
 
     private fun getGrid() = Util.getInputAsListOfString("day11-input.txt")
         .map { it.map { c -> c.digitToInt() } }
@@ -62,7 +63,7 @@ class Day11 {
                 .indices
                 .flatMap { x ->
                     it.indices.map { y ->
-                        Octupus(Coord(x, y), it[y][x])
+                        Octopus(Coord(x, y), it[y][x])
                     }
                 }
         }
