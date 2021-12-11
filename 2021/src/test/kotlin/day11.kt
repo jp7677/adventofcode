@@ -31,10 +31,10 @@ class Day11 {
     }
 
     private fun runDay(grid: List<Octupus>): Int {
-        var grid1 = grid
-        grid1.onEach { it.energy++ }
-        grid1 = processFlashing(grid1).last()
-        return grid1
+        var intermediateGrid = grid
+        intermediateGrid.onEach { it.energy++ }
+        intermediateGrid = processFlashing(intermediateGrid).last()
+        return intermediateGrid
             .filter { it.energy > 9 }
             .onEach { it.energy = 0 }
             .count()
