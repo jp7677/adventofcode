@@ -34,8 +34,10 @@ class Day13 {
 
     private fun List<Coord>.foldAxis(instruction: Instruction) = this
         .forEach {
-            if (instruction.axis == Axis.X) it.x = if (it.x < instruction.value) it.x else instruction.value - (it.x - instruction.value)
-            if (instruction.axis == Axis.Y) it.y = if (it.y < instruction.value) it.y else instruction.value - (it.y - instruction.value)
+            if (instruction.axis == Axis.X)
+                it.x = if (it.x < instruction.value) it.x else instruction.value - (it.x - instruction.value)
+            if (instruction.axis == Axis.Y)
+                it.y = if (it.y < instruction.value) it.y else instruction.value - (it.y - instruction.value)
         }
 
     private fun List<Coord>.line(index: Int) = (0..this.maxOf { it.x })
@@ -59,13 +61,5 @@ class Day13 {
                         .let { s -> Instruction(Axis.valueOf(s[2].uppercase()), s[3].toInt()) }
                 else null
             }
-        }
-
-    private fun List<Coord>.printCode() =
-        (0..this.maxOf { it.y }).forEach { y ->
-            (0..this.maxOf { it.x }).forEach { x ->
-                print(if (this.contains(Coord(x, y))) "#" else ".")
-            }
-            println()
         }
 }
