@@ -34,10 +34,10 @@ class Day13 {
 
     private fun List<Coord>.foldAxis(instruction: Instruction) = this
         .forEach {
-            if (instruction.axis == Axis.X)
-                it.x = if (it.x < instruction.value) it.x else instruction.value - (it.x - instruction.value)
-            if (instruction.axis == Axis.Y)
-                it.y = if (it.y < instruction.value) it.y else instruction.value - (it.y - instruction.value)
+            if (instruction.axis == Axis.X && it.x > instruction.value)
+                it.x = instruction.value - (it.x - instruction.value)
+            if (instruction.axis == Axis.Y && it.y > instruction.value)
+                it.y = instruction.value - (it.y - instruction.value)
         }
 
     private fun List<Coord>.line(index: Int) = (0..this.maxOf { it.x })
