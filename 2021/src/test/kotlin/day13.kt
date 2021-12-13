@@ -3,7 +3,7 @@ import kotlin.test.assertEquals
 
 class Day13 {
     data class Coord(var x: Int, var y: Int)
-    enum class Axis { X, Y}
+    enum class Axis { X, Y }
     data class Instruction(val axis: Axis, val value: Int)
 
     @Test
