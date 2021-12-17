@@ -13,3 +13,5 @@ Only Linux has been tested. Other platforms might just work though.
 ```bash
 ./gradlew test
 ```
+
+Append `--tests Day01` for running a specific test.
