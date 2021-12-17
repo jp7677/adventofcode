@@ -17,4 +17,7 @@ testlogger { theme = com.adarshr.gradle.testlogger.theme.ThemeType.PLAIN }
 tasks.jar { manifest { attributes["Main-Class"] = "MainKt" } }
 tasks.compileKotlin { kotlinOptions.jvmTarget = "17" }
 tasks.compileTestKotlin { kotlinOptions.jvmTarget = "17" }
-tasks.test { useJUnitPlatform() }
+tasks.test {
+    useJUnitPlatform()
+    testLogging { showStandardStreams = true }
+}
