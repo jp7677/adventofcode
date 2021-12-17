@@ -38,6 +38,7 @@ class Day15 {
             .mapNotNull {
                 move -> this.singleOrNull { it.coord.x == coord.x + move.x && it.coord.y == coord.y + move.y }
             }
+            .sortedBy { it.level }
             .forEach { this.buildAllPaths(it.coord, acc, path + it) }
     }
 
