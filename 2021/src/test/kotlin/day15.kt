@@ -1,49 +1,52 @@
-import kotlin.test.Ignore
+import java.lang.IllegalStateException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day15 {
     data class Coord(val x: Int, val y: Int)
     data class Risk(val coord: Coord, val level: Int)
-    private val moves = listOf(Coord(0, 1), Coord(1, 0))
+
+    data class Travel(val distance: Int?, val previous: Coord?)
+    private val directions = listOf(Coord(0, -1), Coord(1, 0), Coord(0, 1), Coord(-1, -1))
 
     @Test
-    @Ignore("Works only with the sample data :(")
     fun `run part 01`() {
         val grid = getGrid()
-        val paths = mutableListOf<List<Risk>>()
-        grid.buildAllPaths(grid.first().coord, paths, listOf(grid.first()))
 
-        val min = paths
-            .minOf { it.sumOf { risk -> risk.level } } - 1
+        val nodes = mutableMapOf<Coord, Travel>()
+        grid.forEach { nodes[it.coord] = Travel(null, null) }
 
-        assertEquals(40, min)
-    }
+        nodes[Coord(0, 0)] = Travel(0, null)
+        while (nodes.any { it.value.distance == null }) {
+            val current = nodes.minByOrNull { it.value.distance ?: Int.MAX_VALUE } ?: throw IllegalStateException()
 
-    private fun Set<Risk>.buildAllPaths(
-        coord: Coord,
-        acc: MutableList<List<Risk>>,
-        path: List<Risk> = listOf()
-    ) {
-        if (this.isEndPos(coord)) {
-            acc.clear()
-            acc += path
-            return
+            directions
+                .mapNotNull { direction ->
+                    grid.singleOrNull { risk ->
+                        risk.coord.x == current.key.x + direction.x && risk.coord.y == current.key.y + direction.y
+                    }
+                        ?.coord
+                }.forEach { coord ->
+                    nodes[coord]
+                        ?.let { node ->
+                            val distance = (current.value.distance ?: 0) + grid.single { it.coord == coord }.level
+                            if ((node.distance ?: Int.MAX_VALUE ) > distance) {
+                                nodes[coord] = Travel(distance, current.key)
+                            }
+                        }
+                }
+
+            if (current.key == Coord(99, 99))
+                break
+
+            nodes.remove(current.key)
         }
 
-        if (acc.any { ac ->  ac.sumOf { it.level } <= path.sumOf { it.level } })
-            return
+        val totalRisk = nodes[Coord(99,99)]?.distance
 
-        moves
-            .mapNotNull {
-                move -> this.singleOrNull { it.coord.x == coord.x + move.x && it.coord.y == coord.y + move.y }
-            }
-            .sortedBy { it.level }
-            .forEach { this.buildAllPaths(it.coord, acc, path + it) }
+        assertEquals(720, totalRisk)
+
     }
-
-    private fun Set<Risk>.isEndPos(coord: Coord) =
-        coord.x == this.maxOf { it.coord.x } && coord.y == this.maxOf { it.coord.y }
 
     private fun getGrid() = Util.getInputAsListOfString("day15-input.txt")
         .map { it.map { c -> c.digitToInt() } }
