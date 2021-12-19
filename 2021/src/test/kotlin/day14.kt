@@ -1,3 +1,4 @@
+import java.lang.IllegalStateException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -7,7 +8,10 @@ class Day14 {
     fun `run part 01`() {
         val (template, insertions) = getInstructions()
 
-        val result = runSteps(template, insertions, 10)
+        val result = template
+            .toInitialPairs()
+            .processPairInsertions(insertions, 10)
+            .calcCommonElementsDiff()
 
         assertEquals(2435, result)
     }
@@ -16,30 +20,34 @@ class Day14 {
     fun `run part 02`() {
         val (template, insertions) = getInstructions()
 
-        val result = runSteps(template, insertions, 40)
+        val result = template
+            .toInitialPairs()
+            .processPairInsertions(insertions, 40)
+            .calcCommonElementsDiff()
 
         assertEquals(2587447599164, result)
     }
 
-    private fun runSteps(template: String, insertions: Map<String, Char>, steps: Int) = template
-        .windowed(2, 1)
-        .associateWith { 1L }
-        .let { templateLinks ->
-            generateSequence(templateLinks) { links ->
-                links
-                    .flatMap {
-                        val insert = insertions[it.key]?.toString() ?: throw java.lang.IllegalStateException()
-                        listOf(
-                            (it.key.first() + insert) to it.value,
-                            (insert + it.key.last()) to it.value)
-                    }
-                    .groupBy { it.first }
-                    .map { it.key to it.value.sumOf { count -> count.second } }
-                    .toMap()
-            }
+    private fun String.toInitialPairs() = this.windowed(2, 1).associateWith { 1L }
+
+    private fun Map<String, Long>.processPairInsertions(insertions: Map<String, Char>, steps: Int) =
+        generateSequence(this) { pairs ->
+            pairs
+                .flatMap {
+                    val insert = insertions[it.key]?.toString() ?: throw IllegalStateException()
+                    listOf(
+                        (it.key.first() + insert) to it.value,
+                        (insert + it.key.last()) to it.value
+                    )
+                }
+                .groupBy { it.first }
+                .map { it.key to it.value.sumOf { count -> count.second } }
+                .toMap()
         }
-        .take(steps + 1)
-        .last()
+            .take(steps + 1)
+            .last()
+
+    private fun Map<String, Long>.calcCommonElementsDiff() = this
         .map { it.key.last() to it.value }
         .groupBy { it.first }
         // This is not completely correct, the totals for the first link should be counted for both characters
