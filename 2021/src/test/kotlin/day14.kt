@@ -50,8 +50,8 @@ class Day14 {
     private fun Map<String, Long>.calcCommonElementsDiff() = this
         .map { it.key.last() to it.value }
         .groupBy { it.first }
-        // This is not completely correct, the totals for the first link should be counted for both characters
-        // Fortunately this is not the character we are interested in, so fine here
+        // This is not completely correct, the totals for the first pair should be counted for both characters
+        // Fortunately the first character is not the character we are interested in, so fine here
         .map { it.key to it.value.sumOf { count -> count.second } }
         .let {
             it.maxOf { count -> count.second } - it.minOf { count -> count.second }
