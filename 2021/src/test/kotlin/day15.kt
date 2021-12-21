@@ -53,7 +53,7 @@ class Day15 {
                 .filterNot { coord -> visited.contains(coord) }
                 .mapNotNull { coord -> map[coord]?.let { coord to it } }
                 .forEach { coordToRisk ->
-                    val totalRisk = (totals[current.key] ?: 0) + coordToRisk.second
+                    val totalRisk = current.value + coordToRisk.second
                     val knownTotalRisk = totals[coordToRisk.first] ?: Int.MAX_VALUE
                     if (totalRisk < knownTotalRisk) {
                         totals[coordToRisk.first] = totalRisk
