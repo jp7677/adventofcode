@@ -18,24 +18,9 @@ class Day15 {
     @Test
     fun `run part 02`() {
         val map = getMap()
+        val fullMap = map.repeatRight(5).repeatDownwards(5)
 
-        val additionalRight = map
-            .flatMap {
-                (1..4).map { x ->
-                    Coord(it.key.x + (x * (map.maxX() + 1)), it.key.y) to
-                        if (it.value + x > 9) (it.value + x) - 9 else it.value + x
-                }
-            }
-
-        val additionalDown = (map + additionalRight)
-            .flatMap {
-                (1..4).map { y ->
-                    Coord(it.key.x, it.key.y + (y * (map.maxY() + 1))) to
-                        if (it.value + y > 9) (it.value + y) - 9 else it.value + y
-                }
-            }
-
-        val totalRisk = findTotalRiskForShortestPath(map + additionalRight + additionalDown)
+        val totalRisk = findTotalRiskForShortestPath(fullMap)
 
         assertEquals(3025, totalRisk)
     }
@@ -67,6 +52,28 @@ class Day15 {
         }
 
         return totals[Coord(map.maxX(), map.maxY())] ?: throw IllegalStateException()
+    }
+
+    private fun Map<Coord, Int>.repeatRight(tiles: Int): Map<Coord, Int> {
+        val maxX = this.maxX()
+        return this + this
+            .flatMap {
+                (1 until tiles).map { x ->
+                    Coord(it.key.x + (x * (maxX + 1)), it.key.y) to
+                        if (it.value + x > 9) (it.value + x) - 9 else it.value + x
+                }
+            }
+    }
+
+    private fun Map<Coord, Int>.repeatDownwards(tiles: Int): Map<Coord, Int> {
+        val maxY = this.maxY()
+        return this + this
+            .flatMap {
+                (1 until tiles).map { y ->
+                    Coord(it.key.x, it.key.y + (y * (maxY + 1))) to
+                        if (it.value + y > 9) (it.value + y) - 9 else it.value + y
+                }
+            }
     }
 
     private fun Map<Coord, Int>.maxX() = this.maxOf { it.key.x }
