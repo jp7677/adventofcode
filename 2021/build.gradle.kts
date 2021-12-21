@@ -3,13 +3,13 @@ version = "0.1-SNAPSHOT"
 
 plugins {
     application
-    kotlin("jvm") version "1.6.0"
+    kotlin("jvm") version "1.6.10"
     id("com.adarshr.test-logger") version "3.1.0"
 }
 
 repositories { mavenCentral() }
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.10")
 }
 
 application { mainClass.set("MainKt") }
