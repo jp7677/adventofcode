@@ -41,34 +41,32 @@ class Day15 {
     }
 
     private fun findTotalRiskForShortestPath(map: Map<Coord, Int>): Int {
+        val queue = mutableMapOf(Coord(0,0) to 0)
+        val totals = mutableMapOf(Coord(0,0) to 0)
         val visited = mutableSetOf<Coord>()
-        val totalDistances = mutableMapOf(Coord(0,0) to 0)
-        val queue = mutableSetOf(Coord(0,0))
 
         while (queue.any()) {
-            val current = queue
-                .associateWith { totalDistances[it] }
-                .minByOrNull { it.value ?: 0 } ?: throw IllegalStateException()
+            val current = queue.minByOrNull { it.value } ?: throw IllegalStateException()
 
             directions
-                .mapNotNull { direction ->
-                    val coord = Coord(current.key.x + direction.x, current.key.y + direction.y)
-                    map[coord]?.let { coord to it }
-                }
-                .filterNot { visited.contains(it.first)  }
-                .forEach { coord ->
-                    val distance = (totalDistances[current.key] ?: 0) + coord.second
-                    if ((totalDistances[coord.first] ?: Int.MAX_VALUE) > distance)
-                        totalDistances[coord.first] = distance
-
-                    queue.add(coord.first)
+                .map { direction -> Coord(current.key.x + direction.x, current.key.y + direction.y) }
+                .filterNot { coord -> visited.contains(coord) }
+                .mapNotNull { coord -> map[coord]?.let { coord to it } }
+                .forEach { coordToRisk ->
+                    val totalRisk = (totals[current.key] ?: 0) + coordToRisk.second
+                    val knownTotalRisk = totals[coordToRisk.first] ?: Int.MAX_VALUE
+                    if (totalRisk < knownTotalRisk) {
+                        totals[coordToRisk.first] = totalRisk
+                        queue[coordToRisk.first] = totalRisk
+                    } else
+                        queue[coordToRisk.first] = knownTotalRisk
                 }
 
             visited.add(current.key)
             queue.remove(current.key)
         }
 
-        return totalDistances[Coord(map.maxX(), map.maxY())] ?: throw IllegalStateException()
+        return totals[Coord(map.maxX(), map.maxY())] ?: throw IllegalStateException()
     }
 
     private fun Map<Coord, Int>.maxX() = this.maxOf { it.key.x }
