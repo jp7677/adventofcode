@@ -7,9 +7,9 @@ class Day16 {
     fun `run part 01`() {
         val bits = getTransmissionBits()
 
-        val versions = getPacket(bits).first
+        val version = getPacket(bits).first
 
-        assertEquals(960, versions)
+        assertEquals(960, version)
     }
 
     @Test
@@ -24,56 +24,56 @@ class Day16 {
     private fun getPacket(bits: String, idx: Int = 0): Triple<Long, Long, Int> {
         var idx1 = idx
 
-        var packetVersion = getPacketVersion(bits, idx1).also { idx1 += it.second }.first
-        val packetLabel = getPacketType(bits, idx1).also { idx1 += it.second }.first
-        val value = if (packetLabel != 4)
-            execOperation(bits, idx1, packetLabel)
+        var version = getVersion(bits, idx1).also { idx1 += it.second }.first
+        val label = getType(bits, idx1).also { idx1 += it.second }.first
+        val value = if (label != 4)
+            execOperation(bits, idx1, label)
                 .also {
-                    packetVersion += it.second
+                    version += it.second
                     idx1 += it.third
                 }
                 .first
         else
             getLiteral(bits, idx1).also { idx1 += it.second }.first
 
-        return Triple(packetVersion, value, idx1 - idx)
+        return Triple(version, value, idx1 - idx)
     }
+
+    private fun getVersion(bits: String, idx: Int) = bits
+        .substring(idx until idx + 3).toLong(2) to 3
+
+    private fun getType(bits: String, idx: Int) = bits
+        .substring(idx until idx + 3).toInt(2) to 3
 
     private fun execOperation(bits: String, idx: Int, op: Int): Triple<Long, Long, Int> {
         var idx1 = idx
-        val (lengthIsNumberOfBits, length, _) = getLength(bits, idx1).also { idx1 += it.third }
+        val packets = mutableListOf<Pair<Long, Long>>()
 
-        val subPackets = mutableListOf<Pair<Long, Long>>()
+        val (lengthIsNumberOfBits, length, _) = getLength(bits, idx1).also { idx1 += it.third }
         if (lengthIsNumberOfBits) {
             val end = idx1 + length
             while (idx1 < end)
-                subPackets += getPacket(bits, idx1).also { idx1 += it.third }
+                packets += getPacket(bits, idx1).also { idx1 += it.third }
                     .let { it.first to it.second }
         } else
             repeat(length) { _ ->
-                subPackets += getPacket(bits, idx1).also { idx1 += it.third }
+                packets += getPacket(bits, idx1).also { idx1 += it.third }
                     .let { it.first to it.second }
             }
 
         val value = when (op) {
-            0 -> subPackets.sumOf { it.second }
-            1 -> subPackets.fold(1L) { acc, it -> acc * it.second }
-            2 -> subPackets.minOf { it.second }
-            3 -> subPackets.maxOf { it.second }
-            5 -> if (subPackets.first().second > subPackets.last().second) 1 else 0
-            6 -> if (subPackets.first().second < subPackets.last().second) 1 else 0
-            7 -> if (subPackets.first().second == subPackets.last().second) 1 else 0
+            0 -> packets.sumOf { it.second }
+            1 -> packets.fold(1L) { acc, it -> acc * it.second }
+            2 -> packets.minOf { it.second }
+            3 -> packets.maxOf { it.second }
+            5 -> if (packets.first().second > packets.last().second) 1 else 0
+            6 -> if (packets.first().second < packets.last().second) 1 else 0
+            7 -> if (packets.first().second == packets.last().second) 1 else 0
             else -> throw IllegalStateException()
         }
 
-        return Triple(value, subPackets.sumOf { it.first }, idx1 - idx)
+        return Triple(value, packets.sumOf { it.first }, idx1 - idx)
     }
-
-    private fun getPacketVersion(bits: String, idx: Int) = bits
-        .substring(idx until idx + 3).toLong(2) to 3
-
-    private fun getPacketType(bits: String, idx: Int) = bits
-        .substring(idx until idx + 3).toInt(2) to 3
 
     private fun getLength(bits: String, idx: Int): Triple<Boolean, Int, Int> {
         val length = if (bits[idx] == '0') 16 else 12
