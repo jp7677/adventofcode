@@ -12,33 +12,61 @@ class Day16 {
         assertEquals(960, versions)
     }
 
-    private fun getPacket(bits: String, idx: Int = 0): Pair<Long, Int> {
+    @Test
+    fun `run part 02`() {
+        val bits = getTransmissionBits()
+
+        val value = getPacket(bits).second
+
+        assertEquals(12301926782560, value)
+    }
+
+    private fun getPacket(bits: String, idx: Int = 0): Triple<Long, Long, Int> {
         var idx1 = idx
 
         var packetVersion = getPacketVersion(bits, idx1).also { idx1 += it.second }.first
         val packetLabel = getPacketType(bits, idx1).also { idx1 += it.second }.first
-
-        when (packetLabel) {
-            4 -> {  // Literal
-                val literal = getLiteral(bits, idx1).also { idx1 += it.second }.first
-            }
-            else -> { // Operator
-                val (lengthIsNumberOfBits, length) = getLength(bits, idx1).also { idx1 += it.third }
-                    .let{ it.first to it.second }
-
-                if (lengthIsNumberOfBits) {
-                    val end = idx1 + length
-                    while (idx1 < end)
-                        packetVersion += getPacket(bits, idx1).also { idx1 += it.second }.first
+        val value = if (packetLabel != 4)
+            execOperation(bits, idx1, packetLabel)
+                .also {
+                    packetVersion += it.second
+                    idx1 += it.third
                 }
-                else
-                    repeat(length) { _ ->
-                        packetVersion += getPacket(bits, idx1).also { idx1 += it.second }.first
-                    }
+                .first
+        else
+            getLiteral(bits, idx1).also { idx1 += it.second }.first
+
+        return Triple(packetVersion, value, idx1 - idx)
+    }
+
+    private fun execOperation(bits: String, idx: Int, op: Int): Triple<Long, Long, Int> {
+        var idx1 = idx
+        val (lengthIsNumberOfBits, length, _) = getLength(bits, idx1).also { idx1 += it.third }
+
+        val subPackets = mutableListOf<Pair<Long, Long>>()
+        if (lengthIsNumberOfBits) {
+            val end = idx1 + length
+            while (idx1 < end)
+                subPackets += getPacket(bits, idx1).also { idx1 += it.third }
+                    .let { it.first to it.second }
+        } else
+            repeat(length) { _ ->
+                subPackets += getPacket(bits, idx1).also { idx1 += it.third }
+                    .let { it.first to it.second }
             }
+
+        val value = when (op) {
+            0 -> subPackets.sumOf { it.second }
+            1 -> subPackets.fold(1L) { acc, it -> acc * it.second }
+            2 -> subPackets.minOf { it.second }
+            3 -> subPackets.maxOf { it.second }
+            5 -> if (subPackets.first().second > subPackets.last().second) 1 else 0
+            6 -> if (subPackets.first().second < subPackets.last().second) 1 else 0
+            7 -> if (subPackets.first().second == subPackets.last().second) 1 else 0
+            else -> throw IllegalStateException()
         }
 
-        return packetVersion to (idx1 - idx)
+        return Triple(value, subPackets.sumOf { it.first }, idx1 - idx)
     }
 
     private fun getPacketVersion(bits: String, idx: Int) = bits
@@ -59,8 +87,8 @@ class Day16 {
     private fun getLiteral(bits: String, idx: Int): Pair<Long, Int> {
         var idx1 = idx
         var literal = ""
-        var hasNext = true
 
+        var hasNext = true
         while (hasNext)
             hasNext = getLiteralGroup(bits, idx1)
                 .also {
@@ -72,10 +100,11 @@ class Day16 {
         return literal.toLong(2) to idx1 - idx
     }
 
-    private fun getLiteralGroup(bits: String, idx: Int): Triple<Boolean, String, Int> {
-        val group = bits.substring(idx until idx + 5)
-        return Triple(group[0] == '1', group.substring(1), 5)
-    }
+    private fun getLiteralGroup(bits: String, idx: Int) =
+        bits.substring(idx until idx + 5)
+            .let {
+                Triple(it[0] == '1', it.substring(1), 5)
+            }
 
     private fun getTransmissionBits() = Util.getInputAsString("day16-input.txt")
         .toList()
