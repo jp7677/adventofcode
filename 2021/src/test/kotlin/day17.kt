@@ -4,16 +4,17 @@ import kotlin.test.assertEquals
 
 class Day17 {
     data class Coord(val x: Int, val y: Int)
-    data class Trajectory(val position: Coord, val velocity: Coord)
+    data class Step(val position: Coord, val velocity: Coord)
 
     @Test
     fun `run part 01`() {
         val area = getArea()
 
-        val maxY = (area.getStartX()..area.getEndX()).flatMap { x ->
-            (area.minY()..abs(area.minY())).mapNotNull { y ->
-                val trajectory = area.fireProbe(Coord(x, y))
-                if (trajectory.first) trajectory.second.maxOf { it.position.y } else null
+        val maxY = (area.getMinInitialVelocityX()..area.getMaxInitialVelocityX()).flatMap { velocityX ->
+            (area.minY()..abs(area.minY())).mapNotNull { velocityY ->
+                area.fireProbe(Coord(velocityX, velocityY)).let {
+                    if (it.first) it.second.maxOf { step -> step.position.y } else null
+                }
             }
         }
             .maxOrNull()
@@ -25,7 +26,7 @@ class Day17 {
     fun `run part 02`() {
         val area = getArea()
 
-        val maxY = (area.getStartX()..area.maxX()).flatMap { x ->
+        val maxY = (area.getMinInitialVelocityX()..area.maxX()).flatMap { x ->
             (area.minY()..abs(area.minY())).mapNotNull { y ->
                 area.fireProbe(Coord(x, y)).first
             }
@@ -35,38 +36,29 @@ class Day17 {
         assertEquals(4973, maxY)
     }
 
-    private fun Set<Coord>.getStartX(): Int {
-        var startX = 0
-        var temp = 0
-        while (temp < this.minX()) {
-            temp += startX + 1
-            startX++
-        }
-        return startX
+    private fun Set<Coord>.getMinInitialVelocityX() = generateSequence(1 to 1) {
+        if (it.first + it.second < this.minX()) it.first + 1 to it.first + it.second else null
     }
+        .count()
 
-    private fun Set<Coord>.getEndX(): Int {
-        var startX = 0
-        var temp = 0
-        while (temp < this.maxX()) {
-            temp += startX + 1
-            startX++
-        }
-        return startX
+    private fun Set<Coord>.getMaxInitialVelocityX() = generateSequence(1 to 1) {
+        if (it.first + it.second < this.maxX()) it.first + 1 to it.first + it.second else null
     }
+        .count()
 
-    private fun Set<Coord>.fireProbe(initialVelocity: Coord): Pair<Boolean, Set<Trajectory>> {
+    private fun Set<Coord>.fireProbe(initialVelocity: Coord): Pair<Boolean, Set<Step>> {
         val areaMaxX = maxX()
         val areaMinY = minY()
-        val steps = generateSequence(Trajectory(Coord(0, 0), initialVelocity)) {
-            if (it.position.x > areaMaxX || it.position.y < areaMinY)
+        val steps = generateSequence(Step(Coord(0, 0), initialVelocity)) {
+            if (it.position.x <= areaMaxX && it.position.y >= areaMinY)
+                Step(
+                    Coord(it.position.x + it.velocity.x, it.position.y + it.velocity.y),
+                    Coord(if (it.velocity.x == 0) 0 else it.velocity.x - 1, it.velocity.y - 1)
+                )
+            else
                 null
-            else {
-                val position = Coord(it.position.x + it.velocity.x, it.position.y + it.velocity.y)
-                val velocity = Coord(if (it.velocity.x == 0) 0 else it.velocity.x - 1, it.velocity.y - 1)
-                Trajectory(position, velocity)
-            }
-        }.toSet()
+        }
+            .toSet()
 
         return (steps.map { it.position } intersect this).any() to steps
     }
