@@ -1,3 +1,4 @@
+import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -10,7 +11,7 @@ class Day17 {
         val area = getArea()
 
         val maxY = (area.getStartX()..area.getEndX()).flatMap { x ->
-            (-0..150).mapNotNull { y -> // TODO: Somehow calculate endY
+            (area.minY()..abs(area.minY())).mapNotNull { y ->
                 val trajectory = area.fireProbe(Coord(x, y))
                 if (trajectory.first) trajectory.second.maxOf { it.position.y } else null
             }
@@ -18,6 +19,20 @@ class Day17 {
             .maxOrNull()
 
         assertEquals(6555, maxY)
+    }
+
+    @Test
+    fun `run part 02`() {
+        val area = getArea()
+
+        val maxY = (area.getStartX()..area.maxX()).flatMap { x ->
+            (area.minY()..abs(area.minY())).mapNotNull { y ->
+                area.fireProbe(Coord(x, y)).first
+            }
+        }
+            .count { it }
+
+        assertEquals(4973, maxY)
     }
 
     private fun Set<Coord>.getStartX(): Int {
@@ -56,8 +71,8 @@ class Day17 {
         return (steps.map { it.position } intersect this).any() to steps
     }
 
-    private fun Set<Coord>.maxX() = maxOf { it.x }
     private fun Set<Coord>.minX() = minOf { it.x }
+    private fun Set<Coord>.maxX() = maxOf { it.x }
     private fun Set<Coord>.minY() = minOf { it.y }
 
     private fun getArea() = Util.getInputAsString("day17-input.txt")
@@ -71,6 +86,5 @@ class Day17 {
                 }
             }
         }
-        .sortedByDescending { it.y }
         .toSet()
 }
