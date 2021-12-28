@@ -12,8 +12,8 @@ class Day17 {
 
         val maxY = (area.getMinInitialVelocityX()..area.getMaxInitialVelocityX()).flatMap { velocityX ->
             (area.minY()..abs(area.minY())).mapNotNull { velocityY ->
-                area.fireProbe(Coord(velocityX, velocityY)).let {
-                    if (it.first) it.second.maxOf { step -> step.position.y } else null
+                area.fireProbe(Coord(velocityX, velocityY)).let { (hit, steps) ->
+                    if (hit) steps.maxOf { step -> step.position.y } else null
                 }
             }
         }
@@ -28,7 +28,7 @@ class Day17 {
 
         val maxY = (area.getMinInitialVelocityX()..area.maxX()).flatMap { x ->
             (area.minY()..abs(area.minY())).mapNotNull { y ->
-                area.fireProbe(Coord(x, y)).first
+                area.fireProbe(Coord(x, y)).let { (hit, _) -> hit }
             }
         }
             .count { it }
@@ -36,13 +36,13 @@ class Day17 {
         assertEquals(4973, maxY)
     }
 
-    private fun Set<Coord>.getMinInitialVelocityX() = generateSequence(1 to 1) {
-        if (it.first + it.second < this.minX()) it.first + 1 to it.first + it.second else null
+    private fun Set<Coord>.getMinInitialVelocityX() = generateSequence(1 to 1) { (index, it) ->
+        if (index + it < this.minX()) index.inc() to index + it else null
     }
         .count()
 
-    private fun Set<Coord>.getMaxInitialVelocityX() = generateSequence(1 to 1) {
-        if (it.first + it.second < this.maxX()) it.first + 1 to it.first + it.second else null
+    private fun Set<Coord>.getMaxInitialVelocityX() = generateSequence(1 to 1) { (index, it) ->
+        if (index + it < this.maxX()) index.inc() to index + it else null
     }
         .count()
 
@@ -71,9 +71,9 @@ class Day17 {
         .split("=", ".", ",")
         .mapNotNull { it.toIntOrNull() }
         .let { Coord(it[0], it[3]) to Coord(it[1], it[2]) }
-        .let {
-            (it.first.x..it.second.x).flatMap { x ->
-                (it.second.y..it.first.y).map { y ->
+        .let { (topLeft, bottomRight) ->
+            (topLeft.x..bottomRight.x).flatMap { x ->
+                (bottomRight.y..topLeft.y).map { y ->
                     Coord(x, y)
                 }
             }
