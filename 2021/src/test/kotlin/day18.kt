@@ -73,9 +73,6 @@ class Day18 {
             return this
         }
 
-        private fun hasExplodable() = this.pairs().any { (_, level) -> level == 5 }
-        private fun hasSplitable() = this.regulars().any { (regular, _) -> regular >= 10 }
-
         fun singleExplode(): Number {
             this.pairs().firstOrNull { (_, level) -> level >= 5 }?.let { (exploding, _) ->
                 // find and add-to regular to the left
@@ -98,7 +95,6 @@ class Day18 {
             }
             return this
         }
-
         fun singleSplit(): Number {
             this.regulars().firstOrNull { (regular, _) -> regular >= 10 }?.let { (regular, number) ->
                 number.left = Number(null, null, regular / 2, number)
@@ -109,6 +105,10 @@ class Day18 {
         }
 
         fun magnitude(): Int = regular ?: (left!!.magnitude() * 3 + (right!!.magnitude()) * 2)
+
+        private fun hasExplodable() = this.pairs().any { (_, level) -> level == 5 }
+
+        private fun hasSplitable() = this.regulars().any { (regular, _) -> regular >= 10 }
 
         private fun pairs(level: Int = 1): List<Pair<Number, Int>> =
             listOf(this to level) +
@@ -155,10 +155,25 @@ class Day18 {
 
     @Test
     fun `run part 01`() {
-        val number = Util.getInputAsListOfString("day18-input.txt")
+        val magnitude = Util.getInputAsListOfString("day18-input.txt")
             .map { Number.from(it) }
             .reduce { it, acc -> (it + acc).reduce() }
+            .magnitude()
 
-        assertEquals(2907, number.magnitude())
+        assertEquals(2907, magnitude)
+    }
+
+    @Test
+    fun `run part 02`() {
+        val numbers = Util.getInputAsListOfString("day18-input.txt")
+
+        val magnitude = numbers
+            .flatMap { a ->
+                numbers.mapNotNull { b ->
+                    if (a != b) (Number.from(a) + Number.from(b)).reduce().magnitude() else null
+                }
+            }.maxOrNull()
+
+        assertEquals(4690, magnitude)
     }
 }
