@@ -175,9 +175,11 @@ class Day18 {
 
         val magnitude = numbers
             .flatMap { a ->
-                numbers.mapNotNull { b ->
-                    if (a != b) (Number.from(a) + Number.from(b)).reduce().magnitude() else null
-                }
+                numbers
+                    .filterNot { b -> a == b }
+                    .map { b ->
+                        (Number.from(a) + Number.from(b)).reduce().magnitude()
+                    }
             }.maxOrNull()
 
         assertEquals(4690, magnitude)
