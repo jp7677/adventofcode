@@ -6,52 +6,6 @@ import kotlin.test.assertEquals
 class Day18 {
 
     class Number(var left: Number?, var right: Number?, var regular: Int?, var parent: Number? = null) {
-
-        companion object {
-            fun from(input: String, parent: Number? = null): Number =
-                input.substring(1, input.length - 1)
-                    .let {
-                        val number = Number(null, null, null, parent)
-
-                        val end: Int
-                        number.left = if (it.first() == '[') {
-                            end = indexOfClosingBracket(it)
-                            from(it.substring(0, end), number)
-                        } else {
-                            end = it.indexOf(',')
-                            Number(null, null, it.substring(0, end).toInt(), number)
-                        }
-
-                        val remaining = it.substring(end + 1)
-                        number.right = if (remaining.first() == '[')
-                            from(remaining, number)
-                        else
-                            Number(null, null, remaining.toInt(), number)
-
-                        number
-                    }
-
-            private fun indexOfClosingBracket(inner: String): Int {
-                val stack = Stack<Char>()
-                for ((index, c) in inner.withIndex()) {
-                    if (c !in listOf('[', ']'))
-                        continue
-
-                    if (stack.isNotEmpty() && c.matchesBracket(stack.peek()))
-                        stack.pop()
-                    else
-                        stack.push(c)
-
-                    if (stack.isEmpty())
-                        return index + 1
-                }
-
-                throw IllegalStateException()
-            }
-
-            private fun Char.matchesBracket(peek: Char) = (this == '[' && peek == ']') || (this == ']' && peek == '[')
-        }
-
         override fun toString() = regular?.toString() ?: "[${left},${right}]"
 
         operator fun plus(other: Number) = Number(this, other, null)
@@ -66,9 +20,8 @@ class Day18 {
                     this.singleExplode()
                 }
 
-                if (hasSplitable()) {
+                if (hasSplitable())
                     this.singleSplit()
-                }
             }
             return this
         }
@@ -125,6 +78,51 @@ class Day18 {
             if (regular != null) listOf(regular!! to this) else listOf<Pair<Int, Number>>() +
                 (left?.regulars() ?: listOf()) +
                 (right?.regulars() ?: listOf())
+
+        companion object {
+            fun from(input: String, parent: Number? = null): Number =
+                input.substring(1, input.length - 1)
+                    .let {
+                        val number = Number(null, null, null, parent)
+
+                        val end: Int
+                        number.left = if (it.first() == '[') {
+                            end = it.indexOfClosingBracket()
+                            from(it.substring(0, end), number)
+                        } else {
+                            end = it.indexOf(',')
+                            Number(null, null, it.substring(0, end).toInt(), number)
+                        }
+
+                        val remaining = it.substring(end + 1)
+                        number.right = if (remaining.first() == '[')
+                            from(remaining, number)
+                        else
+                            Number(null, null, remaining.toInt(), number)
+
+                        number
+                    }
+
+            private fun String.indexOfClosingBracket(): Int {
+                val stack = Stack<Char>()
+                for ((index, c) in this.withIndex()) {
+                    if (c !in listOf('[', ']'))
+                        continue
+
+                    if (stack.isNotEmpty() && c.matchesBracket(stack.peek()))
+                        stack.pop()
+                    else
+                        stack.push(c)
+
+                    if (stack.isEmpty())
+                        return index + 1
+                }
+
+                throw IllegalStateException()
+            }
+
+            private fun Char.matchesBracket(peek: Char) = (this == '[' && peek == ']') || (this == ']' && peek == '[')
+        }
     }
 
     @Test
