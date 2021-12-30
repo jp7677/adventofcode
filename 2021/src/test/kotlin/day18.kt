@@ -8,10 +8,16 @@ class Day18 {
     class Number(var left: Number?, var right: Number?, var regular: Int?, var parent: Number? = null) {
         override fun toString() = regular?.toString() ?: "[${left},${right}]"
 
-        operator fun plus(other: Number) = Number(this, other, null)
+        operator fun plus(element: Number) = Number(this.copy(), element.copy(), null)
             .also {
                 this.parent = it
-                other.parent = it
+                element.parent = it
+            }
+
+        private fun copy(): Number = Number(left?.copy(), right?.copy(), regular)
+            .also {
+                it.left?.parent = it
+                it.right?.parent = it
             }
 
         fun reduce(): Number {
@@ -170,13 +176,14 @@ class Day18 {
     @Test
     fun `run part 02`() {
         val numbers = Util.getInputAsListOfString("day18-input.txt")
+            .map { Number.from(it) }
 
         val magnitude = numbers
             .flatMap { a ->
                 numbers
                     .filterNot { b -> a == b }
                     .map { b ->
-                        (Number.from(a) + Number.from(b)).reduce().magnitude()
+                        (a + b).reduce().magnitude()
                     }
             }.maxOrNull()
 
