@@ -73,36 +73,42 @@ class Day18 {
             return this
         }
 
-        fun singleExplode(): Number {
-            this.pairs().firstOrNull { (_, level) -> level >= 5 }?.let { (exploding, _) ->
-                // find and add-to regular to the left
-                this.regulars().withIndex().singleOrNull {
-                    it.index == this.regulars().withIndex().first { i -> i.value.second.parent == exploding }.index - 1
-                }?.let {
-                    it.value.second.regular = it.value.second.regular!! + (exploding.left?.regular ?: throw IllegalStateException())
-                }
-                // find and add-to regular to the right
-                this.regulars().withIndex().singleOrNull {
-                    it.index == this.regulars().withIndex().last { i -> i.value.second.parent == exploding }.index + 1
-                }?.let {
-                    it.value.second.regular = it.value.second.regular!! + (exploding.right?.regular ?: throw IllegalStateException())
-                }
+        fun singleExplode() = this.regulars()
+            .let { regulars ->
+                this.pairs()
+                    .firstOrNull { (_, level) -> level >= 5 }
+                    ?.let { (exploding, _) ->
+                        // find regular and eventually add to regular to the left
+                        regulars.withIndex().singleOrNull {
+                            it.index == regulars.withIndex().first { i -> i.value.second.parent == exploding }.index - 1
+                        }
+                        ?.let {
+                            it.value.second.regular = it.value.second.regular!! + exploding.left!!.regular!!
+                        }
+                        // find regular and eventually add to regular to the right
+                        regulars.withIndex().singleOrNull {
+                            it.index == regulars.withIndex().last { i -> i.value.second.parent == exploding }.index + 1
+                        }
+                        ?.let {
+                            it.value.second.regular = it.value.second.regular!! + exploding.right!!.regular!!
+                        }
 
-                // explode
-                exploding.left = null
-                exploding.right = null
-                exploding.regular = 0
+                        // explode
+                        exploding.left = null
+                        exploding.right = null
+                        exploding.regular = 0
+                    }
             }
-            return this
-        }
-        fun singleSplit(): Number {
-            this.regulars().firstOrNull { (regular, _) -> regular >= 10 }?.let { (regular, number) ->
+            .let { this }
+
+        fun singleSplit() = this.regulars()
+            .firstOrNull { (regular, _) -> regular >= 10 }
+            ?.let { (regular, number) ->
                 number.left = Number(null, null, regular / 2, number)
                 number.right = Number(null, null, (regular + 1) / 2, number)
                 number.regular = null
             }
-            return this
-        }
+            .let { this }
 
         fun magnitude(): Int = regular ?: (left!!.magnitude() * 3 + (right!!.magnitude()) * 2)
 
