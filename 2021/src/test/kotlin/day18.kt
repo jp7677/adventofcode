@@ -1,5 +1,4 @@
-import java.lang.IllegalStateException
-import java.util.*
+import Util.indexOfClosingBracket
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -44,6 +43,7 @@ class Day18 {
                         ?.let {
                             it.value.second.regular = it.value.second.regular!! + exploding.left!!.regular!!
                         }
+
                         // find regular and eventually add to regular to the right
                         regulars.withIndex().singleOrNull {
                             it.index == regulars.withIndex().last { i -> i.value.second.parent == exploding }.index + 1
@@ -87,7 +87,7 @@ class Day18 {
 
         companion object {
             fun from(input: String, parent: Number? = null): Number =
-                input.substring(1, input.length - 1)
+                input.substring(1, input.length.dec())
                     .let {
                         val number = Number(null, null, null, parent)
 
@@ -100,7 +100,7 @@ class Day18 {
                             Number(null, null, it.substring(0, end).toInt(), number)
                         }
 
-                        val remaining = it.substring(end + 1)
+                        val remaining = it.substring(end.inc())
                         number.right = if (remaining.first() == '[')
                             from(remaining, number)
                         else
@@ -108,26 +108,6 @@ class Day18 {
 
                         number
                     }
-
-            private fun String.indexOfClosingBracket(): Int {
-                val stack = Stack<Char>()
-                for ((index, c) in this.withIndex()) {
-                    if (c !in listOf('[', ']'))
-                        continue
-
-                    if (stack.isNotEmpty() && c.matchesBracket(stack.peek()))
-                        stack.pop()
-                    else
-                        stack.push(c)
-
-                    if (stack.isEmpty())
-                        return index + 1
-                }
-
-                throw IllegalStateException()
-            }
-
-            private fun Char.matchesBracket(peek: Char) = (this == '[' && peek == ']') || (this == ']' && peek == '[')
         }
     }
 

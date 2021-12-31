@@ -1,3 +1,4 @@
+import Util.towards
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -42,6 +43,4 @@ class Day05 {
         .groupingBy { it }
         .eachCount()
         .count { it.value >= 2 }
-
-    private infix fun Int.towards(to: Int) = IntProgression.fromClosedRange(this, to, if (this > to) -1 else 1)
 }
