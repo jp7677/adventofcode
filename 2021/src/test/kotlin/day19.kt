@@ -6,14 +6,7 @@ import kotlin.test.assertEquals
 class Day19 {
     data class Position(val x: Int, val y: Int, val z: Int)
     data class Scanner(val index: Int, val beacons: Set<Position>)
-    enum class Turn {
-        /** negative Z */ NONE,
-        /** positive X */ RIGHT,
-        /** negative X */ LEFT,
-        /** positive Y */ UP,
-        /** negative Y */ DOWN,
-        /** positive Z */ BACKWARDS
-    }
+    enum class Turn { NONE, RIGHT, LEFT, UP, DOWN, BACKWARDS }
     enum class Rotate { NONE, CLOCKWISE, COUNTERCLOCKWISE, UPSIDE_DOWN }
     data class Correction(val turn: Turn, val rotation: Rotate, val x: Int, val y: Int, val z: Int)
     private val turns = listOf(Turn.NONE, Turn.RIGHT, Turn.LEFT, Turn.UP, Turn.DOWN, Turn.BACKWARDS)
@@ -23,8 +16,8 @@ class Day19 {
     fun `run part 01`() {
         val scanners = getScanners()
 
-        val (_, detectedBeacons) = getOceanMap(scanners)
-        val count = detectedBeacons.count()
+        val count = getOceanMap(scanners)
+            .count { (_, isScanner) -> !isScanner }
 
         assertEquals(451, count)
     }
@@ -33,13 +26,16 @@ class Day19 {
     fun `run part 02`() {
         val scanners = getScanners()
 
-        val (detectedScanners, _) = getOceanMap(scanners)
+        val detectedScanners = getOceanMap(scanners)
+            .filter { (_, isScanner) -> isScanner }
+            .map { (position, _) -> position }
+
         val maxDistance = detectedScanners
-            .flatMap { a ->
+            .flatMap { position ->
                 detectedScanners
-                    .filterNot { b -> a == b }
-                    .map { b ->
-                        a.second.distance(b.second)
+                    .filterNot { other -> position == other }
+                    .map { other ->
+                        position.distance(other)
                     }
             }
             .maxOrNull()
@@ -47,7 +43,7 @@ class Day19 {
         assertEquals(13184, maxDistance)
     }
 
-    private fun getOceanMap(scanners: List<Scanner>): Pair<MutableList<Pair<Int, Position>>, MutableSet<Position>> {
+    private fun getOceanMap(scanners: List<Scanner>): Set<Pair<Position, Boolean>> {
         val detectedScanners = mutableListOf(scanners.first().index to Position(0, 0, 0))
         val detectedBeacons = scanners.first().beacons.toMutableSet()
 
@@ -57,14 +53,16 @@ class Day19 {
             scanners
                 .filterNot { detectedScanners.map { scanner -> scanner.first }.contains(it.index) }
                 .map {
-                    it to it.beacons.getTrianglesWithBeacons().filter { (triangles, _) ->
-                        triangles.sorted() in trianglesFromDetectedBeacons
-                            .map { (triangle, _) -> triangle.sorted() }
-                    }
+                    it to it.beacons
+                        .getTrianglesWithBeacons()
+                        .filter { (triangles, _) ->
+                            triangles.sorted() in trianglesFromDetectedBeacons
+                                .map { (triangle, _) -> triangle.sorted() }
+                        }
                 }
-                .filter { (_, trianglesWithBeacons) -> trianglesWithBeacons.count() * 3 >= 12 }
-                .forEach { (scanner, trianglesWithBeacons) ->
-                    val correction = calcCorrection(trianglesWithBeacons, trianglesFromDetectedBeacons)
+                .filter { (_, triangles) -> triangles.count() * 3 >= 12 }
+                .forEach { (scanner, triangles) ->
+                    val correction = calcCorrection(triangles, trianglesFromDetectedBeacons)
 
                     detectedScanners.add(scanner.index to Position(correction.x, correction.y, correction.z))
                     scanner.beacons
@@ -74,9 +72,11 @@ class Day19 {
                 }
         }
 
-        return detectedScanners to detectedBeacons
+        return detectedScanners.map { it.second to true }.toSet() + detectedBeacons.map { it to false }
     }
 
+    /** Build distinct triangles for all positions with closest two neighbours.
+     *  Also maintain position order for each triangle. */
     private fun Set<Position>.getTrianglesWithBeacons() =
         this.map {
             this
@@ -95,38 +95,36 @@ class Day19 {
                 .thenBy { (triangle, _) -> triangle[1] } )
             .distinctBy { (triangle, _) -> triangle.sorted() }
 
+    /** Determine correction (direction and position offset) by turning and rotating matching triangles.
+     *  Direction matches when the distances between all matching positions for matching triangles are equal.
+     *  Compare all triangles to avoid edge case where more than one direction fits. */
     private fun calcCorrection(
         trianglesWithBeacons: List<Pair<List<Int>, List<Position>>>,
         trianglesFromDetectedBeacons: List<Pair<List<Int>, List<Position>>>
-    ) =
-        trianglesWithBeacons
-            .map { (triangle, beacons) ->
-                val (_, matchingDetectedBeacons) = trianglesFromDetectedBeacons
-                    .single { (detectedTriangle, _) -> triangle == detectedTriangle }
+    ) = trianglesWithBeacons
+        .map { (triangle, beacons) ->
+            val (_, matchingDetectedBeacons) = trianglesFromDetectedBeacons
+                .single { (detectedTriangle, _) -> triangle == detectedTriangle }
 
-                turns.flatMap { turn ->
-                    rotations.mapNotNull { rotation ->
-                        val faced = beacons[0].face(turn, rotation)
-                        val distance1 = matchingDetectedBeacons[0].distance(faced)
-                        val distance2 = matchingDetectedBeacons[1].distance(beacons[1].face(turn, rotation))
-                        val distance3 = matchingDetectedBeacons[2].distance(beacons[2].face(turn, rotation))
-                        if (distance1 == distance2 && distance1 == distance3) {
-                            Correction(
-                                turn,
-                                rotation,
-                                faced.x - matchingDetectedBeacons[0].x,
-                                faced.y - matchingDetectedBeacons[0].y,
-                                faced.z - matchingDetectedBeacons[0].z
-                            )
-                        } else null
-                    }
-                }.toSet()
-            }
-            .filterNot { corrections -> corrections.isEmpty() }
-            .reduce { acc, corrections -> acc intersect corrections }
-            .let { corrections ->
-                if (corrections.size == 1) corrections.first() else throw IllegalStateException()
-            }
+            turns.flatMap { turn ->
+                rotations.mapNotNull { rotation ->
+                    val match = matchingDetectedBeacons[0]
+                    val faced = beacons[0].face(turn, rotation)
+                    val distance1 = match.distance(faced)
+                    val distance2 = matchingDetectedBeacons[1].distance(beacons[1].face(turn, rotation))
+                    val distance3 = matchingDetectedBeacons[2].distance(beacons[2].face(turn, rotation))
+
+                    if (distance1 == distance2 && distance1 == distance3)
+                        Correction(turn, rotation, faced.x - match.x,faced.y - match.y, faced.z - match.z)
+                    else null
+                }
+            }.toSet()
+        }
+        .filterNot { corrections -> corrections.isEmpty() }
+        .reduce { acc, corrections -> acc intersect corrections }
+        .let { corrections ->
+            if (corrections.size == 1) corrections.first() else throw IllegalStateException()
+        }
 
     private fun Position.face(turn: Turn, rotation: Rotate) = when (turn to rotation) {
         Turn.NONE to Rotate.NONE                  -> this
