@@ -46,4 +46,15 @@ object Util {
 
         throw IllegalStateException()
     }
+
+    // Based on https://stackoverflow.com/a/65145401
+    inline fun<T> List<T>.splitWhen(predicate: (T)-> Boolean):List<List<T>> =
+        foldIndexed(mutableListOf<MutableList<T>>()) { index, list, element ->
+            when {
+                predicate(element) -> if (index < size - 1 && !predicate(get(index + 1))) list.add(mutableListOf())
+                list.isNotEmpty() -> list.last().add(element)
+                else -> list.add(mutableListOf(element))
+            }
+            list
+        }
 }
