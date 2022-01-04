@@ -38,7 +38,7 @@ class Day18 {
                     ?.let { (exploding, _) ->
                         // find regular and eventually add to regular to the left
                         regulars.withIndex().singleOrNull {
-                            it.index == regulars.withIndex().first { i -> i.value.second.parent == exploding }.index - 1
+                            it.index == regulars.withIndex().first { i -> i.value.second.parent == exploding }.index.dec()
                         }
                         ?.let {
                             it.value.second.regular = it.value.second.regular!! + exploding.left!!.regular!!
@@ -46,7 +46,7 @@ class Day18 {
 
                         // find regular and eventually add to regular to the right
                         regulars.withIndex().singleOrNull {
-                            it.index == regulars.withIndex().last { i -> i.value.second.parent == exploding }.index + 1
+                            it.index == regulars.withIndex().last { i -> i.value.second.parent == exploding }.index.inc()
                         }
                         ?.let {
                             it.value.second.regular = it.value.second.regular!! + exploding.right!!.regular!!
@@ -64,7 +64,7 @@ class Day18 {
             .firstOrNull { (regular, _) -> regular >= 10 }
             ?.let { (regular, number) ->
                 number.left = Number(null, null, regular / 2, number)
-                number.right = Number(null, null, (regular + 1) / 2, number)
+                number.right = Number(null, null, (regular.inc()) / 2, number)
                 number.regular = null
             }
             .let { this }

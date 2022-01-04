@@ -44,7 +44,7 @@ class Day14 {
                 .map { it.key to it.value.sumOf { count -> count.second } }
                 .toMap()
         }
-            .take(steps + 1)
+            .take(steps.inc())
             .last()
 
     private fun Map<String, Long>.calcCommonElementsDiff() = this

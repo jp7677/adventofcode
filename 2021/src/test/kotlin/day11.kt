@@ -23,7 +23,7 @@ class Day11 {
     fun `run part 02`() {
         val grid = getGrid()
 
-        val day = generateSequence(1) { if (runDay(grid) != grid.count()) it + 1 else null }
+        val day = generateSequence(1) { if (runDay(grid) != grid.count()) it.inc() else null }
             .last()
 
         assertEquals(368, day)
@@ -48,7 +48,7 @@ class Day11 {
                             ?.let { octopus ->
                                 octopus.energy = if (octopus == it) 11
                                     else if (octopus.energy == 10) 10
-                                    else octopus.energy + 1
+                                    else octopus.energy.inc()
                             }
                     }
                 } ?: return
