@@ -79,7 +79,7 @@ class Day16 {
         val length = if (bits[idx] == '0') 16 else 12
         return Triple(
             bits[idx] == '0',
-            bits.substring(idx + 1 until idx + length).toInt(2),
+            bits.substring(idx.inc() until idx + length).toInt(2),
             length
         )
     }

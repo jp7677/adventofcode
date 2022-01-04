@@ -53,7 +53,7 @@ class Day17 {
             if (it.position.x <= areaMaxX && it.position.y >= areaMinY)
                 Step(
                     Coord(it.position.x + it.velocity.x, it.position.y + it.velocity.y),
-                    Coord(if (it.velocity.x == 0) 0 else it.velocity.x - 1, it.velocity.y - 1)
+                    Coord(if (it.velocity.x == 0) 0 else it.velocity.x.dec(), it.velocity.y.dec())
                 )
             else
                 null

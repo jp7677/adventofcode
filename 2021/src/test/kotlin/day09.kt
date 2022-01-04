@@ -18,7 +18,7 @@ class Day09 {
                                 .getAdjacents(it.coord, step)
                                 ?.let { adjacent -> adjacent.height > height } != false
                         })
-                        height + 1
+                        height.inc()
                     else 0
                 }
             }

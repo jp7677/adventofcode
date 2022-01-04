@@ -59,7 +59,7 @@ class Day15 {
         return this + this
             .flatMap {
                 (1 until tiles).map { x ->
-                    Coord(it.key.x + (x * (maxX + 1)), it.key.y) to
+                    Coord(it.key.x + (x * (maxX.inc())), it.key.y) to
                         if (it.value + x > 9) (it.value + x) - 9 else it.value + x
                 }
             }
@@ -70,7 +70,7 @@ class Day15 {
         return this + this
             .flatMap {
                 (1 until tiles).map { y ->
-                    Coord(it.key.x, it.key.y + (y * (maxY + 1))) to
+                    Coord(it.key.x, it.key.y + (y * (maxY.inc()))) to
                         if (it.value + y > 9) (it.value + y) - 9 else it.value + y
                 }
             }

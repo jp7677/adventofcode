@@ -37,16 +37,16 @@ class Day20 {
             val maxY = it.maxY()
 
             val processed = mutableSetOf<Pixel>()
-            ((it.minY() - 1)..(it.maxY() + 1)).forEach { y ->
-                ((it.minX() - 1)..(it.maxX() + 1)).forEach { x ->
-                    val index = it.getIndex(x, y, minX, maxX, minY, maxY, isLit)
-                    if (algorithm[index]) processed.add(Pixel(x, y))
+            (it.minY().dec()..it.maxY().inc()).forEach { y ->
+                (it.minX().dec()..it.maxX().inc()).forEach { x ->
+                    if (algorithm[it.getIndex(x, y, minX, maxX, minY, maxY, isLit)])
+                        processed.add(Pixel(x, y))
                 }
             }
             processed to (if (isLit) algorithm.last() else algorithm.first())
         }
             .map { it.first }
-            .take(rounds + 1)
+            .take(rounds.inc())
             .last()
 
     private fun Set<Pixel>.getIndex(x: Int, y: Int, minX: Int, maxX: Int, minY: Int, maxY: Int, isLit: Boolean) =
