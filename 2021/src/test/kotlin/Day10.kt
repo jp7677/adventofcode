@@ -12,12 +12,12 @@ class Day10 {
             .mapNotNull { it.getCorruptedClosingChar() }
             .sumOf {
                 when (it) {
-                    ')' -> 3
-                    ']' -> 57
-                    '}' -> 1197
-                    '>' -> 25137
+                    ')' -> 3L
+                    ']' -> 57L
+                    '}' -> 1197L
+                    '>' -> 25137L
                     else -> throw IllegalStateException()
-                } as Int
+                }
             }
 
         assertEquals(265527, errorScore)
