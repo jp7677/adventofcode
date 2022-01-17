@@ -7,6 +7,6 @@ class Day00 {
     fun `run part 01`() {
         val input = Util.getInputAsListOfString("day00-input.txt")
 
-        assertEquals(true, true)
+        assertEquals(true, input.any())
     }
 }
