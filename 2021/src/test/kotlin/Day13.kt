@@ -54,12 +54,12 @@ class Day13 {
                         .let { s -> Coord(s[0].toInt(), s[1].toInt()) }
                 else null
             } to
-            paper.mapNotNull {
-                if (it.startsWith("fold along"))
-                    it
-                        .split(" ", "=")
-                        .let { s -> Instruction(Axis.valueOf(s[2].uppercase()), s[3].toInt()) }
-                else null
-            }
+                paper.mapNotNull {
+                    if (it.startsWith("fold along"))
+                        it
+                            .split(" ", "=")
+                            .let { s -> Instruction(Axis.valueOf(s[2].uppercase()), s[3].toInt()) }
+                    else null
+                }
         }
 }

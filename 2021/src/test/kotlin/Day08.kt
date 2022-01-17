@@ -15,7 +15,8 @@ class Day08 {
         Display(6, "abdefg".sorted()),
         Display(7, "acf".sorted()),
         Display(8, "abcdefg".sorted()),
-        Display(9, "abcdfg".sorted()))
+        Display(9, "abcdfg".sorted())
+    )
 
     private val displaysWithUniqueSegmentCount = displays
         .filter { displays.count { s -> s.segments.length == it.segments.length } == 1 }
@@ -67,7 +68,7 @@ class Day08 {
 
         segmentsWithUniqueCountOverAllDigits
             .onEach { segment ->
-                val count = displays.joinToString { it.segments }.count { s -> s.toString() == segment}
+                val count = displays.joinToString { it.segments }.count { s -> s.toString() == segment }
                 this[segment] = patterns.joinToString("")
                     .groupBy { it }
                     .filter { it.value.count() == count }

@@ -1,5 +1,5 @@
 import java.lang.IllegalStateException
-import java.util.*
+import java.util.Stack
 
 object Util {
 
@@ -23,17 +23,17 @@ object Util {
     fun String.indexOfClosingBracket(): Int {
         fun Char.matchesBracket(peek: Char) =
             (this == '(' && peek == ')') ||
-            (this == ')' && peek == '(') ||
-            (this == '[' && peek == ']') ||
-            (this == ']' && peek == '[') ||
-            (this == '{' && peek == '}') ||
-            (this == '}' && peek == '{') ||
-            (this == '<' && peek == '>') ||
-            (this == '>' && peek == '<')
+                (this == ')' && peek == '(') ||
+                (this == '[' && peek == ']') ||
+                (this == ']' && peek == '[') ||
+                (this == '{' && peek == '}') ||
+                (this == '}' && peek == '{') ||
+                (this == '<' && peek == '>') ||
+                (this == '>' && peek == '<')
 
         val stack = Stack<Char>()
         this.withIndex()
-            .filter { (_, it) -> it in listOf('(', ')','[', ']','{', '}','<', '>') }
+            .filter { (_, it) -> it in listOf('(', ')', '[', ']', '{', '}', '<', '>') }
             .forEach { (index, it) ->
                 if (stack.isNotEmpty() && it.matchesBracket(stack.peek()))
                     stack.pop()
@@ -48,7 +48,7 @@ object Util {
     }
 
     // Based on https://stackoverflow.com/a/65145401
-    inline fun<T> List<T>.splitWhen(predicate: (T)-> Boolean):List<List<T>> =
+    inline fun <T> List<T>.splitWhen(predicate: (T) -> Boolean): List<List<T>> =
         foldIndexed(mutableListOf<MutableList<T>>()) { index, list, element ->
             when {
                 predicate(element) -> if (index < size.dec() && !predicate(get(index.inc()))) list.add(mutableListOf())

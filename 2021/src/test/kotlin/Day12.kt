@@ -41,7 +41,7 @@ class Day12 {
             return
 
         this
-            .filter { it.from == element  }
+            .filter { it.from == element }
             .map { it.to }
             .forEach { to -> this.buildAllPaths(to, maxVisits, acc, path + to) }
     }

@@ -4,10 +4,10 @@ import kotlin.test.assertEquals
 class Day04 {
     data class Board constructor (val rows: List<List<Int>>, val cols: List<List<Int>>) {
         constructor(rows: List<List<Int>>) :
-        this(
-            rows,
-            List(rows.first().size) { index -> rows.map { it[index] } }
-        )
+            this(
+                rows,
+                List(rows.first().size) { index -> rows.map { it[index] } }
+            )
 
         val all get() = rows.flatten()
     }
@@ -55,8 +55,8 @@ class Day04 {
                 .let { drawnNumbers ->
                     boards
                         .filter {
-                            it.rows.any { r -> drawnNumbers.containsAll(r) }
-                                || it.cols.any { c -> drawnNumbers.containsAll(c) }
+                            it.rows.any { r -> drawnNumbers.containsAll(r) } ||
+                                it.cols.any { c -> drawnNumbers.containsAll(c) }
                         }
                         .map { it to drawnNumbers.last() }
                 }

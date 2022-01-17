@@ -23,8 +23,8 @@ class Day22 {
         steps
             .filter {
                 it.cuboid.minX >= -50 && it.cuboid.maxX <= 50 &&
-                it.cuboid.minY >= -50 && it.cuboid.maxY <= 50 &&
-                it.cuboid.minZ >= -50 && it.cuboid.maxZ <= 50
+                    it.cuboid.minY >= -50 && it.cuboid.maxY <= 50 &&
+                    it.cuboid.minZ >= -50 && it.cuboid.maxZ <= 50
             }
             .forEach {
                 if (it.on)

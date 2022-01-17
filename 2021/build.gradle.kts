@@ -5,6 +5,7 @@ plugins {
     application
     kotlin("jvm") version "1.6.10"
     id("com.adarshr.test-logger") version "3.1.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
 }
 
 repositories { mavenCentral() }

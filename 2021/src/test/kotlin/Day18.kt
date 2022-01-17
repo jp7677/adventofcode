@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 class Day18 {
 
     class Number(var left: Number?, var right: Number?, var regular: Int?, var parent: Number? = null) {
-        override fun toString() = regular?.toString() ?: "[${left},${right}]"
+        override fun toString() = regular?.toString() ?: "[$left,$right]"
 
         operator fun plus(element: Number) = Number(this.copy(), element.copy(), null)
             .also {
@@ -40,17 +40,17 @@ class Day18 {
                         regulars.withIndex().singleOrNull {
                             it.index == regulars.withIndex().first { i -> i.value.second.parent == exploding }.index.dec()
                         }
-                        ?.let {
-                            it.value.second.regular = it.value.second.regular!! + exploding.left!!.regular!!
-                        }
+                            ?.let {
+                                it.value.second.regular = it.value.second.regular!! + exploding.left!!.regular!!
+                            }
 
                         // find regular and eventually add to regular to the right
                         regulars.withIndex().singleOrNull {
                             it.index == regulars.withIndex().last { i -> i.value.second.parent == exploding }.index.inc()
                         }
-                        ?.let {
-                            it.value.second.regular = it.value.second.regular!! + exploding.right!!.regular!!
-                        }
+                            ?.let {
+                                it.value.second.regular = it.value.second.regular!! + exploding.right!!.regular!!
+                            }
 
                         // explode
                         exploding.left = null

@@ -14,10 +14,11 @@ class Day09 {
             .sumOf {
                 it.height.let { height ->
                     if (moves.all { step ->
-                            heatmap
-                                .getAdjacents(it.coord, step)
-                                ?.let { adjacent -> adjacent.height > height } != false
-                        })
+                        heatmap
+                            .getAdjacents(it.coord, step)
+                            ?.let { adjacent -> adjacent.height > height } != false
+                    }
+                    )
                         height.inc()
                     else 0
                 }
