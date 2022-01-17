@@ -4,7 +4,7 @@ import kotlin.test.assertEquals
 
 class Day18 {
 
-    class Number(var left: Number?, var right: Number?, var regular: Int?, var parent: Number? = null) {
+    class Number(var left: Number?, var right: Number?, private var regular: Int?, private var parent: Number? = null) {
         override fun toString() = regular?.toString() ?: "[$left,$right]"
 
         operator fun plus(element: Number) = Number(this.copy(), element.copy(), null)
