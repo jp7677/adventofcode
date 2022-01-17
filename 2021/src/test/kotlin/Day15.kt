@@ -26,8 +26,8 @@ class Day15 {
     }
 
     private fun findTotalRiskForShortestPath(map: Map<Coord, Int>): Int {
-        val queue = mutableMapOf(Coord(0,0) to 0)
-        val totals = mutableMapOf(Coord(0,0) to 0)
+        val queue = mutableMapOf(Coord(0, 0) to 0)
+        val totals = mutableMapOf(Coord(0, 0) to 0)
         val visited = mutableSetOf<Coord>()
 
         while (queue.any()) {

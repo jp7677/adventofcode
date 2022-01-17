@@ -64,13 +64,13 @@ class Day14 {
                 else null
             }
                 .single { it.isNotEmpty() } to
-            paper.mapNotNull {
-                if (it.contains("->"))
-                    it
-                        .split("->")
-                        .let { s -> Pair(s[0].trim(), s[1].trim().first()) }
-                else null
-            }
-                .toMap()
+                paper.mapNotNull {
+                    if (it.contains("->"))
+                        it
+                            .split("->")
+                            .let { s -> Pair(s[0].trim(), s[1].trim().first()) }
+                    else null
+                }
+                    .toMap()
         }
 }

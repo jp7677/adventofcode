@@ -8,7 +8,8 @@ class Day11 {
         listOf(
             Coord(-1, -1), Coord(0, -1), Coord(1, -1),
             Coord(-1, 0), Coord(0, 0), Coord(1, 0),
-            Coord(-1, 1), Coord(0, 1), Coord(1, 1))
+            Coord(-1, 1), Coord(0, 1), Coord(1, 1)
+        )
 
     @Test
     fun `run part 01`() {
@@ -47,8 +48,8 @@ class Day11 {
                             }
                             ?.let { octopus ->
                                 octopus.energy = if (octopus == it) 11
-                                    else if (octopus.energy == 10) 10
-                                    else octopus.energy.inc()
+                                else if (octopus.energy == 10) 10
+                                else octopus.energy.inc()
                             }
                     }
                 } ?: return

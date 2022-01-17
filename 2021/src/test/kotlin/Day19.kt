@@ -91,8 +91,10 @@ class Day19 {
                     ) to listOf(it, beacons.first(), beacons.last())
                 }
         }
-            .sortedWith(compareBy<Pair<List<Int>, List<Position>>> { (triangle, _) -> triangle[0] }
-                .thenBy { (triangle, _) -> triangle[1] } )
+            .sortedWith(
+                compareBy<Pair<List<Int>, List<Position>>> { (triangle, _) -> triangle[0] }
+                    .thenBy { (triangle, _) -> triangle[1] }
+            )
             .distinctBy { (triangle, _) -> triangle.sorted() }
 
     /** Determine correction (direction and position offset) by turning and rotating matching triangles.
@@ -115,7 +117,7 @@ class Day19 {
                     val distance3 = matchingDetectedBeacons[2].distance(beacons[2].face(turn, rotation))
 
                     if (distance1 == distance2 && distance1 == distance3)
-                        Correction(turn, rotation, faced.x - match.x,faced.y - match.y, faced.z - match.z)
+                        Correction(turn, rotation, faced.x - match.x, faced.y - match.y, faced.z - match.z)
                     else null
                 }
             }.toSet()
@@ -127,30 +129,30 @@ class Day19 {
         }
 
     private fun Position.face(turn: Turn, rotation: Rotate) = when (turn to rotation) {
-        Turn.NONE to Rotate.NONE                  -> this
-        Turn.NONE to Rotate.CLOCKWISE             -> Position( this.y, -this.x,  this.z)
-        Turn.NONE to Rotate.COUNTERCLOCKWISE      -> Position(-this.y,  this.x,  this.z)
-        Turn.NONE to Rotate.UPSIDE_DOWN           -> Position(-this.x, -this.y,  this.z)
-        Turn.RIGHT to Rotate.NONE                 -> Position( this.z,  this.y, -this.x)
-        Turn.RIGHT to Rotate.CLOCKWISE            -> Position( this.z, -this.x, -this.y)
-        Turn.RIGHT to Rotate.COUNTERCLOCKWISE     -> Position( this.z,  this.x,  this.y)
-        Turn.RIGHT to Rotate.UPSIDE_DOWN          -> Position( this.z, -this.y,  this.x)
-        Turn.LEFT to Rotate.NONE                  -> Position(-this.z,  this.y,  this.x)
-        Turn.LEFT to Rotate.CLOCKWISE             -> Position(-this.z, -this.x,  this.y)
-        Turn.LEFT to Rotate.COUNTERCLOCKWISE      -> Position(-this.z,  this.x, -this.y)
-        Turn.LEFT to Rotate.UPSIDE_DOWN           -> Position(-this.z, -this.y, -this.x)
-        Turn.UP to Rotate.NONE                    -> Position( this.x,  this.z, -this.y)
-        Turn.UP to Rotate.CLOCKWISE               -> Position( this.y,  this.z,  this.x)
-        Turn.UP to Rotate.COUNTERCLOCKWISE        -> Position(-this.y,  this.z, -this.x)
-        Turn.UP to Rotate.UPSIDE_DOWN             -> Position(-this.x,  this.z,  this.y)
-        Turn.DOWN to Rotate.NONE                  -> Position( this.x, -this.z,  this.y)
-        Turn.DOWN to Rotate.CLOCKWISE             -> Position(-this.y, -this.z,  this.x)
-        Turn.DOWN to Rotate.COUNTERCLOCKWISE      -> Position( this.y, -this.z, -this.x)
-        Turn.DOWN to Rotate.UPSIDE_DOWN           -> Position(-this.x, -this.z, -this.y)
-        Turn.BACKWARDS to Rotate.NONE             -> Position(-this.x,  this.y, -this.z)
-        Turn.BACKWARDS to Rotate.CLOCKWISE        -> Position( this.y,  this.x, -this.z)
+        Turn.NONE to Rotate.NONE -> this
+        Turn.NONE to Rotate.CLOCKWISE -> Position(this.y, -this.x, this.z)
+        Turn.NONE to Rotate.COUNTERCLOCKWISE -> Position(-this.y, this.x, this.z)
+        Turn.NONE to Rotate.UPSIDE_DOWN -> Position(-this.x, -this.y, this.z)
+        Turn.RIGHT to Rotate.NONE -> Position(this.z, this.y, -this.x)
+        Turn.RIGHT to Rotate.CLOCKWISE -> Position(this.z, -this.x, -this.y)
+        Turn.RIGHT to Rotate.COUNTERCLOCKWISE -> Position(this.z, this.x, this.y)
+        Turn.RIGHT to Rotate.UPSIDE_DOWN -> Position(this.z, -this.y, this.x)
+        Turn.LEFT to Rotate.NONE -> Position(-this.z, this.y, this.x)
+        Turn.LEFT to Rotate.CLOCKWISE -> Position(-this.z, -this.x, this.y)
+        Turn.LEFT to Rotate.COUNTERCLOCKWISE -> Position(-this.z, this.x, -this.y)
+        Turn.LEFT to Rotate.UPSIDE_DOWN -> Position(-this.z, -this.y, -this.x)
+        Turn.UP to Rotate.NONE -> Position(this.x, this.z, -this.y)
+        Turn.UP to Rotate.CLOCKWISE -> Position(this.y, this.z, this.x)
+        Turn.UP to Rotate.COUNTERCLOCKWISE -> Position(-this.y, this.z, -this.x)
+        Turn.UP to Rotate.UPSIDE_DOWN -> Position(-this.x, this.z, this.y)
+        Turn.DOWN to Rotate.NONE -> Position(this.x, -this.z, this.y)
+        Turn.DOWN to Rotate.CLOCKWISE -> Position(-this.y, -this.z, this.x)
+        Turn.DOWN to Rotate.COUNTERCLOCKWISE -> Position(this.y, -this.z, -this.x)
+        Turn.DOWN to Rotate.UPSIDE_DOWN -> Position(-this.x, -this.z, -this.y)
+        Turn.BACKWARDS to Rotate.NONE -> Position(-this.x, this.y, -this.z)
+        Turn.BACKWARDS to Rotate.CLOCKWISE -> Position(this.y, this.x, -this.z)
         Turn.BACKWARDS to Rotate.COUNTERCLOCKWISE -> Position(-this.y, -this.x, -this.z)
-        Turn.BACKWARDS to Rotate.UPSIDE_DOWN      -> Position( this.x, -this.y, -this.z)
+        Turn.BACKWARDS to Rotate.UPSIDE_DOWN -> Position(this.x, -this.y, -this.z)
         else -> throw IllegalStateException()
     }
 
@@ -198,34 +200,33 @@ class Day19 {
         assertEquals(Position(-2, -1, -3), Position(1, 2, 3).face(Turn.BACKWARDS, Rotate.COUNTERCLOCKWISE))
         assertEquals(Position(1, -2, -3), Position(1, 2, 3).face(Turn.BACKWARDS, Rotate.UPSIDE_DOWN))
 
+        assertEquals(Position(1, -1, 1), Position(-1, -1, 1).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
+        assertEquals(Position(2, -2, 2), Position(-2, -2, 2).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
+        assertEquals(Position(3, -3, 3), Position(-3, -3, 3).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
+        assertEquals(Position(2, -1, 3), Position(-2, -3, 1).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
+        assertEquals(Position(-5, 4, -6), Position(5, 6, -4).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
+        assertEquals(Position(-8, -7, 0), Position(8, 0, 7).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
 
-        assertEquals(Position(1,-1,1), Position(-1,-1,1).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
-        assertEquals(Position(2,-2,2), Position(-2,-2,2).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
-        assertEquals(Position(3,-3,3), Position(-3,-3,3).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
-        assertEquals(Position(2,-1,3), Position(-2,-3,1).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
-        assertEquals(Position(-5,4,-6), Position(5,6,-4).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
-        assertEquals(Position(-8,-7,0), Position(8,0,7).face(Turn.DOWN, Rotate.UPSIDE_DOWN))
+        assertEquals(Position(-1, -1, -1), Position(-1, -1, 1).face(Turn.LEFT, Rotate.NONE))
+        assertEquals(Position(-2, -2, -2), Position(-2, -2, 2).face(Turn.LEFT, Rotate.NONE))
+        assertEquals(Position(-3, -3, -3), Position(-3, -3, 3).face(Turn.LEFT, Rotate.NONE))
+        assertEquals(Position(-1, -3, -2), Position(-2, -3, 1).face(Turn.LEFT, Rotate.NONE))
+        assertEquals(Position(4, 6, 5), Position(5, 6, -4).face(Turn.LEFT, Rotate.NONE))
+        assertEquals(Position(-7, 0, 8), Position(8, 0, 7).face(Turn.LEFT, Rotate.NONE))
 
-        assertEquals(Position(-1,-1,-1), Position(-1,-1,1).face(Turn.LEFT, Rotate.NONE))
-        assertEquals(Position(-2,-2,-2), Position(-2,-2,2).face(Turn.LEFT, Rotate.NONE))
-        assertEquals(Position(-3,-3,-3), Position(-3,-3,3).face(Turn.LEFT, Rotate.NONE))
-        assertEquals(Position(-1,-3,-2), Position(-2,-3,1).face(Turn.LEFT, Rotate.NONE))
-        assertEquals(Position(4,6,5), Position(5,6,-4).face(Turn.LEFT, Rotate.NONE))
-        assertEquals(Position(-7,0,8), Position(8,0,7).face(Turn.LEFT, Rotate.NONE))
+        assertEquals(Position(1, 1, -1), Position(-1, -1, 1).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
+        assertEquals(Position(2, 2, -2), Position(-2, -2, 2).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
+        assertEquals(Position(3, 3, -3), Position(-3, -3, 3).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
+        assertEquals(Position(1, 3, -2), Position(-2, -3, 1).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
+        assertEquals(Position(-4, -6, 5), Position(5, 6, -4).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
+        assertEquals(Position(7, 0, 8), Position(8, 0, 7).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
 
-        assertEquals(Position(1,1,-1), Position(-1,-1,1).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
-        assertEquals(Position(2,2,-2), Position(-2,-2,2).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
-        assertEquals(Position(3,3,-3), Position(-3,-3,3).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
-        assertEquals(Position(1,3,-2), Position(-2,-3,1).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
-        assertEquals(Position(-4,-6,5), Position(5,6,-4).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
-        assertEquals(Position(7,0,8), Position(8,0,7).face(Turn.RIGHT, Rotate.UPSIDE_DOWN))
-
-        assertEquals(Position(1,1,1), Position(-1,-1,1).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
-        assertEquals(Position(2,2,2), Position(-2,-2,2).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
-        assertEquals(Position(3,3,3), Position(-3,-3,3).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
-        assertEquals(Position(3,1,2), Position(-2,-3,1).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
-        assertEquals(Position(-6,-4,-5), Position(5,6,-4).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
-        assertEquals(Position(0,7,-8), Position(8,0,7).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
+        assertEquals(Position(1, 1, 1), Position(-1, -1, 1).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
+        assertEquals(Position(2, 2, 2), Position(-2, -2, 2).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
+        assertEquals(Position(3, 3, 3), Position(-3, -3, 3).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
+        assertEquals(Position(3, 1, 2), Position(-2, -3, 1).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
+        assertEquals(Position(-6, -4, -5), Position(5, 6, -4).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
+        assertEquals(Position(0, 7, -8), Position(8, 0, 7).face(Turn.UP, Rotate.COUNTERCLOCKWISE))
     }
 
     @Test
