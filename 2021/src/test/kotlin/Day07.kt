@@ -10,7 +10,7 @@ class Day07 {
 
         val minDistance = getDistances(positions)
             .minOfOrNull { distance ->
-                positions.sumOf { it -> abs(distance - it) }
+                positions.sumOf { abs(distance - it) }
             } ?: throw IllegalStateException()
 
         assertEquals(356992, minDistance)
