@@ -19,7 +19,7 @@ namespace day17 {
         }
 
         cube_position operator+(const cube_position &a) const {
-            return cube_position(x + a.x, y + a.y, z + a.z);
+            return {x + a.x, y + a.y, z + a.z};
         }
 
         struct hash {
@@ -41,7 +41,7 @@ namespace day17 {
         }
 
         hypercube_position operator+(const hypercube_position &a) const {
-            return hypercube_position(x + a.x, y + a.y, z + a.z, w + a.w);
+            return {x + a.x, y + a.y, z + a.z, w + a.w};
         }
 
         struct hash {
