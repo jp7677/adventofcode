@@ -4,7 +4,9 @@ From <https://adventofcode.com/2020>. Better late than never ;)
 
 ## System requirements
 
-- build-essentials (gcc, libdw-dev, libunwind-dev)
+- gcc
+- libdw (`dnf install elfutils-devel` or `apt-get install libdw-dev`)
+- libunwind (`dnf install libunwind-devel` or `apt-get install libunwind-dev`)
 - cmake
 
 Only Linux/gcc has been tested. Other platforms might just work though.
