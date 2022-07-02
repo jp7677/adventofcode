@@ -4,7 +4,7 @@ From <https://adventofcode.com/2020>. Better late than never ;)
 
 ## System requirements
 
-- build-essentials (gcc, libunwind-dev libdw-dev)
+- build-essentials (gcc, libdw-dev, libunwind-dev)
 - cmake
 
 Only Linux/gcc has been tested. Other platforms might just work though.
