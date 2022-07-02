@@ -55,7 +55,7 @@ namespace util {
     {
         const auto begin = whitespacedString.find_first_not_of(whitespace);
         if (begin == std::string::npos)
-            return string();
+            return string{};
 
         const auto end = whitespacedString.find_last_not_of(whitespace);
         return whitespacedString.substr(begin, end - begin + 1);
