@@ -11,7 +11,7 @@ namespace day20 {
         auto tilesData = util::loadInputFile("day20-input.txt");
 
         unordered_map<uint, vector<string>> tiles;
-        uint currentTile;
+        auto currentTile = 0U;
         for (const auto& tileData : tilesData)
             if (tileData[0] == 'T') {
                 currentTile = stoul(util::split(tileData, ' ', ':')[1]);
