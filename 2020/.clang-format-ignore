@@ -1,4 +1,4 @@
-external/*
+data/*
 inc/*
 build/*
-builddir/*
+cmake-*/*
