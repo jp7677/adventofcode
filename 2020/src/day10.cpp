@@ -43,7 +43,17 @@ namespace day10 {
 
         auto result = accumulate(diff1groups.begin(), diff1groups.end(), 1UL,
             [](const auto product, const auto& group) {
-                return product * (group == 4 ? 7 : group == 3 ? 4 : group == 2 ? 2 : 1);
+                unsigned short magic_number;
+                switch (group) {
+                    // clang-format off
+                    case 4: magic_number = 7; break;
+                    case 3: magic_number = 4; break;
+                    case 2: magic_number = 2; break;
+                    // clang-format on
+                    default:
+                        magic_number = 1;
+                }
+                return product * magic_number;
             });
 
         REQUIRE(result == 14173478093824);

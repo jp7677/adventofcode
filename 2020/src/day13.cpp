@@ -19,7 +19,7 @@ namespace day13 {
             });
 
         auto min = min_element(busWaits.begin(), busWaits.end(),
-            [](const auto& a, const auto&  b) {
+            [](const auto& a, const auto& b) {
                 return a.second < b.second;
             });
         auto result = (*min).first * (*min).second;
@@ -48,7 +48,8 @@ namespace day13 {
                 return id.second == first.first || id.second - id.first == first.first;
             });
 
-        busIds.erase(remove_if(busIds.begin(), busIds.end(),
+        busIds.erase(
+            remove_if(busIds.begin(), busIds.end(),
                 [&incIds](const auto& id) {
                     return find(incIds.begin(), incIds.end(), id) != incIds.end();
                 }),
@@ -72,7 +73,7 @@ namespace day13 {
                     goto next;
 
             break;
-            next:;
+        next:;
         }
 
         REQUIRE(result == 266204454441577);

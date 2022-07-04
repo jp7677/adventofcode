@@ -52,10 +52,11 @@ namespace day20 {
 
                         auto otherBorder = getTileBorder(other.second);
                         return anyAdjacentBorder(border.top, otherBorder)
-                            || anyAdjacentBorder(border.bottom, otherBorder)
-                            || anyAdjacentBorder(border.right, otherBorder)
-                            || anyAdjacentBorder(border.left, otherBorder)
-                            ? sum + 1 : sum;
+                                || anyAdjacentBorder(border.bottom, otherBorder)
+                                || anyAdjacentBorder(border.right, otherBorder)
+                                || anyAdjacentBorder(border.left, otherBorder)
+                            ? sum + 1
+                            : sum;
                     });
 
                 return adjacentBorders == 2 ? product * tile.first : product;
@@ -66,18 +67,20 @@ namespace day20 {
 
     pair<uint, vector<string>> findTopLeftTile(const unordered_map<uint, vector<string>>& tiles) {
         auto it = find_if(tiles.begin(), tiles.end(),
-            [&tiles](const auto& tile){
+            [&tiles](const auto& tile) {
                 auto border = getTileBorder(tile.second);
                 return find_if(tiles.begin(), tiles.end(),
-                        [&tile, &border](const auto& other) {
-                            auto otherBorder = getTileBorder(other.second);
-                            return tile.first != other.first && anyAdjacentBorder(border.top, otherBorder);
-                        }) == tiles.end()
+                           [&tile, &border](const auto& other) {
+                               auto otherBorder = getTileBorder(other.second);
+                               return tile.first != other.first && anyAdjacentBorder(border.top, otherBorder);
+                           })
+                    == tiles.end()
                     && find_if(tiles.begin(), tiles.end(),
-                        [&tile, &border](const auto& other) {
-                            auto otherBorder = getTileBorder(other.second);
-                            return tile.first != other.first && anyAdjacentBorder(border.left, otherBorder);
-                        }) == tiles.end();
+                           [&tile, &border](const auto& other) {
+                               auto otherBorder = getTileBorder(other.second);
+                               return tile.first != other.first && anyAdjacentBorder(border.left, otherBorder);
+                           })
+                    == tiles.end();
             });
 
         // the given data sets contain a top left corner, we should actually just rotate the first corner tile found here to become a top left corner
@@ -104,7 +107,10 @@ namespace day20 {
         return rotatedTile;
     }
 
-    enum orientation { top, left };
+    enum orientation {
+        top,
+        left
+    };
 
     vector<string> orientateToBoarder(const vector<string>& tile, const string& boarderLane, const orientation orientation) {
         auto boarder = getTileBorder(tile);
@@ -209,10 +215,9 @@ namespace day20 {
 
         auto waterRoughness = accumulate(image.begin(), image.end(), 0U,
             [](const auto sum, const auto& line) {
-                return sum + count_if(line.begin(), line.end(),
-                    [](const auto& character) {
-                        return character == '#';
-                    });
+                return sum + count_if(line.begin(), line.end(), [](const auto& character) {
+                    return character == '#';
+                });
             });
 
         auto result = waterRoughness - (numberOfSeaMonsters * seaMonsterParts);

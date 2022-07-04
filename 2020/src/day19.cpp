@@ -29,15 +29,15 @@ namespace day19 {
             return string(1, rule[2]); // NOLINT(modernize-return-braced-init-list)
 
         auto subRules = util::split(rule, ' ');
-        return "(" +
-            accumulate(subRules.begin(), subRules.end(), string(),
+        return "("
+            + accumulate(subRules.begin(), subRules.end(), string(),
                 [&rules](const auto& result, const auto& subRule) {
                     if (subRule == "|")
                         return result + subRule;
 
                     return result + buildPattern(rules, stoul(subRule));
-                }) +
-            ")";
+                })
+            + ")";
     }
 
     TEST_CASE("Day 19 - Part 1 from https://adventofcode.com/2020/day/19") {

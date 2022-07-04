@@ -6,7 +6,7 @@ namespace day17 {
     static constexpr array<int, 3> moves{{-1, 0, +1}};
 
     struct cube_position {
-        int x,y,z;
+        int x, y, z;
 
         cube_position(int x, int y, int z = 0) {
             this->x = x;
@@ -14,16 +14,16 @@ namespace day17 {
             this->z = z;
         }
 
-        bool operator==(const cube_position &a) const {
+        bool operator==(const cube_position& a) const {
             return x == a.x && y == a.y && z == a.z;
         }
 
-        cube_position operator+(const cube_position &a) const {
+        cube_position operator+(const cube_position& a) const {
             return {x + a.x, y + a.y, z + a.z};
         }
 
         struct hash {
-            size_t operator() (const cube_position& a) const {
+            size_t operator()(const cube_position& a) const {
                 return a.x ^ (a.y << 4) ^ (a.z << 8); // Beware there be dragons.
             }
         };
@@ -36,22 +36,22 @@ namespace day17 {
             this->w = w;
         }
 
-        bool operator==(const hypercube_position &a) const {
+        bool operator==(const hypercube_position& a) const {
             return x == a.x && y == a.y && z == a.z && w == a.w;
         }
 
-        hypercube_position operator+(const hypercube_position &a) const {
+        hypercube_position operator+(const hypercube_position& a) const {
             return {x + a.x, y + a.y, z + a.z, w + a.w};
         }
 
         struct hash {
-            size_t operator() (const hypercube_position& a) const {
+            size_t operator()(const hypercube_position& a) const {
                 return a.x ^ (a.y << 4) ^ (a.z << 8) ^ (a.w << 12); // Beware there be dragons.
             }
         };
     };
 
-    template<typename T, typename H>
+    template <typename T, typename H>
     unordered_set<T, H> loadActiveCubes() {
         auto cubeData = util::loadInputFile("day17-input.txt");
 
@@ -64,12 +64,12 @@ namespace day17 {
         return activeCubes;
     }
 
-    template<typename T, typename H>
+    template <typename T, typename H>
     unordered_set<T, H> runCycle(const unordered_set<T, H>& activeCubes, const vector<T>& directions) {
         unordered_set<T, H> resultingActiveCubes;
         for (auto activeCube : activeCubes) {
             auto activeNeighbours = accumulate(directions.begin(), directions.end(), 0U,
-                [&activeCubes, &activeCube](const auto sum, const auto& direction){
+                [&activeCubes, &activeCube](const auto sum, const auto& direction) {
                     return sum <= 3 && activeCubes.find(activeCube + direction) != activeCubes.end() ? sum + 1 : sum;
                 });
 
@@ -85,7 +85,7 @@ namespace day17 {
                     continue;
 
                 auto activeNeighboursOfNeighbour = accumulate(directions.begin(), directions.end(), 0U,
-                    [&activeCubes, &neighbour](const auto sum, const auto& direction){
+                    [&activeCubes, &neighbour](const auto sum, const auto& direction) {
                         return sum <= 3 && activeCubes.find(neighbour + direction) != activeCubes.end() ? sum + 1 : sum;
                     });
 
@@ -98,7 +98,7 @@ namespace day17 {
         return resultingActiveCubes;
     }
 
-    template<typename T, typename H>
+    template <typename T, typename H>
     uint runCycles(unordered_set<T, H>& activeCubes, const vector<T>& directions) {
         for (auto i = 0U; i < 6; i++)
             activeCubes = runCycle(activeCubes, directions);

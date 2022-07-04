@@ -3,7 +3,10 @@
 using namespace std;
 
 namespace day16 {
-    void loadNotes(vector<pair<string, vector<pair<uint, uint>>>>& ticketFields, vector<uint>& yourTicket, vector<vector<uint>>& nearbyTickets) {
+    void loadNotes(
+        vector<pair<string, vector<pair<uint, uint>>>>& ticketFields,
+        vector<uint>& yourTicket,
+        vector<vector<uint>>& nearbyTickets) {
         auto notesData = util::loadInputFile("day16-input.txt");
 
         auto notesSection = 0U;
@@ -17,10 +20,16 @@ namespace day16 {
 
                     auto lineElements = util::split(notesLine, ':');
                     auto valueElements = util::split(lineElements[1], ' ', '-');
-                    ticketFields.emplace_back(make_pair(lineElements[0], vector<pair<uint, uint>> {
-                        make_pair(stoi(valueElements[0]), stoi(valueElements[1])),
-                        make_pair(stoi(valueElements[3]), stoi(valueElements[4]))
-                    }));
+                    ticketFields.emplace_back(
+                        make_pair(
+                            lineElements[0],
+                            vector<pair<uint, uint>>{
+                                make_pair(
+                                    stoi(valueElements[0]),
+                                    stoi(valueElements[1])),
+                                make_pair(
+                                    stoi(valueElements[3]),
+                                    stoi(valueElements[4]))}));
                     break;
                 }
                 case 1: {
@@ -52,7 +61,8 @@ namespace day16 {
                     nearbyTickets.push_back(nearbyTicket);
                     break;
                 }
-                default: throw runtime_error("invalid data");
+                default:
+                    throw runtime_error("invalid data");
             }
         }
     }
@@ -62,14 +72,16 @@ namespace day16 {
             || (ticketValue >= fieldValue.second[1].first && ticketValue <= fieldValue.second[1].second);
     }
 
-    pair<bool, uint> getInvalidTicketValue(const vector<uint>& nearbyTicket, const vector<pair<string, vector<pair<uint, uint>>>>& ticketFields) {
+    pair<bool, uint> getInvalidTicketValue(
+        const vector<uint>& nearbyTicket,
+        const vector<pair<string, vector<pair<uint, uint>>>>& ticketFields) {
         for (const auto& nearbyTicketValue : nearbyTicket) {
-            for (const auto &ticketField : ticketFields)
+            for (const auto& ticketField : ticketFields)
                 if (isValidTicketValue(nearbyTicketValue, ticketField))
                     goto next;
 
             return make_pair(true, nearbyTicketValue);
-            next:;
+        next:;
         }
 
         return make_pair(false, 0);
@@ -97,7 +109,8 @@ namespace day16 {
 
         loadNotes(ticketFields, yourTicket, nearbyTickets);
 
-        nearbyTickets.erase(remove_if(nearbyTickets.begin(), nearbyTickets.end(),
+        nearbyTickets.erase(
+            remove_if(nearbyTickets.begin(), nearbyTickets.end(),
                 [&ticketFields](const auto& nearbyTicket) {
                     return getInvalidTicketValue(nearbyTicket, ticketFields).first;
                 }),
@@ -121,14 +134,15 @@ namespace day16 {
         for (auto& fieldOption : ticketFieldOptions) {
             vector<string> possibleFieldOptions;
             sort(fieldOption.begin(), fieldOption.end());
-            set_difference(fieldNames.begin(), fieldNames.end(), fieldOption.begin(), fieldOption.end(), back_inserter(possibleFieldOptions));
+            set_difference(fieldNames.begin(), fieldNames.end(), fieldOption.begin(), fieldOption.end(),
+                back_inserter(possibleFieldOptions));
             fieldOption = possibleFieldOptions;
         }
 
         vector<string> finalTicketPositions{ticketFieldOptions.size(), string()};
         while (find(finalTicketPositions.begin(), finalTicketPositions.end(), string()) != finalTicketPositions.end()) {
             auto findFinalIt = find_if(ticketFieldOptions.begin(), ticketFieldOptions.end(),
-               [](const auto& fieldPosition){
+                [](const auto& fieldPosition) {
                     return fieldPosition.size() == 1;
                 });
 

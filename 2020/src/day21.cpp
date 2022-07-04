@@ -41,18 +41,20 @@ namespace day21 {
         for (const auto& foodByAllergen : foodsByAllergen)
             for (const auto& ingredient : foodByAllergen.second)
                 if (find_if(foodsByAllergen.begin(), foodsByAllergen.end(),
-                    [&foodByAllergen, &ingredient](const auto& otherFoodByAllergen) {
-                        return otherFoodByAllergen.first == foodByAllergen.first
-                            && otherFoodByAllergen.second.find(ingredient) == otherFoodByAllergen.second.end();
-                        }) == foodsByAllergen.end())
+                        [&foodByAllergen, &ingredient](const auto& otherFoodByAllergen) {
+                            return otherFoodByAllergen.first == foodByAllergen.first
+                                && otherFoodByAllergen.second.find(ingredient) == otherFoodByAllergen.second.end();
+                        })
+                    == foodsByAllergen.end())
                     inertIngredients.insert(ingredient);
 
         auto result = accumulate(foods.begin(), foods.end(), 0U,
             [&inertIngredients](auto sum, const auto& foodByIngredient) {
-                return sum + count_if(foodByIngredient.begin() , foodByIngredient.end(),
-                    [&inertIngredients](const auto& ingredient) {
-                        return inertIngredients.find(ingredient) == inertIngredients.end();
-                    });
+                return sum
+                    + count_if(foodByIngredient.begin(), foodByIngredient.end(),
+                        [&inertIngredients](const auto& ingredient) {
+                            return inertIngredients.find(ingredient) == inertIngredients.end();
+                        });
             });
 
         REQUIRE(result == 2389);
@@ -78,10 +80,11 @@ namespace day21 {
             unordered_set<string> ingredients;
             for (const auto& ingredient : foodByAllergen.second)
                 if (find_if(foodsByAllergen.begin(), foodsByAllergen.end(),
-                    [&foodByAllergen, &ingredient](const auto& otherFoodByAllergen) {
-                        return otherFoodByAllergen.first == foodByAllergen.first
-                            && otherFoodByAllergen.second.find(ingredient) == otherFoodByAllergen.second.end();
-                        }) == foodsByAllergen.end())
+                        [&foodByAllergen, &ingredient](const auto& otherFoodByAllergen) {
+                            return otherFoodByAllergen.first == foodByAllergen.first
+                                && otherFoodByAllergen.second.find(ingredient) == otherFoodByAllergen.second.end();
+                        })
+                    == foodsByAllergen.end())
                     ingredients.insert(ingredient);
 
             ingredientsByAllergen.emplace(foodByAllergen.first, ingredients);

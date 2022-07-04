@@ -4,9 +4,12 @@ using namespace std;
 
 namespace day11 {
     static constexpr array<pair<short, short>, 8> directions{{
+        // clang-format off
         {-1, -1}, {+0, -1}, {+1, -1},
-        {-1, +0}, {+1, +0},
-        {-1, +1}, {+0, +1}, {+1, +1}}};
+        {-1, +0},           {+1, +0},
+        {-1, +1}, {+0, +1}, {+1, +1}
+        // clang-format on
+    }};
 
     struct size {
         size_t width;

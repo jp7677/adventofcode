@@ -15,7 +15,7 @@ namespace day23 {
         return cups;
     }
 
-    template<typename T>
+    template <typename T>
     uint getDestination(const T begin, const T end, const uint current, const uint max) {
         auto destination = current;
         auto it = begin;
@@ -50,11 +50,11 @@ namespace day23 {
         string result;
         auto it = find(cups.begin(), cups.end(), 1);
         transform(next(it), cups.end(), back_inserter(result),
-            [](const auto& label){
+            [](const auto& label) {
                 return to_string(label)[0];
             });
         transform(cups.begin(), it, back_inserter(result),
-            [](const auto& label){
+            [](const auto& label) {
                 return to_string(label)[0];
             });
 

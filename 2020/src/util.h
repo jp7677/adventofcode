@@ -13,14 +13,14 @@ namespace util {
             throw runtime_error("file is not open");
 
         string line;
-        while(getline(inputStream, line))
+        while (getline(inputStream, line))
             data.push_back(line);
 
         inputStream.close();
         return data;
     }
 
-    template<typename... Chars>
+    template <typename... Chars>
     inline vector<string> split(const string& delimitedString, Chars... delimiters) {
         string search{delimiters...};
         size_t begin, position = 0U;
@@ -51,8 +51,7 @@ namespace util {
         return replacedString;
     }
 
-    inline string trim(const string& whitespacedString, const string& whitespace = " \t")
-    {
+    inline string trim(const string& whitespacedString, const string& whitespace = " \t") {
         const auto begin = whitespacedString.find_first_not_of(whitespace);
         if (begin == std::string::npos)
             return string{};
@@ -68,6 +67,7 @@ namespace util {
     }
 
     inline constexpr ushort numberOfDigits(const uint number) {
+        // clang-format off
         return (number < 10 ? 1 :
             (number < 100 ? 2 :
             (number < 1000 ? 3 :
@@ -78,9 +78,10 @@ namespace util {
             (number < 100000000 ? 8 :
             (number < 1000000000 ? 9 :
             10)))))))));
+        // clang-format on
     }
 
-    inline void negate (int& a) {
+    inline void negate(int& a) {
         a *= -1;
     }
 
