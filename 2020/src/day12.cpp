@@ -16,7 +16,7 @@ namespace day12 {
     }
 
     struct position {
-        int x,y;
+        int x, y;
 
         [[nodiscard]] uint getManhattenDistance() const {
             return abs(x) + abs(y);
@@ -29,11 +29,14 @@ namespace day12 {
 
     void move(position& pos, const char direction, const int steps) {
         switch (direction) {
+            // clang-format off
             case 'E': pos.x += steps; return;
             case 'W': pos.x -= steps; return;
             case 'N': pos.y += steps; return;
             case 'S': pos.y -= steps; return;
-            default: throw runtime_error("invalid data");
+            // clang-format on
+            default:
+                throw runtime_error("invalid data");
         }
     }
 
@@ -43,19 +46,25 @@ namespace day12 {
             normalized = 360 - abs(normalized);
 
         switch (normalized) {
+            // clang-format off
             case   0: move(pos, 'N', steps); return;
             case  90: move(pos, 'E', steps); return;
             case 180: move(pos, 'S', steps); return;
             case 270: move(pos, 'W', steps); return;
-            default: throw runtime_error("invalid data");
+            // clang-format on
+            default:
+                throw runtime_error("invalid data");
         }
     }
 
     void turn(ship& ship, const char direction, const int degrees) {
         switch (direction) {
+            // clang-format off
             case 'R': ship.direction += degrees; return;
             case 'L': ship.direction -= degrees; return;
-            default: throw runtime_error("invalid data");
+            // clang-format on
+            default:
+                throw runtime_error("invalid data");
         }
     }
 
@@ -65,6 +74,7 @@ namespace day12 {
         ship ship{{0, 0}, 90};
         for (const auto& instruction : instructions)
             switch (instruction.first) {
+                // clang-format off
                 case 'N': case 'E': case 'S': case 'W':
                     move(ship, instruction.first, instruction.second);
                     continue;
@@ -74,7 +84,9 @@ namespace day12 {
                 case 'F':
                     move(ship, ship.direction, instruction.second);
                     continue;
-                default: throw runtime_error("invalid data");
+                // clang-format on
+                default:
+                    throw runtime_error("invalid data");
             }
 
         auto result = ship.getManhattenDistance();
@@ -85,10 +97,13 @@ namespace day12 {
     void rotate(position& pos, const char direction, const uint degrees) {
         auto absolute = direction == 'R' ? degrees : 360 - degrees;
         switch (absolute) {
+            // clang-format off
             case  90: util::negate(pos.x); swap(pos.x, pos.y); return;
             case 180: util::negate(pos.x); util::negate(pos.y); return;
             case 270: util::negate(pos.y); swap(pos.x, pos.y); return;
-            default: throw runtime_error("invalid data");
+            // clang-format on
+            default:
+                throw runtime_error("invalid data");
         }
     }
 
@@ -99,6 +114,7 @@ namespace day12 {
         position waypoint{10, 1};
         for (const auto& instruction : instructions)
             switch (instruction.first) {
+                // clang-format off
                 case 'N': case 'E': case 'S': case 'W':
                     move(waypoint, instruction.first, instruction.second);
                     continue;
@@ -109,7 +125,9 @@ namespace day12 {
                     move(ship, 'E', waypoint.x * instruction.second);
                     move(ship, 'N', waypoint.y * instruction.second);
                     continue;
-                default: throw runtime_error("invalid data");
+                // clang-format on
+                default:
+                    throw runtime_error("invalid data");
             }
 
         auto result = ship.getManhattenDistance();

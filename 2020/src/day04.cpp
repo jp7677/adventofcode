@@ -3,9 +3,9 @@
 using namespace std;
 
 namespace day04 {
-    vector<unordered_map<string,string>> loadPassports() {
+    vector<unordered_map<string, string>> loadPassports() {
         auto passportsInput = util::loadInputFile("day04-input.txt");
-      
+
         vector<string> passports(1);
         for (const auto& line : passportsInput) {
             if (!line.empty())
@@ -14,12 +14,12 @@ namespace day04 {
                 passports.push_back(line);
         }
 
-        vector<unordered_map<string,string>> parsedPassports;
+        vector<unordered_map<string, string>> parsedPassports;
         transform(passports.begin(), passports.end(), back_inserter(parsedPassports),
             [](const auto& passportLine) {
                 auto passportFields = util::split(passportLine, ' ');
 
-                unordered_map<string,string> parsedPassportFields;
+                unordered_map<string, string> parsedPassportFields;
                 transform(passportFields.begin(), passportFields.end(), inserter(parsedPassportFields, parsedPassportFields.end()),
                     [](const auto& field) {
                         auto splitted = util::split(field, ':');
@@ -31,7 +31,7 @@ namespace day04 {
         return parsedPassports;
     }
 
-    bool isValidPassport(const unordered_map<string,string>& passport) {
+    bool isValidPassport(const unordered_map<string, string>& passport) {
         return passport.find("byr") != passport.end()
             && passport.find("iyr") != passport.end()
             && passport.find("eyr") != passport.end()
@@ -62,10 +62,13 @@ namespace day04 {
         static const auto digits4Re = regex("^\\d{4}$");
 
         switch (util::numberOfDigits(min)) {
+            // clang-format off
             case 2: if (!isMatch(value, digits2Re)) return false; break;
             case 3: if (!isMatch(value, digits3Re)) return false; break;
             case 4: if (!isMatch(value, digits4Re)) return false; break;
-            default: throw runtime_error("invalid data");
+            // clang-format on
+            default:
+                throw runtime_error("invalid data");
         }
 
         auto number = stoul(value);

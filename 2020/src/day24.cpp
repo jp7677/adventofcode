@@ -3,10 +3,17 @@
 using namespace std;
 
 namespace day24 {
-    enum direction { e, se, sw, w, nw, ne };
+    enum direction {
+        e,
+        se,
+        sw,
+        w,
+        nw,
+        ne
+    };
 
     struct hash {
-        size_t operator() (const pair<int, int>& a) const {
+        size_t operator()(const pair<int, int>& a) const {
             return a.first ^ (a.second << 4); // Beware there be dragons.
         }
     };
@@ -43,13 +50,16 @@ namespace day24 {
             auto tile = accumulate(tileStep.begin(), tileStep.end(), pair<int, int>(0, 0),
                 [](const auto tile, const auto& tileDirection) {
                     switch (tileDirection) {
+                        // clang-format off
                         case direction::e : return pair<int, int>(tile.first + 1, tile.second);
                         case direction::w : return pair<int, int>(tile.first - 1, tile.second);
                         case direction::ne: return pair<int, int>(tile.second % 2 == 0 ? tile.first + 1 : tile.first, tile.second + 1);
                         case direction::nw: return pair<int, int>(tile.second % 2 == 0 ? tile.first : tile.first - 1, tile.second + 1);
                         case direction::se: return pair<int, int>(tile.second % 2 == 0 ? tile.first + 1 : tile.first, tile.second - 1);
                         case direction::sw: return pair<int, int>(tile.second % 2 == 0 ? tile.first : tile.first - 1, tile.second - 1);
-                        default: throw runtime_error("invalid data");
+                        // clang-format on
+                        default:
+                            throw runtime_error("invalid data");
                     }
                 });
 

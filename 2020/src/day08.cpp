@@ -28,7 +28,7 @@ namespace day08 {
             auto instruction = program[pos];
             if (instruction.first == "acc")
                 result += instruction.second;
-         
+
             pos += instruction.first == "jmp" ? instruction.second : 1;
         }
 

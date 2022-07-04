@@ -22,7 +22,7 @@ namespace day09 {
         auto result = [&numbers] {
             for (auto i = preamble; i < numbers.size(); i++) {
                 auto found = [&numbers, i] {
-                    for (auto k = i - preamble ; k < i; k++)
+                    for (auto k = i - preamble; k < i; k++)
                         for (auto l = i - preamble; l < i; l++)
                             if (numbers[k] != numbers[l] && numbers[k] + numbers[l] == numbers[i])
                                 return true;

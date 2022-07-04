@@ -11,7 +11,8 @@ namespace day18 {
         for (const auto& token : util::split(formattedExpression, ' ')) {
             ulong number;
             switch (token[0]) {
-                case '+': case '*':
+                case '+':
+                case '*':
                     results.top().second = token[0];
                     continue;
                 case '(':
@@ -32,7 +33,8 @@ namespace day18 {
                 case '*':
                     results.top().first *= number;
                     break;
-                default: throw runtime_error("Invalid data found");
+                default:
+                    throw runtime_error("Invalid data found");
             }
         }
         return results.top().first;
@@ -52,8 +54,7 @@ namespace day18 {
     ulong simpleEvaluateWithAdditionPrecedence(const string& expression) {
         static const auto re = regex(R"(\d+( \+ \d+)+)");
         auto bracedExpression = expression;
-        for (auto it = sregex_iterator(expression.begin(), expression.end(), re); it != sregex_iterator(); it++)
-        {
+        for (auto it = sregex_iterator(expression.begin(), expression.end(), re); it != sregex_iterator(); it++) {
             auto expr = (*it).str();
             bracedExpression = bracedExpression.replace(bracedExpression.find(expr), expr.length(), string("(").append(expr).append(")"));
         }

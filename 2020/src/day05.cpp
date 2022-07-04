@@ -37,7 +37,7 @@ namespace day05 {
         sort(seatIds.begin(), seatIds.end());
 
         auto result = [&seatIds] {
-            for (auto i = 0U; i <= seatIds.size(); i ++)
+            for (auto i = 0U; i <= seatIds.size(); i++)
                 if (seatIds[i] != seatIds[i + 1] - 1)
                     return seatIds[i] + 1;
 

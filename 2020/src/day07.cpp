@@ -18,7 +18,7 @@ namespace day07 {
 
                 vector<pair<uint, string>> luggages;
                 transform(splitted.begin(), splitted.end(), back_inserter(luggages),
-                    [](const auto& value){
+                    [](const auto& value) {
                         auto splitted = util::split(value, ' ');
 
                         return make_pair(
@@ -28,7 +28,7 @@ namespace day07 {
 
                 return make_pair(key, luggages);
             });
-      
+
         return rules;
     }
 
