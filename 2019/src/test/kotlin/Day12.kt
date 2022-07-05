@@ -6,9 +6,11 @@ class Day12 {
     data class Position(val x: Int, val y: Int, val z: Int) {
         fun pot(): Int = abs(x) + abs(y) + abs(z)
     }
+
     data class Velocity(val x: Int, val y: Int, val z: Int) {
         fun kin(): Int = abs(x) + abs(y) + abs(z)
     }
+
     data class Moon(val position: Position, val velocity: Velocity) {
         fun applyGravity(others: List<Moon>) =
             others.fold(velocity) { acc, moon ->
