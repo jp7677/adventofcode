@@ -35,8 +35,8 @@ class Day12 {
         val re = "-?\\d+".toRegex()
         var moons = Util.getInputAsListOfString("day12-input.txt")
             .map {
-                val (x,y,z) = re.findAll(it)
-                    .map { match ->  match.value.toInt() }
+                val (x, y, z) = re.findAll(it)
+                    .map { match -> match.value.toInt() }
                     .toList()
 
                 Moon(Position(x, y, z), Velocity(0, 0, 0))

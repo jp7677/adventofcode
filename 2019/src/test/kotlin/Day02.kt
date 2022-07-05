@@ -12,7 +12,7 @@ class Day02 {
             .also { it.runToCompletion() }
             .positionZero
 
-        assertEquals (5866663, positionZero)
+        assertEquals(5866663, positionZero)
     }
 
     @Test
@@ -29,8 +29,8 @@ class Day02 {
             }
             .let { it.first * 100 + it.second }
 
-        assertEquals (4259, nounVerb)
+        assertEquals(4259, nounVerb)
     }
 
-    private fun LongRange.crossJoin() = flatMap { it1 -> map { it2 -> it1 to it2} }
+    private fun LongRange.crossJoin() = flatMap { it1 -> map { it2 -> it1 to it2 } }
 }

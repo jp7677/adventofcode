@@ -7,7 +7,7 @@ class Day07 {
     fun runPart01() {
         val program = Util.getInputAsListOfLong("day07-input.txt", ",").toLongArray()
 
-        val signal = listOf(0L, 1L, 2L, 3L , 4L)
+        val signal = listOf(0L, 1L, 2L, 3L, 4L)
             .permutations()
             .maxOf {
                 it.fold(0L) { input, phase ->
@@ -15,14 +15,14 @@ class Day07 {
                 }
             }
 
-        assertEquals (18812, signal)
+        assertEquals(18812, signal)
     }
 
     @Test
     fun runPart02() {
         val program = Util.getInputAsListOfLong("day07-input.txt", ",").toLongArray()
 
-        val signal = listOf(9L, 7L, 8L, 5L , 6L)
+        val signal = listOf(9L, 7L, 8L, 5L, 6L)
             .permutations()
             .maxOf { phases ->
                 phases
@@ -36,6 +36,6 @@ class Day07 {
                     }
             }
 
-        assertEquals (25534964, signal)
+        assertEquals(25534964, signal)
     }
 }

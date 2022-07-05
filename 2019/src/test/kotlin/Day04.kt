@@ -6,8 +6,8 @@ class Day04 {
     @Test
     fun runPart01() {
         val count = countValidPasswords { digitWithNext ->
-            digitWithNext.any { it.first == it.second }
-                && digitWithNext.all { it.first <= it.second }
+            digitWithNext.any { it.first == it.second } &&
+                digitWithNext.all { it.first <= it.second }
         }
 
         assertEquals(979, count)
@@ -16,9 +16,9 @@ class Day04 {
     @Test
     fun runPart02() {
         val count = countValidPasswords { digitWithNext ->
-            digitWithNext.any { it.first == it.second }
-                && digitWithNext.all { it.first <= it.second }
-                && digitWithNext
+            digitWithNext.any { it.first == it.second } &&
+                digitWithNext.all { it.first <= it.second } &&
+                digitWithNext
                     .filter { it.first == it.second }
                     .groupBy { it }
                     .any { it.value.size == 1 }

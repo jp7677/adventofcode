@@ -3,7 +3,7 @@ import kotlin.test.assertEquals
 
 class Day11 {
     data class Panel(val x: Int, val y: Int, var color: Long)
-    enum class Direction{UP, RIGHT, DOWN, LEFT}
+    enum class Direction { UP, RIGHT, DOWN, LEFT }
 
     @Test
     fun runPart01() {
@@ -19,7 +19,7 @@ class Day11 {
     fun runPart02() {
         val program = Util.getInputAsListOfLong("day11-input.txt", ",").toLongArray()
 
-        val panels = getPanels(IntCodeComputer(program),1)
+        val panels = getPanels(IntCodeComputer(program), 1)
         val minX = panels.minOf { it.x }
         val maxX = panels.maxOf { it.x }
 
@@ -63,25 +63,25 @@ class Day11 {
 
     private fun turn(currentDirection: Direction, turn: Long) =
         when (currentDirection) {
-            Direction.UP    -> if (turn == 0L) Direction.LEFT  else Direction.RIGHT
-            Direction.RIGHT -> if (turn == 0L) Direction.UP    else Direction.DOWN
-            Direction.DOWN  -> if (turn == 0L) Direction.RIGHT else Direction.LEFT
-            Direction.LEFT  -> if (turn == 0L) Direction.DOWN  else Direction.UP
+            Direction.UP -> if (turn == 0L) Direction.LEFT else Direction.RIGHT
+            Direction.RIGHT -> if (turn == 0L) Direction.UP else Direction.DOWN
+            Direction.DOWN -> if (turn == 0L) Direction.RIGHT else Direction.LEFT
+            Direction.LEFT -> if (turn == 0L) Direction.DOWN else Direction.UP
         }
 
     private fun getNextX(direction: Direction, currentX: Int) =
         when (direction) {
             Direction.RIGHT -> currentX + 1
-            Direction.LEFT  -> currentX - 1
+            Direction.LEFT -> currentX - 1
             Direction.UP,
-            Direction.DOWN  -> currentX
+            Direction.DOWN -> currentX
         }
 
     private fun getNextY(direction: Direction, currentY: Int) =
         when (direction) {
-            Direction.UP    -> currentY + 1
-            Direction.DOWN  -> currentY - 1
+            Direction.UP -> currentY + 1
+            Direction.DOWN -> currentY - 1
             Direction.RIGHT,
-            Direction.LEFT  -> currentY
+            Direction.LEFT -> currentY
         }
 }

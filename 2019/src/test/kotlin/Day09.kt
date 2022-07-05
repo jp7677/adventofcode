@@ -9,7 +9,7 @@ class Day09 {
 
         val output = IntCodeComputer(program.toLongArray()).runToCompletion(1).last()
 
-        assertEquals (3906448201, output)
+        assertEquals(3906448201, output)
     }
 
     @Test
@@ -18,6 +18,6 @@ class Day09 {
 
         val output = IntCodeComputer(program.toLongArray()).runToCompletion(2).last()
 
-        assertEquals (59785, output)
+        assertEquals(59785, output)
     }
 }
