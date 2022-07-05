@@ -21,6 +21,7 @@ class Day06 {
 
         val result = listOf("YOU", "SAN")
             .map { map.traverseOrbits(it).toList() }
+            .let { it.first().count() + it.last().count() - 2 - 2 * (it.first() intersect it.last().toSet()).count() }
 
         assertEquals(418, result)
     }
