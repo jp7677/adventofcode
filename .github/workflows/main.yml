@@ -36,7 +36,7 @@ jobs:
       - name: Compile and run AoC 2019
         run: |
           cd 2019
-          ./gradlew test
+          ./gradlew check
 
   AoC-2020:
     runs-on: ubuntu-20.04
