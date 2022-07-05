@@ -15,6 +15,7 @@ class Day03 {
 
         val locations = trace(wires)
 
+        val distance = (locations.first() intersect locations.last().toSet())
             .filter { it != Location(0, 0) }
             .minOf { it.toManhattenDistance() }
 
@@ -27,6 +28,7 @@ class Day03 {
 
         val locations = trace(wires)
 
+        val distance = (locations.first() intersect locations.last().toSet())
             .filter { it != Location(0, 0) }
             .minOf { locations.first().indexOf(it) + locations.last().indexOf(it) }
 
