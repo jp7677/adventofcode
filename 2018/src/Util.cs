@@ -7,7 +7,7 @@ namespace aoc2018
 {
     public static class Util
     {
-        public static async Task<IEnumerable<String>> GetInputAsStrings(string name)
+        public static async Task<IEnumerable<string>> GetInputAsStrings(string name)
         {
             var stream = typeof(Util).Assembly.GetManifestResourceStream($"aoc2018.data.{name}");
             if (stream == null)
