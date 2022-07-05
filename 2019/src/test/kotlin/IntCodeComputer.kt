@@ -27,17 +27,17 @@ class IntCodeComputer(private var mem: LongArray, private val phase: Long? = nul
                     when (instr.op) {
                         Op.OUT -> return mem[param1Idx]
                         Op.STD -> relativeBase += mem[param1Idx]
-                        Op.IN  -> mem[param1Idx] = if (phase != null && !phaseSet) phase.also { phaseSet = true } else input
+                        Op.IN -> mem[param1Idx] = if (phase != null && !phaseSet) phase.also { phaseSet = true } else input
                         else -> {
                             val param2Idx = readParamIndex(instr.param2Mode)
                             when (instr.op) {
                                 Op.JNZ -> if (mem[param1Idx] != 0L) idx = mem[param2Idx].toInt()
-                                Op.JZ  -> if (mem[param1Idx] == 0L) idx = mem[param2Idx].toInt()
+                                Op.JZ -> if (mem[param1Idx] == 0L) idx = mem[param2Idx].toInt()
                                 else -> {
                                     val param3Idx = readParamIndex(instr.param3Mode)
                                     when (instr.op) {
-                                        Op.ADD  -> mem[param3Idx] = mem[param1Idx] + mem[param2Idx]
-                                        Op.MUL  -> mem[param3Idx] = mem[param1Idx] * mem[param2Idx]
+                                        Op.ADD -> mem[param3Idx] = mem[param1Idx] + mem[param2Idx]
+                                        Op.MUL -> mem[param3Idx] = mem[param1Idx] * mem[param2Idx]
                                         Op.SETL -> mem[param3Idx] = if (mem[param1Idx] < mem[param2Idx]) 1 else 0
                                         Op.SETE -> mem[param3Idx] = if (mem[param1Idx] == mem[param2Idx]) 1 else 0
                                         else -> throw IllegalStateException()
@@ -67,10 +67,10 @@ class IntCodeComputer(private var mem: LongArray, private val phase: Long? = nul
 
     private fun readParamIndex(mode: Mode) =
         when (mode) {
-            Mode.POSITION  -> mem[idx].toInt()
+            Mode.POSITION -> mem[idx].toInt()
             Mode.IMMEDIATE -> idx
-            Mode.RELATIVE  -> (mem[idx] + relativeBase).toInt()
+            Mode.RELATIVE -> (mem[idx] + relativeBase).toInt()
         }
-        .also { if (it >= mem.size) mem += LongArray(it - mem.size + 1) }
-        .also { idx++ }
+            .also { if (it >= mem.size) mem += LongArray(it - mem.size + 1) }
+            .also { idx++ }
 }

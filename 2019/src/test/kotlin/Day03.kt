@@ -15,7 +15,6 @@ class Day03 {
 
         val locations = trace(wires)
 
-        val distance = (locations.first() intersect locations.last())
             .filter { it != Location(0, 0) }
             .minOf { it.toManhattenDistance() }
 
@@ -28,7 +27,6 @@ class Day03 {
 
         val locations = trace(wires)
 
-        val distance = (locations.first() intersect locations.last())
             .filter { it != Location(0, 0) }
             .minOf { locations.first().indexOf(it) + locations.last().indexOf(it) }
 
@@ -45,7 +43,7 @@ class Day03 {
                 }
         }
 
-    private fun traverse(start: Location, path: Path) = when (path.direction){
+    private fun traverse(start: Location, path: Path) = when (path.direction) {
         Direction.R -> (1..path.length).map { Location(start.x + it, start.y) }
         Direction.L -> (1..path.length).map { Location(start.x - it, start.y) }
         Direction.U -> (1..path.length).map { Location(start.x, start.y + it) }
