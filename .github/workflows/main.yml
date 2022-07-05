@@ -21,6 +21,8 @@ jobs:
       - name: Compile and run AoC 2018
         run: |
           cd 2018
+          dotnet tool restore
+          dotnet csharpier --check src
           dotnet build -c Release 
           dotnet test bin/Release/net6.0/aoc2018.dll
 

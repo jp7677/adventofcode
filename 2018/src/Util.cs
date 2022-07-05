@@ -12,12 +12,10 @@ namespace aoc2018
             var stream = typeof(Util).Assembly.GetManifestResourceStream($"aoc2018.data.{name}");
             if (stream == null)
                 throw new ArgumentOutOfRangeException(nameof(name));
-            
+
             var reader = new StreamReader(stream);
             var content = await reader.ReadToEndAsync();
-            return content
-                .Trim()
-                .Split(Environment.NewLine);
+            return content.Trim().Split(Environment.NewLine);
         }
     }
 }
