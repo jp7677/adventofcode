@@ -11,12 +11,11 @@ namespace aoc2018
         [Fact]
         public async Task Part01()
         {
-            var result = (await Util.GetInputAsStrings("day01-input.txt"))
-                .Sum(Convert.ToInt32);
+            var result = (await Util.GetInputAsStrings("day01-input.txt")).Sum(Convert.ToInt32);
 
             Assert.Equal(500, result);
         }
-        
+
         [Fact]
         public async Task Part02()
         {
@@ -37,7 +36,7 @@ namespace aoc2018
                     frequencies.Add(frequency);
                 }
             }
-            
+
             done:
 
             Assert.Equal(709, frequency);
