@@ -1,3 +1,5 @@
+import java.math.BigInteger
+
 class Util {
     companion object {
         fun getInputAsString(name: String) =
@@ -43,4 +45,10 @@ fun <V> List<V>.permutations(): List<List<V>> {
 
     generate(this.count(), this.toMutableList())
     return listOfPermutations
+}
+
+fun Long.lcm(other: Long): Long {
+    // from https://www.baeldung.com/java-least-common-multiple#lcm-biginteger
+    val gcd = BigInteger.valueOf(this).gcd(BigInteger.valueOf(other)).toLong()
+    return this * other / gcd
 }
