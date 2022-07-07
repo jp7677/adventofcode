@@ -3,18 +3,15 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day12 {
-    data class Position(val x: Int, val y: Int, val z: Int) {
-        fun pot(): Int = abs(x) + abs(y) + abs(z)
+    data class Vector(val x: Int, val y: Int, val z: Int) {
+        operator fun plus(other: Vector) = Vector(x + other.x, y + other.y, z + other.z)
+        fun energy(): Int = abs(x) + abs(y) + abs(z)
     }
 
-    data class Velocity(val x: Int, val y: Int, val z: Int) {
-        fun kin(): Int = abs(x) + abs(y) + abs(z)
-    }
-
-    data class Moon(val position: Position, val velocity: Velocity) {
-        fun applyGravity(others: List<Moon>) =
-            others.fold(velocity) { acc, moon ->
-                Velocity(
+    data class Moon(val position: Vector, val velocity: Vector) {
+        fun applyGravity(others: List<Moon>) = others
+            .fold(velocity) { acc, moon ->
+                Vector(
                     calcAxis(position.x, moon.position.x, acc.x),
                     calcAxis(position.y, moon.position.y, acc.y),
                     calcAxis(position.z, moon.position.z, acc.z)
@@ -29,7 +26,7 @@ class Day12 {
             else
                 axisVelocity
 
-        fun applyVelocity(velocity: Velocity) = Position(position.x + velocity.x, position.y + velocity.y, position.z + velocity.z)
+        fun applyVelocity(velocity: Vector) = position + velocity
     }
 
     @Test
@@ -41,20 +38,17 @@ class Day12 {
                     .map { match -> match.value.toInt() }
                     .toList()
 
-                Moon(Position(x, y, z), Velocity(0, 0, 0))
+                Moon(Vector(x, y, z), Vector(0, 0, 0))
             }
 
         repeat(1000) {
-            moons = moons.map {
-                val velocity = moons
-                    .filter { moon -> it != moon }
-                    .let { moons -> it.applyGravity(moons) }
-
-                Moon(it.applyVelocity(velocity), velocity)
+            moons = moons.map { moon ->
+                val velocity = moon.applyGravity(moons - moon)
+                Moon(moon.applyVelocity(velocity), velocity)
             }
         }
 
-        val energy = moons.sumOf { it.position.pot() * it.velocity.kin() }
+        val energy = moons.sumOf { it.position.energy() * it.velocity.energy() }
 
         assertEquals(9743, energy)
     }
