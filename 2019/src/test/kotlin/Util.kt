@@ -1,4 +1,5 @@
 import java.math.BigInteger
+import kotlin.math.abs
 
 class Util {
     companion object {
@@ -50,5 +51,5 @@ fun <V> List<V>.permutations(): List<List<V>> {
 fun Long.lcm(other: Long): Long {
     // from https://www.baeldung.com/java-least-common-multiple#lcm-biginteger
     val gcd = BigInteger.valueOf(this).gcd(BigInteger.valueOf(other)).toLong()
-    return this * other / gcd
+    return abs(this * other) / gcd
 }
