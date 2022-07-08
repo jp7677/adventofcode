@@ -46,23 +46,22 @@ class Day12 {
     fun runPart02() {
         var moons = getMoons()
 
-        var rx = 0L
-        var ry = 0L
-        var rz = 0L
+        var allXZeroAt = 0L
+        var allYZeroAt = 0L
+        var allZZeroAt = 0L
+        var times = 0L
+        while (allXZeroAt == 0L || allYZeroAt == 0L || allZZeroAt == 0L) {
+            moons = turn(moons).also { times++ }
 
-        var round = 0L
-        while (rx == 0L || ry == 0L || rz == 0L) {
-            moons = turn(moons).also { round++ }
-
-            if (moons.sumOf { abs(it.velocity.x) } == 0 && rx == 0L)
-                rx = round
-            if (moons.sumOf { abs(it.velocity.y) } == 0 && ry == 0L)
-                ry = round
-            if (moons.sumOf { abs(it.velocity.z) } == 0 && rz == 0L)
-                rz = round
+            if (allXZeroAt == 0L && moons.all { it.velocity.x == 0 })
+                allXZeroAt = times
+            if (allYZeroAt == 0L && moons.all { it.velocity.y == 0 })
+                allYZeroAt = times
+            if (allZZeroAt == 0L && moons.all { it.velocity.z == 0 })
+                allZZeroAt = times
         }
 
-        val previousStateAt = 2 * rx.lcm(ry).lcm(rz)
+        val previousStateAt = 2 * allXZeroAt.lcm(allYZeroAt).lcm(allZZeroAt)
 
         assertEquals(288684633706728, previousStateAt)
     }
