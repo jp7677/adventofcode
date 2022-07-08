@@ -18,13 +18,8 @@ class Day12 {
                 )
             }
 
-        private fun calcAxis(axis: Int, otherAxis: Int, axisVelocity: Int) =
-            if (axis < otherAxis)
-                axisVelocity + 1
-            else if (axis > otherAxis)
-                axisVelocity - 1
-            else
-                axisVelocity
+        private fun calcAxis(axis: Int, otherAxis: Int, axisVelocity: Int) = axis
+            .compareTo(otherAxis).negate() + axisVelocity
 
         fun applyVelocity(velocity: Vector) = position + velocity
     }
