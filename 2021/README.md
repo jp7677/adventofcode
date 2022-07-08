@@ -11,7 +11,7 @@ Only Linux has been tested. Other platforms might just work though.
 ## Compile & run
 
 ```bash
-./gradlew test
+./gradlew check
 ```
 
-Append `--tests Day01` for running a specific test.
+Append e.g. `--tests Day01` for running a specific test.
