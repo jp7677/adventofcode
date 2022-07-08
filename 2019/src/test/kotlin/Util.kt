@@ -48,6 +48,8 @@ fun <V> List<V>.permutations(): List<List<V>> {
     return listOfPermutations
 }
 
+fun Int.negate() = this * -1
+
 fun Long.lcm(other: Long): Long {
     // from https://www.baeldung.com/java-least-common-multiple#lcm-biginteger
     val gcd = BigInteger.valueOf(this).gcd(BigInteger.valueOf(other)).toLong()
