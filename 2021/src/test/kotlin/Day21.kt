@@ -68,21 +68,18 @@ class Day21 {
         var player1Score: Int = 0,
         var player2Score: Int = 0
     ) {
-        var player1Wins = false
-        var player2Wins = false
         fun copy() = this.copy(
             player1Board = this.player1Board.copy(),
             player2Board = this.player2Board.copy()
         )
         fun playTurnForPlayer1(outcome: Int) {
             this.player1Score += this.player1Board.move(outcome)
-            this.player1Wins = this.player1Score >= 21
         }
         fun playTurnForPlayer2(outcome: Int) {
             this.player2Score += this.player2Board.move(outcome)
-            this.player2Wins = this.player2Score >= 21
         }
-        fun finished() = player1Wins || player2Wins
+        fun finished() = this.player1Score >= 21 || this.player2Score >= 21
+        fun player1Wins() = this.player1Score > this.player2Score
     }
 
     @Test
@@ -131,12 +128,12 @@ class Day21 {
                 }
         }
 
-        val player1Wins = multiverse.filter { it.first.player1Wins }.sumOf { it.second }
-        val player2Wins = multiverse.filter { it.first.player2Wins }.sumOf { it.second }
+        val maxWins = max(
+            multiverse.filter { it.first.player1Wins() }.sumOf { it.second },
+            multiverse.filter { !it.first.player1Wins() }.sumOf { it.second }
+        )
 
-        val result = max(player1Wins, player2Wins)
-
-        assertEquals(433315766324816, result)
+        assertEquals(433315766324816, maxWins)
     }
 
     /*
