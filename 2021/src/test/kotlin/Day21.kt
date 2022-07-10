@@ -96,35 +96,25 @@ class Day21 {
             multiverse
                 .filter { (universe, _) -> !universe.finished() }
                 .forEach { (universe, occurrences) ->
-                    if (player1turn) {
-                        // create copies
-                        diracDieOutcomes()
-                            .drop(1)
-                            .forEach { (outcome, times) ->
-                                multiverse.add(
-                                    universe.copy().apply {
+                    // create copies
+                    diracDieOutcomes()
+                        .drop(1)
+                        .forEach { (outcome, times) ->
+                            multiverse.add(
+                                universe.copy().apply {
+                                    if (player1turn)
                                         playTurnForPlayer1(outcome)
-                                    } to (times * occurrences)
-                                )
-                            }
-
-                        // play original turn 1
-                        universe.playTurnForPlayer1(diracDieOutcomes().first().first)
-                    } else {
-                        // create copies
-                        diracDieOutcomes()
-                            .drop(1)
-                            .forEach { (outcome, times) ->
-                                multiverse.add(
-                                    universe.copy().apply {
+                                    else
                                         playTurnForPlayer2(outcome)
-                                    } to (times * occurrences)
-                                )
-                            }
+                                } to (times * occurrences)
+                            )
+                        }
 
-                        // play original turn 2
+                    // play original turns
+                    if (player1turn)
+                        universe.playTurnForPlayer1(diracDieOutcomes().first().first)
+                    else
                         universe.playTurnForPlayer2(diracDieOutcomes().first().first)
-                    }
                 }
         }
 
