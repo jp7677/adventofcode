@@ -1,4 +1,6 @@
+import kotlin.math.max
 import kotlin.math.min
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -59,6 +61,100 @@ class Day21 {
         .take(3)
         .sum()
         .let { board1.move(it) }
+
+    data class Universe(
+        val player1Board: Board,
+        val player2Board: Board,
+        var player1Score: Int = 0,
+        var player2Score: Int = 0
+    ) {
+        var player1Wins = false
+        var player2Wins = false
+        fun copy() = this.copy(
+            player1Board = this.player1Board.copy(),
+            player2Board = this.player2Board.copy()
+        )
+        fun playTurnForPlayer1(outcome: Int) {
+            this.player1Score += this.player1Board.move(outcome)
+            this.player1Wins = this.player1Score >= 21
+        }
+        fun playTurnForPlayer2(outcome: Int) {
+            this.player2Score += this.player2Board.move(outcome)
+            this.player2Wins = this.player2Score >= 21
+        }
+        fun finished() = player1Wins || player2Wins
+    }
+
+    @Test
+    @Ignore("Needs way to much memory...")
+    fun `run part 02`() {
+        val (position1, position2) = getStartingPositions()
+
+        val multiverse = mutableListOf<Pair<Universe, Long>>()
+        multiverse.add(Universe(Board(position1), Board(position2)) to 1)
+
+        var player1turn = false
+        while (multiverse.any { (universe, _) -> !universe.finished() }) {
+            player1turn = !player1turn
+            multiverse
+                .filter { (universe, _) -> !universe.finished() }
+                .forEach { (universe, occurrences) ->
+                    if (player1turn) {
+                        // create copies
+                        diracDieOutcomes()
+                            .drop(1)
+                            .forEach { (outcome, times) ->
+                                multiverse.add(
+                                    universe.copy().apply {
+                                        playTurnForPlayer1(outcome)
+                                    } to (times * occurrences)
+                                )
+                            }
+
+                        // play original turn 1
+                        universe.playTurnForPlayer1(diracDieOutcomes().first().first)
+                    } else {
+                        // create copies
+                        diracDieOutcomes()
+                            .drop(1)
+                            .forEach { (outcome, times) ->
+                                multiverse.add(
+                                    universe.copy().apply {
+                                        playTurnForPlayer2(outcome)
+                                    } to (times * occurrences)
+                                )
+                            }
+
+                        // play original turn 2
+                        universe.playTurnForPlayer2(diracDieOutcomes().first().first)
+                    }
+                }
+        }
+
+        val player1Wins = multiverse.filter { it.first.player1Wins }.sumOf { it.second }
+        val player2Wins = multiverse.filter { it.first.player2Wins }.sumOf { it.second }
+
+        val result = max(player1Wins, player2Wins)
+
+        assertEquals(433315766324816, result)
+    }
+
+    /*
+        1                   2                   3
+        1     2     3       1     2     3       1     2     3
+        1 2 3 1 2 3 1 2 3   1 2 3 1 2 3 1 2 3   1 2 3 1 2 3 1 2 3
+
+        'outcome' to 'number of occurrences'
+    */
+    private fun diracDieOutcomes() = listOf(
+        3 to 1,
+        4 to 3,
+        5 to 6,
+        6 to 7,
+        7 to 6,
+        8 to 3,
+        9 to 1
+    )
 
     private fun getStartingPositions() =
         Util.getInputAsListOfString("day21-input.txt")

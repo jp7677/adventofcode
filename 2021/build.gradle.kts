@@ -19,6 +19,7 @@ tasks.jar { manifest { attributes["Main-Class"] = "MainKt" } }
 tasks.compileKotlin { kotlinOptions.jvmTarget = "17" }
 tasks.compileTestKotlin { kotlinOptions.jvmTarget = "17" }
 tasks.test {
+    maxHeapSize = "16g" // Currently needed when running Day21/2 :(
     useJUnitPlatform()
     testLogging { showStandardStreams = true }
 }
