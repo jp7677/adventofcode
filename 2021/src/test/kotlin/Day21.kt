@@ -3,11 +3,15 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day21 {
-    data class DeterministicDie(var rolls: Int = 0, var number: Int = 100) {
+    class DeterministicDie {
+        var rolls: Int = 0
+            private set
+
+        private var outcome: Int = 0
+
         fun roll(): Int {
-            rolls++
-            number = if (number == 100) 1 else number.inc()
-            return number
+            outcome = if (outcome == 100) 1 else outcome.inc()
+            return outcome.also { rolls++ }
         }
     }
 
@@ -21,25 +25,32 @@ class Day21 {
 
     @Test
     fun `run part 01`() {
-        val start = Util.getInputAsListOfString("day21-input.txt")
-            .map { it.split(':').last().trim().toInt() }
-            .let { it.first() to it.last() }
+        val (position1, position2) = getStartingPositions()
 
         val die = DeterministicDie()
-        val board1 = Board(start.first)
-        var score1 = 0
-        val board2 = Board(start.second)
-        var score2 = 0
-
-        while (score2 < 1000) {
-            score1 += playTurn(die, board1)
-            if (score1 >= 1000) break
-            score2 += playTurn(die, board2)
-        }
+        val (score1, score2) = playDeterministicGame(die, Board(position1), Board(position2))
 
         val result = min(score1, score2) * die.rolls
 
         assertEquals(679329, result)
+    }
+
+    private fun playDeterministicGame(
+        die: DeterministicDie,
+        board1: Board,
+        board2: Board
+    ): Pair<Int, Int> {
+        var score1 = 0
+        var score2 = 0
+        while (true) {
+            score1 += playTurn(die, board1)
+            if (score1 >= 1000) break
+
+            score2 += playTurn(die, board2)
+            if (score2 >= 1000) break
+        }
+
+        return score1 to score2
     }
 
     private fun playTurn(die: DeterministicDie, board1: Board) = generateSequence {
@@ -48,4 +59,9 @@ class Day21 {
         .take(3)
         .sum()
         .let { board1.move(it) }
+
+    private fun getStartingPositions() =
+        Util.getInputAsListOfString("day21-input.txt")
+            .map { it.split(':').last().trim().toInt() }
+            .let { it.first() to it.last() }
 }
