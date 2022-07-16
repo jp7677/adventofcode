@@ -1,6 +1,5 @@
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -83,20 +82,25 @@ class Day21 {
     }
 
     @Test
-    @Ignore("Needs way to much memory...")
     fun `run part 02`() {
         val (position1, position2) = getStartingPositions()
 
-        val multiverse = mutableListOf(Universe(Board(position1), Board(position2)) to 1L)
+        val multiverse = mutableMapOf(Universe(Board(position1), Board(position2)) to 1L)
 
         while (multiverse.any { (universe, _) -> universe.running() }) {
             multiverse
                 .filter { (universe, _) -> universe.running() }
-                .flatMapTo(multiverse) { (universe, occurrences) ->
+                .flatMap { (universe, occurrences) ->
+                    multiverse.remove(universe)
                     diracDieOutcomes()
+                        .drop(1)
                         .map { (outcome, times) ->
                             universe.copy().apply { playTurnForPlayer1(outcome) } to times * occurrences
                         }
+                        .also {
+                            universe.playTurnForPlayer1(diracDieOutcomes().first().first)
+                        }
+                        .plus(universe to occurrences)
                         .flatMap { (universe1, occurrences1) ->
                             if (universe1.running())
                                 diracDieOutcomes()
@@ -105,17 +109,15 @@ class Day21 {
                                     }
                             else listOf(universe1 to occurrences1)
                         }
-                        .drop(1)
-                        .also {
-                            universe.playTurnForPlayer1(diracDieOutcomes().first().first)
-                            if (universe.running()) universe.playTurnForPlayer2(diracDieOutcomes().first().first)
-                        }
+                }
+                .forEach { (universe, occurrences) ->
+                    multiverse[universe] = (multiverse[universe] ?: 0) + occurrences
                 }
         }
 
         val maxWins = max(
-            multiverse.filter { it.first.player1Wins() }.sumOf { it.second },
-            multiverse.filter { !it.first.player1Wins() }.sumOf { it.second }
+            multiverse.filter { it.key.player1Wins() }.values.sum(),
+            multiverse.filter { !it.key.player1Wins() }.values.sum()
         )
 
         assertEquals(433315766324816, maxWins)
