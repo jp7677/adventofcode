@@ -95,26 +95,28 @@ class Day21 {
             player1turn = !player1turn
             multiverse
                 .filter { (universe, _) -> !universe.finished() }
-                .forEach { (universe, occurrences) ->
-                    // create copies
+                .flatMapTo(multiverse) { (universe, occurrences) ->
                     diracDieOutcomes()
                         .drop(1)
-                        .forEach { (outcome, times) ->
-                            multiverse.add(
-                                universe.copy().apply {
+                        .map { (outcome, times) ->
+                            // create copies
+                            val copy = universe.copy()
+                                .apply {
                                     if (player1turn)
                                         playTurnForPlayer1(outcome)
                                     else
                                         playTurnForPlayer2(outcome)
-                                } to (times * occurrences)
-                            )
-                        }
+                                }
 
-                    // play original turns
-                    if (player1turn)
-                        universe.playTurnForPlayer1(diracDieOutcomes().first().first)
-                    else
-                        universe.playTurnForPlayer2(diracDieOutcomes().first().first)
+                            copy to (times * occurrences)
+                        }
+                        .also {
+                            // play original turn
+                            if (player1turn)
+                                universe.playTurnForPlayer1(firstOutcome)
+                            else
+                                universe.playTurnForPlayer2(firstOutcome)
+                        }
                 }
         }
 
@@ -142,6 +144,8 @@ class Day21 {
         8 to 3,
         9 to 1
     )
+
+    private val firstOutcome = diracDieOutcomes().first().first
 
     private fun getStartingPositions() =
         Util.getInputAsListOfString("day21-input.txt")
