@@ -78,7 +78,7 @@ class Day21 {
         fun playTurnForPlayer2(outcome: Int) {
             this.player2Score += this.player2Board.move(outcome)
         }
-        fun finished() = this.player1Score >= 21 || this.player2Score >= 21
+        fun running() = this.player1Score < 21 && this.player2Score < 21
         fun player1Wins() = this.player1Score > this.player2Score
     }
 
@@ -87,35 +87,28 @@ class Day21 {
     fun `run part 02`() {
         val (position1, position2) = getStartingPositions()
 
-        val multiverse = mutableListOf<Pair<Universe, Long>>()
-        multiverse.add(Universe(Board(position1), Board(position2)) to 1)
+        val multiverse = mutableListOf(Universe(Board(position1), Board(position2)) to 1L)
 
-        var player1turn = false
-        while (multiverse.any { (universe, _) -> !universe.finished() }) {
-            player1turn = !player1turn
+        while (multiverse.any { (universe, _) -> universe.running() }) {
             multiverse
-                .filter { (universe, _) -> !universe.finished() }
+                .filter { (universe, _) -> universe.running() }
                 .flatMapTo(multiverse) { (universe, occurrences) ->
                     diracDieOutcomes()
-                        .drop(1)
                         .map { (outcome, times) ->
-                            // create copies
-                            val copy = universe.copy()
-                                .apply {
-                                    if (player1turn)
-                                        playTurnForPlayer1(outcome)
-                                    else
-                                        playTurnForPlayer2(outcome)
-                                }
-
-                            copy to (times * occurrences)
+                            universe.copy().apply { playTurnForPlayer1(outcome) } to times * occurrences
                         }
+                        .flatMap { (universe1, occurrences1) ->
+                            if (universe1.running())
+                                diracDieOutcomes()
+                                    .map { (outcome, times) ->
+                                        universe1.copy().apply { playTurnForPlayer2(outcome) } to times * occurrences1
+                                    }
+                            else listOf(universe1 to occurrences1)
+                        }
+                        .drop(1)
                         .also {
-                            // play original turn
-                            if (player1turn)
-                                universe.playTurnForPlayer1(firstOutcome)
-                            else
-                                universe.playTurnForPlayer2(firstOutcome)
+                            universe.playTurnForPlayer1(diracDieOutcomes().first().first)
+                            if (universe.running()) universe.playTurnForPlayer2(diracDieOutcomes().first().first)
                         }
                 }
         }
@@ -144,8 +137,6 @@ class Day21 {
         8 to 3,
         9 to 1
     )
-
-    private val firstOutcome = diracDieOutcomes().first().first
 
     private fun getStartingPositions() =
         Util.getInputAsListOfString("day21-input.txt")
