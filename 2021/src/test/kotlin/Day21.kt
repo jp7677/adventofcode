@@ -95,16 +95,11 @@ class Day21 {
             multiverse
                 .filter { (universe, _) -> universe.running() }
                 .flatMap { (universe, occurrences) ->
+                    multiverse.remove(universe)
                     diracDieOutcomes()
-                        .drop(1)
                         .map { (outcome, times) ->
                             universe.copy().apply { playTurnForPlayer1(outcome) } to times * occurrences
                         }
-                        .also {
-                            multiverse.remove(universe)
-                            universe.playTurnForPlayer1(diracDieOutcomes().first().first)
-                        }
-                        .plus(universe to occurrences)
                         .flatMap { (universe1, occurrences1) ->
                             if (universe1.running())
                                 diracDieOutcomes()
