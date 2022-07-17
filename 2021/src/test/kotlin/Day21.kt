@@ -24,6 +24,30 @@ class Day21 {
         }
     }
 
+    data class Universe(
+        val player1Board: Board,
+        val player2Board: Board,
+        var player1Score: Int = 0,
+        var player2Score: Int = 0
+    ) {
+        fun copy() = this.copy(
+            player1Board = this.player1Board.copy(),
+            player2Board = this.player2Board.copy()
+        )
+
+        fun playTurnForPlayer1(outcome: Int) {
+            this.player1Score += this.player1Board.move(outcome)
+        }
+
+        fun playTurnForPlayer2(outcome: Int) {
+            this.player2Score += this.player2Board.move(outcome)
+        }
+
+        fun running() = this.player1Score < 21 && this.player2Score < 21
+
+        fun player1Wins() = this.player1Score > this.player2Score
+    }
+
     @Test
     fun `run part 01`() {
         val (position1, position2) = getStartingPositions()
@@ -61,26 +85,6 @@ class Day21 {
         .sum()
         .let { board1.move(it) }
 
-    data class Universe(
-        val player1Board: Board,
-        val player2Board: Board,
-        var player1Score: Int = 0,
-        var player2Score: Int = 0
-    ) {
-        fun copy() = this.copy(
-            player1Board = this.player1Board.copy(),
-            player2Board = this.player2Board.copy()
-        )
-        fun playTurnForPlayer1(outcome: Int) {
-            this.player1Score += this.player1Board.move(outcome)
-        }
-        fun playTurnForPlayer2(outcome: Int) {
-            this.player2Score += this.player2Board.move(outcome)
-        }
-        fun running() = this.player1Score < 21 && this.player2Score < 21
-        fun player1Wins() = this.player1Score > this.player2Score
-    }
-
     @Test
     fun `run part 02`() {
         val (position1, position2) = getStartingPositions()
@@ -91,13 +95,13 @@ class Day21 {
             multiverse
                 .filter { (universe, _) -> universe.running() }
                 .flatMap { (universe, occurrences) ->
-                    multiverse.remove(universe)
                     diracDieOutcomes()
                         .drop(1)
                         .map { (outcome, times) ->
                             universe.copy().apply { playTurnForPlayer1(outcome) } to times * occurrences
                         }
                         .also {
+                            multiverse.remove(universe)
                             universe.playTurnForPlayer1(diracDieOutcomes().first().first)
                         }
                         .plus(universe to occurrences)
@@ -130,15 +134,7 @@ class Day21 {
 
         'outcome' to 'number of occurrences'
     */
-    private fun diracDieOutcomes() = listOf(
-        3 to 1,
-        4 to 3,
-        5 to 6,
-        6 to 7,
-        7 to 6,
-        8 to 3,
-        9 to 1
-    )
+    private fun diracDieOutcomes() = listOf(3 to 1, 4 to 3, 5 to 6, 6 to 7, 7 to 6, 8 to 3, 9 to 1)
 
     private fun getStartingPositions() =
         Util.getInputAsListOfString("day21-input.txt")
