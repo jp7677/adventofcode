@@ -34,6 +34,7 @@ class Day22 {
             )
         }
     }
+
     data class Step(val on: Boolean, val cuboid: Cuboid)
 
     @Test
@@ -55,26 +56,27 @@ class Day22 {
         assertEquals(1257350313518866, count)
     }
 
-    private fun runSteps(steps: List<Step>) = steps.mapIndexed { index, step ->
-        val previouslyTurnedOn = steps
-            .take(index)
-            .filter { it.on }
-            .mapNotNull { step.cuboid intersect it.cuboid }
+    private fun runSteps(steps: List<Step>) = steps
+        .mapIndexed { index, step ->
+            val previouslyTurnedOn = steps
+                .take(index)
+                .filter { it.on }
+                .mapNotNull { step.cuboid intersect it.cuboid }
 
-        if (step.on) {
-            step.cuboid.size() - previouslyTurnedOn.calcEffectiveSize()
-        } else {
-            val turnOnLater = steps
-                .drop(index + 1)
-                .map { it.cuboid }
-                .mapNotNull { step.cuboid intersect it }
+            if (step.on) {
+                step.cuboid.size() - previouslyTurnedOn.calcEffectiveSize()
+            } else {
+                val turnOnLater = steps
+                    .drop(index + 1)
+                    .map { it.cuboid }
+                    .mapNotNull { step.cuboid intersect it }
 
-            previouslyTurnedOn.except(turnOnLater) * -1
+                previouslyTurnedOn.except(turnOnLater) * -1
+            }
         }
-    }
         .sum()
 
-    private fun List<Cuboid>.except(turnOnLaterSize: List<Cuboid>): Long = this
+    private fun List<Cuboid>.except(turnOnLaterSize: List<Cuboid>) = this
         .calcEffectiveSize() -
         this
             .flatMap { cuboid ->
@@ -83,10 +85,10 @@ class Day22 {
             .calcEffectiveSize()
 
     private fun List<Cuboid>.calcEffectiveSize(): Long = this
-        .mapIndexed { index, it ->
-            it.size() - this
+        .mapIndexed { index, cuboid ->
+            cuboid.size() - this
                 .take(index)
-                .mapNotNull { i -> it intersect i }
+                .mapNotNull { cuboid intersect it }
                 .calcEffectiveSize()
         }
         .sum()
