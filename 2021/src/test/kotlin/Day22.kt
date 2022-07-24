@@ -57,41 +57,38 @@ class Day22 {
     }
 
     private fun runSteps(steps: List<Step>) = steps
-        .mapIndexed { index, step ->
+        .foldIndexed(0L) { index, acc, step ->
             val previouslyTurnedOn = steps
                 .take(index)
                 .filter { it.on }
                 .mapNotNull { step.cuboid intersect it.cuboid }
 
             if (step.on) {
-                step.cuboid.size() - previouslyTurnedOn.calcEffectiveSize()
+                acc + step.cuboid.size() - previouslyTurnedOn.effectiveSize()
             } else {
-                val turnOnLater = steps
+                val turnOnOrOffLater = steps
                     .drop(index + 1)
-                    .map { it.cuboid }
-                    .mapNotNull { step.cuboid intersect it }
+                    .mapNotNull { step.cuboid intersect it.cuboid }
 
-                previouslyTurnedOn.except(turnOnLater) * -1
+                acc - previouslyTurnedOn.except(turnOnOrOffLater)
             }
         }
-        .sum()
 
-    private fun List<Cuboid>.except(turnOnLaterSize: List<Cuboid>) = this
-        .calcEffectiveSize() -
+    private fun List<Cuboid>.except(other: List<Cuboid>) = this
+        .effectiveSize() -
         this
             .flatMap { cuboid ->
-                turnOnLaterSize.mapNotNull { cuboid intersect it }
+                other.mapNotNull { cuboid intersect it }
             }
-            .calcEffectiveSize()
+            .effectiveSize()
 
-    private fun List<Cuboid>.calcEffectiveSize(): Long = this
-        .mapIndexed { index, cuboid ->
-            cuboid.size() - this
+    private fun List<Cuboid>.effectiveSize(): Long = this
+        .foldIndexed(0L) { index, acc, cuboid ->
+            acc + cuboid.size() - this
                 .take(index)
                 .mapNotNull { cuboid intersect it }
-                .calcEffectiveSize()
+                .effectiveSize()
         }
-        .sum()
 
     private fun getSteps() = Util.getInputAsListOfString("day22-input.txt")
         .map {
