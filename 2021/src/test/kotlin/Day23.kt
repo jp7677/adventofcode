@@ -1,9 +1,11 @@
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day23 {
 
     @Test
+    @Ignore("solved on paper...")
     fun `run part 01`() {
         val input = Util.getInputAsListOfString("day23-input.txt")
 
@@ -64,6 +66,7 @@ class Day23 {
     }
 
     @Test
+    @Ignore("solved on paper...")
     fun `run part 02`() {
         val input = Util.getInputAsListOfString("day23-input.txt")
 
