@@ -149,7 +149,8 @@ class Day23 {
           #########
         */
 
-        val energy = 47665
+        val energy = listOf(55, 410, 3200, 44000)
+            .sum()
 
         assertEquals(47665, energy)  
     }
