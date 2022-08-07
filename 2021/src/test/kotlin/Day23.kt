@@ -64,7 +64,7 @@ class Day23 {
     }
 
     @Test
-    fun `run part 01`() {
+    fun `run part 02`() {
         val input = Util.getInputAsListOfString("day23-input.txt")
 
         /*
