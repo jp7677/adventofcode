@@ -30,7 +30,8 @@ class Day25 {
                         else -> null
                     }
                 }
-            }.toMap()
+            }
+            .toMap()
 
         val steps = generateSequence(cucumbers) {
             if (it.count { cucumber -> !it.containsKey(cucumber.key.next(cucumber.value)) } > 0)
@@ -39,7 +40,8 @@ class Day25 {
                     .move(Direction.SOUTH)
             else
                 null
-        }.count()
+        }
+            .count()
 
         assertEquals(429, steps)
     }
@@ -50,5 +52,6 @@ class Day25 {
                 it.key.next(it.value) to it.value
             else
                 it.key to it.value
-        }.toMap()
+        }
+        .toMap()
 }
