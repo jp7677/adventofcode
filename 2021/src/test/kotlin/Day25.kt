@@ -3,7 +3,6 @@ import kotlin.test.assertEquals
 
 class Day25 {
     enum class Direction { EAST, SOUTH }
-
     data class Coord(val x: Int, val y: Int, val maxX: Int, val maxY: Int) {
         fun next(direction: Direction) = Coord(
             if (direction == Direction.EAST) {
