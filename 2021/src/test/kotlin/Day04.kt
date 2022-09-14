@@ -2,7 +2,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day04 {
-    data class Board constructor (val rows: List<List<Int>>, val cols: List<List<Int>>) {
+    data class Board constructor(val rows: List<List<Int>>, val cols: List<List<Int>>) {
         constructor(rows: List<List<Int>>) :
             this(
                 rows,
