@@ -54,7 +54,7 @@ class Day24 {
     }
 
     @Test
-    @Ignore("It's also way too slow...")
+    @Ignore("it's also way too slow...")
     fun `run part 02`() {
         val statementChunks = getStatements()
             .let {
