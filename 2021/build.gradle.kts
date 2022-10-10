@@ -3,7 +3,7 @@ version = "0.1-SNAPSHOT"
 
 plugins {
     application
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.7.20"
     id("com.adarshr.test-logger") version "3.2.0"
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
 }
