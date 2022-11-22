@@ -1,5 +1,4 @@
-import assertk.assertThat
-import assertk.assertions.isEqualTo
+import io.kotest.matchers.shouldBe
 import kotlin.test.Test
 
 class Day00 {
@@ -8,6 +7,6 @@ class Day00 {
     fun `run part 01`() {
         val input = Util.getInputAsListOfString("day00-input.txt")
 
-        assertThat(input.any()).isEqualTo(true)
+        input.any() shouldBe true
     }
 }
