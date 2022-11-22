@@ -1,6 +1,3 @@
-import java.lang.IllegalStateException
-import java.util.Stack
-
 object Util {
 
     fun getInputAsString(name: String) =
