@@ -13,7 +13,7 @@ plugins {
 repositories { mavenCentral() }
 dependencies {
     testImplementation(kotlin("test"))
-    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.25")
+    testImplementation("io.kotest:kotest-assertions-core:5.5.4")
 }
 
 application { mainClass.set("MainKt") }
