@@ -1,12 +1,11 @@
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import kotlin.test.Test
 
-class Day00 {
+class Day00 : StringSpec({
 
-    @Test
-    fun `run part 01`() {
+    "run part 01" {
         val input = Util.getInputAsListOfString("day00-input.txt")
 
         input.any() shouldBe true
     }
-}
+})
