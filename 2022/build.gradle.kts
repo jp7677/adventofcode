@@ -12,7 +12,6 @@ plugins {
 
 repositories { mavenCentral() }
 dependencies {
-    testImplementation(kotlin("test"))
     testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
     testImplementation("io.kotest:kotest-assertions-core:5.5.4")
 }
@@ -21,8 +20,8 @@ application { mainClass.set("MainKt") }
 testlogger { theme = com.adarshr.gradle.testlogger.theme.ThemeType.PLAIN }
 tasks {
     withType<Jar> { manifest { attributes["Main-Class"] = "MainKt" } }
-    withType<KotlinCompile>().all { kotlinOptions.jvmTarget = "17" }
-    withType<Test> {
+    withType<KotlinCompile>().configureEach { kotlinOptions.jvmTarget = "17" }
+    withType<Test>().configureEach {
         useJUnitPlatform()
         testLogging { showStandardStreams = true }
     }
