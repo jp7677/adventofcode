@@ -66,18 +66,13 @@ data class Game(val other: Shape, val you: Shape?, val outcome: Outcome?) {
         outcome
     )
 
+    private fun Shape.forLoose() = this.forWin().forWin()
+
     private fun Shape.forWin() =
         when (this) {
             Shape.ROCK -> Shape.PAPER
             Shape.PAPER -> Shape.SCISSORS
             Shape.SCISSORS -> Shape.ROCK
-        }
-
-    private fun Shape.forLoose() =
-        when (this) {
-            Shape.ROCK -> Shape.SCISSORS
-            Shape.PAPER -> Shape.ROCK
-            Shape.SCISSORS -> Shape.PAPER
         }
 }
 
