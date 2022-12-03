@@ -26,7 +26,4 @@ private fun String.duplicated() = this
     .map { it[0].toSet() intersect it[1].toSet() }
     .first().single()
 
-private fun Char.priority() = if (isLowerCase())
-    code - 97 + 1
-else
-    code - 65 + 27
+private fun Char.priority() = if (isLowerCase()) code - 97 + 1 else code - 65 + 27
