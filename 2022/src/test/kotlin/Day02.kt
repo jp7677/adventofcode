@@ -77,7 +77,6 @@ data class Game(val other: Shape, val you: Shape?, val outcome: Outcome?) {
 }
 
 class Day02 : StringSpec({
-
     "puzzle part 01" {
         val totalScore = Util.getInputAsListOfString("day02-input.txt")
             .map { it.split(' ') }
