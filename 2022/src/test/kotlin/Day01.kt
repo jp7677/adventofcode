@@ -2,14 +2,6 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class Day01 : StringSpec({
-    fun getCalories() = Util.getInputAsListOfString("day01-input.txt")
-        .fold(arrayOf(0)) { acc, it ->
-            if (it.isNotEmpty())
-                acc.apply { this[lastIndex] += it.toInt() }
-            else
-                acc + arrayOf(0)
-        }
-
     "puzzle part 01" {
         val maxCalories = getCalories().maxOf { it }
 
@@ -25,3 +17,11 @@ class Day01 : StringSpec({
         max3Calories shouldBe 204610
     }
 })
+
+private fun getCalories() = Util.getInputAsListOfString("day01-input.txt")
+    .fold(arrayOf(0)) { acc, it ->
+        if (it.isNotEmpty())
+            acc.apply { this[lastIndex] += it.toInt() }
+        else
+            acc + arrayOf(0)
+    }
