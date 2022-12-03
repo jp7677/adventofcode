@@ -15,4 +15,4 @@ Enjoy the stars...
 
 - <https://github.com/Dricus/adventofcode>
 - <https://github.com/ErikSchierboom/advent-of-code>
-- <https://github.com/StefRave/advent-of-code-2021>
+- <https://github.com/StefRave/advent-of-code>
