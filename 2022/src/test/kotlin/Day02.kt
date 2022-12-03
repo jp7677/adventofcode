@@ -78,7 +78,7 @@ private data class Game(val other: Shape, val you: Shape?, val outcome: Outcome?
 
 class Day02 : StringSpec({
     "puzzle part 01" {
-        val totalScore = Util.getInputAsListOfString("day02-input.txt")
+        val totalScore = getPuzzleInput("day02-input.txt")
             .map { it.split(' ') }
             .map { Game(Shape.from(it.first()), Shape.from(it.last()), null) }
             .map { it.calcOutcome() }
@@ -88,7 +88,7 @@ class Day02 : StringSpec({
     }
 
     "puzzle part 02" {
-        val totalScore = Util.getInputAsListOfString("day02-input.txt")
+        val totalScore = getPuzzleInput("day02-input.txt")
             .map { it.split(' ') }
             .map { Game(Shape.from(it.first()), null, Outcome.from(it.last())) }
             .map { it.decrypt() }

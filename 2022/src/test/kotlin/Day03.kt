@@ -3,7 +3,7 @@ import io.kotest.matchers.shouldBe
 
 class Day03 : StringSpec({
     "puzzle part 01" {
-        val sumOfPriorities = Util.getInputAsListOfString("day03-input.txt")
+        val sumOfPriorities = getPuzzleInput("day03-input.txt")
             .map { it.duplicated() }
             .sumOf { it.priority() }
 
@@ -11,7 +11,7 @@ class Day03 : StringSpec({
     }
 
     "puzzle part 02" {
-        val sumOfPriorities = Util.getInputAsListOfString("day03-input.txt")
+        val sumOfPriorities = getPuzzleInput("day03-input.txt")
             .map { rucksack -> rucksack.filterNot { it == rucksack.duplicated() } }
             .chunked(3)
             .map { it[0].toSet() intersect it[1].toSet() intersect it[2].toSet() }
