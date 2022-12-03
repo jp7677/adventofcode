@@ -18,7 +18,7 @@ class Day01 : StringSpec({
     }
 })
 
-private fun getCalories() = Util.getInputAsListOfString("day01-input.txt")
+private fun getCalories() = getPuzzleInput("day01-input.txt")
     .fold(arrayOf(0)) { acc, it ->
         if (it.isNotEmpty())
             acc.apply { this[lastIndex] += it.toInt() }
