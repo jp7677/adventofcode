@@ -1,7 +1,7 @@
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-enum class Outcome {
+private enum class Outcome {
     WIN, LOOSE, DRAW;
 
     companion object {
@@ -21,7 +21,7 @@ enum class Outcome {
     }
 }
 
-enum class Shape {
+private enum class Shape {
     ROCK, PAPER, SCISSORS;
 
     companion object {
@@ -41,7 +41,7 @@ enum class Shape {
     }
 }
 
-data class Game(val other: Shape, val you: Shape?, val outcome: Outcome?) {
+private data class Game(val other: Shape, val you: Shape?, val outcome: Outcome?) {
     fun scoreForSelected() = you?.score() ?: throw IllegalStateException()
     fun scoreForOutcome() = outcome?.score() ?: throw IllegalStateException()
 
