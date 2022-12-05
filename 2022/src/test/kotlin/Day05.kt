@@ -29,7 +29,6 @@ class Day05 : StringSpec({
             repeat(move.num) {
                 stacks[move.dest].add(q.removeLast())
             }
-
         }
 
         val result = stacks.joinToString("") { it.removeLast() }
@@ -41,8 +40,8 @@ class Day05 : StringSpec({
 private fun getCratesAndMoves(): Pair<List<ArrayDeque<String>>, List<Move>> {
     val input = getPuzzleInput("day05-input.txt", "${eol()}${eol()}").toList()
 
-    val stacksPlan = input[0].split(eol()).reversed()
-    val numberOfStacks = stacksPlan.first().trim().last().toString().toInt()
+    val stacksPlan = input.first().split(eol()).reversed()
+    val numberOfStacks = stacksPlan.first().trim().last().digitToInt()
     val stacks = buildList<ArrayDeque<String>> {
         repeat(numberOfStacks) { add(ArrayDeque(1)) }
     }
@@ -55,8 +54,10 @@ private fun getCratesAndMoves(): Pair<List<ArrayDeque<String>>, List<Move>> {
         }
     }
 
-    val moves = input[1].split(eol())
-        .map { it.split(" ").let { s -> Move(s[1].toInt(), s[3].toInt() - 1, s[5].toInt() - 1) } }
+    val moves = input.last().split(eol())
+        .map { line ->
+            line.split(" ").let { Move(it[1].toInt(), it[3].toInt() - 1, it[5].toInt() - 1) }
+        }
 
     return stacks to moves
 }
