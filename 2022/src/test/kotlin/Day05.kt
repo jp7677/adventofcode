@@ -1,14 +1,14 @@
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-private data class Move(val num: Int, val src: Int, val dest: Int)
+private data class Move(val times: Int, val src: Int, val dest: Int)
 
 class Day05 : StringSpec({
     "puzzle part 01" {
         val (stacks, moves) = getCratesAndMoves()
 
         moves.forEach { move ->
-            repeat(move.num) {
+            repeat(move.times) {
                 stacks[move.dest].add(stacks[move.src].removeLast())
             }
         }
@@ -20,15 +20,16 @@ class Day05 : StringSpec({
 
     "puzzle part 02" {
         val (stacks, moves) = getCratesAndMoves()
+        val deque = ArrayDeque<String>(1)
 
         moves.forEach { move ->
-            val q = ArrayDeque<String>(move.num)
-            repeat(move.num) {
-                q.add(stacks[move.src].removeLast())
+            repeat(move.times) {
+                deque.add(stacks[move.src].removeLast())
             }
-            repeat(move.num) {
-                stacks[move.dest].add(q.removeLast())
+            repeat(move.times) {
+                stacks[move.dest].add(deque.removeLast())
             }
+            deque.clear()
         }
 
         val result = stacks.joinToString("") { it.removeLast() }
@@ -40,18 +41,16 @@ class Day05 : StringSpec({
 private fun getCratesAndMoves(): Pair<List<ArrayDeque<String>>, List<Move>> {
     val input = getPuzzleInput("day05-input.txt", "${eol()}${eol()}").toList()
 
-    val stacksPlan = input.first().split(eol()).reversed()
-    val numberOfStacks = stacksPlan.first().trim().last().digitToInt()
+    val stacksPlan = input.first().split(eol())
+    val numberOfStacks = stacksPlan.last().trim().last().digitToInt()
     val stacks = buildList<ArrayDeque<String>> {
         repeat(numberOfStacks) { add(ArrayDeque(1)) }
     }
 
-    stacksPlan.drop(1).forEach {
-        for (i in 1..numberOfStacks * 4 step 4) {
-            if (it.length >= i && it[i].isLetter()) {
+    stacksPlan.reversed().drop(1).forEach {
+        for (i in 1..numberOfStacks * 4 step 4)
+            if (it.length >= i && it[i].isLetter())
                 stacks[(i - 1) / 4].add(it[i].toString())
-            }
-        }
     }
 
     val moves = input.last().split(eol())
