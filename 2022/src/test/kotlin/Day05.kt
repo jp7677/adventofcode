@@ -5,7 +5,7 @@ private data class Move(val times: Int, val src: Int, val dest: Int)
 
 class Day05 : StringSpec({
     "puzzle part 01" {
-        val (stacks, moves) = getCratesAndMoves()
+        val (stacks, moves) = getStacksAndMoves()
 
         moves.forEach { move ->
             repeat(move.times) {
@@ -19,7 +19,7 @@ class Day05 : StringSpec({
     }
 
     "puzzle part 02" {
-        val (stacks, moves) = getCratesAndMoves()
+        val (stacks, moves) = getStacksAndMoves()
         val deque = ArrayDeque<String>(1)
 
         moves.forEach { move ->
@@ -38,16 +38,16 @@ class Day05 : StringSpec({
     }
 })
 
-private fun getCratesAndMoves(): Pair<List<ArrayDeque<String>>, List<Move>> {
+private fun getStacksAndMoves(): Pair<List<ArrayDeque<String>>, List<Move>> {
     val input = getPuzzleInput("day05-input.txt", "${eol()}${eol()}").toList()
 
-    val stacksPlan = input.first().split(eol())
-    val numberOfStacks = stacksPlan.last().trim().last().digitToInt()
+    val startingStacks = input.first().split(eol())
+    val numberOfStacks = startingStacks.last().trim().last().digitToInt()
     val stacks = buildList<ArrayDeque<String>> {
         repeat(numberOfStacks) { add(ArrayDeque(1)) }
     }
 
-    stacksPlan.reversed().drop(1).forEach {
+    startingStacks.reversed().drop(1).forEach {
         for (i in 1..numberOfStacks * 4 step 4)
             if (it.length >= i && it[i].isLetter())
                 stacks[(i - 1) / 4].add(it[i].toString())
