@@ -30,22 +30,20 @@ private fun getDirectorySizes(): Map<String, Long> {
                 it.startsWith("$ ls") -> null
                 it.startsWith("$ cd ..") -> null.also { currentPath.removeLast() }
                 it.startsWith("$ cd") -> null.also { _ -> currentPath.add(it.dirName()) }
-                it.startsWith("dir") -> currentPath.toArray().plus(it.dirName()).join() to 0L
-                else -> currentPath.toArray().join() to it.fileSize()
+                it.startsWith("dir") -> currentPath.toArray().plus(it.dirName()).toPath() to 0L
+                else -> currentPath.toArray().toPath() to it.fileSize()
             }
         }
         .groupingBy { (path, _) -> path }
         .fold(0L) { acc, (_, size) -> acc + size }
 
-    return sizes
-        .map { (path, size) ->
-            path to sizes
-                .filterKeys { it != path && it.startsWith(path) }
-                .values.sum().plus(size)
-        }
-        .toMap()
+    return sizes.mapValues { (path, size) ->
+        sizes
+            .filterKeys { it != path && it.startsWith(path) }
+            .values.sum() + size
+    }
 }
 
 private fun String.dirName() = drop(4).trim()
 private fun String.fileSize() = split(" ").first().toLong()
-private fun Array<Any?>.join() = joinToString("/").replace("//", "/")
+private fun Array<Any?>.toPath() = joinToString("/").replace("//", "/")
