@@ -40,9 +40,8 @@ private fun getDirectorySizes(): Map<String, Long> {
     return sizes
         .map { (path, size) ->
             path to sizes
-                .filterKeys { it != path }
-                .map { if (it.key.startsWith(path)) it.value else 0 }
-                .sum().plus(size)
+                .filterKeys { it != path && it.startsWith(path) }
+                .values.sum().plus(size)
         }
         .toMap()
 }
