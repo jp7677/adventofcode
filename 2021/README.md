@@ -14,7 +14,7 @@ Only Linux has been tested. Other platforms might just work though.
 ./gradlew check
 ```
 
-Append e.g. `--tests Day01` for running a specific test.
+Use e.g. `./gradlew test --tests Day01` for running a specific test.
 
 ## Results
 
