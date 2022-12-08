@@ -1,53 +1,43 @@
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-private data class Tree(val x: Int, val y: Int, val height: Int)
-
 class Day08 : StringSpec({
     "puzzle part 01" {
-        val trees = getTrees()
+        val (trees, maxX, maxY) = getTreesWithSizing()
 
-        val countOfVisibleTrees = trees.count { tree ->
-            trees.none { it.y == tree.y && it.x < tree.x && it.height >= tree.height } ||
-                trees.none { it.y == tree.y && it.x > tree.x && it.height >= tree.height } ||
-                trees.none { it.y < tree.y && it.x == tree.x && it.height >= tree.height } ||
-                trees.none { it.y > tree.y && it.x == tree.x && it.height >= tree.height }
+        val countOfVisibleTrees = (0..maxX).sumOf { x ->
+            (0..maxY).count { y ->
+                val height = trees[x][y]
+                (x - 1 downTo 0).none { trees[it][y] >= height } ||
+                    (x + 1..maxX).none { trees[it][y] >= height } ||
+                    (y - 1 downTo 0).none { trees[x][it] >= height } ||
+                    (y + 1..maxY).none { trees[x][it] >= height }
+            }
         }
 
         countOfVisibleTrees shouldBe 1798
     }
 
     "puzzle part 02" {
-        val trees = getTrees()
-        val treesReversed = getTrees().reversed()
-        val maxX = trees.maxOf { it.x }
-        val maxY = trees.maxOf { it.y }
+        val (trees, maxX, maxY) = getTreesWithSizing()
 
-        val score = trees
-            .filterNot { it.x == 0 || it.x == maxX || it.y == 0 || it.y == maxY }
-            .maxOf { tree ->
-                val left = treesReversed.filter { it.y == tree.y && it.x < tree.x }
-                    .firstOrNull { it.height >= tree.height }
-                    ?.let { tree.x - it.x } ?: tree.x
-                val right = trees.filter { it.y == tree.y && it.x > tree.x }
-                    .firstOrNull { it.height >= tree.height }
-                    ?.let { it.x - tree.x } ?: (maxX - tree.x)
-                val up = treesReversed.filter { it.y < tree.y && it.x == tree.x }
-                    .firstOrNull { it.height >= tree.height }
-                    ?.let { tree.y - it.y } ?: tree.y
-                val down = trees.filter { it.y > tree.y && it.x == tree.x }
-                    .firstOrNull { it.height >= tree.height }
-                    ?.let { it.y - tree.y } ?: (maxY - tree.y)
-
+        val maxScore = (1 until maxX).flatMap { x ->
+            (1 until maxY).map { y ->
+                val height = trees[x][y]
+                val left = (x - 1 downTo 0).firstOrNull { trees[it][y] >= height }?.let { x - it } ?: x
+                val right = (x + 1..maxX).firstOrNull { trees[it][y] >= height }?.let { it - x } ?: (maxX - x)
+                val up = (y - 1 downTo 0).firstOrNull { trees[x][it] >= height }?.let { y - it } ?: y
+                val down = (y + 1..maxY).firstOrNull { trees[x][it] >= height }?.let { it - y } ?: (maxY - y)
                 left * right * up * down
             }
+        }.max()
 
-        score shouldBe 259308
+        maxScore shouldBe 259308
     }
 })
 
-private fun getTrees() = getPuzzleInput("day08-input.txt")
-    .flatMapIndexed { y, it ->
-        it.mapIndexed { x, c -> Tree(x, y, c.digitToInt()) }
-    }
-    .toList()
+private fun getTreesWithSizing() = getPuzzleInput("day08-input.txt")
+    .map {
+        it.map { c -> c.digitToInt() }.toIntArray()
+    }.toList().toTypedArray()
+    .let { Triple(it, it[0].size - 1, it.size - 1) }
