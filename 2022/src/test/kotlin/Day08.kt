@@ -39,5 +39,6 @@ class Day08 : StringSpec({
 private fun getTreesWithSizing() = getPuzzleInput("day08-input.txt")
     .map {
         it.map { c -> c.digitToInt() }.toIntArray()
-    }.toList().toTypedArray()
+    }
+    .toList().toTypedArray()
     .let { Triple(it, it[0].size - 1, it.size - 1) }
