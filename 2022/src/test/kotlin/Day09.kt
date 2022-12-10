@@ -7,8 +7,8 @@ private data class Position(val x: Int, val y: Int)
 class Day09 : StringSpec({
     "puzzle part 01" {
         val countOfPositions = getHeadPositions()
-            .fold(listOf(Position(0, 0))) { acc, head ->
-                acc + acc.last().follow(head)
+            .scan(Position(0, 0)) { acc, head ->
+                acc.follow(head)
             }
             .toSet().count()
 
@@ -21,9 +21,7 @@ class Day09 : StringSpec({
             .fold(knots) { rope, head ->
                 rope
                     .map { it.last() }
-                    .fold(listOf(head)) { knots, it ->
-                        knots + it.follow(knots.last())
-                    }
+                    .scan(head) { knots, it -> it.follow(knots) }
                     .drop(1)
                     .mapIndexed { index, it ->
                         if (index == rope.size - 1) rope[index] + it else listOf(it)
@@ -42,9 +40,7 @@ private fun getHeadPositions() = getPuzzleInput("day09-input.txt")
     .flatMap { (move, times) ->
         buildList { repeat(times) { add(move) } }
     }
-    .fold(listOf(Position(0, 0))) { acc, it ->
-        acc + acc.last().move(it)
-    }
+    .scan(Position(0, 0)) { acc, it -> acc.move(it) }
 
 private fun Position.move(direction: String) = when (direction) {
     "R" -> Position(this.x + 1, this.y)
