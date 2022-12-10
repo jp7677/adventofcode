@@ -7,9 +7,7 @@ private data class Position(val x: Int, val y: Int)
 class Day09 : StringSpec({
     "puzzle part 01" {
         val countOfPositions = getHeadPositions()
-            .scan(Position(0, 0)) { acc, head ->
-                acc.follow(head)
-            }
+            .runningReduce { acc, head -> acc.follow(head) }
             .toSet().count()
 
         countOfPositions shouldBe 5619
