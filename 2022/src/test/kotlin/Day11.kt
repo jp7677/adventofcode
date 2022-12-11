@@ -8,6 +8,7 @@ private data class Operation(val op: String, val other: String) {
         else -> throw IllegalArgumentException()
     }
 }
+
 private data class Monkey(
     val items: MutableList<Long>,
     val operation: Operation,
@@ -60,7 +61,6 @@ class Day11 : StringSpec({
 })
 
 private fun getMonkeys() = getPuzzleInput("day11-input.txt", "$eol$eol")
-    .toList()
     .map {
         it.split(eol)
             .drop(1)
@@ -75,4 +75,4 @@ private fun getMonkeys() = getPuzzleInput("day11-input.txt", "$eol$eol")
                     m[4].drop("    If false: throw to monkey ".length).toInt()
                 )
             }
-    }
+    }.toList()
