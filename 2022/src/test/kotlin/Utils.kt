@@ -1,12 +1,12 @@
-fun getPuzzleInput(name: String, separator: String = eol()) =
+fun getPuzzleInput(name: String, separator: String = eol) =
     object {}::class.java.getResourceAsStream(name)
         ?.bufferedReader()
         ?.let {
-            if (separator == eol())
+            if (separator == eol)
                 it.lineSequence()
             else
                 it.readText().split(separator).asSequence()
         }
         ?: throw Exception("Invalid input name")
 
-fun eol(): String = System.lineSeparator()
+val eol: String = System.lineSeparator()
