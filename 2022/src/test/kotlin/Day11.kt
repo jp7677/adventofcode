@@ -18,11 +18,11 @@ private data class Monkey(
 )
 
 class Day11 : StringSpec({
-    "puzzle part 01" { runRound(20, 3) shouldBe 110220 }
-    "puzzle part 02" { runRound(10000) shouldBe 19457438264 }
+    "puzzle part 01" { chaseMonkeys(20, 3) shouldBe 110220 }
+    "puzzle part 02" { chaseMonkeys(10000) shouldBe 19457438264 }
 })
 
-private fun runRound(times: Int, worryLevelDivider: Int = 1): Long {
+private fun chaseMonkeys(times: Int, worryLevelDivider: Int = 1): Long {
     val monkeys = getMonkeys()
     val inspection = MutableList(monkeys.size) { 0L }
     val primes = monkeys.map { it.test }.reduce { acc, it -> acc * it }
