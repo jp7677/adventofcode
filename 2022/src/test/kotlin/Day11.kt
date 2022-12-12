@@ -18,47 +18,28 @@ private data class Monkey(
 )
 
 class Day11 : StringSpec({
-    "puzzle part 01" {
-        val monkeys = getMonkeys()
-        val inspection = MutableList(monkeys.size) { 0L }
-
-        repeat(20) { _ ->
-            monkeys.forEachIndexed { index, m ->
-                m.items.forEach { i ->
-                    inspection[index]++
-                    val level = m.operation.run(i) / 3
-                    monkeys[if (level % m.test == 0L) m.ifTrue else m.ifFalse].items += level
-                }
-                m.items.clear()
-            }
-        }
-
-        val monkeyBusinessLevel = inspection.sorted().takeLast(2).reduce { acc, it -> acc * it }
-
-        monkeyBusinessLevel shouldBe 110220
-    }
-
-    "puzzle part 02" {
-        val monkeys = getMonkeys()
-        val inspection = MutableList(monkeys.size) { 0L }
-        val primes = monkeys.map { it.test }.reduce { acc, it -> acc * it }
-
-        repeat(10000) { _ ->
-            monkeys.forEachIndexed { index, m ->
-                m.items.forEach { i ->
-                    inspection[index]++
-                    val level = m.operation.run(i) % primes
-                    monkeys[if (level % m.test == 0L) m.ifTrue else m.ifFalse].items += level
-                }
-                m.items.clear()
-            }
-        }
-
-        val monkeyBusinessLevel = inspection.sorted().takeLast(2).reduce { acc, it -> acc * it }
-
-        monkeyBusinessLevel shouldBe 19457438264
-    }
+    "puzzle part 01" { runRound(20, 3) shouldBe 110220 }
+    "puzzle part 02" { runRound(10000) shouldBe 19457438264 }
 })
+
+private fun runRound(times: Int, worryLevelDivider: Int = 1): Long {
+    val monkeys = getMonkeys()
+    val inspection = MutableList(monkeys.size) { 0L }
+    val primes = monkeys.map { it.test }.reduce { acc, it -> acc * it }
+
+    repeat(times) { _ ->
+        monkeys.forEachIndexed { index, m ->
+            m.items.forEach { i ->
+                inspection[index]++
+                val level = (m.operation.run(i) / worryLevelDivider) % primes
+                monkeys[if (level % m.test == 0L) m.ifTrue else m.ifFalse].items += level
+            }
+            m.items.clear()
+        }
+    }
+
+    return inspection.sorted().takeLast(2).reduce { acc, it -> acc * it }
+}
 
 private fun getMonkeys() = getPuzzleInput("day11-input.txt", "$eol$eol")
     .map {
