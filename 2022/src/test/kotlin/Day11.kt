@@ -29,9 +29,9 @@ private fun runRound(times: Int, worryLevelDivider: Int = 1): Long {
 
     repeat(times) { _ ->
         monkeys.forEachIndexed { index, m ->
-            m.items.forEach { i ->
+            m.items.forEach { item ->
                 inspection[index]++
-                val level = (m.operation.run(i) / worryLevelDivider) % primes
+                val level = (m.operation.run(item) / worryLevelDivider) % primes
                 monkeys[if (level % m.test == 0L) m.ifTrue else m.ifFalse].items += level
             }
             m.items.clear()
