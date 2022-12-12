@@ -7,26 +7,27 @@ private val directions = listOf(Coord(1, 0), Coord(0, 1), Coord(-1, 0), Coord(0,
 class Day12 : StringSpec({
     "puzzle part 01" {
         val map = getMap()
-        val start = map.toList().single { it.second == S }.first
-        val end = map.toList().single { it.second == E }.first
+        val start = map.filterValues { it == S }.keys.single()
+        val end = map.filterValues { it == E }.keys.single()
 
-        val path = findTotalRiskForShortestPath(map, start, end)
+        val path = findShortestPathLength(map, start, end)
 
         path shouldBe 456
     }
 
     "puzzle part 02" {
         val map = getMap()
-        val end = map.toList().single { it.second == E }.first
+        val end = map.filterValues { it == E }.keys.single()
 
-        val minPath = map.filter { it.value <= 1 }
-            .minOf { findTotalRiskForShortestPath(map, it.key, end) ?: Int.MAX_VALUE }
+        val shortestPath = map.filter { it.value <= 1 }
+            .mapNotNull { findShortestPathLength(map, it.key, end) }
+            .min()
 
-        minPath shouldBe 454
+        shortestPath shouldBe 454
     }
 })
 
-private fun findTotalRiskForShortestPath(map: Map<Coord, Int>, start: Coord, end: Coord): Int? {
+private fun findShortestPathLength(map: Map<Coord, Int>, start: Coord, end: Coord): Int? {
     val queue = mutableMapOf(start to 0)
     val totals = mutableMapOf(start to 0)
     val visited = mutableSetOf<Coord>()
@@ -37,9 +38,9 @@ private fun findTotalRiskForShortestPath(map: Map<Coord, Int>, start: Coord, end
         directions
             .map { direction -> Coord(current.key.x + direction.x, current.key.y + direction.y) }
             .filterNot { coord -> visited.contains(coord) }
-            .mapNotNull { coord -> map[coord]?.let { coord to it } }
-            .filter { (_, distance) -> distance <= map[current.key]!! + 1 }
-            .forEach { (coord, _) ->
+            .mapNotNull { coord -> map[coord]?.let { coord to it } }.toMap()
+            .filterValues { it <= map[current.key]!! + 1 }
+            .keys.forEach { coord ->
                 val totalDistance = current.value + 1
                 val knownTotalDistance = totals[coord] ?: Int.MAX_VALUE
                 if (totalDistance < knownTotalDistance) {
@@ -59,10 +60,7 @@ private fun findTotalRiskForShortestPath(map: Map<Coord, Int>, start: Coord, end
     return totals.filterKeys { it == end }.toList().firstOrNull()?.second
 }
 
-private const val S = 0
-private const val E = ('z'.code - 96) + 1
-
-private fun getMap() = getPuzzleInput("day12-input.txt")
+private fun getMap() = getPuzzleInput("day12-input.txt").toList()
     .map {
         it.map { c ->
             when (c) {
@@ -72,13 +70,12 @@ private fun getMap() = getPuzzleInput("day12-input.txt")
             }
         }
     }
-    .toList()
     .let {
-        it
-            .first()
-            .indices
-            .flatMap { x ->
-                List(it.size) { y -> Coord(x, y) to it[y][x] }
-            }
+        it.first().indices.flatMap { x ->
+            List(it.size) { y -> Coord(x, y) to it[y][x] }
+        }
     }
     .toMap()
+
+private const val S = 0
+private const val E = ('z'.code - 96) + 1
