@@ -74,8 +74,7 @@ private fun getMap() = getPuzzleInput("day12-input.txt").toList()
         it.first().indices.flatMap { x ->
             List(it.size) { y -> Coord(x, y) to it[y][x] }
         }
-    }
-    .toMap()
+    }.toMap()
 
 private const val S = 0
 private const val E = ('z'.code - 96) + 1
