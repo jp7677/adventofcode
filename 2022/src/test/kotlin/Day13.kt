@@ -12,18 +12,27 @@ private data class Packet(val integer: Int?, val packets: List<Packet>?) : Compa
             if (packet.isEmpty()) return Packet()
             if (!packet.startsWith('[') || !packet.endsWith(']')) throw IllegalArgumentException()
 
-            var p = packet.drop(1).dropLast(1)
-            while (p.contains('[')) {
-                val start = p.indexOf('[')
-                val end = start + p.drop(start).indexOfClosingBracket()
-                val maskedList = p.drop(start).take(end - start).mask()
-                p = p.take(start) + maskedList + p.drop(end)
-            }
-
-            return p.split(',')
+            return packet
+                .drop(1).dropLast(1)
+                .maskLists()
+                .split(',')
                 .map { it.toIntOrNull()?.let { integer -> Packet(integer) } ?: parse(it.unmask()) }
                 .let { Packet(it) }
         }
+
+        private fun String.maskLists(): String {
+            var s = this
+            while (s.contains('[')) {
+                val start = s.indexOf('[')
+                val end = start + s.drop(start).indexOfClosingBracket()
+                val maskedList = s.drop(start).take(end - start).mask()
+                s = s.take(start) + maskedList + s.drop(end)
+            }
+            return s
+        }
+
+        private fun String.mask() = this.replace('[', '(').replace(']', ')').replace(',', '.')
+        private fun String.unmask() = this.replace('(', '[').replace(')', ']').replace('.', ',')
 
         fun wrap(integer: Int) = Packet(listOf(Packet(integer)))
     }
@@ -80,6 +89,3 @@ class Day13 : StringSpec({
         key1 * key2 shouldBe 20570
     }
 })
-
-private fun String.mask() = this.replace('[', '(').replace(']', ')').replace(',', '.')
-private fun String.unmask() = this.replace('(', '[').replace(')', ']').replace('.', ',')
