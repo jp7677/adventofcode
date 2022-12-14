@@ -43,3 +43,5 @@ fun String.indexOfClosingBracket(): Int {
 
 // Based on https://stackoverflow.com/a/52986053
 infix fun Int.towards(to: Int) = IntProgression.fromClosedRange(this, to, if (this > to) -1 else 1)
+
+fun String.indexOfOrNull(char: Char) = indexOf(char).let { if (it == -1) null else it }
