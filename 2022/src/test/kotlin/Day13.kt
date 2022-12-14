@@ -10,29 +10,27 @@ private data class Packet(val integer: Int?, val packets: List<Packet>?) : Compa
     companion object {
         fun parse(packet: String): Packet {
             if (packet.isEmpty()) return Packet()
-            if (!packet.startsWith('[') || !packet.endsWith(']')) throw IllegalArgumentException()
+            if (packet == "[]") return Packet(listOf(Packet()))
+            packet.toIntOrNull()?.let { return Packet(it) }
 
-            return packet
-                .drop(1).dropLast(1)
-                .maskLists()
-                .split(',')
-                .map { it.toIntOrNull()?.let { integer -> Packet(integer) } ?: parse(it.unmask()) }
+            return generateSequence(1) { start ->
+                if (start >= packet.length) null
+                else {
+                    val part = packet.drop(start)
+                    val length = if (packet[start] == '[')
+                        part.indexOfClosingBracket()
+                    else
+                        part.indexOfOrNull(',') ?: part.length.dec()
+
+                    start + length + 1
+                }
+            }
+                .toList()
+                .zipWithNext()
+                .map { (start, end) -> packet.drop(start).take(end - start - 1) }
+                .map { token -> parse(token) }
                 .let { Packet(it) }
         }
-
-        private fun String.maskLists(): String {
-            var s = this
-            while (s.contains('[')) {
-                val start = s.indexOf('[')
-                val end = start + s.drop(start).indexOfClosingBracket()
-                val maskedList = s.drop(start).take(end - start).mask()
-                s = s.take(start) + maskedList + s.drop(end)
-            }
-            return s
-        }
-
-        private fun String.mask() = this.replace('[', '(').replace(']', ')').replace(',', '.')
-        private fun String.unmask() = this.replace('(', '[').replace(')', ']').replace('.', ',')
 
         fun wrap(integer: Int) = Packet(listOf(Packet(integer)))
     }
