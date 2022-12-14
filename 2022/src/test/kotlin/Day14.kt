@@ -14,7 +14,6 @@ class Day14 : StringSpec({
 
     "puzzle part 02" {
         val rocks = getRocks()
-
         val minX = rocks.minOf { it.x }
         val maxX = rocks.maxOf { it.x }
         val distanceX = maxX - minX
@@ -62,10 +61,9 @@ private fun Coord14.isStuck(map: Set<Coord14>) = map
 
 private fun getRocks() = getPuzzleInput("day14-input.txt")
     .flatMap { line ->
-        line.split(" -> ")
-            .map { s ->
-                s.split(",").let { Coord14(it.first().toInt(), it.last().toInt()) }
-            }
+        line.split(" -> ").map { s ->
+            s.split(",").let { Coord14(it.first().toInt(), it.last().toInt()) }
+        }
             .fold(listOf<Coord14>()) { acc, it ->
                 if (acc.any()) {
                     acc + (acc.last().x towards it.x).flatMap { x ->
