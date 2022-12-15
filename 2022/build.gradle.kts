@@ -7,7 +7,7 @@ plugins {
     application
     kotlin("jvm") version "1.7.22"
     id("com.adarshr.test-logger") version "3.2.0"
-    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
+    id("org.jmailen.kotlinter") version "3.12.0"
 }
 
 repositories { mavenCentral() }
