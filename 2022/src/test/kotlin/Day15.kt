@@ -6,14 +6,14 @@ import kotlin.math.min
 
 private data class Position15(val x: Int, val y: Int)
 private data class Sensor(val position: Position15, val beacon: Position15) {
-    val distanceToBeaon: Int = (position.x - beacon.x).absoluteValue + (position.y - beacon.y).absoluteValue
+    val distanceToBeacon: Int = (position.x - beacon.x).absoluteValue + (position.y - beacon.y).absoluteValue
 
     fun knownRange(y: Int): IntRange? {
         val distanceY = (this.position.y - y).absoluteValue
-        if (distanceY > distanceToBeaon) return null
+        if (distanceY > distanceToBeacon) return null
 
-        val x1 = this.position.x - (distanceToBeaon - distanceY)
-        val x2 = this.position.x + (distanceToBeaon - distanceY)
+        val x1 = this.position.x - (distanceToBeacon - distanceY)
+        val x2 = this.position.x + (distanceToBeacon - distanceY)
         return min(x1, x2)..max(x1, x2)
     }
 }
