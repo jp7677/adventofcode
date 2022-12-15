@@ -39,23 +39,20 @@ class Day15 : StringSpec({
         val boundary = 4000000
         val frequency = (0..boundary).firstNotNullOf { y ->
             sensors.mapNotNull { it.knownRange(y) }
-                .map { IntRange(max(it.first, 0), min(it.last, boundary)) }
-                .sortedBy { it.first }
+                .map { max(it.first, 0)..min(it.last, boundary) }
                 .missing()
-                ?.let { it * 4000000 + y }
+                ?.let { x -> x * 4000000 + y }
         }
 
         frequency shouldBe 13360899249595
     }
 })
 
-private fun List<IntRange>.missing(): Long? {
-    this.reduce { acc, it ->
+private fun List<IntRange>.missing(): Long? = this.sortedBy { it.first }
+    .reduce { acc, it ->
         if (it.first > acc.last + 1) return acc.last.toLong() + 1
         min(acc.first, it.first)..max(acc.last, it.last)
-    }
-    return null
-}
+    }.let { null }
 
 private val re = "x=(-?\\d+), y=(-?\\d+)".toRegex()
 private fun getSensors() = getPuzzleInput("day15-input.txt").map { line ->
