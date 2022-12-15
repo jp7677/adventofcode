@@ -6,7 +6,7 @@ import kotlin.math.min
 
 private data class Position15(val x: Int, val y: Int)
 private data class Sensor(val position: Position15, val beacon: Position15) {
-    val distanceToBeaon: Int = position.toManhattenDistance(beacon)
+    val distanceToBeaon: Int = (position.x - beacon.x).absoluteValue + (position.y - beacon.y).absoluteValue
 
     fun knownRange(y: Int): IntRange? {
         val distanceY = (this.position.y - y).absoluteValue
@@ -26,7 +26,7 @@ class Day15 : StringSpec({
         val knownRangeAtRow = sensors.mapNotNull { it.knownRange(row) }
         val beaconsInRow = sensors.map { it.beacon }.toSet().count { it.y == row }
 
-        val countOfKnownAtRow = (knownRangeAtRow.minOf { it.first } ..knownRangeAtRow.maxOf { it.last })
+        val countOfKnownAtRow = ((knownRangeAtRow.minOf { it.first })..(knownRangeAtRow.maxOf { it.last }))
             .count { y -> knownRangeAtRow.any { y in it } }
         val positionsAtRowWithoutBeacon = countOfKnownAtRow - beaconsInRow
 
@@ -57,9 +57,7 @@ private fun List<IntRange>.missing(): Long? {
     return null
 }
 
-private fun Position15.toManhattenDistance(other: Position15) = (x - other.x).absoluteValue + (y - other.y).absoluteValue
-
-private val re = Regex("x=(-?\\d+), y=(-?\\d+)")
+private val re = "x=(-?\\d+), y=(-?\\d+)".toRegex()
 private fun getSensors() = getPuzzleInput("day15-input.txt").map { line ->
     re.findAll(line).let { m ->
         Sensor(
