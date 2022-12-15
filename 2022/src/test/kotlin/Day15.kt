@@ -49,9 +49,9 @@ class Day15 : StringSpec({
 })
 
 private fun List<IntRange>.missing(): Long? = this.sortedBy { it.first }
-    .reduce { acc, it ->
-        if (it.first > acc.last + 1) return acc.last.toLong() + 1
-        min(acc.first, it.first)..max(acc.last, it.last)
+    .fold(0L) { acc, it ->
+        if (it.first > acc + 1) return acc + 1
+        max(acc, it.last.toLong())
     }.let { null }
 
 private val re = "x=(-?\\d+), y=(-?\\d+)".toRegex()
@@ -59,7 +59,7 @@ private fun getSensors() = getPuzzleInput("day15-input.txt").map { line ->
     re.findAll(line).let { m ->
         Sensor(
             Position15(m.first().groupValues[1].toInt(), m.first().groupValues[2].toInt()),
-            Position15(m.last().groupValues[1].toInt(), m.last().groupValues[2].toInt()),
+            Position15(m.last().groupValues[1].toInt(), m.last().groupValues[2].toInt())
         )
     }
 }
