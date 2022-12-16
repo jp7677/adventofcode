@@ -5,7 +5,7 @@ private data class Valve(val name: String, val flowRate: Int, val leadsTo: List<
 private val re = "rate=(\\d+);".toRegex()
 
 class Day16 : StringSpec({
-    "puzzle part 01" {
+    "puzzle part 01".config(enabled = false) {
         val valves = getValves()
 
         val start = valves.single { it.name == "AA" }
