@@ -5,7 +5,7 @@ private data class Valve(val name: String, val flowRate: Int, val leadsTo: List<
 private val re = "rate=(\\d+);".toRegex()
 
 class Day16 : StringSpec({
-    "puzzle part 01".config(enabled = false) {
+    "puzzle part 01" {
         val valves = getValves()
 
         val start = valves.single { it.name == "AA" }
@@ -14,10 +14,39 @@ class Day16 : StringSpec({
             (relevantValves + start).map { v2 -> Pair(v1.name, v2.name) to valves.distance(v1, v2) }
         }.toMap()
 
-        val maxPressure = relevantValves.allRoutes(start, listOf(), 30, distances)
-            .maxOf { it.pressure(30) }
+        val time = 30
+        val maxPressure = relevantValves.allRoutes(start, listOf(), time, distances)
+            .maxOf { it.pressure(time) }
 
         maxPressure shouldBe 1728
+    }
+
+    "puzzle part 02" {
+        val valves = getValves()
+
+        val start = valves.single { it.name == "AA" }
+        val relevantValves = valves.filterNot { it.flowRate == 0 }.sortedByDescending { it.flowRate }.toSet()
+        val distances = (relevantValves + start).flatMap { v1 ->
+            (relevantValves + start).map { v2 -> Pair(v1.name, v2.name) to valves.distance(v1, v2) }
+        }.toMap()
+
+        val time = 26
+        val pressureForOne = relevantValves
+            .allRoutes(start, listOf(), time, distances)
+            .sortedByDescending { it.pressure(time) }
+            .take(1000) // Just a gamble but seems to work
+
+        val combinedPressure = pressureForOne
+            .flatMap { elf ->
+                pressureForOne
+                    .filter { elephant -> elf.none { elephant.any { e -> e.first.name == it.first.name } } }
+                    .map { elephant -> elf to elephant }
+            }
+            .maxOf {
+                it.first.pressure(time) + it.second.pressure(time)
+            }
+
+        combinedPressure shouldBe 2304
     }
 })
 
@@ -46,8 +75,8 @@ private fun Set<Valve>.allRoutes(
     path: List<Pair<Valve, Int>>,
     max: Int,
     distances: Map<Pair<String, String>, Int>,
-    knownPaths: List<List<Pair<Valve, Int>>> = listOf()
-): List<List<Pair<Valve, Int>>> {
+    knownPaths: Set<List<Pair<Valve, Int>>> = setOf()
+): Set<List<Pair<Valve, Int>>> {
     val next = this
         .filterNot { it.name == current.name || it.name in path.map { n -> n.first.name } }
         .map {
@@ -58,10 +87,10 @@ private fun Set<Valve>.allRoutes(
 
             it to distance
         }
-        .filterNot { it.second > max }
+        .filter { it.second < max }
 
     if (next.none())
-        return listOf(path)
+        return setOf(path)
 
     return knownPaths + next.flatMap {
         allRoutes(
