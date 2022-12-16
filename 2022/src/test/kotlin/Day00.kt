@@ -3,7 +3,7 @@ import io.kotest.matchers.shouldBe
 
 class Day00 : StringSpec({
     "puzzle part 01" {
-        val input = getPuzzleInput("day00-input.txt")
+        val input = getPuzzleInput("day00-input.txt").toList()
 
         input.count() shouldBe 0
     }
