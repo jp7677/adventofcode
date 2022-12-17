@@ -17,6 +17,7 @@ class Day17 : StringSpec({
         var pos = -1
 
         val map = buildSet { repeat(7) { add(Coord17(it, 0)) } }.toMutableList()
+        var discarded = 0L
         repeat(2022) { round ->
             val offset = map.offsetY()
             if (offset > 0) map.forEach { it.y += offset }
@@ -33,8 +34,15 @@ class Day17 : StringSpec({
                 shape.forEach { it.y++ }
             }
             map.addAll(shape)
+
+            val lineY = map.groupBy { it.y }.filterValues { it.size == 7 }.keys.last()
+            discarded += map.maxY() - lineY
+            map.removeIf { it.y > lineY }
         }
-        map.minY().absoluteValue + map.maxY().absoluteValue shouldBe 3065
+
+        val height = map.minY().absoluteValue + map.maxY().absoluteValue + discarded
+
+        height shouldBe 3065
     }
 })
 
