@@ -44,6 +44,22 @@ class Day17 : StringSpec({
 
         height shouldBe 3065
     }
+
+    "puzzle part 02".config(enabled = false) {
+        // Found manually by seeing a pattern like below when jet pattern starts over
+        // Round - Height
+        // 0       0
+        // 1707    2569
+        // 3442    5280
+        // 5177    7991
+        // 6912    10702
+        // 8647    13413
+        // From round 1707 on the height increases with 2711 every 1735 rounds
+
+        val multiplier = (1000000000000L - 1707 - 168) / 1735
+        val height = multiplier * 2711 + 2569 + 2841 - 2569
+        height shouldBe 1562536022966
+    }
 })
 
 private fun List<Coord17>.hitsLeftWall() = any { it.x - 1 < 0 }
