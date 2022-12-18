@@ -3,7 +3,7 @@ import io.kotest.matchers.shouldBe
 import kotlin.math.absoluteValue
 
 private data class Cube(val x: Int, val y: Int, val z: Int)
-private val neighbours = listOf(
+private val adjacent = listOf(
     Cube(1, 0, 0),
     Cube(-1, 0, 0),
     Cube(0, 1, 0),
@@ -22,20 +22,18 @@ private data class Cocoon(val lava: Set<Cube>) {
     val cubes: Set<Cube>
 
     init {
-        cubes = Cube(minX, minY, minZ).getAdjacentNeighbours()
+        cubes = Cube(minX, minY, minZ).findAllAdjacent()
     }
 
-    private fun Cube.getAdjacentNeighbours(visited: MutableSet<Cube> = mutableSetOf()): Set<Cube> =
-        setOf(this) + neighbours
+    private fun Cube.findAllAdjacent(visited: MutableSet<Cube> = mutableSetOf()): Set<Cube> =
+        setOf(this) + adjacent
             .map { n -> Cube(x + n.x, y + n.y, z + n.z) }
             .filterNot {
                 it.x < minX || it.x > maxX || it.y < minY || it.y > maxY || it.z < minZ || it.z > maxZ ||
                     lava.contains(it) || visited.contains(it)
             }
             .onEach { visited.add(it) }
-            .flatMap {
-                it.getAdjacentNeighbours(visited)
-            }
+            .flatMap { it.findAllAdjacent(visited) }
 
     fun outerSize() = (2 * sideX() * sideY()) + (2 * sideX() * sideZ()) + (2 * sideY() * sideZ())
     private fun sideX() = (maxX - minX + 1).absoluteValue
@@ -49,7 +47,7 @@ class Day18 : StringSpec({
 })
 
 private fun Set<Cube>.countSides() = sumOf {
-    6 - neighbours.count { n -> contains(Cube(it.x + n.x, it.y + n.y, it.z + n.z)) }
+    6 - adjacent.count { n -> contains(Cube(it.x + n.x, it.y + n.y, it.z + n.z)) }
 }
 
 private fun getCubes() = getPuzzleInput("day18-input.txt")
