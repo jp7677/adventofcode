@@ -19,6 +19,9 @@ private data class Cocoon(val lava: Set<Cube>) {
     val maxY = lava.maxOf { it.y } + 1
     val minZ = lava.minOf { it.z } - 1
     val maxZ = lava.maxOf { it.z } + 1
+    val sizeX = (maxX - minX + 1).absoluteValue
+    val sizeY = (maxY - minY + 1).absoluteValue
+    val sizeZ = (maxZ - minZ + 1).absoluteValue
     val cubes: Set<Cube>
 
     init {
@@ -36,10 +39,7 @@ private data class Cocoon(val lava: Set<Cube>) {
             .flatMap { it.findAllAdjacent(visited) }
 
     fun innerSurfaceSize() = cubes.exposedSides() - outerSurfaceSize()
-    private fun outerSurfaceSize() = (2 * sideX() * sideY()) + (2 * sideX() * sideZ()) + (2 * sideY() * sideZ())
-    private fun sideX() = (maxX - minX + 1).absoluteValue
-    private fun sideY() = (maxY - minY + 1).absoluteValue
-    private fun sideZ() = (maxZ - minZ + 1).absoluteValue
+    private fun outerSurfaceSize() = 2 * (sizeX * sizeY + sizeX * sizeZ + sizeY * sizeZ)
 }
 
 class Day18 : StringSpec({
