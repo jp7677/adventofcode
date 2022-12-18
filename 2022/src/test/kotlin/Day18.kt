@@ -35,18 +35,19 @@ private data class Cocoon(val lava: Set<Cube>) {
             .onEach { visited.add(it) }
             .flatMap { it.findAllAdjacent(visited) }
 
-    fun outerSize() = (2 * sideX() * sideY()) + (2 * sideX() * sideZ()) + (2 * sideY() * sideZ())
+    fun innerSurfaceSize() = cubes.exposedSides() - outerSurfaceSize()
+    private fun outerSurfaceSize() = (2 * sideX() * sideY()) + (2 * sideX() * sideZ()) + (2 * sideY() * sideZ())
     private fun sideX() = (maxX - minX + 1).absoluteValue
     private fun sideY() = (maxY - minY + 1).absoluteValue
     private fun sideZ() = (maxZ - minZ + 1).absoluteValue
 }
 
 class Day18 : StringSpec({
-    "puzzle part 01" { getCubes().countSides() shouldBe 3542 }
-    "puzzle part 02" { Cocoon(getCubes()).let { it.cubes.countSides() - it.outerSize() } shouldBe 2080 }
+    "puzzle part 01" { getCubes().exposedSides() shouldBe 3542 }
+    "puzzle part 02" { Cocoon(getCubes()).innerSurfaceSize() shouldBe 2080 }
 })
 
-private fun Set<Cube>.countSides() = sumOf {
+private fun Set<Cube>.exposedSides() = sumOf {
     6 - adjacent.count { n -> contains(Cube(it.x + n.x, it.y + n.y, it.z + n.z)) }
 }
 
