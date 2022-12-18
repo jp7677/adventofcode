@@ -26,11 +26,12 @@ private data class Cocoon(val lava: Set<Cube>) {
     }
 
     private fun Cube.getAdjacentNeighbours(visited: MutableSet<Cube> = mutableSetOf()): Set<Cube> =
-        setOf(this) + neighbours.asSequence()
+        setOf(this) + neighbours
             .map { n -> Cube(x + n.x, y + n.y, z + n.z) }
-            .filterNot { it.x < minX || it.x > maxX || it.y < minY || it.y > maxY || it.z < minZ || it.z > maxZ }
-            .filterNot { lava.contains(it) || visited.contains(it) }
-            .toList()
+            .filterNot {
+                it.x < minX || it.x > maxX || it.y < minY || it.y > maxY || it.z < minZ || it.z > maxZ ||
+                    lava.contains(it) || visited.contains(it)
+            }
             .onEach { visited.add(it) }
             .flatMap {
                 it.getAdjacentNeighbours(visited)
