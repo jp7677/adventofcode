@@ -12,59 +12,43 @@ private val neighbours = listOf(
     Cube(0, 0, -1)
 )
 
-private data class Cocon(val lava: Set<Cube>) {
+private data class Cocoon(val lava: Set<Cube>) {
     val minX = lava.minOf { it.x } - 1
     val maxX = lava.maxOf { it.x } + 1
     val minY = lava.minOf { it.y } - 1
     val maxY = lava.maxOf { it.y } + 1
     val minZ = lava.minOf { it.z } - 1
     val maxZ = lava.maxOf { it.z } + 1
+    val cubes: Set<Cube>
 
-    fun sideX() = (maxX - minX + 1).absoluteValue
-    fun sideY() = (maxY - minY + 1).absoluteValue
-    fun sideZ() = (maxZ - minZ + 1).absoluteValue
-    fun outerSize() = (2 * sideX() * sideY()) + (2 * sideX() * sideZ()) + (2 * sideY() * sideZ())
+    init {
+        cubes = Cube(minX, minY, minZ).getAdjacentNeighbours()
+    }
 
-    fun buildCocon() = Cube(minX, minY, minZ).getNeighbours()
-
-    private fun Cube.getNeighbours(visited: MutableSet<Cube> = mutableSetOf()): Set<Cube> {
-        val potentialNeighbours = neighbours
+    private fun Cube.getAdjacentNeighbours(visited: MutableSet<Cube> = mutableSetOf()): Set<Cube> =
+        setOf(this) + neighbours.asSequence()
             .map { n -> Cube(x + n.x, y + n.y, z + n.z) }
             .filterNot { it.x < minX || it.x > maxX || it.y < minY || it.y > maxY || it.z < minZ || it.z > maxZ }
-            .filterNot { lava.contains(it) }
-            .filterNot { visited.contains(it) }
-
-        return setOf(this) + potentialNeighbours
+            .filterNot { lava.contains(it) || visited.contains(it) }
+            .toList()
             .onEach { visited.add(it) }
             .flatMap {
-                it.getNeighbours(visited)
+                it.getAdjacentNeighbours(visited)
             }
-    }
+
+    fun outerSize() = (2 * sideX() * sideY()) + (2 * sideX() * sideZ()) + (2 * sideY() * sideZ())
+    private fun sideX() = (maxX - minX + 1).absoluteValue
+    private fun sideY() = (maxY - minY + 1).absoluteValue
+    private fun sideZ() = (maxZ - minZ + 1).absoluteValue
 }
 
 class Day18 : StringSpec({
-    "puzzle part 01" {
-        val cubes = getCubes()
-
-        val sides = cubes.sidesCount()
-
-        sides shouldBe 3542
-    }
-
-    "puzzle part 02" {
-        val cubes = getCubes()
-
-        val cocon = Cocon(cubes)
-        val sides = cocon.buildCocon().sidesCount() - cocon.outerSize()
-
-        sides shouldBe 2080
-    }
+    "puzzle part 01" { getCubes().countSides() shouldBe 3542 }
+    "puzzle part 02" { Cocoon(getCubes()).let { it.cubes.countSides() - it.outerSize() } shouldBe 2080 }
 })
 
-private fun Set<Cube>.sidesCount() = sumOf {
-    6 - neighbours.count { n ->
-        contains(Cube(it.x + n.x, it.y + n.y, it.z + n.z))
-    }
+private fun Set<Cube>.countSides() = sumOf {
+    6 - neighbours.count { n -> contains(Cube(it.x + n.x, it.y + n.y, it.z + n.z)) }
 }
 
 private fun getCubes() = getPuzzleInput("day18-input.txt")
