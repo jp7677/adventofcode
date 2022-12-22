@@ -2,65 +2,61 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class Day20 : StringSpec({
-    "puzzle part 01".config(enabled = false) {
-        val numbers = getPuzzleInput("day20-input.txt").withIndex()
-            .map { "${it.index}#${it.value}" }
-            .toList()
+    "puzzle part 01" {
+        val (file, mix) = getFile()
 
-        val file = numbers.zipWithNext().toMap()
-            .plus(numbers.last() to numbers.first())
-            .toMutableMap()
+        file.indices.forEach { mix.move(file[it]) }
 
-        numbers.indices.forEach {
-            val number = numbers[it]
-            if (number.toValue() % numbers.size != 0)
-                file.move(number)
+        mix.sumOfGroveCoordinates() shouldBe 9945
+    }
+
+    "puzzle part 02" {
+        val (file, mix) = getFile(811589153)
+
+        repeat(10) {
+            file.indices.forEach { mix.move(file[it]) }
         }
 
-        val zero = file.keys.single { it.endsWith("#0") }
-        val grove1 = file.keyAfter(zero, 1000)
-        val grove2 = file.keyAfter(zero, 2000)
-        val grove3 = file.keyAfter(zero, 3000)
-
-        grove1.toValue() + grove2.toValue() + grove3.toValue() shouldBe 13148 // 7716 too low // 13148 not good??
+        mix.sumOfGroveCoordinates() shouldBe 3338877775442
     }
 })
 
 private fun MutableMap<String, String>.move(number: String) {
-    val value = number.toValue() % size
+    val value = number.toValue() % (size - 1)
+    if (value % size == 0L) return
 
-    val gap1 = keyBefore(number, 1) // alternative: keyAfter(number, size - 1)
-    val gap2 = this[number]!!
-    val between1 = if (value > 0) keyAfter(number, value) else keyAfter(number, size + value - 1)
-    val between2 = this[between1]!!
+    val steps = if (value > 0) value.toInt() else size + value.toInt() - 1
+    val dest = keyAfter(number, steps)
 
-    this[gap1] = gap2
-    this[between1] = number
-    this[number] = between2
+    this[keyBefore(number)] = this[number]!!
+    this[number] = this[dest]!!
+    this[dest] = number
 }
 
-private fun Map<String, String>.keyAfter(start: String, moves: Int): String {
-    var current = start
-    repeat(moves) {
-        current = this[current]!!
-    }
+private fun Map<String, String>.keyAfter(number: String, moves: Int): String {
+    var current = number
+    repeat(moves) { current = this[current]!! }
     return current
 }
 
-private fun Map<String, String>.keyBefore(start: String, moves: Int): String {
-    var current = start
-    repeat(moves) {
-        current = entries.single { it.value == current }.key
-    }
-    return current
+private fun Map<String, String>.keyBefore(number: String) = entries.single { it.value == number }.key
+
+private fun String.toValue() = split('#')[1].toLong()
+
+private fun MutableMap<String, String>.sumOfGroveCoordinates(): Long {
+    val zero = keys.single { it.endsWith("#0") }
+    return listOf(1000, 2000, 3000).sumOf { keyAfter(zero, it).toValue() }
 }
 
-private fun String.toValue() = split('#')[1].toInt()
+private fun getFile(key: Int = 1): Pair<List<String>, MutableMap<String, String>> {
+    val file = getPuzzleInput("day20-input.txt")
+        .map { it.toLong() * key }.withIndex()
+        .map { "${it.index}#${it.value}" }
+        .toList()
 
-private fun MutableMap<String, String>.debug() {
-    val start = entries.last().key
-    (0 until size).forEach {
-        print("${this[keyAfter(start, it)]!!.toValue()}, ")
-    }
-    println()
+    val mix = file.zipWithNext().toMap()
+        .plus(file.last() to file.first())
+        .toMutableMap()
+
+    return file to mix
 }
