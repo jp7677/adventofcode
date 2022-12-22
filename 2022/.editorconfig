@@ -10,4 +10,5 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 
 [*.{kt,kts}]
+disabled_rules = multiline-if-else
 ktlint_disabled_rules = multiline-if-else
