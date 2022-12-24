@@ -1,8 +1,8 @@
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-private data class Coord(val x: Int, val y: Int)
-private val directions = listOf(Coord(1, 0), Coord(0, 1), Coord(-1, 0), Coord(0, -1))
+private data class Coord12(val x: Int, val y: Int)
+private val directions = listOf(Coord12(1, 0), Coord12(0, 1), Coord12(-1, 0), Coord12(0, -1))
 
 class Day12 : StringSpec({
     "puzzle part 01" {
@@ -27,16 +27,16 @@ class Day12 : StringSpec({
     }
 })
 
-private fun findShortestPathLength(map: Map<Coord, Int>, start: Coord, end: Coord): Int? {
+private fun findShortestPathLength(map: Map<Coord12, Int>, start: Coord12, end: Coord12): Int? {
     val queue = mutableMapOf(start to 0)
     val totals = mutableMapOf(start to 0)
-    val visited = mutableSetOf<Coord>()
+    val visited = mutableSetOf<Coord12>()
 
     while (queue.any()) {
         val current = queue.minByOrNull { it.value } ?: throw IllegalStateException()
 
         directions
-            .map { direction -> Coord(current.key.x + direction.x, current.key.y + direction.y) }
+            .map { direction -> Coord12(current.key.x + direction.x, current.key.y + direction.y) }
             .filterNot { coord -> visited.contains(coord) }
             .mapNotNull { coord -> map[coord]?.let { coord to it } }.toMap()
             .filterValues { it <= map[current.key]!! + 1 }
@@ -72,7 +72,7 @@ private fun getMap() = getPuzzleInput("day12-input.txt").toList()
     }
     .let {
         it.first().indices.flatMap { x ->
-            List(it.size) { y -> Coord(x, y) to it[y][x] }
+            List(it.size) { y -> Coord12(x, y) to it[y][x] }
         }
     }.toMap()
 
