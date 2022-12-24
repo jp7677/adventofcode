@@ -16,7 +16,7 @@ private data class OpMonkey21(val name1: String, val name2: String, val op: (Lon
     override lateinit var monkeys: Map<String, Monkey21>
     override fun yell() = op(monkeys[name1]!!.yell(), monkeys[name2]!!.yell())
 
-    fun revertYell(yell: Long, num: Long, r: Boolean) = when ((op as KFunction<*>).name) {
+    fun revertYell(yell: Long, num: Long, r: Boolean = false) = when ((op as KFunction<*>).name) {
         "plus" -> yell - num
         "minus" -> if (r) yell + num else num - yell
         "times" -> yell / num
@@ -40,10 +40,8 @@ class Day21 : StringSpec({
         monkeys.onEach { it.value.monkeys = monkeys }
 
         val root = monkeys["root"]!! as OpMonkey21
-        val name1HasHuman = monkeys.hasHuman(root.name1)
-        val otherYell = monkeys[if (name1HasHuman) root.name1 else root.name2]!!.yell()
-        val name = if (name1HasHuman) root.name1 else root.name2
-        val number = root.revertYell(root.yell(), otherYell, name1HasHuman)
+        val name = if (monkeys.hasHuman(root.name1)) root.name1 else root.name2
+        val number = root.revertYell(root.yell(), monkeys[name]!!.yell())
 
         val humanYell = monkeys.findHuman(monkeys[name]!!, number)
 
@@ -55,8 +53,8 @@ private fun Map<String, Monkey21>.findHuman(monkey: Monkey21, yell: Long): Long 
     if (monkey !is OpMonkey21) throw IllegalStateException()
 
     val name1HasHuman = this.hasHuman(monkey.name1)
-    val otherYell = this[if (name1HasHuman) monkey.name2 else monkey.name1]!!.yell()
     val name = if (name1HasHuman) monkey.name1 else monkey.name2
+    val otherYell = this[if (name1HasHuman) monkey.name2 else monkey.name1]!!.yell()
     val number = monkey.revertYell(yell, otherYell, name1HasHuman)
 
     if (name == "humn") return number
