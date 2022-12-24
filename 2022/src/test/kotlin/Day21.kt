@@ -4,17 +4,17 @@ import kotlin.reflect.KFunction
 
 private sealed interface Monkey21 {
     var monkeys: Map<String, Monkey21>
-    fun yell(): Long
+    val yell: Long
 }
 
 private data class NumMonkey21(val num: Long) : Monkey21 {
     override lateinit var monkeys: Map<String, Monkey21>
-    override fun yell() = num
+    override val yell = num
 }
 
 private data class OpMonkey21(val name1: String, val name2: String, val op: (Long, Long) -> Long) : Monkey21 {
     override lateinit var monkeys: Map<String, Monkey21>
-    override fun yell() = op(monkeys[name1]!!.yell(), monkeys[name2]!!.yell())
+    override val yell by lazy { op(monkeys[name1]!!.yell, monkeys[name2]!!.yell) }
 
     fun revertYell(yell: Long, num: Long, r: Boolean = false) = when ((op as KFunction<*>).name) {
         "plus" -> yell - num
@@ -30,7 +30,7 @@ class Day21 : StringSpec({
         val monkeys = getMonkeys()
         monkeys.onEach { it.value.monkeys = monkeys }
 
-        val number = monkeys["root"]!!.yell()
+        val number = monkeys["root"]!!.yell
 
         number shouldBe 145167969204648
     }
@@ -41,7 +41,7 @@ class Day21 : StringSpec({
 
         val root = monkeys["root"]!! as OpMonkey21
         val name = if (monkeys.hasHuman(root.name1)) root.name1 else root.name2
-        val number = root.revertYell(root.yell(), monkeys[name]!!.yell())
+        val number = root.revertYell(root.yell, monkeys[name]!!.yell)
 
         val humanYell = monkeys.findHuman(monkeys[name]!!, number)
 
@@ -54,7 +54,7 @@ private fun Map<String, Monkey21>.findHuman(monkey: Monkey21, yell: Long): Long 
 
     val name1HasHuman = this.hasHuman(monkey.name1)
     val name = if (name1HasHuman) monkey.name1 else monkey.name2
-    val otherYell = this[if (name1HasHuman) monkey.name2 else monkey.name1]!!.yell()
+    val otherYell = this[if (name1HasHuman) monkey.name2 else monkey.name1]!!.yell
     val number = monkey.revertYell(yell, otherYell, name1HasHuman)
 
     if (name == "humn") return number
