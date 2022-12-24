@@ -63,7 +63,6 @@ private fun Map<String, Monkey21>.findHuman(monkey: Monkey21, yell: Long): Long 
 
 private fun Map<String, Monkey21>.hasHuman(name: String): Boolean {
     if (name == "humn") return true
-
     return when (val monkey = this[name]!!) {
         is OpMonkey21 -> hasHuman(monkey.name1) || hasHuman(monkey.name2)
         is NumMonkey21 -> false
