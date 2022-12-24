@@ -2,7 +2,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import kotlin.math.absoluteValue
 
-private data class Position(val x: Int, val y: Int)
+private data class Position9(val x: Int, val y: Int)
 
 class Day09 : StringSpec({
     "puzzle part 01" {
@@ -14,7 +14,7 @@ class Day09 : StringSpec({
     }
 
     "puzzle part 02" {
-        val knots = buildList { repeat(9) { add(listOf(Position(0, 0))) } }
+        val knots = buildList { repeat(9) { add(listOf(Position9(0, 0))) } }
         val countOfPositions = getHeadPositions()
             .fold(knots) { rope, head ->
                 rope
@@ -38,27 +38,27 @@ private fun getHeadPositions() = getPuzzleInput("day09-input.txt")
     .flatMap { (move, times) ->
         buildList { repeat(times) { add(move) } }
     }
-    .scan(Position(0, 0)) { acc, it -> acc.move(it) }
+    .scan(Position9(0, 0)) { acc, it -> acc.move(it) }
 
-private fun Position.move(direction: String) = when (direction) {
-    "R" -> Position(this.x + 1, this.y)
-    "L" -> Position(this.x - 1, this.y)
-    "U" -> Position(this.x, this.y + 1)
-    "D" -> Position(this.x, this.y - 1)
+private fun Position9.move(direction: String) = when (direction) {
+    "R" -> Position9(this.x + 1, this.y)
+    "L" -> Position9(this.x - 1, this.y)
+    "U" -> Position9(this.x, this.y + 1)
+    "D" -> Position9(this.x, this.y - 1)
     else -> throw IllegalArgumentException()
 }
 
-private fun Position.follow(other: Position) =
+private fun Position9.follow(other: Position9) =
     if ((this.x - other.x).absoluteValue <= 1 && (this.y - other.y).absoluteValue <= 1)
         this
     else when {
-        other.x > x && other.y == y -> Position(x + 1, y)
-        other.x < x && other.y == y -> Position(x - 1, y)
-        other.x == x && other.y > y -> Position(x, y + 1)
-        other.x == x && other.y < y -> Position(x, y - 1)
-        other.x > x && other.y > y -> Position(x + 1, y + 1)
-        other.x < x && other.y > y -> Position(x - 1, y + 1)
-        other.x > x -> Position(x + 1, y - 1)
-        other.x < x -> Position(x - 1, y - 1)
+        other.x > x && other.y == y -> Position9(x + 1, y)
+        other.x < x && other.y == y -> Position9(x - 1, y)
+        other.x == x && other.y > y -> Position9(x, y + 1)
+        other.x == x && other.y < y -> Position9(x, y - 1)
+        other.x > x && other.y > y -> Position9(x + 1, y + 1)
+        other.x < x && other.y > y -> Position9(x - 1, y + 1)
+        other.x > x -> Position9(x + 1, y - 1)
+        other.x < x -> Position9(x - 1, y - 1)
         else -> throw IllegalArgumentException()
     }

@@ -1,7 +1,7 @@
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-private data class Move(val times: Int, val src: Int, val dest: Int)
+private data class Move5(val times: Int, val src: Int, val dest: Int)
 
 class Day05 : StringSpec({
     "puzzle part 01" {
@@ -38,7 +38,7 @@ class Day05 : StringSpec({
     }
 })
 
-private fun getStacksAndMoves(): Pair<List<ArrayDeque<String>>, List<Move>> {
+private fun getStacksAndMoves(): Pair<List<ArrayDeque<String>>, List<Move5>> {
     val input = getPuzzleInput("day05-input.txt", "$eol$eol").toList()
 
     val startingStacks = input.first().split(eol)
@@ -55,7 +55,7 @@ private fun getStacksAndMoves(): Pair<List<ArrayDeque<String>>, List<Move>> {
 
     val moves = input.last().split(eol)
         .map { line ->
-            line.split(" ").let { Move(it[1].toInt(), it[3].toInt() - 1, it[5].toInt() - 1) }
+            line.split(" ").let { Move5(it[1].toInt(), it[3].toInt() - 1, it[5].toInt() - 1) }
         }
 
     return stacks to moves
