@@ -45,9 +45,9 @@ class Day21 : StringSpec({
         val name = if (name1HasHuman) root.name1 else root.name2
         val number = root.revertYell(root.yell(), otherYell, name1HasHuman)
 
-        val foundYell = monkeys.findHuman(monkeys[name]!!, number)
+        val humanYell = monkeys.findHuman(monkeys[name]!!, number)
 
-        foundYell shouldBe 3330805295850
+        humanYell shouldBe 3330805295850
     }
 })
 
