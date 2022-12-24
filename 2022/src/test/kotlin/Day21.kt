@@ -35,7 +35,7 @@ class Day21 : StringSpec({
         number shouldBe 145167969204648
     }
 
-    "puzzle part 02".config(enabled = true) {
+    "puzzle part 02" {
         val monkeys = getMonkeys()
         monkeys.onEach { it.value.monkeys = monkeys }
 
