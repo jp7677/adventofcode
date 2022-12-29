@@ -21,10 +21,10 @@ private data class Position22(var tile: Tile, var direction: Direction) {
     }
 }
 
-private enum class Turn { CLOCKWISE, COUNTERCLOCKWISE }
+private enum class Turn22 { CLOCKWISE, COUNTERCLOCKWISE }
 private sealed interface PathSegment
 private data class Move22(val steps: Int) : PathSegment
-private data class PathTurn(val turn: Turn) : PathSegment
+private data class PathTurn(val turn: Turn22) : PathSegment
 
 class Day22 : StringSpec({
     "puzzle part 01" {
@@ -65,15 +65,15 @@ class Day22 : StringSpec({
     }
 })
 
-private fun Direction.turn(turn: Turn) = when (turn) {
-    Turn.CLOCKWISE -> when (this) {
+private fun Direction.turn(turn: Turn22) = when (turn) {
+    Turn22.CLOCKWISE -> when (this) {
         Direction.UP -> Direction.RIGHT
         Direction.RIGHT -> Direction.DOWN
         Direction.DOWN -> Direction.LEFT
         Direction.LEFT -> Direction.UP
     }
 
-    Turn.COUNTERCLOCKWISE -> when (this) {
+    Turn22.COUNTERCLOCKWISE -> when (this) {
         Direction.UP -> Direction.LEFT
         Direction.RIGHT -> Direction.UP
         Direction.DOWN -> Direction.RIGHT
@@ -181,8 +181,8 @@ private fun getMapAndPath(includePlanes: Boolean = false) = getPuzzleInput("day2
                     m.groups.drop(1)
                         .map {
                             when (it?.value) {
-                                "R" -> PathTurn(Turn.CLOCKWISE)
-                                "L" -> PathTurn(Turn.COUNTERCLOCKWISE)
+                                "R" -> PathTurn(Turn22.CLOCKWISE)
+                                "L" -> PathTurn(Turn22.COUNTERCLOCKWISE)
                                 else -> Move22(it?.value?.toInt() ?: throw IllegalArgumentException())
                             }
                         }
