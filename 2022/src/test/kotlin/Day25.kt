@@ -23,8 +23,8 @@ private fun String.fromSnafuNumber() = this.reversed()
     .sum()
 
 private fun Long.toSnafuNumber() = generateSequence(this.quotientToRemainder()) { (q, _) ->
-    (q / 5).let { r ->
-        if (r != 0L) r.quotientToRemainder()
+    (q / 5).let {
+        if (it != 0L) it.quotientToRemainder()
         else null
     }
 }
@@ -33,8 +33,8 @@ private fun Long.toSnafuNumber() = generateSequence(this.quotientToRemainder()) 
     .joinToString("")
     .trimStart('0')
 
-private fun Long.quotientToRemainder() = when (val m1 = this % 5) {
+private fun Long.quotientToRemainder() = when (val r = this % 5) {
     4L -> this + 1 to "-"
     3L -> this + 2 to "="
-    else -> this to m1.toString()
+    else -> this to r.toString()
 }
