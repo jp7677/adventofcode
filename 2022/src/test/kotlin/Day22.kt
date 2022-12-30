@@ -11,13 +11,13 @@ private sealed interface Coord22 {
 private data class Tile(override val x: Int, override val y: Int, override val plane: Int = 0) : Coord22
 private data class Wall(override val x: Int, override val y: Int, override val plane: Int = 0) : Coord22
 
-private enum class Direction { UP, RIGHT, DOWN, LEFT }
-private data class Position22(var tile: Tile, var direction: Direction) {
+private enum class Direction22 { UP, RIGHT, DOWN, LEFT }
+private data class Position22(var tile: Tile, var direction: Direction22) {
     fun password() = ((tile.y + 1) * 1000) + ((tile.x + 1) * 4) + when (direction) {
-        Direction.RIGHT -> 0
-        Direction.DOWN -> 1
-        Direction.LEFT -> 2
-        Direction.UP -> 3
+        Direction22.RIGHT -> 0
+        Direction22.DOWN -> 1
+        Direction22.LEFT -> 2
+        Direction22.UP -> 3
     }
 }
 
@@ -29,7 +29,7 @@ private data class PathTurn(val turn: Turn22) : PathSegment
 class Day22 : StringSpec({
     "puzzle part 01" {
         val (map, path) = getMapAndPath()
-        val pos = Position22(Tile(map.filter { it.y == 0 }.minOf { it.x }, 0), Direction.RIGHT)
+        val pos = Position22(Tile(map.filter { it.y == 0 }.minOf { it.x }, 0), Direction22.RIGHT)
 
         path.forEach { segment ->
             when (segment) {
@@ -47,7 +47,7 @@ class Day22 : StringSpec({
 
     "puzzle part 02" {
         val (map, path) = getMapAndPath(includePlanes = true)
-        val pos = Position22(Tile(map.filter { it.y == 0 }.minOf { it.x }, 0, 1), Direction.RIGHT)
+        val pos = Position22(Tile(map.filter { it.y == 0 }.minOf { it.x }, 0, 1), Direction22.RIGHT)
 
         path.forEach { segment ->
             when (segment) {
@@ -65,31 +65,31 @@ class Day22 : StringSpec({
     }
 })
 
-private fun Direction.turn(turn: Turn22) = when (turn) {
+private fun Direction22.turn(turn: Turn22) = when (turn) {
     Turn22.CLOCKWISE -> when (this) {
-        Direction.UP -> Direction.RIGHT
-        Direction.RIGHT -> Direction.DOWN
-        Direction.DOWN -> Direction.LEFT
-        Direction.LEFT -> Direction.UP
+        Direction22.UP -> Direction22.RIGHT
+        Direction22.RIGHT -> Direction22.DOWN
+        Direction22.DOWN -> Direction22.LEFT
+        Direction22.LEFT -> Direction22.UP
     }
 
     Turn22.COUNTERCLOCKWISE -> when (this) {
-        Direction.UP -> Direction.LEFT
-        Direction.RIGHT -> Direction.UP
-        Direction.DOWN -> Direction.RIGHT
-        Direction.LEFT -> Direction.DOWN
+        Direction22.UP -> Direction22.LEFT
+        Direction22.RIGHT -> Direction22.UP
+        Direction22.DOWN -> Direction22.RIGHT
+        Direction22.LEFT -> Direction22.DOWN
     }
 }
 
 private fun Set<Coord22>.peekForMap(pos: Position22): Coord22? {
     val next = when (pos.direction) {
-        Direction.UP -> Tile(pos.tile.x, pos.tile.y.dec())
+        Direction22.UP -> Tile(pos.tile.x, pos.tile.y.dec())
             .let { if (containsCoord(it)) it else Tile(it.x, this.filter { m -> m.x == it.x }.maxOf { m -> m.y }) }
-        Direction.RIGHT -> Tile(pos.tile.x.inc(), pos.tile.y)
+        Direction22.RIGHT -> Tile(pos.tile.x.inc(), pos.tile.y)
             .let { if (containsCoord(it)) it else Tile(this.filter { m -> m.y == it.y }.minOf { m -> m.x }, it.y) }
-        Direction.DOWN -> Tile(pos.tile.x, pos.tile.y.inc())
+        Direction22.DOWN -> Tile(pos.tile.x, pos.tile.y.inc())
             .let { if (containsCoord(it)) it else Tile(it.x, this.filter { m -> m.x == it.x }.minOf { m -> m.y }) }
-        Direction.LEFT -> Tile(pos.tile.x.dec(), pos.tile.y)
+        Direction22.LEFT -> Tile(pos.tile.x.dec(), pos.tile.y)
             .let { if (containsCoord(it)) it else Tile(this.filter { m -> m.y == it.y }.maxOf { m -> m.x }, it.y) }
     }
 
@@ -100,10 +100,10 @@ private fun Set<Coord22>.containsCoord(tile: Tile) = this.contains(tile) || this
 
 private fun Set<Coord22>.peekForCube(pos: Position22): Position22? {
     val next = when (pos.direction) {
-        Direction.UP -> Tile(pos.tile.x, pos.tile.y.dec(), pos.tile.plane)
-        Direction.RIGHT -> Tile(pos.tile.x.inc(), pos.tile.y, pos.tile.plane)
-        Direction.DOWN -> Tile(pos.tile.x, pos.tile.y.inc(), pos.tile.plane)
-        Direction.LEFT -> Tile(pos.tile.x.dec(), pos.tile.y, pos.tile.plane)
+        Direction22.UP -> Tile(pos.tile.x, pos.tile.y.dec(), pos.tile.plane)
+        Direction22.RIGHT -> Tile(pos.tile.x.inc(), pos.tile.y, pos.tile.plane)
+        Direction22.DOWN -> Tile(pos.tile.x, pos.tile.y.inc(), pos.tile.plane)
+        Direction22.LEFT -> Tile(pos.tile.x.dec(), pos.tile.y, pos.tile.plane)
     }
         .let { Position22(it, pos.direction) }
         .let { if (isCorrectPlane(it)) it else mapToOtherPlane(it) }
@@ -116,40 +116,40 @@ private fun Set<Coord22>.isCorrectPlane(pos: Position22) = any { it.x == pos.til
 private fun mapToOtherPlane(pos: Position22): Position22 {
     return when (pos.tile.plane) {
         1 -> when (pos.direction) {
-            Direction.UP -> Position22(Tile(0, pos.tile.x + 100, 6), Direction.RIGHT)
-            Direction.LEFT -> Position22(Tile(0, (pos.tile.y - 149).absoluteValue, 4), Direction.RIGHT)
-            Direction.RIGHT -> pos.copy(tile = pos.tile.copy(plane = 2))
-            Direction.DOWN -> pos.copy(tile = pos.tile.copy(plane = 3))
+            Direction22.UP -> Position22(Tile(0, pos.tile.x + 100, 6), Direction22.RIGHT)
+            Direction22.LEFT -> Position22(Tile(0, (pos.tile.y - 149).absoluteValue, 4), Direction22.RIGHT)
+            Direction22.RIGHT -> pos.copy(tile = pos.tile.copy(plane = 2))
+            Direction22.DOWN -> pos.copy(tile = pos.tile.copy(plane = 3))
         }
         2 -> when (pos.direction) {
-            Direction.UP -> Position22(Tile(pos.tile.x - 100, 199, 6), Direction.UP)
-            Direction.RIGHT -> Position22(Tile(99, (pos.tile.y - 149).absoluteValue, 5), Direction.LEFT)
-            Direction.DOWN -> Position22(Tile(99, pos.tile.x - 50, 3), Direction.LEFT)
-            Direction.LEFT -> pos.copy(tile = pos.tile.copy(plane = 1))
+            Direction22.UP -> Position22(Tile(pos.tile.x - 100, 199, 6), Direction22.UP)
+            Direction22.RIGHT -> Position22(Tile(99, (pos.tile.y - 149).absoluteValue, 5), Direction22.LEFT)
+            Direction22.DOWN -> Position22(Tile(99, pos.tile.x - 50, 3), Direction22.LEFT)
+            Direction22.LEFT -> pos.copy(tile = pos.tile.copy(plane = 1))
         }
         3 -> when (pos.direction) {
-            Direction.LEFT -> Position22(Tile(pos.tile.y - 50, 100, 4), Direction.DOWN)
-            Direction.RIGHT -> Position22(Tile(pos.tile.y + 50, 49, 2), Direction.UP)
-            Direction.UP -> pos.copy(tile = pos.tile.copy(plane = 1))
-            Direction.DOWN -> pos.copy(tile = pos.tile.copy(plane = 5))
+            Direction22.LEFT -> Position22(Tile(pos.tile.y - 50, 100, 4), Direction22.DOWN)
+            Direction22.RIGHT -> Position22(Tile(pos.tile.y + 50, 49, 2), Direction22.UP)
+            Direction22.UP -> pos.copy(tile = pos.tile.copy(plane = 1))
+            Direction22.DOWN -> pos.copy(tile = pos.tile.copy(plane = 5))
         }
         4 -> when (pos.direction) {
-            Direction.UP -> Position22(Tile(50, pos.tile.x + 50, 3), Direction.RIGHT)
-            Direction.LEFT -> Position22(Tile(50, (pos.tile.y - 149).absoluteValue, 1), Direction.RIGHT)
-            Direction.RIGHT -> pos.copy(tile = pos.tile.copy(plane = 5))
-            Direction.DOWN -> pos.copy(tile = pos.tile.copy(plane = 6))
+            Direction22.UP -> Position22(Tile(50, pos.tile.x + 50, 3), Direction22.RIGHT)
+            Direction22.LEFT -> Position22(Tile(50, (pos.tile.y - 149).absoluteValue, 1), Direction22.RIGHT)
+            Direction22.RIGHT -> pos.copy(tile = pos.tile.copy(plane = 5))
+            Direction22.DOWN -> pos.copy(tile = pos.tile.copy(plane = 6))
         }
         5 -> when (pos.direction) {
-            Direction.RIGHT -> Position22(Tile(149, (pos.tile.y - 149).absoluteValue, 2), Direction.LEFT)
-            Direction.DOWN -> Position22(Tile(49, pos.tile.x + 100, 6), Direction.LEFT)
-            Direction.UP -> pos.copy(tile = pos.tile.copy(plane = 3))
-            Direction.LEFT -> pos.copy(tile = pos.tile.copy(plane = 4))
+            Direction22.RIGHT -> Position22(Tile(149, (pos.tile.y - 149).absoluteValue, 2), Direction22.LEFT)
+            Direction22.DOWN -> Position22(Tile(49, pos.tile.x + 100, 6), Direction22.LEFT)
+            Direction22.UP -> pos.copy(tile = pos.tile.copy(plane = 3))
+            Direction22.LEFT -> pos.copy(tile = pos.tile.copy(plane = 4))
         }
         6 -> when (pos.direction) {
-            Direction.RIGHT -> Position22(Tile(pos.tile.y - 100, 149, 5), Direction.UP)
-            Direction.DOWN -> Position22(Tile(pos.tile.x + 100, 0, 2), Direction.DOWN)
-            Direction.LEFT -> Position22(Tile(pos.tile.y - 100, 0, 1), Direction.DOWN)
-            Direction.UP -> pos.copy(tile = pos.tile.copy(plane = 4))
+            Direction22.RIGHT -> Position22(Tile(pos.tile.y - 100, 149, 5), Direction22.UP)
+            Direction22.DOWN -> Position22(Tile(pos.tile.x + 100, 0, 2), Direction22.DOWN)
+            Direction22.LEFT -> Position22(Tile(pos.tile.y - 100, 0, 1), Direction22.DOWN)
+            Direction22.UP -> pos.copy(tile = pos.tile.copy(plane = 4))
         }
         else -> throw IllegalArgumentException("${pos.tile.plane} - ${pos.direction}")
     }
