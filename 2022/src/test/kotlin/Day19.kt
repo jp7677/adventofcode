@@ -28,28 +28,39 @@ private data class Blueprint(
 
 class Day19 : StringSpec({
     "puzzle part 01".config(enabled = false) {
-        val blueprints = getBlueprints()
+        val blueprints = getBlueprints().asSequence()
 
-        val geodes = blueprints.map {
-            val materials = collectMaterials(it, 24)
-            it.id to materials.geode
-        }
+        val geodes = blueprints.map { it.id to collectMaterials(it, 24).geode }.toList()
 
         geodes shouldBe idToMaxGeode
         geodes.sumOf { it.first * it.second } shouldBe 2301
-        blueprints.count() shouldBe 30
+    }
+
+    "puzzle part 02".config(enabled = false) {
+        val blueprints = getBlueprints().asSequence().take(3)
+
+        val geodes = blueprints
+            .map { collectMaterials(it, 32).geode }
+            .reduce { acc, it -> acc * it }
+
+        geodes shouldBe 10336
     }
 })
 
 private fun collectMaterials(blueprint: Blueprint, minutes: Int): Stash {
     val states = mutableSetOf(CollectState())
-    repeat(minutes) {
-        // needed for id 23, but yielded wrong results for others
-//        val invalidStates = mutableListOf<CollectState>()
-//        if (24 - minute < blueprint.geodeRobotObsidianCosts) {
-//            invalidStates.addAll(states.filter { it.robots.obsidian == 0 })
-//        }
-//        states.removeAll(invalidStates.toSet())
+    repeat(minutes) { _ ->
+        val maxStates = if (blueprint.id != 5) 10000 else 100000
+        if (states.count() > maxStates) {
+            val promising = states
+                .sortedWith(
+                    compareByDescending<CollectState> { it.robots.geode }
+                        .thenByDescending { it.robots.obsidian }
+                        .thenByDescending { it.robots.clay }
+                        .thenByDescending { it.robots.ore }
+                ).take(maxStates)
+            states.removeIf { it !in promising }
+        }
 
         states.forEach { state ->
             if (state.materials.obsidian >= blueprint.geodeRobotObsidianCosts && state.materials.ore >= blueprint.geodeRobotOreCosts) {
