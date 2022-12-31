@@ -111,7 +111,7 @@ private fun collectMaterials(blueprint: Blueprint, minutes: Int): Stash {
         }
     }
 
-    return if (states.any()) states.maxByOrNull { it.materials.geode }!!.materials else Stash()
+    return states.maxBy { it.materials.geode }.materials
 }
 
 private fun getBlueprints(): List<Blueprint> {
