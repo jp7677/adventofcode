@@ -27,7 +27,7 @@ private data class Blueprint(
 )
 
 class Day19 : StringSpec({
-    "puzzle part 01".config(enabled = false) {
+    "puzzle part 01" {
         val blueprints = getBlueprints().asSequence()
 
         val geodes = blueprints.map { it.id to collectMaterials(it, 24).geode }.toList()
@@ -36,7 +36,7 @@ class Day19 : StringSpec({
         geodes.sumOf { it.first * it.second } shouldBe 2301
     }
 
-    "puzzle part 02".config(enabled = false) {
+    "puzzle part 02" {
         val blueprints = getBlueprints().asSequence().take(3)
 
         val geodes = blueprints
@@ -50,15 +50,16 @@ class Day19 : StringSpec({
 private fun collectMaterials(blueprint: Blueprint, minutes: Int): Stash {
     val states = mutableSetOf(CollectState())
     repeat(minutes) { _ ->
-        val maxStates = if (blueprint.id != 5) 10000 else 100000
-        if (states.count() > maxStates) {
+        val maxPromisingStates = 1500 // Arbitrary number based on playing with the results
+        if (states.count() > maxPromisingStates) {
             val promising = states
                 .sortedWith(
-                    compareByDescending<CollectState> { it.robots.geode }
+                    compareByDescending<CollectState> { it.materials.geode }
+                        .thenByDescending { it.robots.geode }
                         .thenByDescending { it.robots.obsidian }
                         .thenByDescending { it.robots.clay }
                         .thenByDescending { it.robots.ore }
-                ).take(maxStates)
+                ).take(maxPromisingStates)
             states.removeIf { it !in promising }
         }
 
