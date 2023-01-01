@@ -1,3 +1,5 @@
+import io.kotest.assertions.all
+import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -29,14 +31,17 @@ private data class Production(
     fun copy() = Production(blueprint, robots.copy(), materials.copy(), factory)
 }
 
+@OptIn(ExperimentalKotest::class)
 class Day19 : StringSpec({
     "puzzle part 01" {
         val blueprints = getBlueprints().asSequence()
 
         val geodes = blueprints.map { it.id to collectMaterials(it, 24).geode }.toList()
 
-        geodes shouldBe idToMaxGeode
-        geodes.sumOf { it.first * it.second } shouldBe 2301
+        all {
+            geodes.sumOf { it.first * it.second } shouldBe 2301
+            geodes shouldBe idToMaxGeode
+        }
     }
 
     "puzzle part 02" {
