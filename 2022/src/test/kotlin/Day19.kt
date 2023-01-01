@@ -20,13 +20,13 @@ private data class Stock(
 
 private enum class Producing { NONE, ORE_ROBOT, CLAY_ROBOT, OBSIDIAN_ROBOT, GEODE_ROBOT }
 
-private data class CollectState(
+private data class Production(
     val blueprint: Blueprint,
     val robots: Stock = Stock(ore = 1),
     val materials: Stock = Stock(),
     var factory: Producing = Producing.NONE
 ) {
-    fun copy() = CollectState(blueprint, robots.copy(), materials.copy(), factory)
+    fun copy() = Production(blueprint, robots.copy(), materials.copy(), factory)
 }
 
 class Day19 : StringSpec({
@@ -51,17 +51,17 @@ class Day19 : StringSpec({
 })
 
 private fun collectMaterials(blueprint: Blueprint, minutes: Int): Stock {
-    val states = mutableSetOf(CollectState(blueprint))
+    val productions = mutableSetOf(Production(blueprint))
     repeat(minutes) { _ ->
-        states.removeNonPromising()
+        productions.removeNonPromising()
 
-        states.forEach {
+        productions.forEach {
             if (it.canProduceGeodeRobot()) it.produceGeodeRobot()
         }
 
-        states.addAll(
+        productions.addAll(
             buildList {
-                states.forEach {
+                productions.forEach {
                     if (it.canProduceObsidianRobot()) add(it.copy().apply { produceObsidianRobot() })
                     if (it.canProduceClayRobot()) add(it.copy().apply { produceClayRobot() })
                     if (it.canProduceOreRobot()) add(it.copy().apply { produceOreRobot() })
@@ -69,21 +69,21 @@ private fun collectMaterials(blueprint: Blueprint, minutes: Int): Stock {
             }
         )
 
-        states.forEach {
+        productions.forEach {
             it.collectMaterials()
             it.deliverRobot()
         }
     }
 
-    return states.maxBy { it.materials.geode }.materials
+    return productions.maxBy { it.materials.geode }.materials
 }
 
-private fun MutableSet<CollectState>.removeNonPromising() {
+private fun MutableSet<Production>.removeNonPromising() {
     val maxPromisingStates = 1500 // Arbitrary number based on playing with the results
     if (count() <= maxPromisingStates) return
 
     val promising = sortedWith(
-        compareByDescending<CollectState> { it.materials.geode }
+        compareByDescending<Production> { it.materials.geode }
             .thenByDescending { it.robots.geode }
             .thenByDescending { it.robots.obsidian }
             .thenByDescending { it.robots.clay }
@@ -93,48 +93,48 @@ private fun MutableSet<CollectState>.removeNonPromising() {
     removeIf { it !in promising }
 }
 
-private fun CollectState.canProduceOreRobot() = factory == Producing.NONE &&
+private fun Production.canProduceOreRobot() = factory == Producing.NONE &&
     materials.ore >= blueprint.oreRobotOreCosts
 
-private fun CollectState.canProduceClayRobot() = factory == Producing.NONE &&
+private fun Production.canProduceClayRobot() = factory == Producing.NONE &&
     materials.ore >= blueprint.clayRobotOreCosts
 
-private fun CollectState.canProduceObsidianRobot() = factory == Producing.NONE &&
+private fun Production.canProduceObsidianRobot() = factory == Producing.NONE &&
     materials.clay >= blueprint.obsidianRobotClayCosts && materials.ore >= blueprint.obsidianRobotOreCosts
 
-private fun CollectState.canProduceGeodeRobot() = factory == Producing.NONE &&
+private fun Production.canProduceGeodeRobot() = factory == Producing.NONE &&
     materials.obsidian >= blueprint.geodeRobotObsidianCosts && materials.ore >= blueprint.geodeRobotOreCosts
 
-private fun CollectState.produceOreRobot() {
+private fun Production.produceOreRobot() {
     factory = Producing.ORE_ROBOT
     materials.ore -= blueprint.oreRobotOreCosts
 }
 
-private fun CollectState.produceClayRobot() {
+private fun Production.produceClayRobot() {
     factory = Producing.CLAY_ROBOT
     materials.ore -= blueprint.clayRobotOreCosts
 }
 
-private fun CollectState.produceObsidianRobot() {
+private fun Production.produceObsidianRobot() {
     factory = Producing.OBSIDIAN_ROBOT
     materials.clay -= blueprint.obsidianRobotClayCosts
     materials.ore -= blueprint.obsidianRobotOreCosts
 }
 
-private fun CollectState.produceGeodeRobot() {
+private fun Production.produceGeodeRobot() {
     factory = Producing.GEODE_ROBOT
     materials.obsidian -= blueprint.geodeRobotObsidianCosts
     materials.ore -= blueprint.geodeRobotOreCosts
 }
 
-private fun CollectState.collectMaterials() {
+private fun Production.collectMaterials() {
     materials.ore += robots.ore
     materials.clay += robots.clay
     materials.obsidian += robots.obsidian
     materials.geode += robots.geode
 }
 
-private fun CollectState.deliverRobot() {
+private fun Production.deliverRobot() {
     when (factory) {
         Producing.NONE -> return
         Producing.ORE_ROBOT -> robots.ore++
