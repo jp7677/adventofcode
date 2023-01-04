@@ -1,5 +1,6 @@
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import java.util.PriorityQueue
 
 private data class Coord12(val x: Int, val y: Int)
 private val directions = listOf(Coord12(1, 0), Coord12(0, 1), Coord12(-1, 0), Coord12(0, -1))
@@ -28,33 +29,30 @@ class Day12 : StringSpec({
 })
 
 private fun findShortestPathLength(map: Map<Coord12, Int>, start: Coord12, end: Coord12): Int? {
-    val queue = mutableMapOf(start to 0)
+    val queue = PriorityQueue<Pair<Coord12, Int>>(1, compareBy { (_, distance) -> distance })
+        .apply { offer(start to 0) }
     val totals = mutableMapOf(start to 0)
     val visited = mutableSetOf<Coord12>()
 
-    while (queue.any()) {
-        val current = queue.minByOrNull { it.value } ?: throw IllegalStateException()
+    while (!queue.isEmpty()) {
+        val (current, distance) = queue.poll()
 
         directions
-            .map { direction -> Coord12(current.key.x + direction.x, current.key.y + direction.y) }
+            .map { direction -> Coord12(current.x + direction.x, current.y + direction.y) }
             .filterNot { coord -> visited.contains(coord) }
             .mapNotNull { coord -> map[coord]?.let { coord to it } }.toMap()
-            .filterValues { it <= map[current.key]!! + 1 }
+            .filterValues { it <= map[current]!! + 1 }
             .keys.forEach { coord ->
-                val totalDistance = current.value + 1
+                val totalDistance = distance + 1
                 val knownTotalDistance = totals[coord] ?: Int.MAX_VALUE
                 if (totalDistance < knownTotalDistance) {
                     totals[coord] = totalDistance
-                    queue[coord] = totalDistance
-                } else
-                    queue[coord] = knownTotalDistance
+                    queue.offer(coord to totalDistance)
+                }
             }
 
-        if (current.key == end)
-            break
-
-        visited.add(current.key)
-        queue.remove(current.key)
+        if (current == end) queue.clear()
+        visited.add(current)
     }
 
     return totals.filterKeys { it == end }.toList().firstOrNull()?.second
