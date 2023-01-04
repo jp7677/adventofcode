@@ -27,12 +27,13 @@ class Day15 {
     }
 
     private fun findTotalRiskForShortestPath(map: Map<Coord, Int>): Int {
+        val end = Coord(map.maxX(), map.maxY())
         val queue = PriorityQueue<Pair<Coord, Int>>(1, compareBy { (_, distance) -> distance })
             .apply { offer(Coord(0, 0) to 0) }
         val totals = mutableMapOf(Coord(0, 0) to 0)
         val visited = mutableSetOf<Coord>()
 
-        while (!queue.isEmpty()) {
+        while (queue.isNotEmpty()) {
             val (current, distance) = queue.poll()
 
             directions
@@ -48,10 +49,11 @@ class Day15 {
                     }
                 }
 
+            if (current == end) break
             visited.add(current)
         }
 
-        return totals[Coord(map.maxX(), map.maxY())] ?: throw IllegalStateException()
+        return totals[end] ?: throw IllegalStateException()
     }
 
     private fun Map<Coord, Int>.repeatRight(tiles: Int): Map<Coord, Int> {
