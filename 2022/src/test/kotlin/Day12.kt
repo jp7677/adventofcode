@@ -34,7 +34,7 @@ private fun findShortestPathLength(map: Map<Coord12, Int>, start: Coord12, end: 
     val totals = mutableMapOf(start to 0)
     val visited = mutableSetOf<Coord12>()
 
-    while (!queue.isEmpty()) {
+    while (queue.isNotEmpty()) {
         val (current, distance) = queue.poll()
 
         directions
@@ -51,7 +51,7 @@ private fun findShortestPathLength(map: Map<Coord12, Int>, start: Coord12, end: 
                 }
             }
 
-        if (current == end) queue.clear()
+        if (current == end) break
         visited.add(current)
     }
 
