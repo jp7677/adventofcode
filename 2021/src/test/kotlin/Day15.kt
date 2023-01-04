@@ -1,4 +1,5 @@
 import java.lang.IllegalStateException
+import java.util.PriorityQueue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -26,29 +27,28 @@ class Day15 {
     }
 
     private fun findTotalRiskForShortestPath(map: Map<Coord, Int>): Int {
-        val queue = mutableMapOf(Coord(0, 0) to 0)
+        val queue = PriorityQueue<Pair<Coord, Int>>(1, compareBy { (_, distance) -> distance })
+            .apply { offer(Coord(0, 0) to 0) }
         val totals = mutableMapOf(Coord(0, 0) to 0)
         val visited = mutableSetOf<Coord>()
 
-        while (queue.any()) {
-            val current = queue.minByOrNull { it.value } ?: throw IllegalStateException()
+        while (!queue.isEmpty()) {
+            val (current, distance) = queue.poll()
 
             directions
-                .map { direction -> Coord(current.key.x + direction.x, current.key.y + direction.y) }
+                .map { direction -> Coord(current.x + direction.x, current.y + direction.y) }
                 .filterNot { coord -> visited.contains(coord) }
-                .mapNotNull { coord -> map[coord]?.let { coord to it } }
-                .forEach { coordToRisk ->
-                    val totalRisk = current.value + coordToRisk.second
-                    val knownTotalRisk = totals[coordToRisk.first] ?: Int.MAX_VALUE
+                .mapNotNull { coord -> map[coord]?.let { risk -> coord to risk } }
+                .forEach { (coord, risk) ->
+                    val totalRisk = distance + risk
+                    val knownTotalRisk = totals[coord] ?: Int.MAX_VALUE
                     if (totalRisk < knownTotalRisk) {
-                        totals[coordToRisk.first] = totalRisk
-                        queue[coordToRisk.first] = totalRisk
-                    } else
-                        queue[coordToRisk.first] = knownTotalRisk
+                        totals[coord] = totalRisk
+                        queue.offer(coord to totalRisk)
+                    }
                 }
 
-            visited.add(current.key)
-            queue.remove(current.key)
+            visited.add(current)
         }
 
         return totals[Coord(map.maxX(), map.maxY())] ?: throw IllegalStateException()
