@@ -11,23 +11,22 @@ class Day15 {
     fun `run part 01`() {
         val map = getMap()
 
-        val totalRisk = findTotalRiskForShortestPath(map)
+        val totalRisk = map.findTotalRiskForShortestPath()
 
         assertEquals(720, totalRisk)
     }
 
     @Test
     fun `run part 02`() {
-        val map = getMap()
-        val fullMap = map.repeatRight(5).repeatDownwards(5)
+        val map = getMap().repeatRight(5).repeatDownwards(5)
 
-        val totalRisk = findTotalRiskForShortestPath(fullMap)
+        val totalRisk = map.findTotalRiskForShortestPath()
 
         assertEquals(3025, totalRisk)
     }
 
-    private fun findTotalRiskForShortestPath(map: Map<Coord, Int>): Int {
-        val end = Coord(map.maxX(), map.maxY())
+    private fun Map<Coord, Int>.findTotalRiskForShortestPath(): Int {
+        val end = Coord(maxX(), maxY())
         val queue = PriorityQueue<Pair<Coord, Int>>(1, compareBy { (_, risk) -> risk })
             .apply { offer(Coord(0, 0) to 0) }
         val totals = mutableMapOf(Coord(0, 0) to 0)
@@ -39,7 +38,7 @@ class Day15 {
             directions
                 .map { direction -> Coord(current.x + direction.x, current.y + direction.y) }
                 .filterNot { coord -> visited.contains(coord) }
-                .mapNotNull { coord -> map[coord]?.let { risk -> coord to risk } }
+                .mapNotNull { coord -> this[coord]?.let { risk -> coord to risk } }
                 .forEach { (coord, risk) ->
                     val newTotalRisk = totalRisk + risk
                     val knownTotalRisk = totals[coord] ?: Int.MAX_VALUE
