@@ -1,10 +1,12 @@
 import java.lang.IllegalStateException
 import java.util.PriorityQueue
+import kotlin.math.absoluteValue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day15 {
     data class Coord(val x: Int, val y: Int)
+    private data class QueueItem(val coord: Coord, val totalDistance: Int, val priority: Int)
     private val directions = listOf(Coord(1, 0), Coord(0, 1), Coord(-1, 0), Coord(0, -1))
 
     @Test
@@ -27,33 +29,35 @@ class Day15 {
 
     private fun Map<Coord, Int>.findTotalRiskForShortestPath(): Int {
         val end = Coord(maxX(), maxY())
-        val queue = PriorityQueue<Pair<Coord, Int>>(1, compareBy { (_, risk) -> risk })
-            .apply { offer(Coord(0, 0) to 0) }
+        val queue = PriorityQueue<QueueItem>(1, compareBy { it.priority })
+            .apply { offer(QueueItem(Coord(0, 0), 0, end.x + end.y)) }
         val totals = mutableMapOf(Coord(0, 0) to 0)
         val visited = mutableSetOf<Coord>()
 
         while (queue.isNotEmpty()) {
-            val (current, totalRisk) = queue.poll()
+            val current = queue.poll()
 
             directions
-                .map { direction -> Coord(current.x + direction.x, current.y + direction.y) }
+                .map { direction -> Coord(current.coord.x + direction.x, current.coord.y + direction.y) }
                 .filterNot { coord -> visited.contains(coord) }
                 .mapNotNull { coord -> this[coord]?.let { risk -> coord to risk } }
                 .forEach { (coord, risk) ->
-                    val newTotalRisk = totalRisk + risk
+                    val newTotalRisk = current.totalDistance + risk
                     val knownTotalRisk = totals[coord] ?: Int.MAX_VALUE
                     if (newTotalRisk < knownTotalRisk) {
                         totals[coord] = newTotalRisk
-                        queue.offer(coord to newTotalRisk)
+                        queue.offer(QueueItem(coord, newTotalRisk, newTotalRisk + coord.manhattenDistance(end)))
                     }
                 }
 
-            if (current == end) break
-            visited.add(current)
+            if (current.coord == end) break
+            visited.add(current.coord)
         }
 
         return totals[end] ?: throw IllegalStateException()
     }
+
+    private fun Coord.manhattenDistance(end: Coord) = (end.x - x).absoluteValue + (end.y - y).absoluteValue
 
     private fun Map<Coord, Int>.repeatRight(tiles: Int): Map<Coord, Int> {
         val maxX = this.maxX()
