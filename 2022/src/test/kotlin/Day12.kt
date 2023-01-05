@@ -11,7 +11,7 @@ class Day12 : StringSpec({
         val start = map.filterValues { it == S }.keys.single()
         val end = map.filterValues { it == E }.keys.single()
 
-        val path = findShortestPathLength(map, start, end)
+        val path = map.findShortestPathLength(start, end)
 
         path shouldBe 456
     }
@@ -21,14 +21,14 @@ class Day12 : StringSpec({
         val end = map.filterValues { it == E }.keys.single()
 
         val shortestPath = map.filter { it.value <= 1 }
-            .mapNotNull { findShortestPathLength(map, it.key, end) }
+            .mapNotNull { map.findShortestPathLength(it.key, end) }
             .min()
 
         shortestPath shouldBe 454
     }
 })
 
-private fun findShortestPathLength(map: Map<Coord12, Int>, start: Coord12, end: Coord12): Int? {
+private fun Map<Coord12, Int>.findShortestPathLength(start: Coord12, end: Coord12): Int? {
     val queue = PriorityQueue<Pair<Coord12, Int>>(1, compareBy { (_, distance) -> distance })
         .apply { offer(start to 0) }
     val totals = mutableMapOf(start to 0)
@@ -36,12 +36,13 @@ private fun findShortestPathLength(map: Map<Coord12, Int>, start: Coord12, end: 
 
     while (queue.isNotEmpty()) {
         val (current, totalDistance) = queue.poll()
+        val distance = this[current]!! + 1
 
         directions
             .map { direction -> Coord12(current.x + direction.x, current.y + direction.y) }
             .filterNot { coord -> visited.contains(coord) }
-            .mapNotNull { coord -> map[coord]?.let { coord to it } }.toMap()
-            .filterValues { it <= map[current]!! + 1 }
+            .mapNotNull { coord -> this[coord]?.let { coord to it } }.toMap()
+            .filterValues { it <= distance }
             .keys.forEach { coord ->
                 val newTotalDistance = totalDistance + 1
                 val knownTotalDistance = totals[coord] ?: Int.MAX_VALUE
