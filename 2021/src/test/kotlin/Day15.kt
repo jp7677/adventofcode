@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 
 class Day15 {
     data class Coord(val x: Int, val y: Int)
-    private data class QueueItem(val coord: Coord, val totalDistance: Int, val priority: Int)
+    private data class QueueItem(val coord: Coord, val totalRisk: Int, val priority: Int)
     private val directions = listOf(Coord(1, 0), Coord(0, 1), Coord(-1, 0), Coord(0, -1))
 
     @Test
@@ -42,7 +42,7 @@ class Day15 {
                 .filterNot { coord -> visited.contains(coord) }
                 .mapNotNull { coord -> this[coord]?.let { risk -> coord to risk } }
                 .forEach { (coord, risk) ->
-                    val newTotalRisk = current.totalDistance + risk
+                    val newTotalRisk = current.totalRisk + risk
                     val knownTotalRisk = totals[coord] ?: Int.MAX_VALUE
                     if (newTotalRisk < knownTotalRisk) {
                         totals[coord] = newTotalRisk
