@@ -28,24 +28,24 @@ class Day15 {
 
     private fun findTotalRiskForShortestPath(map: Map<Coord, Int>): Int {
         val end = Coord(map.maxX(), map.maxY())
-        val queue = PriorityQueue<Pair<Coord, Int>>(1, compareBy { (_, distance) -> distance })
+        val queue = PriorityQueue<Pair<Coord, Int>>(1, compareBy { (_, risk) -> risk })
             .apply { offer(Coord(0, 0) to 0) }
         val totals = mutableMapOf(Coord(0, 0) to 0)
         val visited = mutableSetOf<Coord>()
 
         while (queue.isNotEmpty()) {
-            val (current, distance) = queue.poll()
+            val (current, totalRisk) = queue.poll()
 
             directions
                 .map { direction -> Coord(current.x + direction.x, current.y + direction.y) }
                 .filterNot { coord -> visited.contains(coord) }
                 .mapNotNull { coord -> map[coord]?.let { risk -> coord to risk } }
                 .forEach { (coord, risk) ->
-                    val totalRisk = distance + risk
+                    val newTotalRisk = totalRisk + risk
                     val knownTotalRisk = totals[coord] ?: Int.MAX_VALUE
-                    if (totalRisk < knownTotalRisk) {
-                        totals[coord] = totalRisk
-                        queue.offer(coord to totalRisk)
+                    if (newTotalRisk < knownTotalRisk) {
+                        totals[coord] = newTotalRisk
+                        queue.offer(coord to newTotalRisk)
                     }
                 }
 
