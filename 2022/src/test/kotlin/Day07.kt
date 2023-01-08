@@ -29,7 +29,7 @@ private fun getDirectorySizes(): Map<String, Long> {
             when {
                 it.startsWith("$ ls") -> null
                 it.startsWith("$ cd ..") -> null.also { currentPath.removeLast() }
-                it.startsWith("$ cd") -> null.also { _ -> currentPath.add(it.dirName()) }
+                it.startsWith("$ cd") -> null.also { _ -> currentPath.addLast(it.dirName()) }
                 it.startsWith("dir") -> currentPath.toArray().plus(it.dirName()).toPath() to 0L
                 else -> currentPath.toArray().toPath() to it.fileSize()
             }
