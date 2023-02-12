@@ -22,7 +22,7 @@ private fun String.fromSnafuNumber() = this.reversed()
     }
     .sum()
 
-private fun Long.toSnafuNumber() = generateSequence(this.quotientToRemainder()) { (q, _) ->
+private fun Long.toSnafuNumber() = generateSequence(quotientToRemainder()) { (q, _) ->
     (q / 5).let {
         if (it != 0L) it.quotientToRemainder()
         else null
