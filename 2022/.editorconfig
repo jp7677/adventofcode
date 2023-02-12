@@ -10,5 +10,5 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 
 [*.{kt,kts}]
-disabled_rules = multiline-if-else
-ktlint_disabled_rules = multiline-if-else
+disabled_rules = multiline-if-else,trailing-comma-on-call-site,trailing-comma-on-declaration-site
+ktlint_disabled_rules = multiline-if-else,trailing-comma-on-call-site,trailing-comma-on-declaration-site
