@@ -10,5 +10,16 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 
 [*.{kt,kts}]
-disabled_rules = multiline-if-else,trailing-comma-on-call-site,trailing-comma-on-declaration-site
-ktlint_disabled_rules = multiline-if-else,trailing-comma-on-call-site,trailing-comma-on-declaration-site
+ij_kotlin_allow_trailing_comma_on_call_site = false
+ij_kotlin_allow_trailing_comma = false
+
+ktlint_standard_multiline-expression-wrapping = disabled
+ktlint_standard_string-template-indent = disabled
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_if-else-bracing = disabled
+ktlint_standard_multiline-if-else = disabled
+ktlint_standard_if-else-wrapping = disabled
+ktlint_standard_function-signature = disabled
+ktlint_standard_enum-wrapping = disabled
+ktlint_standard_blank-line-before-declaration = disabled
+ktlint_standard_statement-wrapping = disabled
