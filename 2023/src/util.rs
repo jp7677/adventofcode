@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use std::fs;
 
 pub fn read_input(name: &str) -> String {
