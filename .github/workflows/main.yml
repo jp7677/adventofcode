@@ -87,5 +87,6 @@ jobs:
         run: |
           sudo apt-get install -y rustc cargo
           cd 2023
+          cargo fmt --check
           cargo build --release
           time cargo test --release
