@@ -78,3 +78,14 @@ jobs:
         run: |
           cd 2022
           ./gradlew check
+
+  AoC-2023:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Compile and run AoC 2023
+        run: |
+          sudo apt-get install -y rustc cargo
+          cd 2023
+          cargo build --release
+          time cargo test --release
