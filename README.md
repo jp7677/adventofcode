@@ -9,7 +9,7 @@ From <https://adventofcode.com/>. Very much work in progress and better late tha
 - Advent of Code 2020 C++ <https://github.com/jp7677/adventofcode/tree/main/2020>
 - Advent of Code 2021 Kotlin <https://github.com/jp7677/adventofcode/tree/main/2021>
 - Advent of Code 2022 Kotlin <https://github.com/jp7677/adventofcode/tree/main/2022>
-- Advent of Code 2022 Rust <https://github.com/jp7677/adventofcode/tree/main/2023>
+- Advent of Code 2023 Rust <https://github.com/jp7677/adventofcode/tree/main/2023>
 
 Enjoy the stars...
 
