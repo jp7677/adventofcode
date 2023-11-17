@@ -14,4 +14,4 @@ Only Linux has been tested. Other platforms might just work though.
 cargo test
 ```
 
-Use e.g. `cargo test day01::test::part01` for running a specific test.
+Use e.g. `cargo test day01::part01` for running a specific test.
