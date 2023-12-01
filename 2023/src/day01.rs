@@ -10,24 +10,23 @@ fn part01() {
 
 #[test]
 fn part02() {
-    let input = read_input(DAYS::Day01);
-
-    let input = input.replace("oneight", "18");
-    let input = input.replace("twone", "21");
-    let input = input.replace("treeight", "38");
-    let input = input.replace("fiveight", "58");
-    let input = input.replace("eightwo", "82");
-    let input = input.replace("eighthree", "83");
-    let input = input.replace("nineight", "98");
-    let input = input.replace("one", "1");
-    let input = input.replace("two", "2");
-    let input = input.replace("three", "3");
-    let input = input.replace("four", "4");
-    let input = input.replace("five", "5");
-    let input = input.replace("six", "6");
-    let input = input.replace("seven", "7");
-    let input = input.replace("eight", "8");
-    let input = input.replace("nine", "9");
+    let input = read_input(DAYS::Day01)
+        .replace("oneight", "18")
+        .replace("twone", "21")
+        .replace("treeight", "38")
+        .replace("fiveight", "58")
+        .replace("eightwo", "82")
+        .replace("eighthree", "83")
+        .replace("nineight", "98")
+        .replace("one", "1")
+        .replace("two", "2")
+        .replace("three", "3")
+        .replace("four", "4")
+        .replace("five", "5")
+        .replace("six", "6")
+        .replace("seven", "7")
+        .replace("eight", "8")
+        .replace("nine", "9");
 
     assert_eq!(read_calibration_value(input), 55260);
 }
@@ -38,8 +37,7 @@ fn read_calibration_value(input: String) -> u32 {
         .map(|line| {
             let c1 = line.chars().find(|c| c.is_digit(10)).unwrap();
             let c2 = line.chars().rfind(|c| c.is_digit(10)).unwrap();
-            let s = [c1, c2].iter().collect::<String>();
-            s.parse::<u32>().unwrap()
+            [c1, c2].iter().collect::<String>().parse::<u32>().unwrap()
         })
         .collect::<Vec<_>>();
 
