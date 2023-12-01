@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Compile and run AoC 2020
         run: |
-          sudo apt-get install -y libdw-dev libunwind-dev
+          sudo apt update && sudo apt install -y libdw-dev libunwind-dev
           cd 2020
           ./build/make.sh
           time ./cmake-build-release/adventofcode
@@ -85,7 +85,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Compile and run AoC 2023
         run: |
-          sudo apt-get install -y rustc cargo
+          sudo apt update && sudo apt install -y rustc cargo
           cd 2023
           cargo fmt --check
           cargo build --release
