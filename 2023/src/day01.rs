@@ -5,7 +5,7 @@ use crate::util::*;
 fn part01() {
     let input = read_input(DAYS::Day01);
 
-    assert_eq!(read_calibration_value(input), 55123);
+    assert_eq!(read_calibration_value(&input), 55123);
 }
 
 #[test]
@@ -28,10 +28,10 @@ fn part02() {
         .replace("eight", "8")
         .replace("nine", "9");
 
-    assert_eq!(read_calibration_value(input), 55260);
+    assert_eq!(read_calibration_value(&input), 55260);
 }
 
-fn read_calibration_value(input: String) -> u32 {
+fn read_calibration_value(input: &str) -> u32 {
     let values = input
         .lines()
         .map(|line| {
