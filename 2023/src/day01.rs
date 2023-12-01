@@ -3,32 +3,43 @@ use crate::util::*;
 
 #[test]
 fn part01() {
-    let input = read_input(DAYS::Day01);
+    let document = read_input(DAYS::Day01);
 
-    assert_eq!(read_calibration_value(&input), 55123);
+    assert_eq!(read_calibration_value(&document), 55123);
 }
 
 #[test]
 fn part02() {
-    let input = read_input(DAYS::Day01)
-        .replace("oneight", "18")
-        .replace("twone", "21")
-        .replace("treeight", "38")
-        .replace("fiveight", "58")
-        .replace("eightwo", "82")
-        .replace("eighthree", "83")
-        .replace("nineight", "98")
-        .replace("one", "1")
-        .replace("two", "2")
-        .replace("three", "3")
-        .replace("four", "4")
-        .replace("five", "5")
-        .replace("six", "6")
-        .replace("seven", "7")
-        .replace("eight", "8")
-        .replace("nine", "9");
+    let document = read_input(DAYS::Day01);
 
-    assert_eq!(read_calibration_value(&input), 55260);
+    let document = spelled_out_letters()
+        .iter()
+        .fold(document, |acc, (letters, digits)| {
+            acc.replace(letters, digits)
+        });
+
+    assert_eq!(read_calibration_value(&document), 55260);
+}
+
+fn spelled_out_letters<'a>() -> [(&'a str, &'a str); 16] {
+    [
+        ("oneight", "18"),
+        ("twone", "21"),
+        ("treeight", "38"),
+        ("fiveight", "58"),
+        ("eightwo", "82"),
+        ("eighthree", "83"),
+        ("nineight", "98"),
+        ("one", "1"),
+        ("two", "2"),
+        ("three", "3"),
+        ("four", "4"),
+        ("five", "5"),
+        ("six", "6"),
+        ("seven", "7"),
+        ("eight", "8"),
+        ("nine", "9"),
+    ]
 }
 
 fn read_calibration_value(input: &str) -> u32 {
