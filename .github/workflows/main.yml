@@ -44,9 +44,12 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
+      - name: Set up packages
+        run: |
+          sudo apt update
+          sudo apt install -y libdw-dev libunwind-dev
       - name: Compile and run AoC 2020
         run: |
-          sudo apt update && sudo apt install -y libdw-dev libunwind-dev
           cd 2020
           ./build/make.sh
           time ./cmake-build-release/adventofcode
@@ -83,9 +86,12 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
+      - name: Set up packages
+        run: |
+          sudo apt update
+          sudo apt install -y rustc cargo
       - name: Compile and run AoC 2023
         run: |
-          sudo apt update && sudo apt install -y rustc cargo
           cd 2023
           cargo fmt --check
           cargo build --release
