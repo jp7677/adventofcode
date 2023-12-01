@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 mod day00;
 mod day01;
 mod util;
