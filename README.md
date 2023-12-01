@@ -15,6 +15,6 @@ Enjoy the stars...
 
 ## Other cool solutions
 
-- <https://github.com/Dricus/adventofcode>
+- <https://github.com/dirkgroot/adventofcode>
 - <https://github.com/ErikSchierboom/advent-of-code>
 - <https://github.com/StefRave/advent-of-code>
