@@ -57,37 +57,35 @@ fn part02() {
 }
 
 fn parse_games(input: &str) -> Vec<Game> {
-    input
-        .lines()
-        .map(|record| {
-            let parts = record.split_once(":").unwrap();
-
-            let id = parts.0.split_once(" ").unwrap().1.parse::<u32>().unwrap();
-            let sets = parts
-                .1
-                .split(";")
-                .map(|subset| {
-                    let colors = subset
-                        .split(",")
-                        .map(|c| {
-                            let p = c.trim().split_once(" ").unwrap();
-                            (p.0.trim().parse::<u32>().unwrap(), p.1)
-                        })
-                        .collect::<Vec<(u32, &str)>>();
-
-                    Set {
-                        red: get_color("red", &colors),
-                        green: get_color("green", &colors),
-                        blue: get_color("blue", &colors),
-                    }
-                })
-                .collect::<Vec<Set>>();
-
-            Game { id, sets }
-        })
-        .collect::<Vec<Game>>()
+    input.lines().map(|it| create_game(it).unwrap()).collect()
 }
 
-fn get_color(color: &str, colors: &Vec<(u32, &str)>) -> Option<u32> {
+fn create_game(record: &str) -> Option<Game> {
+    let parts = record.split_once(":")?;
+    Some(Game {
+        id: parts.0.split_once(" ")?.1.parse::<u32>().ok()?,
+        sets: parts.1.split(";").map(|it| create_set(it)).collect(),
+    })
+}
+
+fn create_set(s: &str) -> Set {
+    let colors = s
+        .split(",")
+        .map(|it| create_color(it).unwrap())
+        .collect::<Vec<(u32, &str)>>();
+
+    Set {
+        red: get_cubes("red", &colors),
+        green: get_cubes("green", &colors),
+        blue: get_cubes("blue", &colors),
+    }
+}
+
+fn create_color(s: &str) -> Option<(u32, &str)> {
+    let color = s.trim().split_once(" ")?;
+    Some((color.0.trim().parse::<u32>().ok()?, color.1))
+}
+
+fn get_cubes(color: &str, colors: &Vec<(u32, &str)>) -> Option<u32> {
     Some(colors.iter().find(|c| c.1 == color)?.0)
 }
