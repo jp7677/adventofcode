@@ -1,8 +1,11 @@
 #![allow(dead_code)]
 
+extern crate core;
+
 mod day00;
 mod day01;
 mod day02;
+mod day03;
 mod util;
 
 fn main() {
