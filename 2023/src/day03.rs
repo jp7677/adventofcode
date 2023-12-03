@@ -38,7 +38,7 @@ fn part02() {
 
     let mut gears = parts
         .iter()
-        .filter_map(|n| n.adjacents.iter().find(|a| a.symbol == '*'))
+        .filter_map(|p| p.adjacents.iter().find(|a| a.symbol == '*'))
         .map(|c| (c.x, c.y))
         .collect::<Vec<(i32, i32)>>();
 
