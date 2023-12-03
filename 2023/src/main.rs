@@ -1,6 +1,5 @@
 #![allow(dead_code)]
-
-extern crate core;
+#![allow(unused_imports)]
 
 mod day00;
 mod day01;

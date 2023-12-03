@@ -1,5 +1,4 @@
 use crate::util::*;
-#[cfg(test)]
 use std::rc::Rc;
 
 struct Coord {
