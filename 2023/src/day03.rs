@@ -109,7 +109,7 @@ fn parse_map(input: &String) -> Vec<Part> {
                 })
                 .collect::<Vec<Adjacent>>();
 
-            if i >= 1 && input.chars().nth(i - 1).unwrap_or('_').is_digit(10) {
+            if i >= 1 && char_at(input, i - 1).is_digit(10) {
                 parts.last_mut().unwrap().number.push(c);
                 parts
                     .last_mut()
