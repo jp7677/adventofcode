@@ -1,7 +1,7 @@
 mod days;
 mod input;
-mod strings;
+mod string;
 
 pub use days::DAYS;
 pub use input::read_input;
-pub use strings::char_at;
+pub use string::char_at;
