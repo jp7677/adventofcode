@@ -5,27 +5,38 @@ struct Card {
     numbers: Vec<u32>,
 }
 
+impl Card {
+    fn points(&self) -> u32 {
+        self.numbers.iter().fold(0, |acc, n| {
+            if self.winning_numbers.contains(n) {
+                if acc > 0 {
+                    acc * 2
+                } else {
+                    1
+                }
+            } else {
+                acc
+            }
+        })
+    }
+
+    fn wins(&self) -> u32 {
+        self.numbers.iter().fold(0, |acc, n| {
+            if self.winning_numbers.contains(n) {
+                acc + 1
+            } else {
+                acc
+            }
+        })
+    }
+}
+
 #[test]
 fn part01() {
     let input = read_input(DAYS::Day04);
 
     let cards = parse_cards(input);
-    let points = cards
-        .iter()
-        .map(|c| {
-            c.numbers.iter().fold(0, |acc, n| {
-                if c.winning_numbers.contains(n) {
-                    if acc > 0 {
-                        acc * 2
-                    } else {
-                        1
-                    }
-                } else {
-                    acc
-                }
-            })
-        })
-        .sum::<u32>();
+    let points = cards.iter().map(|c| c.points()).sum::<u32>();
 
     assert_eq!(points, 27845);
 }
@@ -37,17 +48,10 @@ fn part02() {
     let cards = parse_cards(input);
     let mut copies = vec![1; cards.len()];
     for (i, c) in cards.iter().enumerate() {
-        let wins = c.numbers.iter().fold(0, |acc, n| {
-            if c.winning_numbers.contains(n) {
-                acc + 1
-            } else {
-                acc
-            }
-        });
-
+        let wins = c.wins();
         for _ in 0..copies[i] {
-            for n in i..i + wins {
-                copies[n + 1] = copies[n + 1] + 1;
+            for n in i..i + wins as usize {
+                copies[n + 1] += 1;
             }
         }
     }
@@ -56,21 +60,20 @@ fn part02() {
 }
 
 fn parse_cards(input: String) -> Vec<Card> {
-    let cards = input
+    input
         .lines()
         .map(|line| {
-            let (w, h) = line.split_once(':').unwrap().1.split_once('|').unwrap();
+            let (w, n) = line.split_once(':').unwrap().1.split_once('|').unwrap();
             Card {
-                winning_numbers: w
-                    .split_whitespace()
-                    .map(|s| s.parse::<u32>().unwrap())
-                    .collect::<Vec<u32>>(),
-                numbers: h
-                    .split_whitespace()
-                    .map(|s| s.parse::<u32>().unwrap())
-                    .collect::<Vec<u32>>(),
+                winning_numbers: parse_numbers(w),
+                numbers: parse_numbers(n),
             }
         })
-        .collect::<Vec<Card>>();
-    cards
+        .collect::<Vec<Card>>()
+}
+
+fn parse_numbers(n: &str) -> Vec<u32> {
+    n.split_whitespace()
+        .map(|s| s.parse::<u32>().unwrap())
+        .collect::<Vec<u32>>()
 }
