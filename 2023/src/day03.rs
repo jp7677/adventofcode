@@ -86,6 +86,7 @@ fn parse_map(input: &String) -> Vec<Part> {
 
     let map_size = input.lines().count() as i32;
     let mut parts: Vec<Part> = Vec::new();
+    let mut last_char = None;
     for (i, c) in input.chars().enumerate() {
         if c.is_digit(10) {
             let x = i as i32 % (map_size + 1);
@@ -109,7 +110,7 @@ fn parse_map(input: &String) -> Vec<Part> {
                 })
                 .collect::<Vec<Adjacent>>();
 
-            if i >= 1 && char_at(input, i - 1).is_digit(10) {
+            if last_char.unwrap_or('_').is_digit(10) {
                 parts.last_mut().unwrap().number.push(c);
                 parts
                     .last_mut()
@@ -123,6 +124,7 @@ fn parse_map(input: &String) -> Vec<Part> {
                 });
             }
         }
+        last_char = Some(c);
     }
     parts
 }
