@@ -15,28 +15,78 @@ impl Hand {
         }
     }
 
-    pub fn cmp(&self, other: &Hand) -> Ordering {
+    pub fn cmp(&self, other: &Hand, joker: bool) -> Ordering {
         if self.cards == other.cards {
             Ordering::Equal
         } else {
-            let s1 = self.type_score();
-            let s2 = other.type_score();
-            if s1 > s2 {
+            let score_self = if joker {
+                self.use_joker().type_score()
+            } else {
+                self.type_score()
+            };
+            let score_other = if joker {
+                other.use_joker().type_score()
+            } else {
+                other.type_score()
+            };
+
+            if score_self > score_other {
                 Ordering::Greater
-            } else if s1 < s2 {
+            } else if score_self < score_other {
                 Ordering::Less
             } else {
-                let s1 = self.cards_score();
-                let s2 = other.cards_score();
-                if s1 > s2 {
+                let score_self = self.cards_score(joker);
+                let score_other = other.cards_score(joker);
+                if score_self > score_other {
                     Ordering::Greater
-                } else if s1 < s2 {
+                } else if score_self < score_other {
                     Ordering::Less
                 } else {
                     panic!()
                 }
             }
         }
+    }
+
+    pub fn use_joker(&self) -> Hand {
+        if !self.cards.contains('J') {
+            return Hand {
+                cards: self.cards.clone(),
+                card_counts: self.card_counts.clone(),
+            };
+        }
+        if self.cards == "JJJJJ" {
+            return Hand::from("AAAAA");
+        }
+
+        let card_count_excl_joker = self
+            .card_counts
+            .iter()
+            .filter(|(k, _)| **k != 'J')
+            .collect::<HashMap<&char, &u32>>();
+        let max_count = card_count_excl_joker.values().max().unwrap();
+        let mut highest_score_chars = card_count_excl_joker
+            .iter()
+            .filter(|(_, v)| *v == max_count)
+            .map(|(k, _)| *k)
+            .collect::<Vec<&char>>();
+        highest_score_chars.sort_by(|a, b| {
+            let s1 = Hand::card_score(**a, false);
+            let s2 = Hand::card_score(**b, false);
+            if s1 > s2 {
+                Ordering::Greater
+            } else if s1 < s2 {
+                Ordering::Less
+            } else {
+                Ordering::Equal
+            }
+        });
+        let highest_score_char = highest_score_chars.last().unwrap();
+
+        let cards = self
+            .cards
+            .replace("J", highest_score_char.to_string().as_str());
+        Hand::from(cards.as_str())
     }
 
     fn type_score(&self) -> u16 {
@@ -87,21 +137,27 @@ impl Hand {
         self.card_counts.values().all(|v| *v == 1)
     }
 
-    fn cards_score(&self) -> u32 {
+    fn cards_score(&self, joker: bool) -> u32 {
         self.cards
             .chars()
-            .map(|c| Hand::card_score(c))
+            .map(|c| Hand::card_score(c, joker))
             .fold(String::new(), |acc, c| String::from(format!("{acc}{c:02}")))
             .parse::<u32>()
             .unwrap()
     }
 
-    fn card_score(c: char) -> u32 {
+    fn card_score(c: char, joker: bool) -> u32 {
         match c {
             'A' => 14,
             'K' => 13,
             'Q' => 12,
-            'J' => 11,
+            'J' => {
+                if joker {
+                    1
+                } else {
+                    11
+                }
+            }
             'T' => 10,
             _ => c.to_digit(10).unwrap(),
         }
@@ -112,29 +168,39 @@ impl Hand {
 fn part01() {
     let input = read_input(DAYS::Day07);
 
-    let mut games = input
-        .lines()
-        .map(|line| {
-            let s = line.split_once(' ').unwrap();
-            (Hand::from(s.0), s.1.parse::<u32>().unwrap())
-        })
-        .collect::<Vec<(Hand, u32)>>();
-
-    games.sort_by(|(a, _), (b, _)| a.cmp(b));
-
-    let total_winnings = games
-        .iter()
-        .enumerate()
-        .fold(0, |acc, (i, (_, bid))| acc + (i as u32 + 1) * bid);
+    let mut games = parse_games(input);
+    games.sort_by(|(a, _), (b, _)| a.cmp(b, false));
+    let total_winnings = calc_winnings(&games);
 
     assert_eq!(total_winnings, 248105065);
 }
 
 #[test]
 fn part02() {
-    let input = read_input(DAYS::Day00);
+    let input = read_input(DAYS::Day07);
 
-    assert_eq!(input.lines().count(), 1);
+    let mut games = parse_games(input);
+    games.sort_by(|(a, _), (b, _)| a.cmp(b, true));
+    let total_winnings = calc_winnings(&games);
+
+    assert_eq!(total_winnings, 249515436);
+}
+
+fn parse_games(input: String) -> Vec<(Hand, u32)> {
+    input
+        .lines()
+        .map(|line| {
+            let s = line.split_once(' ').unwrap();
+            (Hand::from(s.0), s.1.parse::<u32>().unwrap())
+        })
+        .collect::<Vec<(Hand, u32)>>()
+}
+
+fn calc_winnings(games: &Vec<(Hand, u32)>) -> u32 {
+    games
+        .iter()
+        .enumerate()
+        .fold(0, |acc, (i, (_, bid))| acc + (i as u32 + 1) * bid)
 }
 
 #[test]
@@ -175,11 +241,11 @@ fn high_card() {
 #[test]
 fn same_type() {
     assert_eq!(
-        Hand::from("33332").cmp(&Hand::from("2AAAA")),
+        Hand::from("33332").cmp(&Hand::from("2AAAA"), false),
         Ordering::Greater
     );
     assert_eq!(
-        Hand::from("77888").cmp(&Hand::from("77788")),
+        Hand::from("77888").cmp(&Hand::from("77788"), false),
         Ordering::Greater
     );
 }
