@@ -29,6 +29,28 @@ fn part01() {
     let input = read_input(DAYS::Day05);
 
     let (seeds, maps) = parse_seeds_and_maps(&input);
+    let lowest_location = plant(maps, &seeds);
+
+    assert_eq!(lowest_location, 111627841);
+}
+
+#[test]
+#[ignore = "brute-force is not the correct way..."]
+fn part02() {
+    let input = read_input(DAYS::Day05);
+
+    let (seeds, maps) = parse_seeds_and_maps(&input);
+
+    let mut numbers = Vec::new();
+    seeds
+        .chunks(2)
+        .for_each(|c| numbers.append(&mut (c[0]..(c[0] + c[1])).collect::<Vec<u64>>()));
+    let lowest_location = plant(maps, &numbers);
+
+    assert_eq!(lowest_location, 69323688);
+}
+
+fn plant(maps: Vec<Map>, seeds: &Vec<u64>) -> u64 {
     let mut stage = "seed";
     let mut numbers = seeds.to_vec();
     while stage != "location" {
@@ -39,16 +61,7 @@ fn part01() {
             .collect::<Vec<u64>>();
         stage = map.to.as_str();
     }
-    let lowest_location = numbers.iter().min().unwrap();
-
-    assert_eq!(*lowest_location, 111627841);
-}
-
-#[test]
-fn part02() {
-    let input = read_input(DAYS::Day05);
-
-    assert_eq!(input.lines().count(), 1);
+    *numbers.iter().min().unwrap()
 }
 
 fn parse_seeds_and_maps(input: &String) -> (Vec<u64>, Vec<Map>) {
