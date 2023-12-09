@@ -29,7 +29,7 @@ fn part01() {
     let input = read_input(DAYS::Day05);
 
     let (seeds, maps) = parse_seeds_and_maps(&input);
-    let lowest_location = plant(maps, &seeds);
+    let lowest_location = plant(&maps, &seeds);
 
     assert_eq!(lowest_location, 111627841);
 }
@@ -45,12 +45,12 @@ fn part02() {
     seeds
         .chunks(2)
         .for_each(|c| numbers.append(&mut (c[0]..(c[0] + c[1])).collect::<Vec<u64>>()));
-    let lowest_location = plant(maps, &numbers);
+    let lowest_location = plant(&maps, &numbers);
 
     assert_eq!(lowest_location, 69323688);
 }
 
-fn plant(maps: Vec<Map>, seeds: &Vec<u64>) -> u64 {
+fn plant(maps: &Vec<Map>, seeds: &Vec<u64>) -> u64 {
     let mut stage = "seed";
     let mut numbers = seeds.to_vec();
     while stage != "location" {
