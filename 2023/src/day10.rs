@@ -33,34 +33,7 @@ fn part01() {
     let input = read_input(DAYS::Day10);
 
     let map = parse_map(&input);
-
-    let start = map.iter().find(|(_, v)| *v == &Start).unwrap();
-    let start = (start.0.clone(), *start.1);
-
-    let current = start_neighbours(&start.0);
-    let current = current
-        .iter()
-        .filter(|n| map.get(&n.0) == Some(&n.1))
-        .collect::<Vec<_>>();
-    let current = current.first().unwrap();
-    let current = (current.0.clone(), current.1);
-
-    let mut path = vec![start, current];
-    loop {
-        let last = path.iter().nth(path.len() - 2).unwrap();
-        let current = path.last().unwrap();
-        let current = neighbours(&current.0, current.1);
-        let current = current
-            .iter()
-            .filter(|n| map.get(&n.0) == Some(&n.1) && n.0 != last.0)
-            .collect::<Vec<_>>();
-
-        match current.first() {
-            None => break,
-            Some(v) => path.push((v.0.clone(), v.1)),
-        }
-    }
-
+    let path = walk_path(&map);
     let max_distance = (path.len() + 1) / 2;
 
     assert_eq!(max_distance, 6717);
@@ -73,30 +46,38 @@ fn part02() {
     assert_eq!(input.lines().count(), 1);
 }
 
-fn parse_map(input: &String) -> HashMap<Coord, Pipe> {
-    let mut map: HashMap<Coord, Pipe> = HashMap::new();
-    for (y, line) in input.lines().enumerate() {
-        for (x, symbol) in line.chars().enumerate() {
-            if symbol != '.' {
-                let coord = Coord {
-                    x: x as u32 + 1,
-                    y: y as u32 + 1,
-                };
-                let pipe = match symbol {
-                    '|' => PipeVertical,
-                    '-' => PipeHorizontal,
-                    'L' => BendL,
-                    'J' => BendJ,
-                    '7' => Bend7,
-                    'F' => BendF,
-                    'S' => Start,
-                    _ => panic!("Unexpected symbol"),
-                };
-                map.insert(coord, pipe);
-            }
+fn walk_path(map: &HashMap<Coord, Pipe>) -> Vec<(Coord, Pipe)> {
+    let mut path = build_initial_path(&map);
+    loop {
+        let last = path.iter().nth(path.len() - 2).unwrap();
+        let current = path.last().unwrap();
+        let next = neighbours(&current.0, current.1);
+        let next = next
+            .iter()
+            .filter(|n| map.get(&n.0) == Some(&n.1) && n.0 != last.0)
+            .nth(0);
+
+        match next {
+            None => break,
+            Some(v) => path.push((v.0.clone(), v.1)),
         }
     }
-    map
+    path
+}
+
+fn build_initial_path(map: &HashMap<Coord, Pipe>) -> Vec<(Coord, Pipe)> {
+    let start = map.iter().find(|(_, v)| *v == &Start).unwrap();
+    let start = (start.0.clone(), *start.1);
+
+    let current = start_neighbours(&start.0);
+    let current = current
+        .iter()
+        .filter(|n| map.get(&n.0) == Some(&n.1))
+        .collect::<Vec<_>>();
+    let current = current.first().unwrap();
+    let current = (current.0.clone(), current.1);
+
+    vec![start, current]
 }
 
 fn start_neighbours(coord: &Coord) -> [(Coord, Pipe); 12] {
@@ -157,4 +138,30 @@ fn neighbour(out: &Direction, coord: &Coord) -> Coord {
             y: coord.y,
         },
     }
+}
+
+fn parse_map(input: &String) -> HashMap<Coord, Pipe> {
+    let mut map: HashMap<Coord, Pipe> = HashMap::new();
+    for (y, line) in input.lines().enumerate() {
+        for (x, symbol) in line.chars().enumerate() {
+            if symbol != '.' {
+                let coord = Coord {
+                    x: x as u32 + 1,
+                    y: y as u32 + 1,
+                };
+                let pipe = match symbol {
+                    '|' => PipeVertical,
+                    '-' => PipeHorizontal,
+                    'L' => BendL,
+                    'J' => BendJ,
+                    '7' => Bend7,
+                    'F' => BendF,
+                    'S' => Start,
+                    _ => panic!("Unexpected symbol"),
+                };
+                map.insert(coord, pipe);
+            }
+        }
+    }
+    map
 }
