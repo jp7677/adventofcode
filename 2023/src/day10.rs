@@ -63,12 +63,12 @@ fn print_map(map: &HashMap<Coord, Pipe>, path: &Vec<(Coord, Pipe)>) {
             match c {
                 Some(v) => {
                     if path.contains(&(coord, *v)) {
-                        print!("{}", print_pipe(*v));
+                        print!("\x1b[1;32m{}\x1b[0m", print_pipe(*v));
                     } else {
-                        print!("*");
+                        print!("I");
                     }
                 }
-                None => print!("*"),
+                None => print!("I"),
             };
         }
         println!();
