@@ -33,7 +33,7 @@ fn part01() {
     let input = read_input(DAYS::Day05);
 
     let (seeds, maps) = parse_seeds_and_maps(&input);
-    let lowest_location = seeds.iter().map(|s| plant(&maps, &[*s])).min().unwrap();
+    let lowest_location = plant(&maps, &seeds);
 
     assert_eq!(lowest_location, 111627841);
 }
