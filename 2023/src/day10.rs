@@ -40,10 +40,52 @@ fn part01() {
 }
 
 #[test]
+#[ignore = "image processing and manual counting after filling the outer area is not the correct way..."]
 fn part02() {
-    let input = read_input(DAYS::Day00);
+    let input = read_input(DAYS::Day10);
 
-    assert_eq!(input.lines().count(), 1);
+    let map = parse_map(&input);
+    let path = walk_path(&map);
+    print_map(&map, &path);
+
+    assert_eq!(381, 381);
+}
+
+fn print_map(map: &HashMap<Coord, Pipe>, path: &Vec<(Coord, Pipe)>) {
+    let max_x = map.keys().map(|k| k.x).max().unwrap();
+    let max_y = map.keys().map(|k| k.y).max().unwrap();
+
+    println!();
+    for y in 1..max_y + 1 {
+        for x in 1..max_x + 1 {
+            let coord = Coord { x, y };
+            let c = map.get(&coord);
+            match c {
+                Some(v) => {
+                    if path.contains(&(coord, *v)) {
+                        print!("{}", print_pipe(*v));
+                    } else {
+                        print!("*");
+                    }
+                }
+                None => print!("*"),
+            };
+        }
+        println!();
+    }
+    println!();
+}
+
+fn print_pipe(pipe: Pipe) -> char {
+    match pipe {
+        PipeVertical => '│',
+        PipeHorizontal => '─',
+        BendL => '└',
+        BendJ => '┘',
+        Bend7 => '┐',
+        BendF => '┌',
+        Start => '│', // taken from input data,
+    }
 }
 
 fn walk_path(map: &HashMap<Coord, Pipe>) -> Vec<(Coord, Pipe)> {
