@@ -15,3 +15,11 @@ fn gcd_of_two_numbers(a: usize, b: usize) -> usize {
     }
     gcd_of_two_numbers(b, a % b)
 }
+
+pub fn abs(a: u64, b: u64) -> u64 {
+    if a > b {
+        a - b
+    } else {
+        b - a
+    }
+}
