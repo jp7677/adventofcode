@@ -11,7 +11,7 @@ Only Linux has been tested. Other platforms might just work though.
 ## Compile & run
 
 ```bash
-cargo test
+cargo test --release
 ```
 
-Use e.g. `cargo test day01::part01` for running a specific test.
+Use e.g. `cargo test day01::part01 -- --nocapture` for running a specific test.
