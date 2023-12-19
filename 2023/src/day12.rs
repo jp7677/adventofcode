@@ -14,11 +14,12 @@ struct Record<'a> {
 fn part01() {
     let input = read_input(DAYS::Day12);
 
-    let records = unfold_records(&input, 1);
-    let records = parse_records(&records, 1);
+    let rounds = 1;
+    let records = unfold_records(&input, rounds);
+    let records = parse_records(&records, rounds);
     let arrangement_count = records
         .iter()
-        .flat_map(|record| count_arrangements(record, 0, 1, true))
+        .flat_map(|record| count_arrangements(record, 0, rounds as u64, true))
         .map(|(_, v)| v)
         .sum::<u64>();
 
@@ -30,37 +31,25 @@ fn part01() {
 fn part02() {
     let input = read_input(DAYS::Day12);
 
-    let records = unfold_records(&input, 5);
-    let records = parse_records(&records, 5);
+    let rounds = 5;
+    let records = unfold_records(&input, rounds);
+    let records = parse_records(&records, rounds);
     let arrangement_count = records
         .iter()
         .flat_map(|record| {
-            (0..5).fold(vec![HashMap::from([(0, 1u64)])], |acc, r| {
-                let intermediate = acc
-                    .iter()
-                    .flat_map(|m| {
-                        m.iter()
-                            .map(|(k, v)| count_arrangements(record, *k, *v, r == 4))
-                            .collect::<Vec<HashMap<u32, u64>>>()
+            (0..rounds).fold(HashMap::from([(0, 1u64)]), |acc, r| {
+                acc.iter()
+                    .flat_map(|(k, v)| count_arrangements(record, *k, *v, r == rounds - 1))
+                    .fold(HashMap::new(), |mut acc, (k, v)| {
+                        acc.insert(k, acc.get(&k).or(Some(&0)).unwrap() + v);
+                        acc
                     })
-                    .collect::<Vec<HashMap<u32, u64>>>();
-                consolidate(&intermediate)
             })
         })
-        .map(|m| m.values().sum::<u64>())
+        .map(|(_, v)| v)
         .sum::<u64>();
 
     assert_eq!(arrangement_count, 1537505634471);
-}
-
-fn consolidate(intermediate: &Vec<HashMap<u32, u64>>) -> Vec<HashMap<u32, u64>> {
-    let mut acc = HashMap::new();
-    intermediate.iter().for_each(|i| {
-        i.iter().for_each(|(k, v)| {
-            acc.insert(*k, acc.get(k).or(Some(&0)).unwrap() + v);
-        });
-    });
-    vec![acc]
 }
 
 fn count_arrangements(record: &Record, start: u32, multiple: u64, last: bool) -> HashMap<u32, u64> {
