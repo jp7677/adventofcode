@@ -1,4 +1,5 @@
 use crate::util::*;
+use std::collections::HashMap;
 use std::fmt::format;
 
 #[derive(Debug)]
@@ -14,101 +15,148 @@ fn part01() {
     let input = read_input(DAYS::Day12);
 
     let records = unfold_records(&input, 1);
-    let records = parse_records(&records);
-    let count = count_arrangements(&records);
+    let records = parse_records(&records, 1);
+    let arrangement_count = records
+        .iter()
+        .flat_map(|record| count_arrangements(record, 0, 1, true))
+        .map(|(_, v)| v)
+        .sum::<u64>();
 
-    assert_eq!(count, 6827);
+    assert_eq!(arrangement_count, 6827);
 }
 
 #[test]
-#[ignore = "way to slow ..."]
+#[ignore = "should be faster ..."]
 fn part02() {
     let input = read_input(DAYS::Day12);
 
     let records = unfold_records(&input, 5);
-    let records = parse_records(&records);
-    let _ = count_arrangements(&records);
+    let records = parse_records(&records, 5);
+    let arrangement_count = records
+        .iter()
+        .flat_map(|record| {
+            (0..5).fold(vec![HashMap::from([(0, 1u64)])], |acc, r| {
+                let intermediate = acc
+                    .iter()
+                    .flat_map(|m| {
+                        m.iter()
+                            .map(|(k, v)| count_arrangements(record, *k, *v, r == 4))
+                            .collect::<Vec<HashMap<u32, u64>>>()
+                    })
+                    .collect::<Vec<HashMap<u32, u64>>>();
+                consolidate(&intermediate)
+            })
+        })
+        .map(|m| m.values().sum::<u64>())
+        .sum::<u64>();
 
-    assert_eq!(0, 0);
+    assert_eq!(arrangement_count, 1537505634471);
 }
 
-fn count_arrangements(records: &Vec<Record>) -> usize {
-    records
-        .iter()
-        .map(|record| {
-            let mut count = 0usize;
-            balls_and_urns1(
-                &record,
-                &mut count,
-                &Vec::new(),
-                record.voids as usize,
-                1,
-                record.gaps as usize,
-            );
-            count
-        })
-        .sum::<usize>()
+fn consolidate(intermediate: &Vec<HashMap<u32, u64>>) -> Vec<HashMap<u32, u64>> {
+    let mut acc = HashMap::new();
+    intermediate.iter().for_each(|i| {
+        i.iter().for_each(|(k, v)| {
+            acc.insert(*k, acc.get(k).or(Some(&0)).unwrap() + v);
+        });
+    });
+    vec![acc]
+}
+
+fn count_arrangements(record: &Record, start: u32, multiple: u64, last: bool) -> HashMap<u32, u64> {
+    let mut count = HashMap::new();
+    balls_and_urns1(
+        &record,
+        &mut count,
+        &Vec::new(),
+        record.voids,
+        1,
+        record.gaps,
+        start,
+        multiple,
+        last,
+    );
+    count
 }
 
 fn balls_and_urns1(
     record: &Record,
-    acc: &mut usize,
-    v: &Vec<usize>,
-    n: usize,
-    depth: usize,
-    max_depth: usize,
+    acc: &mut HashMap<u32, u64>,
+    v: &Vec<u32>,
+    n: u32,
+    depth: u32,
+    max_depth: u32,
+    start: u32,
+    multiple: u64,
+    last: bool,
 ) {
-    let sum = v.iter().sum::<usize>();
+    let sum = v.iter().sum::<u32>();
     let remain = if sum <= n { 0 } else { n - sum };
 
     if depth == max_depth {
         let mut v1 = v.clone();
         v1.push(n - sum);
 
-        let arrangement_version = to_arrangement(&record.spring_groups, &v1, v1.len());
-        if is_valid_arrangement(
-            &record.spring_list,
-            &arrangement_version,
-            arrangement_version.len(),
-        ) {
-            *acc = *acc + 1;
+        let mut version = to_arrangement(&record.spring_groups, &v1);
+        version = version.trim_end_matches('.').to_string();
+        version.push('.');
+        if is_valid_arrangement(&record.spring_list, start as usize, last, &version) {
+            acc.insert(
+                start + version.len() as u32,
+                acc.get(&(start + version.len() as u32))
+                    .or(Some(&0))
+                    .unwrap()
+                    + multiple,
+            );
         }
         return;
     } else if remain >= (n - sum + 1) {
         let mut v1 = v.clone();
         v1.push(0);
 
-        let arrangement_version = to_arrangement(&record.spring_groups, &v1, v1.len());
-        if is_valid_arrangement(
-            &record.spring_list,
-            &arrangement_version,
-            arrangement_version.len(),
-        ) {
-            balls_and_urns1(record, acc, &mut v1, n, depth + 1, max_depth);
+        let version = to_arrangement(&record.spring_groups, &v1);
+        if is_valid_arrangement(&record.spring_list, start as usize, false, &version) {
+            balls_and_urns1(
+                record,
+                acc,
+                &mut v1,
+                n,
+                depth + 1,
+                max_depth,
+                start,
+                multiple,
+                last,
+            );
         }
     } else {
         for i in 0..(n - sum + 1) {
             let mut v1 = v.clone();
             v1.push(i);
 
-            let arrangement_version = to_arrangement(&record.spring_groups, &v1, v1.len());
-            if is_valid_arrangement(
-                &record.spring_list,
-                &arrangement_version,
-                arrangement_version.len(),
-            ) {
-                balls_and_urns1(record, acc, &mut v1, n, depth + 1, max_depth);
+            let version = to_arrangement(&record.spring_groups, &v1);
+            if is_valid_arrangement(&record.spring_list, start as usize, false, &version) {
+                balls_and_urns1(
+                    record,
+                    acc,
+                    &mut v1,
+                    n,
+                    depth + 1,
+                    max_depth,
+                    start,
+                    multiple,
+                    last,
+                );
             }
         }
     }
 }
 
-fn to_arrangement(spring_groups: &Vec<u32>, variation: &Vec<usize>, len: usize) -> String {
+fn to_arrangement(spring_groups: &Vec<u32>, variation: &Vec<u32>) -> String {
     let mut start = String::new();
     (0..variation[0]).for_each(|_| start.push('.'));
     spring_groups
         .iter()
-        .take(len)
+        .take(variation.len())
         .enumerate()
         .fold(start, |mut acc, (i, v)| {
             (0..*v).for_each(|_| acc.push('#'));
@@ -122,12 +170,35 @@ fn to_arrangement(spring_groups: &Vec<u32>, variation: &Vec<usize>, len: usize) 
         })
 }
 
-fn is_valid_arrangement(spring_list: &str, version: &str, len: usize) -> bool {
-    for (i, c) in spring_list.chars().take(len).enumerate() {
+fn is_valid_arrangement(spring_list: &str, start: usize, last: bool, version: &str) -> bool {
+    if start > spring_list.len() {
+        return false;
+    }
+
+    for (i, c) in spring_list
+        .chars()
+        .skip(start)
+        .take(version.len())
+        .enumerate()
+    {
         if c != '?' && c != ansi_char_at(version, i) {
             return false;
         }
     }
+
+    if version.len() > spring_list.len() - start
+        && version[spring_list.len() - start..].contains("#")
+    {
+        return false;
+    }
+
+    if last
+        && spring_list.len() > (version.len() + start)
+        && spring_list[version.len() + start..].contains("#")
+    {
+        return false;
+    }
+
     true
 }
 
@@ -143,14 +214,13 @@ fn unfold_records(input: &String, multiple: u32) -> Vec<String> {
                 .trim_start_matches('.')
                 .trim_end_matches('.')
                 .to_string();
-            let group =
-                (1..multiple).fold(String::from(p[1]), |acc, _| format!("{},{}", acc, p[1]));
+            let group = p[1];
             format!("{} {}", list, group)
         })
         .collect::<Vec<String>>()
 }
 
-fn parse_records(records: &Vec<String>) -> Vec<Record> {
+fn parse_records(records: &Vec<String>, multiple: u32) -> Vec<Record> {
     records
         .iter()
         .map(|line| {
@@ -160,13 +230,15 @@ fn parse_records(records: &Vec<String>) -> Vec<Record> {
                 .map(|g| g.parse::<u32>().unwrap())
                 .collect::<Vec<_>>();
             let gaps = groups.len() as u32 + 1;
-            let voids = p[0].len() as u32 - groups.iter().fold(gaps - 2, |acc, g| acc + g);
+            let voids = p[0].len() as u32
+                - (groups.iter().fold(gaps - 2, |acc, g| acc + g) * multiple)
+                - (multiple - 1);
 
             Record {
                 spring_list: p[0],
                 spring_groups: groups,
-                gaps: gaps,
-                voids: voids,
+                gaps,
+                voids,
             }
         })
         .collect::<Vec<Record>>()
