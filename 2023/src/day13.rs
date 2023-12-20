@@ -14,14 +14,27 @@ fn part01() {
 
     let maps = parse_maps(&input);
     let number = maps.iter().fold(0, |acc, map| {
-        let result = find_reflection(map);
+        let result = find_reflection(map, 0);
         acc + result.0 + 100 * result.1
     });
 
     assert_eq!(number, 34772);
 }
 
-fn find_reflection(map: &HashSet<Coord>) -> (u32, u32) {
+#[test]
+fn part02() {
+    let input = read_input(DAYS::Day13);
+
+    let maps = parse_maps(&input);
+    let number = maps.iter().fold(0, |acc, map| {
+        let result = find_reflection(map, 1);
+        acc + result.0 + 100 * result.1
+    });
+
+    assert_eq!(number, 35554);
+}
+
+fn find_reflection(map: &HashSet<Coord>, diff: usize) -> (u32, u32) {
     let max_x = map.iter().map(|c| c.x).max().unwrap() + 1;
     for i in 1..max_x {
         let width = min(i, max_x - i);
@@ -41,7 +54,7 @@ fn find_reflection(map: &HashSet<Coord>) -> (u32, u32) {
         if a.symmetric_difference(&b.iter().collect::<HashSet<_>>())
             .collect::<HashSet<_>>()
             .len()
-            == 0
+            == diff
         {
             return (i as u32, 0);
         }
@@ -67,20 +80,13 @@ fn find_reflection(map: &HashSet<Coord>) -> (u32, u32) {
         if a.symmetric_difference(&b.iter().collect::<HashSet<_>>())
             .collect::<HashSet<_>>()
             .len()
-            == 0
+            == diff
         {
             return (0, i as u32);
         }
     }
 
     panic!("no reflection")
-}
-
-#[test]
-fn part02() {
-    let input = read_input(DAYS::Day00);
-
-    assert_eq!(input.lines().count(), 1);
 }
 
 fn parse_maps(input: &String) -> Vec<HashSet<Coord>> {
