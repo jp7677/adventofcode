@@ -51,11 +51,7 @@ fn find_reflection(map: &HashSet<Coord>, diff: usize) -> (u32, u32) {
             })
             .collect::<HashSet<_>>();
 
-        if a.symmetric_difference(&b.iter().collect::<HashSet<_>>())
-            .collect::<HashSet<_>>()
-            .len()
-            == diff
-        {
+        if a.symmetric_difference(&b.iter().collect()).count() == diff {
             return (i as u32, 0);
         }
     }
@@ -74,14 +70,9 @@ fn find_reflection(map: &HashSet<Coord>, diff: usize) -> (u32, u32) {
                 x: c.x,
                 y: i - (c.y - i + 1),
             })
-            .into_iter()
             .collect::<HashSet<_>>();
 
-        if a.symmetric_difference(&b.iter().collect::<HashSet<_>>())
-            .collect::<HashSet<_>>()
-            .len()
-            == diff
-        {
+        if a.symmetric_difference(&b.iter().collect()).count() == diff {
             return (0, i as u32);
         }
     }
