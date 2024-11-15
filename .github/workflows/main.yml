@@ -104,9 +104,11 @@ jobs:
       - name: Set up .Net Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: 8.0.x
       - name: Compile and run AoC 2024
         run: |
           cd 2024
+          dotnet tool restore
+          DOTNET_ROLL_FORWARD=latestMajor dotnet fsharplint lint src/*
           dotnet build -c Release 
           dotnet test bin/Release/net8.0/aoc2024.dll
