@@ -19,8 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Include="Util.fs" />
-        <Compile Include="Day00.fs" />
+        <Compile Include="src/Util.fs" />
+        <Compile Include="src/Day00.fs" />
     </ItemGroup>
 
 </Project>
