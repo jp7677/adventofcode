@@ -48,9 +48,10 @@ private fun getStacksAndMoves(): Pair<List<ArrayDeque<String>>, List<Move5>> {
     }
 
     startingStacks.reversed().drop(1).forEach {
-        for (i in 1..numberOfStacks * 4 step 4)
+        for (i in 1..numberOfStacks * 4 step 4) {
             if (it.length >= i && it[i].isLetter())
                 stacks[(i - 1) / 4].add(it[i].toString())
+        }
     }
 
     val moves = input.last().split(eol)
