@@ -15,6 +15,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="data\day00-input.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="Util.fs" />
         <Compile Include="Day00.fs" />
     </ItemGroup>
 
