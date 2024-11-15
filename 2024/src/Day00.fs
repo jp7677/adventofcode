@@ -1,11 +1,11 @@
 ﻿namespace aoc2024
 
 open Xunit
+open FsUnit.Xunit
+open Util
 
 module Day00 =
 
     [<Fact>]
-    let ``Part 01`` () =
-        let lines = Util.ReadInput("day00-input.txt")
-        let first = lines |> Seq.head |> int
-        Assert.Equal(0, first)
+    let ``part 01``() =
+        input "day00-input.txt" |> Seq.head |> int |> should equal 0
