@@ -113,8 +113,8 @@ private fun Set<Coord22>.peekForCube(pos: Position22): Position22? {
 
 private fun Set<Coord22>.isCorrectPlane(pos: Position22) = any { it.x == pos.tile.x && it.y == pos.tile.y && it.plane == pos.tile.plane }
 
-private fun mapToOtherPlane(pos: Position22): Position22 {
-    return when (pos.tile.plane) {
+private fun mapToOtherPlane(pos: Position22): Position22 =
+    when (pos.tile.plane) {
         1 -> when (pos.direction) {
             Direction22.UP -> Position22(Tile(0, pos.tile.x + 100, 6), Direction22.RIGHT)
             Direction22.LEFT -> Position22(Tile(0, (pos.tile.y - 149).absoluteValue, 4), Direction22.RIGHT)
@@ -153,7 +153,6 @@ private fun mapToOtherPlane(pos: Position22): Position22 {
         }
         else -> throw IllegalArgumentException("${pos.tile.plane} - ${pos.direction}")
     }
-}
 
 private fun getMapAndPath(includePlanes: Boolean = false) = getPuzzleInput("day22-input.txt", "$eol$eol").toList()
     .let { it.first().split(eol) to it.last() }
