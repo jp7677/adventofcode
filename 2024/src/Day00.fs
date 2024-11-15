@@ -1,4 +1,4 @@
-﻿namespace aoc2024
+﻿namespace Aoc2024
 
 open Xunit
 open FsUnit.Xunit
