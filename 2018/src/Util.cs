@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace aoc2018;
 
@@ -19,24 +17,5 @@ public static class Util
         {
             yield return line;
         }
-    }
-
-    public static List<T> ToList<T>(
-        this IAsyncEnumerable<T> items,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return items.ToListAsync(cancellationToken).Result;
-    }
-
-    public static async Task<List<T>> ToListAsync<T>(
-        this IAsyncEnumerable<T> items,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var results = new List<T>();
-        await foreach (var item in items.WithCancellation(cancellationToken).ConfigureAwait(false))
-            results.Add(item);
-        return results;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace aoc2018;
@@ -10,7 +11,9 @@ public class Day01
     [Fact]
     public void Part01()
     {
-        var result = Util.GetInputAsStrings("day01-input.txt").ToList().Sum(Convert.ToInt32);
+        var result = Util.GetInputAsStrings("day01-input.txt")
+            .ToBlockingEnumerable()
+            .Sum(Convert.ToInt32);
 
         Assert.Equal(500, result);
     }
@@ -19,7 +22,7 @@ public class Day01
     public void Part02()
     {
         var frequencyChanges = Util.GetInputAsStrings("day01-input.txt")
-            .ToList()
+            .ToBlockingEnumerable()
             .Select(f => Convert.ToInt32(f))
             .ToList();
 

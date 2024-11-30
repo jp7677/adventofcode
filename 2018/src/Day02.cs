@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace aoc2018;
@@ -9,7 +10,7 @@ public class Day02
     public void Part01()
     {
         var ids = Util.GetInputAsStrings("day02-input.txt")
-            .ToList()
+            .ToBlockingEnumerable()
             .Select(s => s.ToCharArray().GroupBy(c => c).ToDictionary(g => g.Key, g => g.Count()))
             .ToList();
 
@@ -22,7 +23,7 @@ public class Day02
     [Fact]
     public void Part02()
     {
-        var ids = Util.GetInputAsStrings("day02-input.txt").ToList();
+        var ids = Util.GetInputAsStrings("day02-input.txt").ToBlockingEnumerable().ToList();
 
         var prototypes = ids.Where(
                 id1 =>
