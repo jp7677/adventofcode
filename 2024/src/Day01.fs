@@ -11,7 +11,7 @@ module Day01 =
         let lists =
             input "day01-input.txt"
             |> Seq.map _.Split("   ")
-            |> Seq.map (fun it -> it[0] |> int, it[1] |> int)
+            |> Seq.map (fun p -> p[0] |> int, p[1] |> int)
             |> Seq.toList
 
         (lists |> List.map fst, lists |> List.map snd)
@@ -25,7 +25,7 @@ module Day01 =
             list1
             |> List.sort
             |> List.indexed
-            |> List.sumBy (fun (index, it) -> Math.Abs(it - list2Sorted[index]))
+            |> List.sumBy (fun (index, id1) -> Math.Abs(id1 - list2Sorted[index]))
 
         distance |> should equal 2164381
 
@@ -35,8 +35,6 @@ module Day01 =
 
         let score =
             list1
-            |> List.sumBy (fun id ->
-                let c = list2 |> List.filter (fun it -> it = id) |> List.length
-                id * c)
+            |> List.sumBy (fun id1 -> list2 |> List.countBy (fun id2 -> id2 = id1) |> (fun count -> count * id1))
 
         score |> should equal 20719933
