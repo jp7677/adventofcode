@@ -35,6 +35,6 @@ module Day01 =
 
         let score =
             list1
-            |> List.sumBy (fun id1 -> list2 |> List.countBy (fun id2 -> id2 = id1) |> (fun count -> count * id1))
+            |> List.sumBy (fun id1 -> list2 |> List.countBy (fun id2 -> id2 = id1) |> Int.times id1)
 
         score |> should equal 20719933
