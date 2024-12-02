@@ -6,20 +6,34 @@ open Util
 
 module Day02 =
 
-    let readList () =
+    let readReports () =
         input "day02-input.txt"
         |> Seq.map _.Split(" ")
         |> Seq.map (fun p -> p |> Array.toList |> List.map (fun s -> s |> int))
-        |> Seq.toList
+
+    let mapToDeltas = Seq.map (fun report -> report |> List.pairwise |> List.map (fun (l1, l2) -> l2 - l1))
+
+    let safeRules =
+        fun deltas ->
+            deltas |> List.forall (fun delta -> (delta >= 1 && delta <= 3))
+            || deltas |> List.forall (fun delta -> (delta <= -1 && delta >= -3))
 
     [<Fact>]
     let ``part 01`` () =
-        let safeReports =
-            readList ()
-            |> Seq.map (fun report -> report |> List.pairwise |> List.map (fun (l1, l2) -> l2 - l1))
-            |> Seq.filter (fun deltas ->
-                deltas |> List.forall (fun delta -> (delta >= 1 && delta <= 3))
-                || deltas |> List.forall (fun delta -> (delta <= -1 && delta >= -3)))
-            |> Seq.toList
+        let safeReports = readReports () |> mapToDeltas |> Seq.filter safeRules |> Seq.toList
 
         safeReports |> should haveLength 483
+
+    let safeWithOneBadRules: int list -> bool =
+        fun report ->
+            [ 0 .. report.Length - 1 ]
+            |> List.toSeq
+            |> Seq.map (fun b -> report |> List.removeAt b)
+            |> mapToDeltas
+            |> Seq.exists safeRules
+
+    [<Fact>]
+    let ``part 02`` () =
+        let safeReports = readReports () |> Seq.filter safeWithOneBadRules |> Seq.toList
+
+        safeReports |> should haveLength 528
