@@ -9,7 +9,7 @@ module Day02 =
     let readReports () =
         input "day02-input.txt"
         |> Seq.map _.Split(" ")
-        |> Seq.map (fun p -> p |> Array.toList |> List.map (fun s -> s |> int))
+        |> Seq.map (fun p -> p |> Seq.map int |> Seq.toList)
 
     let mapToDeltas = Seq.map (fun report -> report |> List.pairwise |> List.map (fun (l1, l2) -> l2 - l1))
 
@@ -27,7 +27,6 @@ module Day02 =
     let safeWithOneBadRules: int list -> bool =
         fun report ->
             [ 0 .. report.Length - 1 ]
-            |> List.toSeq
             |> Seq.map (fun b -> report |> List.removeAt b)
             |> mapToDeltas
             |> Seq.exists safeRules
