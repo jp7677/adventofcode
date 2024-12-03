@@ -28,12 +28,11 @@ module Day03 =
     let ``part 01`` () =
         let result =
             readInstructions
-            |> Seq.fold
-                (fun acc instr ->
-                    match instr with
-                    | Mul(a, b) -> acc + (a * b)
-                    | _ -> acc)
-                0
+            |> Seq.choose (fun instr ->
+                match instr with
+                | Mul(a, b) -> Some(a * b)
+                | _ -> None)
+            |> Seq.sum
 
         result |> should equal 174960292
 
