@@ -1,6 +1,5 @@
 ﻿namespace Aoc2024
 
-open System.Text.RegularExpressions
 open FsUnit.Xunit
 open Xunit
 open Util
@@ -12,29 +11,18 @@ module Day03 =
         | Dont
         | Mul of int * int
 
-    type Status =
-        | Enabled
-        | Disabled
-
-    let matchNumbers instruction =
-        seq {
-            for m in Regex.Matches(instruction, "(\d+)") do
-                yield m.Value
-        }
-
-    let matchInstructions memory =
-        seq {
-            for m in Regex.Matches(memory, "(mul\(\d+,\d+\))|(do\(\))|(don't\(\))") do
-                if m.Value.StartsWith("mul") then
-                    let i = m.Value |> matchNumbers |> Seq.toList
-                    yield Mul(i[0] |> int, i[1] |> int)
-                else if m.Value.StartsWith("don't") then
-                    yield Dont
-                else
-                    yield Do
-        }
-
-    let readInstructions = input "day03-input.txt" |> Seq.reduce (fun a b -> a + b) |> matchInstructions
+    let readInstructions =
+        input "day03-input.txt"
+        |> Seq.reduce (fun a b -> a + b)
+        |> matchRegex "(mul\(\d+,\d+\))|(do\(\))|(don't\(\))"
+        |> Seq.map (fun m ->
+            if m.StartsWith("mul") then
+                let i = m |> matchRegex "(\d+)" |> Seq.toList
+                Mul(i[0] |> int, i[1] |> int)
+            else if m.StartsWith("don't") then
+                Dont
+            else
+                Do)
 
     [<Fact>]
     let ``part 01`` () =
@@ -48,6 +36,10 @@ module Day03 =
                 0
 
         result |> should equal 174960292
+
+    type Status =
+        | Enabled
+        | Disabled
 
     [<Fact>]
     let ``part 02`` () =

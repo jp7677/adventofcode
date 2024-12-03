@@ -1,11 +1,18 @@
 namespace Aoc2024
 
 open System
+open System.Text.RegularExpressions
 
 module Util =
-    let input (name: string) =
+    let input name =
         let path = $"{Reflection.Assembly.GetExecutingAssembly().Location}/../../../../data/{name}"
         seq { yield! IO.File.ReadLines path }
+
+    let matchRegex pattern input =
+        seq {
+            for m in Regex.Matches(input, pattern) do
+                yield m.Value
+        }
 
 module List =
     let inline countBy (predicate: 'T -> bool) list =
