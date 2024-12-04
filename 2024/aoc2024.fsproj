@@ -21,10 +21,7 @@
 
     <ItemGroup>
         <Compile Include="src/Util.fs"/>
-        <Compile Include="src/Day00.fs"/>
-        <Compile Include="src/Day01.fs"/>
-        <Compile Include="src/Day02.fs"/>
-        <Compile Include="src/Day03.fs"/>
+        <Compile Include="src/Day*.fs"/>
     </ItemGroup>
 
 </Project>
