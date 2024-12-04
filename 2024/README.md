@@ -1,6 +1,6 @@
-# Advent of Code 2018 C#
+# Advent of Code 2024 F#
 
-From <https://adventofcode.com/2019>. Better late than never ;)
+From <https://adventofcode.com/2024>. Better late than never ;)
 
 ## System requirements
 
@@ -12,5 +12,5 @@ Only Linux has been tested. Other platforms might just work though.
 
 ```bash
 dotnet build -c Release 
-dotnet test bin/Release/net9.0/aoc2018.dll
+dotnet test bin/Release/net9.0/aoc2024.dll
 ```
