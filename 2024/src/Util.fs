@@ -18,6 +18,13 @@ module List =
     let inline countBy (predicate: 'T -> bool) list =
         list |> List.filter predicate |> List.length
 
+module Seq =
+    let inline toString seq = seq |> Seq.toArray |> String
+
+module Map =
+    let inline countBy (predicate: 'Key -> 'T -> bool) map =
+        map |> Map.filter predicate |> Map.count
+
 module Int =
     let inline plus (b: int) int = int + b
     let inline minus (b: int) int = int - b
