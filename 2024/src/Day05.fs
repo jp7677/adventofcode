@@ -26,7 +26,7 @@ module Day05 =
 
         (rules, pages)
 
-    let detectInvalidPages (rules: Set<'a>) pages =
+    let detectInvalidPages (rules: Set<int * int>) pages =
         pages
         |> Seq.choose (fun p ->
             let length = p |> Seq.length |> Int.minus 1
