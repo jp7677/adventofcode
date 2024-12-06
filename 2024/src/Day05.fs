@@ -20,8 +20,7 @@ module Day05 =
         let pages =
             puzzle
             |> Seq.skip (sepIndex + 1)
-            |> Seq.map _.Split(",")
-            |> Seq.map (fun s -> s |> Seq.map int)
+            |> Seq.map (fun s -> s.Split(",") |> Seq.map int)
             |> Seq.toList
 
         (rules, pages)
