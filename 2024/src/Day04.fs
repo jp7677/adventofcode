@@ -13,17 +13,18 @@ module Day04 =
         (path |> Seq.map matchXMAS |> Seq.collect id |> Seq.length)
         + (path |> Seq.map matchSAMX |> Seq.collect id |> Seq.length)
 
-    let mapDiagonal max (path : string list)  =
+    let mapDiagonal max (path: string list) =
         [ 0..max ]
-        |> Seq.collect (fun x -> (
-            seq {
+        |> Seq.collect (fun x ->
+            (seq {
                 yield
                     [ 0..max ]
-                    |> Seq.choose (fun y -> if (x+y <= max) then Some (path[y][y+x]) else None)
+                    |> Seq.choose (fun y -> if (x + y <= max) then Some(path[y][y + x]) else None)
                     |> Seq.toString
+
                 yield
                     [ 0..max ]
-                    |> Seq.choose (fun y -> if (x+y <= max) then Some (path[x+y][y]) else None)
+                    |> Seq.choose (fun y -> if (x + y <= max) then Some(path[x + y][y]) else None)
                     |> Seq.toString
             }))
         |> Seq.tail // Skip duplicate
@@ -34,6 +35,7 @@ module Day04 =
         let max = path |> List.length |> Int.minus 1
 
         let pathH = path
+
         let pathV =
             [ 0..max ]
             |> List.map (fun x -> ([ 0..max ] |> Seq.map (fun y -> path[y][x]) |> Seq.rev |> Seq.toString))
@@ -55,21 +57,23 @@ module Day04 =
 
         let chars =
             [ 0..max ]
-            |> Seq.collect (fun x -> ([ 0..max ] |> Seq.map (fun y -> ({x=x;y=y},path[y][x]))))
+            |> Seq.collect (fun x -> ([ 0..max ] |> Seq.map (fun y -> ({ x = x; y = y }, path[y][x]))))
             |> Map.ofSeq
 
-        let count =chars |> Map.countBy (fun k v ->
-            if k.x = 0 || k.x = max || k.y = 0 || k.y = max || v <> 'A' then
-                false
-            else
-                let adj1 = chars |> Map.find {x=k.x-1;y=k.y-1}
-                let adj2 = chars |> Map.find {x=k.x-1;y=k.y+1}
-                let adj3 = chars |> Map.find {x=k.x+1;y=k.y+1}
-                let adj4 = chars |> Map.find {x=k.x+1;y=k.y-1}
+        let count =
+            chars
+            |> Map.countBy (fun k v ->
+                if k.x = 0 || k.x = max || k.y = 0 || k.y = max || v <> 'A' then
+                    false
+                else
+                    let adj1 = chars |> Map.find { x = k.x - 1; y = k.y - 1 }
+                    let adj2 = chars |> Map.find { x = k.x - 1; y = k.y + 1 }
+                    let adj3 = chars |> Map.find { x = k.x + 1; y = k.y + 1 }
+                    let adj4 = chars |> Map.find { x = k.x + 1; y = k.y - 1 }
 
-                let c1 = [adj1;adj3] |> List.sort
-                let c2 = [adj2;adj4] |> List.sort
+                    let c1 = [ adj1; adj3 ] |> List.sort
+                    let c2 = [ adj2; adj4 ] |> List.sort
 
-                c1 = ['M';'S'] && c2 = ['M';'S'])
+                    c1 = [ 'M'; 'S' ] && c2 = [ 'M'; 'S' ])
 
         count |> should equal 1936
