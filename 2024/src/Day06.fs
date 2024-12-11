@@ -1,5 +1,6 @@
 ﻿namespace Aoc2024
 
+open System.Collections.Generic
 open Xunit
 open FsUnit.Xunit
 open Util
@@ -122,7 +123,7 @@ module Day06 =
 
         distinctSteps |> should equal 5212
 
-    [<Fact(Skip = "Slow")>]
+    [<Fact>]
     let ``part 02`` () =
         let max, obstructions, guard = getMap
 
@@ -136,16 +137,16 @@ module Day06 =
                 if obstructions.Contains(newObstruction) || newObstruction = guard.coord then
                     None
                 else
-                    let alternativeObstructions = obstructions |> Set.add newObstruction
+                    let alternativeObstructions = obstructions.Add newObstruction
                     let alternativeSteps = getSteps max alternativeObstructions guard
 
-                    let mutable alternativeGuardStepsSet: Set<Guard> = Set.empty
+                    let alternativeGuardStepsSet = HashSet<Guard>()
 
                     let findRepeat =
                         alternativeSteps
                         |> Seq.tryFind (fun alternativeStep ->
                             let foundRepeatedStep = alternativeGuardStepsSet.Contains(alternativeStep)
-                            alternativeGuardStepsSet <- alternativeGuardStepsSet |> Set.add alternativeStep
+                            alternativeGuardStepsSet.Add alternativeStep |> ignore
                             foundRepeatedStep)
 
                     match findRepeat with
