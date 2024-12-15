@@ -10,6 +10,20 @@ on:
   workflow_dispatch:
 
 jobs:
+  AoC-2017:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+      - name: Compile and run AoC 2017
+        run: |
+          cd 2017
+          npm ci
+          npx jest
+
   AoC-2018:
     runs-on: ubuntu-latest
     steps:
