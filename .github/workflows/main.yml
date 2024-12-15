@@ -21,7 +21,7 @@ jobs:
       - name: Run AoC 2015
         run: |
           cd 2015
-          python -m unittest *
+          python -m unittest *.py
 
   AoC-2017:
     runs-on: ubuntu-latest
