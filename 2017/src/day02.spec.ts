@@ -9,9 +9,7 @@ describe("day 02", () => {
       (line) => line.split(RegExp("\t")).map((c) => parseInt(c)),
     );
 
-    const checksum = spreadsheet
-      .map((row) => row.max() - row.min())
-      .reduce((acc, it) => acc + it);
+    const checksum = spreadsheet.map((row) => row.max() - row.min()).sum();
 
     expect(checksum).toBe(45158);
   });
@@ -38,7 +36,7 @@ describe("day 02", () => {
 
         return n1 > n2 ? n1 / n2 : n2 / n1;
       })
-      .reduce((acc, it) => acc + it);
+      .sum();
 
     expect(checksum).toBe(294);
   });
