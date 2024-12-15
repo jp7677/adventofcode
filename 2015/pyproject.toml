@@ -12,4 +12,5 @@ dependencies = [
 disable = [
     "missing-module-docstring",
     "missing-function-docstring",
+    "multiple-statements",
 ]
