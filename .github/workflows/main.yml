@@ -22,6 +22,8 @@ jobs:
         run: |
           cd 2017
           npm ci
+          npx eslint src/**/*
+          npx prettier src/**/* --check
           npx jest
 
   AoC-2018:
