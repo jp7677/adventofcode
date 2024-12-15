@@ -1,5 +1,3 @@
 def read_input(name):
-    input_data = open("./data/" + name, "r")
-    data = input_data.read().strip()
-    input_data.close()
-    return data
+    with open("./data/" + name, mode="r", encoding="utf-8") as file:
+        return file.read().strip()

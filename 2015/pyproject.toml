@@ -1,0 +1,15 @@
+[project]
+name = "aoc2015"
+version = "0.0.1"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pylint==3.3.2",
+    "pytest==8.3.4",
+]
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    "missing-module-docstring",
+    "missing-function-docstring",
+]
