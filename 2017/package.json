@@ -1,0 +1,11 @@
+{
+    "name": "aoc2017",
+    "version": "0.0.1",
+    "author": "jp7677",
+    "devDependencies": {
+        "@jest/globals": "^29.7.0",
+        "@tsconfig/node22": "^22.0.0",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.2.5"
+    }
+}
