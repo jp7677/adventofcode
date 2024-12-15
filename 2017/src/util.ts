@@ -12,6 +12,7 @@ declare global {
   interface Array<T> {
     max(): number;
     min(): number;
+    sum(): number;
   }
 }
 
@@ -27,4 +28,8 @@ Array.prototype.min = function () {
     if (it < acc) return it;
     else return acc;
   });
+};
+
+Array.prototype.sum = function () {
+  return this.reduce((acc, it) => acc + it);
 };
