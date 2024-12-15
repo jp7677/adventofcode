@@ -11,5 +11,5 @@ Only Linux has been tested. Other platforms might just work though.
 ## Compile & run
 
 ```bash
-python -m unittest *.py
+pytest
 ```
