@@ -10,6 +10,19 @@ on:
   workflow_dispatch:
 
 jobs:
+  AoC-2015:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Run AoC 2015
+        run: |
+          cd 2015
+          python -m unittest *
+
   AoC-2017:
     runs-on: ubuntu-latest
     steps:
@@ -18,7 +31,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
-      - name: Compile and run AoC 2017
+      - name: Run AoC 2017
         run: |
           cd 2017
           npm ci
