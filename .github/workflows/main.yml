@@ -29,6 +29,21 @@ jobs:
           pylint .
           pytest
 
+  AoC-2016:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - name: Run AoC 2016
+        run: |
+          cd 2016
+          bundler install
+          rubocop
+          rake
+
   AoC-2017:
     runs-on: ubuntu-latest
     steps:
