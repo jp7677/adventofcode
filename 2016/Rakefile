@@ -4,4 +4,5 @@ task default: %w[test]
 
 task :test do
   ruby 'test/day00_test.rb'
+  ruby 'test/day01_test.rb'
 end
