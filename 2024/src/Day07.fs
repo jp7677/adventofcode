@@ -7,10 +7,7 @@ open Util
 module Day07 =
 
     let opAdd (a: int64, b: int64) = a + b
-
-    let opMul (a: int64, b: int64) =
-        (if a = 0 then 1L else a) * (if b = 0 then 1L else b)
-
+    let opMul (a: int64, b: int64) = a * b
     let opConcat (a: int64, b: int64) = $"{a}{b}" |> int64
 
     let rec evaluate (operands, acc, index, maxIndex, maxResult, ops) =
