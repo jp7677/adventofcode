@@ -72,7 +72,7 @@ jobs:
         run: |
           cd 2018
           dotnet tool restore
-          DOTNET_ROLL_FORWARD=latestMajor dotnet csharpier --check src
+          dotnet csharpier --check src
           dotnet build -c Release 
           dotnet test bin/Release/net9.0/aoc2018.dll
 

@@ -47,18 +47,14 @@ public class Day03
             .ToBlockingEnumerable()
             .Select(line => _regex.Matches(line).Select(m => int.Parse(m.Value)).ToList())
             .Select(n => new Claim(n[0], n[1], n[2], n[3], n[4]))
-            .Select(
-                claim =>
-                    (
-                        claim.Id,
-                        Enumerable
-                            .Range(claim.X, claim.Width)
-                            .SelectMany(
-                                x =>
-                                    Enumerable
-                                        .Range(claim.Y, claim.Height)
-                                        .Select(y => new Position(x, y))
-                            )
-                    )
+            .Select(claim =>
+                (
+                    claim.Id,
+                    Enumerable
+                        .Range(claim.X, claim.Width)
+                        .SelectMany(x =>
+                            Enumerable.Range(claim.Y, claim.Height).Select(y => new Position(x, y))
+                        )
+                )
             );
 }
