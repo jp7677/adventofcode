@@ -6,16 +6,21 @@ describe("day 03", () => {
     const input = await readInput("day03-input.txt");
     const number = parseInt(input[0]);
 
+    const steps = Array.from(generateSteps(number));
+    const prev = steps[steps.length - 2];
+    const last = steps[steps.length - 1];
+
+    const a = last.side / 2;
+    const b = Math.abs(last.side / 2 - ((number - prev.start) % last.side));
+
+    expect(a + b).toBe(438);
+  });
+
+  function* generateSteps(number: number) {
     let step = { base: 1, start: 1 };
     while (step.start < number) {
       step = { base: step.base + 2, start: Math.pow(step.base + 2, 2) };
+      yield { side: step.base - 1, start: step.start };
     }
-
-    const side = Math.sqrt(step.start) - 1;
-    const offset = (number - Math.pow(step.base - 2, 2)) % side;
-    const x = (step.base - 1) / 2;
-    const y = Math.abs(side / 2 - offset);
-
-    expect(x + y).toBe(438);
-  });
+  }
 });
