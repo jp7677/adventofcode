@@ -40,90 +40,104 @@ describe("day 03", () => {
     const input = await readInput("day03-input.txt");
     const number = parseInt(input[0]);
 
+    const seq = generateStressSteps();
+    let step;
+    do {
+      step = seq.next();
+    } while (!step.done && step.value < number);
+
+    expect(step.value).toBe(266330);
+  });
+
+  function* generateStressSteps() {
     const coords: Map<string, number> = new Map<string, number>();
     coords.set(JSON.stringify({ x: 0, y: 0 }), 1);
     coords.set(JSON.stringify({ x: 1, y: 0 }), 1);
 
     let current = { coord: { x: 1, y: 0 }, direction: Direction.NORTH };
-    // @ts-expect-error: Object is possibly undefined
-    while (coords.get(JSON.stringify(current.coord)) < number) {
-      let next;
-      switch (current.direction) {
-        case Direction.NORTH:
-          if (
-            coords.has(
-              JSON.stringify({ x: current.coord.x - 1, y: current.coord.y }),
-            )
-          ) {
-            next = {
-              coord: { x: current.coord.x, y: current.coord.y - 1 },
-              direction: Direction.NORTH,
-            };
-          } else {
-            next = {
-              coord: { x: current.coord.x - 1, y: current.coord.y },
-              direction: Direction.WEST,
-            };
-          }
-          break;
-        case Direction.WEST:
-          if (
-            coords.has(
-              JSON.stringify({ x: current.coord.x, y: current.coord.y + 1 }),
-            )
-          ) {
-            next = {
-              coord: { x: current.coord.x - 1, y: current.coord.y },
-              direction: Direction.WEST,
-            };
-          } else {
-            next = {
-              coord: { x: current.coord.x, y: current.coord.y + 1 },
-              direction: Direction.SOUTH,
-            };
-          }
-          break;
-        case Direction.SOUTH:
-          if (
-            coords.has(
-              JSON.stringify({ x: current.coord.x + 1, y: current.coord.y }),
-            )
-          ) {
-            next = {
-              coord: { x: current.coord.x, y: current.coord.y + 1 },
-              direction: Direction.SOUTH,
-            };
-          } else {
-            next = {
-              coord: { x: current.coord.x + 1, y: current.coord.y },
-              direction: Direction.EAST,
-            };
-          }
-          break;
-        case Direction.EAST:
-          if (
-            coords.has(
-              JSON.stringify({ x: current.coord.x, y: current.coord.y - 1 }),
-            )
-          ) {
-            next = {
-              coord: { x: current.coord.x + 1, y: current.coord.y },
-              direction: Direction.EAST,
-            };
-          } else {
-            next = {
-              coord: { x: current.coord.x, y: current.coord.y - 1 },
-              direction: Direction.NORTH,
-            };
-          }
-          break;
-      }
-      coords.set(JSON.stringify(next.coord), sumOfAdjacent(coords, next.coord));
+    while (true) {
+      const next = move(current, coords);
+      const sum = sumOfAdjacent(coords, next.coord);
+      coords.set(JSON.stringify(next.coord), sum);
       current = next;
+      yield sum;
     }
+  }
 
-    expect(coords.get(JSON.stringify(current.coord))).toBe(266330);
-  });
+  function move(
+    current: {
+      coord: Coord;
+      direction: Direction;
+    },
+    coords: Map<string, number>,
+  ) {
+    switch (current.direction) {
+      case Direction.NORTH:
+        if (
+          coords.has(
+            JSON.stringify({ x: current.coord.x - 1, y: current.coord.y }),
+          )
+        ) {
+          return {
+            coord: { x: current.coord.x, y: current.coord.y - 1 },
+            direction: Direction.NORTH,
+          };
+        } else {
+          return {
+            coord: { x: current.coord.x - 1, y: current.coord.y },
+            direction: Direction.WEST,
+          };
+        }
+      case Direction.WEST:
+        if (
+          coords.has(
+            JSON.stringify({ x: current.coord.x, y: current.coord.y + 1 }),
+          )
+        ) {
+          return {
+            coord: { x: current.coord.x - 1, y: current.coord.y },
+            direction: Direction.WEST,
+          };
+        } else {
+          return {
+            coord: { x: current.coord.x, y: current.coord.y + 1 },
+            direction: Direction.SOUTH,
+          };
+        }
+      case Direction.SOUTH:
+        if (
+          coords.has(
+            JSON.stringify({ x: current.coord.x + 1, y: current.coord.y }),
+          )
+        ) {
+          return {
+            coord: { x: current.coord.x, y: current.coord.y + 1 },
+            direction: Direction.SOUTH,
+          };
+        } else {
+          return {
+            coord: { x: current.coord.x + 1, y: current.coord.y },
+            direction: Direction.EAST,
+          };
+        }
+      case Direction.EAST:
+        if (
+          coords.has(
+            JSON.stringify({ x: current.coord.x, y: current.coord.y - 1 }),
+          )
+        ) {
+          return {
+            coord: { x: current.coord.x + 1, y: current.coord.y },
+            direction: Direction.EAST,
+          };
+        } else {
+          return {
+            coord: { x: current.coord.x, y: current.coord.y - 1 },
+            direction: Direction.NORTH,
+          };
+        }
+    }
+  }
 
   const sumOfAdjacent = (coords: Map<string, number>, coord: Coord) =>
     [
