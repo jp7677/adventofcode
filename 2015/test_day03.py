@@ -7,6 +7,7 @@ def test_part01():
 
     assert len(set(path)) == 2592
 
+
 def test_part02():
     directions = read_input("day03-input.txt")
 

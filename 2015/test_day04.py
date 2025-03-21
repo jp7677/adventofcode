@@ -10,12 +10,14 @@ def test_part01():
 
     assert secret == 346386
 
+
 def test_part02():
     input_data = read_input("day04-input.txt")
 
     secret = find_secret(input_data, "000000")
 
     assert secret == 9958218
+
 
 def find_secret(input_data, zeroes):
     secret = 0
