@@ -8,6 +8,7 @@ def test_part01():
 
     assert floor == 138
 
+
 def test_part02():
     directions = read_input("day01-input.txt")
 
