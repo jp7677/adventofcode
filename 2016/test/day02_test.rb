@@ -183,13 +183,12 @@ describe 'day02' do
     input = Util.read_input('day02-input.txt')
 
     keypad = Keypad.new
-    code = ''
 
-    input.each do |line|
-      line.chars.each do |c|
+    code = input.reduce('') do |acc, it|
+      it.chars.each do |c|
         keypad.move(c)
       end
-      code += keypad.button
+      acc + keypad.button
     end
 
     assert_equal '69642', code
@@ -199,13 +198,11 @@ describe 'day02' do
     input = Util.read_input('day02-input.txt')
 
     keypad = Keypad.new
-    code = ''
-
-    input.each do |line|
-      line.chars.each do |c|
+    code = input.reduce('') do |acc, it|
+      it.chars.each do |c|
         keypad.move2(c)
       end
-      code += keypad.button
+      acc + keypad.button
     end
 
     assert_equal '8CB23', code
