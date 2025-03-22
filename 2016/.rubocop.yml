@@ -1,2 +1,5 @@
 Metrics:
   Enabled: false
+AllCops:
+  SuggestExtensions: false
+  NewCops: enable
