@@ -27,7 +27,7 @@ describe 'day04' do
       room[0].split('-').last.to_i
     end
 
-    assert_equal 1514, sector_ids.sum
+    assert_equal 245_102, sector_ids.sum
   end
 
   it 'solves part 02' do
