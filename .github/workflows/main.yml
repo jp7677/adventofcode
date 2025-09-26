@@ -163,3 +163,26 @@ jobs:
           DOTNET_ROLL_FORWARD=latestMajor dotnet fsharplint lint src/*
           dotnet build -c Release 
           dotnet test bin/Release/net9.0/aoc2024.dll
+
+  AoC-2025:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Lua
+        uses: leafo/gh-actions-lua@v12
+        with:
+          luaVersion: "5.4"
+      - name: Set up LuaRocks
+        uses: leafo/gh-actions-luarocks@v6
+      - name: Install dependencies
+        run: |
+          cd 2025
+          luarocks init aoc2025-0-1.rockspec
+          ./luarocks install --only-deps aoc2025-0-1.rockspec
+      - name: Run AoC 2025
+        env:
+          LUA_INIT: "@src/setup.lua"
+        run: |
+          cd 2025
+          ./lua_modules/bin/luacheck src
+          ./lua_modules/bin/busted
