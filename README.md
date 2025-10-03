@@ -14,6 +14,7 @@ From <https://adventofcode.com/>. Very much work in progress and better late tha
 - Advent of Code 2022 Kotlin <https://github.com/jp7677/adventofcode/tree/main/2022>
 - Advent of Code 2023 Rust <https://github.com/jp7677/adventofcode/tree/main/2023>
 - Advent of Code 2024 F# <https://github.com/jp7677/adventofcode/tree/main/2024>
+- Advent of Code 2025 Lua <https://github.com/jp7677/adventofcode/tree/main/2025>
 
 Enjoy the stars...
 
