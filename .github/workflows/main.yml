@@ -177,11 +177,12 @@ jobs:
       - name: Install dependencies
         run: |
           cd 2025
-          luarocks init aoc2025-0-1.rockspec
-          ./luarocks install --only-deps aoc2025-0-1.rockspec
+          luarocks init --lua-versions 5.1
+          luarocks install luacheck
+          luarocks install busted
+          luarocks install inspect
+          luarocks install --dev fun
       - name: Run AoC 2025
-        env:
-          LUA_INIT: "@src/setup.lua"
         run: |
           cd 2025
           ./lua_modules/bin/luacheck src

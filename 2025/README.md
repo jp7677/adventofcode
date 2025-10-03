@@ -8,10 +8,18 @@ From <https://adventofcode.com/2025>. Better late than never ;)
 
 Lua 5.4 should also "just work". Only Linux has been tested. Other platforms might just work though.
 
-## Compile & run
+## Setup
 
 ```bash
-luarocks init aoc2025-0-1.rockspec
-./luarocks install --only-deps aoc2025-0-1.rockspec
-LUA_INIT=@src/setup.lua ./lua_modules/bin/busted
+luarocks init --lua-versions 5.1
+luarocks install luacheck
+luarocks install busted
+luarocks install inspect
+luarocks install --dev fun
+```
+
+## run tests
+
+```bash
+./lua_modules/bin/busted
 ```
