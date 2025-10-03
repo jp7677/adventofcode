@@ -1,5 +1,3 @@
--- luacheck: ignore _dbg
-local _dbg = require "debugger"
 local bstd = require "busted"
 local insp = require "inspect"
 local fun = require "fun"
