@@ -29,7 +29,7 @@ class Day07 {
                     .map { IntCodeComputer(program.copyOf(), it) }
                     .let { amps ->
                         generateSequence(0L) {
-                            amps.fold(it as? Long) { input, amp ->
+                            amps.fold(it as Long?) { input, amp ->
                                 if (input != null) amp.run(input) else amp.run()
                             }
                         }.last()
