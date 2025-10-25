@@ -21,9 +21,9 @@ class Day02 {
 
         val nounVerb = (0L..99L)
             .crossJoin()
-            .first {
+            .first { (n, v) ->
                 IntCodeComputer(program.toLongArray())
-                    .apply { noun = it.first; verb = it.second }
+                    .apply { noun = n; verb = v }
                     .also { it.runToCompletion() }
                     .positionZero == 19690720L
             }

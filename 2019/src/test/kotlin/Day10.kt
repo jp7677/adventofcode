@@ -46,7 +46,6 @@ class Day10 {
 
         val result = hits[200 - 1]
             .let { it.x * 100 + it.y }
-            .toInt()
 
         assertEquals(305, result)
     }

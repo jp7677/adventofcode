@@ -57,10 +57,10 @@ class IntCodeComputer(private var mem: LongArray, private val phase: Long? = nul
         .map { it.toString().toInt() }
         .let { digits ->
             Instruction(
-                Op.values().single { it.code == "${digits[3]}${digits[4]}".toInt() },
-                Mode.values().single { it.code == digits[2] },
-                Mode.values().single { it.code == digits[1] },
-                Mode.values().single { it.code == digits[0] }
+                Op.entries.single { it.code == "${digits[3]}${digits[4]}".toInt() },
+                Mode.entries.single { it.code == digits[2] },
+                Mode.entries.single { it.code == digits[1] },
+                Mode.entries.single { it.code == digits[0] }
             )
         }
         .also { idx++ }
