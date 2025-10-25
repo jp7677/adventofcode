@@ -5,7 +5,7 @@ class IntCodeComputer(private var mem: LongArray, private val phase: Long? = nul
         ADD(1), MUL(2), IN(3), OUT(4), JNZ(5), JZ(6), SETL(7), SETE(8), STD(9), ESC(99)
     }
     private enum class Mode(val code: Int) { POSITION(0), IMMEDIATE(1), RELATIVE(2) }
-    private class Instruction(val op: Op, val param1Mode: Mode, val param2Mode: Mode, val param3Mode: Mode)
+    private data class Instruction(val op: Op, val param1Mode: Mode, val param2Mode: Mode, val param3Mode: Mode)
     private var idx = 0
     private var relativeBase = 0L
     private var phaseSet = false
