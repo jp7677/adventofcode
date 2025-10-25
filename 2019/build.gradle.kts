@@ -3,9 +3,9 @@ version = "0.1-SNAPSHOT"
 
 plugins {
     application
-    kotlin("jvm") version "1.7.10"
-    id("com.adarshr.test-logger") version "3.2.0"
-    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
+    kotlin("jvm") version "2.1.21"
+    id("com.adarshr.test-logger") version "4.0.0"
+    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
 }
 
 repositories { mavenCentral() }
