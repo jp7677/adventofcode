@@ -11,7 +11,7 @@ Lua 5.4 should also "just work". Only Linux has been tested. Other platforms mig
 ## Setup
 
 ```bash
-luarocks init --lua-versions 5.1
+luarocks init --lua-versions 5.4
 luarocks install luacheck
 luarocks install busted
 luarocks install inspect
