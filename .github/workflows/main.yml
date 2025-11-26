@@ -23,6 +23,12 @@ jobs:
           cd 2015
           python -m pip install --upgrade pip
           pip install .
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
+        run: |
+          cd 2015
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
       - name: Run AoC 2015
         run: |
           cd 2015
@@ -37,6 +43,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}      
+        run: |
+          cd 2016
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
       - name: Run AoC 2016
         run: |
           cd 2016
@@ -52,6 +64,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
+        run: |
+          cd 2017
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
       - name: Run AoC 2017
         run: |
           cd 2017
@@ -68,6 +86,12 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
+        run: |
+          cd 2018
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
       - name: Compile and run AoC 2018
         run: |
           cd 2018
@@ -85,6 +109,12 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
+        run: |
+          cd 2019
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
       - name: Compile and run AoC 2019
         run: |
           cd 2019
@@ -98,6 +128,12 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y libdw-dev libunwind-dev
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
+        run: |
+          cd 2020
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
       - name: Compile and run AoC 2020
         run: |
           cd 2020
@@ -113,6 +149,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
+        run: |
+          cd 2021
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
       - name: Compile and run AoC 2021
         run: |
           cd 2021
@@ -127,6 +169,12 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
+        run: |
+          cd 2022
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
       - name: Compile and run AoC 2022
         run: |
           cd 2022
@@ -140,6 +188,12 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y rustc cargo
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
+        run: |
+          cd 2023
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
       - name: Compile and run AoC 2023
         run: |
           cd 2023
@@ -155,6 +209,12 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
+        run: |
+          cd 2024
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
       - name: Compile and run AoC 2024
         run: |
           cd 2024
@@ -182,6 +242,12 @@ jobs:
           luarocks install busted
           luarocks install inspect
           luarocks install --dev fun
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
+        run: |
+          cd 2025
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
       - name: Run AoC 2025
         run: |
           cd 2025
