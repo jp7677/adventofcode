@@ -6,15 +6,15 @@ version = "0.1-SNAPSHOT"
 
 plugins {
     application
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm") version "2.2.21"
     id("com.adarshr.test-logger") version "4.0.0"
-    id("org.jmailen.kotlinter") version "4.4.1"
+    id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
 }
 
 repositories { mavenCentral() }
 dependencies {
-    testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
-    testImplementation("io.kotest:kotest-assertions-core:5.9.1")
+    testImplementation("io.kotest:kotest-runner-junit5:6.0.5")
+    testImplementation("io.kotest:kotest-assertions-core:6.0.5")
 }
 
 application { mainClass.set("MainKt") }
