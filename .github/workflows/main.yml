@@ -208,7 +208,7 @@ jobs:
       - name: Set up .Net Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
       - name: Uzip data
         env:
           INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
@@ -222,7 +222,7 @@ jobs:
           dotnet fantomas --check src/*
           DOTNET_ROLL_FORWARD=latestMajor dotnet fsharplint lint src/*
           dotnet build -c Release 
-          dotnet test bin/Release/net9.0/aoc2024.dll
+          dotnet test bin/Release/net10.0/aoc2024.dll
 
   AoC-2025:
     runs-on: ubuntu-latest
