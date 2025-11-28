@@ -4,7 +4,7 @@ From <https://adventofcode.com/2016>. Better late than never ;)
 
 ## System requirements
 
-- Ruby 3.3
+- Ruby 3.3 or newer
 
 Only Linux has been tested. Other platforms might just work though.
 
