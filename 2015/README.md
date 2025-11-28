@@ -4,12 +4,13 @@ From <https://adventofcode.com/2015>. Better late than never ;)
 
 ## System requirements
 
-- Python 3.13
+- Python 3.14 or newer
 
 Only Linux has been tested. Other platforms might just work though.
 
 ## Compile & run
 
 ```bash
+pylint .
 pytest
 ```
