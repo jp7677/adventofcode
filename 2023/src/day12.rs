@@ -209,7 +209,7 @@ fn unfold_records(input: &String, multiple: u32) -> Vec<String> {
         .collect::<Vec<String>>()
 }
 
-fn parse_records(records: &Vec<String>, multiple: u32) -> Vec<Record> {
+fn parse_records(records: &Vec<String>, multiple: u32) -> Vec<Record<'_>> {
     records
         .iter()
         .map(|line| {

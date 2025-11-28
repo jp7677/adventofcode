@@ -23,7 +23,7 @@ struct Operation<'a> {
 }
 
 impl Operation<'_> {
-    fn new(label: &str, op: LensOp, focal_length: Option<u32>) -> Operation {
+    fn new(label: &str, op: LensOp, focal_length: Option<u32>) -> Operation<'_> {
         Operation {
             label,
             box_nr: hash_algorithm(label) as usize,

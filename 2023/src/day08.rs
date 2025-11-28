@@ -55,7 +55,7 @@ fn get_steps(
     steps
 }
 
-fn get_instructions_and_elements(input: &str) -> (&str, HashMap<&str, Element>) {
+fn get_instructions_and_elements(input: &str) -> (&str, HashMap<&str, Element<'_>>) {
     let instructions = input.lines().nth(0).unwrap();
     let map = input
         .lines()
