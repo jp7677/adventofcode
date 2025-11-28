@@ -4,7 +4,7 @@ From <https://adventofcode.com/2024>. Better late than never ;)
 
 ## System requirements
 
-- .NET SDK 9
+- .NET SDK 10
 
 Only Linux has been tested. Other platforms might just work though.
 
@@ -12,5 +12,5 @@ Only Linux has been tested. Other platforms might just work though.
 
 ```bash
 dotnet build -c Release 
-dotnet test bin/Release/net9.0/aoc2024.dll
+dotnet test bin/Release/net10.0/aoc2024.dll
 ```
