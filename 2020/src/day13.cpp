@@ -22,7 +22,7 @@ namespace day13 {
             [](const auto& a, const auto& b) {
                 return a.second < b.second;
             });
-        auto result = (*min).first * (*min).second;
+        auto result = min->first * min->second;
 
         REQUIRE(result == 2545);
     }

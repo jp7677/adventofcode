@@ -21,15 +21,14 @@ namespace day16 {
                     auto lineElements = util::split(notesLine, ':');
                     auto valueElements = util::split(lineElements[1], ' ', '-');
                     ticketFields.emplace_back(
-                        make_pair(
-                            lineElements[0],
+                        lineElements[0],
                             vector<pair<uint, uint>>{
                                 make_pair(
                                     stoi(valueElements[0]),
                                     stoi(valueElements[1])),
                                 make_pair(
                                     stoi(valueElements[3]),
-                                    stoi(valueElements[4]))}));
+                                    stoi(valueElements[4]))});
                     break;
                 }
                 case 1: {

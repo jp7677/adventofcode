@@ -114,7 +114,7 @@ namespace day17 {
             for (const auto y : moves)
                 for (const auto z : moves)
                     if (x != 0 || y != 0 || z != 0)
-                        directions.emplace_back(cube_position(x, y, z));
+                        directions.emplace_back(x, y, z);
 
         auto result = runCycles(activeCubes, directions);
 
@@ -130,7 +130,7 @@ namespace day17 {
                 for (const auto z : moves)
                     for (const auto w : moves)
                         if (x != 0 || y != 0 || z != 0 || w != 0)
-                            directions.emplace_back(hypercube_position(x, y, z, w));
+                            directions.emplace_back(x, y, z, w);
 
         auto result = runCycles(activeCubes, directions);
 

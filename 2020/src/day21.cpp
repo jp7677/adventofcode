@@ -27,7 +27,7 @@ namespace day21 {
             auto ingredientsData = get<0>(foodData);
             auto allergensData = get<1>(foodData);
 
-            foods.emplace_back(unordered_set<string>());
+            foods.emplace_back();
             for (const auto& ingredient : ingredientsData)
                 foods.back().insert(ingredient);
 
@@ -106,7 +106,7 @@ namespace day21 {
         }
 
         auto result = accumulate(ingredientsWithAllergen.begin(), ingredientsWithAllergen.end(), string(),
-            [](auto result, const auto& ingredientWithAllergen) {
+            [](auto& result, const auto& ingredientWithAllergen) {
                 return result + ingredientWithAllergen.second + ",";
             });
         result = util::trim(result, ",");

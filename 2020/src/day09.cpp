@@ -17,7 +17,7 @@ namespace day09 {
 
     TEST_CASE("Day 09 - Part 1 from https://adventofcode.com/2020/day/9") {
         auto numbers = loadNumbers();
-        static const auto preamble = 25U;
+        static constexpr auto preamble = 25U;
 
         auto result = [&numbers] {
             for (auto i = preamble; i < numbers.size(); i++) {
@@ -42,7 +42,7 @@ namespace day09 {
 
     TEST_CASE("Day 09 - Part 2 from https://adventofcode.com/2020/day/9#part2") {
         auto numbers = loadNumbers();
-        static const auto invalid = 1309761972U;
+        static constexpr auto invalid = 1309761972U;
 
         auto position = [&numbers] {
             for (auto i = 0U; i < numbers.size(); i++) {

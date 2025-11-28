@@ -148,14 +148,14 @@ namespace day20 {
         while (true) {
             unordered_map<uint, vector<string>>::const_iterator itLeft, itBottom;
             itLeft = find_if(tiles.begin(), tiles.end(),
-                [&foundTiles, &lastRightBorder](const auto tile) {
+                [&foundTiles, &lastRightBorder](const auto& tile) {
                     return find(foundTiles.begin(), foundTiles.end(), tile.first) == foundTiles.end()
                         && anyAdjacentBorder(lastRightBorder, getTileBorder(tile.second));
                 });
 
             if (itLeft == tiles.end())
                 itBottom = find_if(tiles.begin(), tiles.end(),
-                    [&foundTiles, &firstInRowBottomBoarder](const auto tile) {
+                    [&foundTiles, &firstInRowBottomBoarder](const auto& tile) {
                         return find(foundTiles.begin(), foundTiles.end(), tile.first) == foundTiles.end()
                             && anyAdjacentBorder(firstInRowBottomBoarder, getTileBorder(tile.second));
                     });
