@@ -119,7 +119,10 @@ class Day18 {
         assertEquals("[[1,9],[8,5]]", Number.from("[[1,9],[8,5]]").toString())
         assertEquals("[[[[1,2],[3,4]],[[5,6],[7,8]]],9]", Number.from("[[[[1,2],[3,4]],[[5,6],[7,8]]],9]").toString())
         assertEquals("[[[9,[3,8]],[[0,9],6]],[[[3,7],[4,9]],3]]", Number.from("[[[9,[3,8]],[[0,9],6]],[[[3,7],[4,9]],3]]").toString())
-        assertEquals("[[[[1,3],[5,3]],[[1,3],[8,7]]],[[[4,9],[6,9]],[[8,2],[7,3]]]]", Number.from("[[[[1,3],[5,3]],[[1,3],[8,7]]],[[[4,9],[6,9]],[[8,2],[7,3]]]]").toString())
+        assertEquals(
+            "[[[[1,3],[5,3]],[[1,3],[8,7]]],[[[4,9],[6,9]],[[8,2],[7,3]]]]",
+            Number.from("[[[[1,3],[5,3]],[[1,3],[8,7]]],[[[4,9],[6,9]],[[8,2],[7,3]]]]").toString()
+        )
 
         assertEquals("[[1,2],[[3,4],5]]", (Number.from("[1,2]") + Number.from("[[3,4],5]")).toString())
 
@@ -133,7 +136,10 @@ class Day18 {
         assertEquals("[[5,6],1]", Number.from("[11,1]").singleSplit().toString())
         assertEquals("[[6,6],1]", Number.from("[12,1]").singleSplit().toString())
 
-        assertEquals("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]", (Number.from("[[[[4,3],4],4],[7,[[8,4],9]]]") + Number.from("[1,1]")).reduce().toString())
+        assertEquals(
+            "[[[[0,7],4],[[7,8],[6,0]]],[8,1]]",
+            (Number.from("[[[[4,3],4],4],[7,[[8,4],9]]]") + Number.from("[1,1]")).reduce().toString()
+        )
 
         assertEquals(143, Number.from("[[1,2],[[3,4],5]]").magnitude())
         assertEquals(1384, Number.from("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]").magnitude())

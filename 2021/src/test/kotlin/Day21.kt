@@ -128,7 +128,7 @@ class Day21 {
         1 2 3 1 2 3 1 2 3   1 2 3 1 2 3 1 2 3   1 2 3 1 2 3 1 2 3
 
         'outcome' to 'number of occurrences'
-    */
+     */
     private fun diracDieOutcomes() = listOf(3 to 1, 4 to 3, 5 to 6, 6 to 7, 7 to 6, 8 to 3, 9 to 1)
 
     private fun getStartingPositions() =

@@ -1,11 +1,13 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 group = "me.jp7677"
 version = "0.1-SNAPSHOT"
 
 plugins {
     application
-    kotlin("jvm") version "1.7.21"
-    id("com.adarshr.test-logger") version "3.2.0"
-    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
+    kotlin("jvm") version "2.2.21"
+    id("com.adarshr.test-logger") version "4.0.0"
+    id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
 }
 
 repositories { mavenCentral() }
@@ -17,8 +19,8 @@ application { mainClass.set("MainKt") }
 testlogger { theme = com.adarshr.gradle.testlogger.theme.ThemeType.PLAIN }
 tasks {
     jar { manifest { attributes["Main-Class"] = "MainKt" } }
-    compileKotlin { kotlinOptions.jvmTarget = "17" }
-    compileTestKotlin { kotlinOptions.jvmTarget = "17" }
+    compileKotlin { compilerOptions.jvmTarget.set(JvmTarget.JVM_21) }
+    compileTestKotlin { compilerOptions.jvmTarget.set(JvmTarget.JVM_21) }
     test {
         useJUnitPlatform()
         testLogging { showStandardStreams = true }

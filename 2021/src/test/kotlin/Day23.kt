@@ -150,7 +150,7 @@ class Day23 {
           #A#B#C#D#
           #A#B#C#D#
           #########
-        */
+         */
 
         val energy = listOf(55, 410, 3200, 44000)
             .sum()

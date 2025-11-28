@@ -3,10 +3,12 @@ import kotlin.test.assertEquals
 
 class Day20 {
     data class Pixel(val x: Int, val y: Int)
+
+    @Suppress("ktlint:standard:argument-list-wrapping")
     private val processingInput = listOf(
         Pixel(-1, -1), Pixel(0, -1), Pixel(1, -1),
         Pixel(-1, 0), Pixel(0, 0), Pixel(1, 0),
-        Pixel(-1, 1), Pixel(0, 1), Pixel(1, 1),
+        Pixel(-1, 1), Pixel(0, 1), Pixel(1, 1)
     )
 
     @Test

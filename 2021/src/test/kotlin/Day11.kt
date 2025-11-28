@@ -4,6 +4,8 @@ import kotlin.test.assertEquals
 class Day11 {
     data class Coord(val x: Int, val y: Int)
     data class Octopus(val coord: Coord, var energy: Int)
+
+    @Suppress("ktlint:standard:argument-list-wrapping")
     private val flashArea =
         listOf(
             Coord(-1, -1), Coord(0, -1), Coord(1, -1),

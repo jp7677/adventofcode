@@ -52,9 +52,10 @@ class Day16 {
         val (lengthIsNumberOfBits, length, _) = getLength(bits, idx1).also { idx1 += it.third }
         if (lengthIsNumberOfBits) {
             val end = idx1 + length
-            while (idx1 < end)
+            while (idx1 < end) {
                 packets += getPacket(bits, idx1).also { idx1 += it.third }
                     .let { it.first to it.second }
+            }
         } else
             repeat(length) { _ ->
                 packets += getPacket(bits, idx1).also { idx1 += it.third }
@@ -85,13 +86,14 @@ class Day16 {
         var literal = ""
 
         var hasNext = true
-        while (hasNext)
+        while (hasNext) {
             hasNext = getLiteralGroup(bits, idx1)
                 .also {
                     literal += it.second
                     idx1 += it.third
                 }
                 .first
+        }
 
         return literal.toLong(2) to idx1 - idx
     }

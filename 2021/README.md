@@ -4,7 +4,7 @@ From <https://adventofcode.com/2021>. Better late than never ;)
 
 ## System requirements
 
-- OpenJDK 17
+- OpenJDK 21
 
 Only Linux has been tested. Other platforms might just work though.
 
