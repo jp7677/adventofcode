@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/2020.iml" filepath="$PROJECT_DIR$/.idea/2020.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/adventofcode.iml" filepath="$PROJECT_DIR$/.idea/adventofcode.iml" />
     </modules>
   </component>
 </project>
