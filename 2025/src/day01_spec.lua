@@ -15,14 +15,10 @@ local fn_day01_1 = function ()
             local point
             if direction == "R" then
                 point = (current + clicks) % 100
-                if point == 100 then
-                    point = 0
-                end
+                if point == 100 then point = 0 end
             else
                 point = current - clicks
-                if point < 0 then
-                    point = 100 + point
-                end
+                if point < 0 then point = 100 + point end
             end
 
             table.insert(acc, point)
