@@ -43,13 +43,7 @@ local fn_day01_2 = function ()
             local current = acc[#acc]
 
             fun.range(clicks):each(function(idx)
-                local point
-                if direction == "R" then
-                    point = current + 1
-                else
-                    point = current - 1
-                end
-
+                local point = direction == "R" and current + 1 or current - 1
                 if point == 100 then point = 0 end
                 if point == -1 then point = 99 end
                 current = point
