@@ -36,4 +36,38 @@ local fn_day01_1 = function ()
     bstd.assert.same(982, #zeros)
 end
 
+local fn_day01_2 = function ()
+    local rotations = util.load_input("01")
+
+    rotations = fun
+        .map(function(x) return { x:sub(1, 1), tonumber(x:sub(2)) } end, rotations)
+        :foldl(function(acc, x)
+            local direction = x[1]
+            local clicks = x[2]
+
+            fun.range(clicks):each(function()
+                local point
+                if direction == "R" then
+                    point = acc[#acc] + 1
+                else
+                    point = acc[#acc] - 1
+                end
+
+                if point == 100 then point = 0 end
+                if point == -1 then point = 99 end
+
+                table.insert(acc, point)
+            end)
+
+            return acc
+        end, { 50 })
+
+    local zeros = fun
+        .filter(function(x) return x == 0 end, rotations)
+        :totable()
+
+    bstd.assert.same(6106, #zeros)
+end
+
 bstd.it("solves day 01 part 1", fn_day01_1)
+bstd.it("solves day 01 part 2", fn_day01_2)
