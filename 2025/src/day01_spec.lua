@@ -3,10 +3,10 @@ local fun = require "fun"
 local util = require "util"
 
 local fn_day01_1 = function ()
-    local rotations = util.load_input("01")
+    local input = util.load_input("01")
 
-    rotations = fun
-        .map(function(x) return { x:sub(1, 1), tonumber(x:sub(2)) } end, rotations)
+    local rotations = fun.iter(input)
+        :map(function(x) return { x:sub(1, 1), tonumber(x:sub(2)) } end)
         :foldl(function(acc, x)
             local current = acc[#acc]
             local direction = x[1]
@@ -25,18 +25,18 @@ local fn_day01_1 = function ()
             return acc
         end, { 50 })
 
-    local zeros = fun
-        .filter(function(x) return x == 0 end, rotations)
-        :totable()
+    local count = fun.iter(rotations)
+        :filter(function(x) return x == 0 end)
+        :length()
 
-    bstd.assert.same(982, #zeros)
+    bstd.assert.same(982, count)
 end
 
 local fn_day01_2 = function ()
-    local rotations = util.load_input("01")
+    local input = util.load_input("01")
 
-    rotations = fun
-        .map(function(x) return { x:sub(1, 1), tonumber(x:sub(2)) } end, rotations)
+    local rotations = fun.iter(input)
+        :map(function(x) return { x:sub(1, 1), tonumber(x:sub(2)) } end)
         :foldl(function(acc, x)
             local direction = x[1]
             local clicks = x[2]
@@ -56,11 +56,11 @@ local fn_day01_2 = function ()
             return acc
         end, { 50 })
 
-    local zeros = fun
-        .filter(function(x) return x == 0 end, rotations)
-        :totable()
+    local count = fun.iter(rotations)
+        :filter(function(x) return x == 0 end)
+        :length()
 
-    bstd.assert.same(6106, #zeros)
+    bstd.assert.same(6106, count)
 end
 
 bstd.it("solves day 01 part 1", fn_day01_1)
