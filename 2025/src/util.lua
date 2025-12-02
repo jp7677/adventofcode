@@ -22,4 +22,12 @@ function util.load_input(day)
     return fun.totable(dup(io.lines("./data/day" .. day .. "-input.txt")))
 end
 
+function util.stringsplit(str, delimiter)
+    local res = {}
+    for s in string.gmatch(str, '([^' .. delimiter .. ']+)') do
+        table.insert(res, s)
+    end
+    return res
+end
+
 return util
