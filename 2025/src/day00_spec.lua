@@ -3,7 +3,7 @@ local insp = require "inspect"
 local fun = require "fun"
 local util = require "util"
 
-local fn_day00 = function ()
+local fn_day00_part1 = function()
     local input = util.load_input("00")
 
     local fn_tonumber = function(x) return tonumber(x) end
@@ -13,4 +13,4 @@ local fn_day00 = function ()
     bstd.assert.same("{ 0 }", insp(input))
 end
 
-bstd.it("solves day 00", fn_day00)
+bstd.it("solves day 00 part 1", fn_day00_part1)

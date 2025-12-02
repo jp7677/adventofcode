@@ -17,20 +17,20 @@ local chuncked = function(str, size)
     return res
 end
 
-bstd.it("chuncked", function ()
+bstd.it("chuncked", function()
     bstd.assert.same(insp(chuncked('1', 1)), '{ "1" }')
     bstd.assert.same(insp(chuncked('1122', 2)), '{ "11", "22" }')
     bstd.assert.same(insp(chuncked('112233', 2)), '{ "11", "22", "33" }')
     bstd.assert.same(insp(chuncked('112233', 3)), '{ "112", "233" }')
 end)
 
-local fn_day00_part1 = function ()
+local fn_day00_part1 = function()
     local input = util.load_input("02")[1]
 
     local ranges = util.stringsplit(input, ',')
 
     local invalid = fun.iter(ranges)
-        :map(function (x)
+        :map(function(x)
             local p1, p2 = table.unpack(util.stringsplit(x, '-'))
             return fun.range(tonumber(p1), tonumber(p2))
                 :filter(function (y)
@@ -47,16 +47,16 @@ local fn_day00_part1 = function ()
     bstd.assert.same(19605500130, invalid)
 end
 
-local fn_day00_part2 = function ()
+local fn_day00_part2 = function()
     local input = util.load_input("02")[1]
 
     local ranges = util.stringsplit(input, ',')
 
     local invalid = fun.iter(ranges)
-        :map(function (x)
+        :map(function(x)
             local p1, p2 = table.unpack(util.stringsplit(x, '-'))
             return fun.range(tonumber(p1), tonumber(p2))
-                :filter(function (y)
+                :filter(function(y)
                     local s = tostring(y)
                     for _, p in fun.range(1, #s / 2) do
                         if #s > 1 and #s % p == 0 then

@@ -2,7 +2,7 @@ local bstd = require "busted"
 local fun = require "fun"
 local util = require "util"
 
-local fn_day01_1 = function ()
+local fn_day01_1 = function()
     local input = util.load_input("01")
 
     local rotations = fun.iter(input)
@@ -32,7 +32,7 @@ local fn_day01_1 = function ()
     bstd.assert.same(982, count)
 end
 
-local fn_day01_2 = function ()
+local fn_day01_2 = function()
     local input = util.load_input("01")
 
     local rotations = fun.iter(input)
