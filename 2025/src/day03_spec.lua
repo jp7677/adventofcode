@@ -5,15 +5,15 @@ local util = require "util"
 local function calculate_joltage(banks, size)
     return fun.iter(banks)
         :map(function(x)
-            local largest = {}
-            local remaining = x
-            fun.range(size - 1, 0):each(function(reserved)
-                local it = fun.iter(remaining)
-                local max = it:take(#remaining - reserved):max(x)
-                local idx = it:index(max)
-                remaining = it:drop(idx):totable()
-                table.insert(largest, max)
-            end)
+            local idx = 0
+            local largest = fun.range(size - 1, 0)
+                :map(function(reserved)
+                    local it = fun.take(#x - reserved, x):drop(idx)
+                    local max = it:max()
+                    idx = idx + it:index(max)
+                    return max
+                end)
+                :totable()
             return tonumber(table.concat(largest))
         end)
         :sum()
