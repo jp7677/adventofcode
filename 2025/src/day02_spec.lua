@@ -8,7 +8,7 @@ local chuncked = function(str, size)
     if #str % size ~= 0 then return res end
 
     local parts = #str / size
-    for _, i in fun.range(0, parts - 1) do
+    for i = 0, parts - 1 do
         local start = (i * size) + 1
         table.insert(res, string.sub(str, start, start + size - 1))
     end
@@ -49,7 +49,7 @@ end
 local fn_day00_part2 = function()
     local invalid = sum_of_invalid(function(y)
         local s = tostring(y)
-        for p in fun.range(#s / 2) do
+        for p = 1, #s / 2 do
             if #s > 1 and #s % p == 0 then
                 local chuncks = chuncked(s, p)
                 local same = fun.all(function(a) return a == chuncks[1] end, chuncks)
