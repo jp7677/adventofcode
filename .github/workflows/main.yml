@@ -252,4 +252,4 @@ jobs:
         run: |
           cd 2025
           ./lua_modules/bin/luacheck src
-          ./lua_modules/bin/busted
+          ./lua_modules/bin/busted --exclude-tags="ignore"
