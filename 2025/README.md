@@ -23,3 +23,5 @@ luarocks install --dev fun
 ```bash
 ./lua_modules/bin/busted
 ```
+
+Use `./lua_modules/bin/busted --tags="day01"` for a specific day.

@@ -13,4 +13,4 @@ local fn_day00_part1 = function()
     bstd.assert.same("{ 0 }", insp(input))
 end
 
-bstd.it("solves day 00 part 1", fn_day00_part1)
+bstd.it("solves #day00 part 1", fn_day00_part1)

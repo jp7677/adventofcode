@@ -63,5 +63,5 @@ local fn_day04_part2 = function()
     bstd.assert.same(8946, coords_count - #coords)
 end
 
-bstd.it("solves day 04 part 1 (#ignore because way to slow ...)", fn_day04_part1)
-bstd.it("solves day 04 part 2 (#ignore because way to slow ...)", fn_day04_part2)
+bstd.it("solves #day04 part 1 (#ignore because way to slow ...)", fn_day04_part1)
+bstd.it("solves #day04 part 2 (#ignore because way to slow ...)", fn_day04_part2)

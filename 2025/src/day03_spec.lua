@@ -35,5 +35,5 @@ local fn_day03_part2 = function()
     bstd.assert.same(167526011932478, joltage)
 end
 
-bstd.it("solves day 03 part 1", fn_day03_part1)
-bstd.it("solves day 03 part 2", fn_day03_part2)
+bstd.it("solves #day03 part 1", fn_day03_part1)
+bstd.it("solves #day03 part 2", fn_day03_part2)

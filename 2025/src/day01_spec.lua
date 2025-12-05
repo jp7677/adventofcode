@@ -63,5 +63,5 @@ local fn_day01_2 = function()
     bstd.assert.same(6106, count)
 end
 
-bstd.it("solves day 01 part 1", fn_day01_1)
-bstd.it("solves day 01 part 2", fn_day01_2)
+bstd.it("solves #day01 part 1", fn_day01_1)
+bstd.it("solves #day01 part 2", fn_day01_2)
