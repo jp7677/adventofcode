@@ -4,15 +4,13 @@ local fun = require "fun"
 local util = require "util"
 
 local chuncked = function(str, size)
-    local res = {}
-    if #str % size ~= 0 then return res end
-
     local parts = #str / size
+    local chuncks = {}
     for i = 0, parts - 1 do
         local start = (i * size) + 1
-        table.insert(res, string.sub(str, start, start + size - 1))
+        chuncks[i + 1] = string.sub(str, start, start + size - 1)
     end
-    return res
+    return chuncks
 end
 
 bstd.it("chuncked", function()
@@ -31,7 +29,7 @@ local sum_of_invalid = function(fn_filter)
             local p1, p2 = table.unpack(util.stringsplit(x, '-'))
             return acc + fun.range(tonumber(p1), tonumber(p2))
                 :filter(function (y) return fn_filter(y) end)
-                :sum(function(y) return y end)
+                :sum()
         end, 0)
 end
 
@@ -49,10 +47,16 @@ end
 local fn_day00_part2 = function()
     local invalid = sum_of_invalid(function(y)
         local s = tostring(y)
-        for p = 1, #s / 2 do
+        for p = 1, math.floor(#s / 2) do
             if #s > 1 and #s % p == 0 then
                 local chuncks = chuncked(s, p)
-                local same = fun.all(function(a) return a == chuncks[1] end, chuncks)
+                local same = true
+                for i = 2, #chuncks do
+                    if chuncks[1] ~= chuncks[i] then
+                        same = false
+                        break
+                    end
+                end
                 if same == true then return true end
             end
         end
