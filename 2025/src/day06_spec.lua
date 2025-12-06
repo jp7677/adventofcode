@@ -41,18 +41,10 @@ end
 
 local fn_day06_part2 = function()
     local input = util.load_input("06")
+    local ops = util.stringtotable(input[#input])
 
-    local indicies = fun.iter(input)
-        :drop(#input - 1)
-        :map(function(x)
-            local indicies = {}
-            for i = 1, #x do
-                if x:sub(i,i) ~= ' ' then table.insert(indicies, i) end
-            end
-            table.insert(indicies, #x + 2)
-            return indicies
-        end)
-        :totable()[1]
+    local indicies = fun.chain(fun.indexes('*', ops), fun.indexes('+', ops), { #ops + 2 }):totable()
+    table.sort(indicies)
 
     local ranges = fun.zip(indicies, fun.iter(indicies):drop(1))
         :map(function(x, y) return { x, y - 2} end)
