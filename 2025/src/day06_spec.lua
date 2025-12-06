@@ -16,11 +16,7 @@ local function calculate_total(problems)
             local op = x[#x]
             return fun.iter(x)
                 :take(#x - 1)
-                :foldl(function(acc, y)
-                    if op == '+' then return acc + y end
-                    if op == '*' then return acc * y end
-                    error()
-                end, op == '+' and 0 or 1)
+                :foldl(op == '+' and fun.op.add or fun.op.mul, op == '+' and 0 or 1)
         end)
         :sum()
 end
