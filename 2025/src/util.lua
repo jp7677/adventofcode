@@ -30,4 +30,12 @@ function util.stringsplit(str, delimiter)
     return res
 end
 
+function util.stringtotable(str)
+    local res = {}
+    for i = 1, string.len(str) do
+        res[i] = string.sub(str, i, i)
+    end
+    return res
+end
+
 return util
