@@ -54,10 +54,9 @@ local fn_day06_part2 = function()
         end)
         :totable()[1]
 
-    local ranges = {}
-    for i = 1, #indicies - 1 do
-        ranges[i] = { indicies[i], indicies[i + 1] - 2 }
-    end
+    local ranges = fun.zip(indicies, fun.iter(indicies):drop(1))
+        :map(function(x, y) return { x, y - 2} end)
+        :totable()
 
     local rows = fun.iter(input)
         :map(function(x)
