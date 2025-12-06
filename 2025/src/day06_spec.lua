@@ -43,7 +43,7 @@ local fn_day06_part2 = function()
     table.sort(indicies)
 
     local ranges = fun.zip(indicies, fun.iter(indicies):drop(1))
-        :map(function(x, y) return { x, y - 2} end)
+        :map(function(x, y) return { x, y - 2 } end)
         :totable()
 
     local rows = fun.iter(input)
