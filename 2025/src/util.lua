@@ -38,4 +38,16 @@ function util.stringtotable(str)
     return res
 end
 
+function util.dedup(t)
+    local hash = {}
+    for _,v in ipairs(t) do
+        hash[v] = true
+    end
+    local res = {}
+    for k,_ in pairs(hash) do
+        res[#res + 1] = k
+    end
+    return res
+end
+
 return util
