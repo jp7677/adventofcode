@@ -1,5 +1,4 @@
 local bstd = require "busted"
-local insp = require "inspect"
 local fun = require "fun"
 local util = require "util"
 
@@ -12,11 +11,6 @@ local function dec(index)
     local x = index >> 8
     return { x = x, y = y}
 end
-
-bstd.it("serializes coordinates", function()
-    bstd.assert.same(257, enc({ x = 1, y = 1}))
-    bstd.assert.same({ x = 1, y = 1}, dec(257))
-end)
 
 local function load_coords()
     local input = util.load_input("07")
@@ -38,38 +32,48 @@ local function load_coords()
     return start, coords, y_max
 end
 
+local function set_add(set, key)
+    set[key] = true
+end
+
+local function set_remove(set, key)
+    set[key] = nil
+end
+
+-- local function set_contains(set, key)
+--     return set[key] ~= nil
+-- end
+
+local function set_values(set)
+  local copy = {}
+  for i, v in pairs(set) do
+    if v ~= nil then copy[#copy + 1] = i end
+  end
+  return copy
+end
+
 local fn_day07_part1 = function()
     local start, coords, y_max = load_coords()
 
+    local init = {}
+    set_add(init, dec(start).x)
+
     local splitted = 0
-    fun.range(2, y_max)
+    fun.range(1, y_max, 2)
         :foldl(function(acc, y)
-            local beams = fun.iter(acc)
-                :map(function(b) return dec(b) end)
-                :map(function(b) return { x = b.x, y = y} end)
+            local splits = fun.iter(set_values(acc))
+                :filter(function(b) return fun.any(function(c) return c == enc({x = b, y = y}) end, coords) end)
                 :totable()
 
-            local splits = fun.iter(beams)
-                :filter(function(b)
-                    return fun.any(function(z) return z == enc(b) end, coords)
-                end)
-                :totable()
-            
-            local other_beams = fun.iter(beams)
-                :filter(function(b) return fun.all(function(s) return s.x ~= b.x end, splits) end)
-                :totable()
-
-            local new_beams = fun.iter(splits)
-                :map(function(b) return { { x = b.x - 1, y = y }, { x = b.x + 1, y = y } } end)
-                :reduce(function(acc, x) return fun.chain(acc, x) end, {})
-
-            local all = fun.chain(other_beams, new_beams)
-                :map(function(b) return enc(b) end)
-                :totable()
+            fun.each(function(s)
+                set_remove(acc, s)
+                set_add(acc, s - 1)
+                set_add(acc, s + 1)
+            end, splits)
 
             splitted = splitted + #splits
-            return util.dedup(all)
-        end, { start })
+            return acc
+        end, init)
 
     bstd.assert.same(1533, splitted)
 end
