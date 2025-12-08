@@ -1,16 +1,7 @@
 local bstd = require "busted"
 local fun = require "fun"
 local util = require "util"
-
-local function enc(coord)
-    return (coord.x << 8) + coord.y
-end
-
-local function dec(index)
-    local y = index & 0x00ff
-    local x = index >> 8
-    return { x = x, y = y}
-end
+local set = require "set"
 
 local function load_coords()
     local input = util.load_input("07")
@@ -22,60 +13,87 @@ local function load_coords()
         y_max = y
         for x = 1, #r do
             if r:sub(x, x) == 'S' then
-                start = enc({ x = x, y = y})
+                start = { x = x, y = y}
             end
             if r:sub(x, x) == '^' then
-                coords[enc({ x = x, y = y})] = true
+                coords[util.pack_coord({ x = x, y = y})] = true
             end
         end
     end
     return start, coords, y_max
 end
 
-local function set_add(set, key)
-    set[key] = true
-end
-
-local function set_remove(set, key)
-    set[key] = nil
-end
-
--- local function set_contains(set, key)
---     return set[key] ~= nil
--- end
-
-local function set_values(set)
-  local copy = {}
-  for i, v in pairs(set) do
-    if v ~= nil then copy[#copy + 1] = i end
-  end
-  return copy
-end
-
 local fn_day07_part1 = function()
     local start, coords, y_max = load_coords()
 
-    local init = {}
-    set_add(init, dec(start).x)
-
     local splitted = 0
-    fun.range(1, y_max, 2)
-        :foldl(function(acc, y)
-            local splits = fun.iter(set_values(acc))
-                :filter(function(b) return fun.any(function(c) return c == enc({x = b, y = y}) end, coords) end)
-                :totable()
+    local acc = {}
+    set.add(acc, start.x)
+    for y = start.y, y_max, 2 do
+        local splits = {}
+        for i, v in pairs(acc) do
+            if v ~= nil and coords[util.pack_coord({x = i, y = y})] then set.add(splits, i) end
+        end
 
-            fun.each(function(s)
-                set_remove(acc, s)
-                set_add(acc, s - 1)
-                set_add(acc, s + 1)
-            end, splits)
+        for i, v in pairs(splits) do
+            if v ~= nil then
+                set.remove(acc, i)
+                set.add(acc, i - 1)
+                set.add(acc, i + 1)
+            end
+        end
 
-            splitted = splitted + #splits
-            return acc
-        end, init)
+        splitted = splitted + set.length(splits)
+    end
 
     bstd.assert.same(1533, splitted)
 end
 
+local function traverse(start, coords, y_max)
+    local acc = {}
+    set.add(acc, start.x)
+
+    local timelines = {}
+    for y = start.y, y_max, 2 do
+        local splits = {}
+        for i, v in pairs(acc) do
+            if v ~= nil and coords[util.pack_coord({x = i, y = y})] then set.add(splits, i) end
+        end
+
+        for i, v in pairs(splits) do
+            if v ~= nil then
+                set.remove(acc, i)
+                set.add(acc, i - 1)
+                timelines[#timelines + 1] = { x = i + 1, y = y }
+            end
+        end
+    end
+
+    return timelines
+end
+
+local fn_day07_part2 = function()
+    local start, coords, y_max = load_coords()
+
+    local timelines = { start }
+    local total_timelines = 1
+    while #timelines > 0 do
+        local new_timelines = fun.iter(timelines)
+            :map(function(t)
+                return traverse(t, coords, y_max)
+            end)
+            :totable()
+
+        if #new_timelines == 0 then break end
+
+        timelines = fun.iter(new_timelines)
+            :foldl(function(acc, x) return fun.chain(acc, x) end, {})
+            :totable()
+        total_timelines = total_timelines + #timelines
+    end
+
+    bstd.assert.same(40, total_timelines) -- sample input
+end
+
 bstd.it("solves #day07 part 1", fn_day07_part1)
+bstd.it("solves #day07 part 2, #ignore because works only for small room", fn_day07_part2)

@@ -50,4 +50,14 @@ function util.dedup(t)
     return res
 end
 
+function util.pack_coord(coord)
+    return (coord.x << 8) + coord.y
+end
+
+function util.unpack_coord(index)
+    local y = index & 0x00ff
+    local x = index >> 8
+    return { x = x, y = y}
+end
+
 return util
