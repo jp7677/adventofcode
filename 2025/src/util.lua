@@ -50,14 +50,33 @@ function util.dedup(t)
     return res
 end
 
-function util.pack_coord(coord)
-    return (coord.x << 8) + coord.y
+function util.removenil(t)
+    local res = {}
+    for _, v in pairs(t) do
+        if v ~= nil then table.insert(res, v) end
+    end
+    return res
 end
 
-function util.unpack_coord(index)
-    local y = index & 0x00ff
-    local x = index >> 8
+function util.pack_coord2(coord)
+    return (coord.x << 16) + coord.y
+end
+
+function util.pack_coord3(coord)
+    return (coord.x << 32) + (coord.y << 16) + coord.z
+end
+
+function util.unpack_coord2(index)
+    local y = index & 0x0000ffff
+    local x = index >> 16
     return { x = x, y = y}
+end
+
+function util.unpack_coord3(index)
+    local z = index & 0x0000ffff
+    local y = (index >> 16) & 0x0000ffff
+    local x = index >> 32
+    return { x = x, y = y, z = z}
 end
 
 return util

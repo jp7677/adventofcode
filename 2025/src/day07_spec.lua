@@ -15,7 +15,7 @@ local function load_coords()
                 start = { x = x, y = y }
             end
             if row:sub(x, x) == '^' then
-                set.add(coords, util.pack_coord({ x = x, y = y }))
+                set.add(coords, util.pack_coord2({ x = x, y = y }))
             end
         end
     end
@@ -33,7 +33,7 @@ local fn_day07 = function()
     for y = start.y, y_max, 2 do
         local splitters = {}
         for i, _ in pairs(beams) do
-            if set.contains(coords, util.pack_coord({x = i, y = y})) then set.add(splitters, i) end
+            if set.contains(coords, util.pack_coord2({x = i, y = y})) then set.add(splitters, i) end
         end
 
         for i, _ in pairs(splitters) do
