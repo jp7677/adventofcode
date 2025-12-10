@@ -18,10 +18,15 @@ luarocks install inspect
 luarocks install --dev fun
 ```
 
-## run tests
+## Run tests
 
 ```bash
 ./lua_modules/bin/busted
 ```
 
 Use `./lua_modules/bin/busted --tags="day01"` for a specific day.
+
+## Useful VS Code plugins
+
+- https://marketplace.visualstudio.com/items?itemName=sumneko.lua
+- https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode

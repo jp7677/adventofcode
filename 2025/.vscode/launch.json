@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug test",
+            "type": "lua-local",
+            "request": "launch",
+            "program": {
+                "command": "${workspaceFolder}/lua_modules/bin/busted"
+            },
+            "cwd": "${workspaceFolder}",
+            "args": [ "${file}" ],
+            "env": {
+                "LOCAL_LUA_DEBUGGER_VSCODE": "1",
+                "LUA_INIT": "if os and os.getenv and os.getenv('LOCAL_LUA_DEBUGGER_VSCODE')=='1' then require('lldebugger').start() end",
+            }
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "files.exclude": {
+        ".idea": true,
+        ".luarocks": true,
+        "lua": true,
+        "luarocks": true
+    }
+}
