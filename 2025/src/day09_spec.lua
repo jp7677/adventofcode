@@ -13,6 +13,10 @@ local function load_coords()
         :totable()
 end
 
+local function calc_area(a, b)
+    return (math.abs(a.x - b.x) + 1) * (math.abs(a.y - b.y) + 1)
+end
+
 local fn_day09_part1 = function()
     local coords = load_coords()
 
@@ -20,7 +24,7 @@ local fn_day09_part1 = function()
     for _, coord in pairs(coords) do
         for _, other in pairs(coords) do
             if coord.x ~= other.x and coord.y ~= other.y  then
-                areas[#areas + 1] = (math.abs(coord.x - other.x) + 1) * (math.abs(coord.y - other.y) + 1)
+                areas[#areas + 1] = calc_area(coord, other)
             end
         end
     end
@@ -44,7 +48,7 @@ local fn_day09_part2 = function()
                     return ((x.x > coord.x and x.x < other1.x) and (x.y > coord.y and x.y < other1.y))
                 end, coords)
             then
-                return (math.abs(coord.x - other1.x) + 1) * (math.abs(coord.y - other1.y) + 1)
+                return calc_area(coord, other1)
             else
                 return 0
             end
@@ -57,7 +61,7 @@ local fn_day09_part2 = function()
                     return ((x.x < other2.x and x.x > coord.x) and (x.y < coord.y and x.y > other2.y))
                 end, coords)
             then
-                return (math.abs(coord.x - other2.x) + 1) * (math.abs(coord.y - other2.y) + 1)
+                return calc_area(coord, other2)
             else
                 return 0
             end
