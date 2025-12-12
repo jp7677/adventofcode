@@ -4,7 +4,7 @@ From <https://adventofcode.com/2025>. Better late than never ;)
 
 ## System requirements
 
-- LuaJIT 2.1 
+- Lua 5.4 
 
 Lua 5.4 should also "just work". Only Linux has been tested. Other platforms might just work though.
 
@@ -28,5 +28,5 @@ Use `./lua_modules/bin/busted --tags="day01"` for a specific day.
 
 ## Useful VS Code plugins
 
-- https://marketplace.visualstudio.com/items?itemName=sumneko.lua
-- https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
+- [https://marketplace.visualstudio.com/items?itemName=sumneko.lua]
+- [https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode]
