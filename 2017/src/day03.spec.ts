@@ -73,11 +73,7 @@ describe("day 03", () => {
   ) {
     switch (current.direction) {
       case Direction.NORTH:
-        if (
-          coords.has(
-            JSON.stringify({ x: current.coord.x - 1, y: current.coord.y }),
-          )
-        ) {
+        if (coords.has(JSON.stringify({ x: current.coord.x - 1, y: current.coord.y }))) {
           return {
             coord: { x: current.coord.x, y: current.coord.y - 1 },
             direction: Direction.NORTH,
@@ -89,11 +85,7 @@ describe("day 03", () => {
           };
         }
       case Direction.WEST:
-        if (
-          coords.has(
-            JSON.stringify({ x: current.coord.x, y: current.coord.y + 1 }),
-          )
-        ) {
+        if (coords.has(JSON.stringify({ x: current.coord.x, y: current.coord.y + 1 }))) {
           return {
             coord: { x: current.coord.x - 1, y: current.coord.y },
             direction: Direction.WEST,
@@ -105,11 +97,7 @@ describe("day 03", () => {
           };
         }
       case Direction.SOUTH:
-        if (
-          coords.has(
-            JSON.stringify({ x: current.coord.x + 1, y: current.coord.y }),
-          )
-        ) {
+        if (coords.has(JSON.stringify({ x: current.coord.x + 1, y: current.coord.y }))) {
           return {
             coord: { x: current.coord.x, y: current.coord.y + 1 },
             direction: Direction.SOUTH,
@@ -121,11 +109,7 @@ describe("day 03", () => {
           };
         }
       case Direction.EAST:
-        if (
-          coords.has(
-            JSON.stringify({ x: current.coord.x, y: current.coord.y - 1 }),
-          )
-        ) {
+        if (coords.has(JSON.stringify({ x: current.coord.x, y: current.coord.y - 1 }))) {
           return {
             coord: { x: current.coord.x + 1, y: current.coord.y },
             direction: Direction.EAST,
@@ -149,11 +133,5 @@ describe("day 03", () => {
       { x: -1, y: 1 },
       { x: 0, y: 1 },
       { x: 1, y: 1 },
-    ].reduce(
-      (acc, it) =>
-        acc +
-        (coords.get(JSON.stringify({ x: coord.x + it.x, y: coord.y + it.y })) ||
-          0),
-      0,
-    );
+    ].reduce((acc, it) => acc + (coords.get(JSON.stringify({ x: coord.x + it.x, y: coord.y + it.y })) || 0), 0);
 });

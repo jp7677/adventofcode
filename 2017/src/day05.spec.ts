@@ -11,10 +11,7 @@ describe("day 05", () => {
     while (index >= 0 && index < offsets.length) {
       steps++;
       const jump = offsets[index];
-      offsets[index] =
-        includingDecrease && jump >= 3
-          ? offsets[index] - 1
-          : offsets[index] + 1;
+      offsets[index] = includingDecrease && jump >= 3 ? offsets[index] - 1 : offsets[index] + 1;
       index += jump;
     }
     return steps;

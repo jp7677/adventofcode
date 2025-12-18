@@ -5,8 +5,7 @@ function reallocate(memory: number[]) {
   const highest = memory.max();
   const highestIndex = memory.indexOf(highest);
   memory[highestIndex] = 0;
-  for (let i = 0; i < highest; i++)
-    memory[(highestIndex + i + 1) % memory.length]++;
+  for (let i = 0; i < highest; i++) memory[(highestIndex + i + 1) % memory.length]++;
 
   return memory.join("-");
 }

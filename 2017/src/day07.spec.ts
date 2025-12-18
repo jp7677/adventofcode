@@ -73,14 +73,10 @@ describe("day 07", () => {
     if (!unbalanced) throw new Error();
 
     const correct = unbalanced.find(
-      (program) =>
-        unbalanced.filter((p) => p?.totalWeight == program?.totalWeight)
-          .length > 1,
+      (program) => unbalanced.filter((p) => p?.totalWeight == program?.totalWeight).length > 1,
     );
     const wrong = unbalanced.find(
-      (program) =>
-        unbalanced.filter((p) => p?.totalWeight == program?.totalWeight)
-          .length == 1,
+      (program) => unbalanced.filter((p) => p?.totalWeight == program?.totalWeight).length == 1,
     );
 
     if (!correct || !wrong) throw new Error();
