@@ -3,13 +3,13 @@
     "version": "0.0.1",
     "author": "jp7677",
     "devDependencies": {
-        "@eslint/js": "^9.39.1",
+        "@eslint/js": "^9.39.2",
         "@jest/globals": "^30.2.0",
-        "@tsconfig/node22": "^22.0.5",
-        "eslint": "^9.39.1",
+        "@tsconfig/node24": "^24.0.3",
+        "eslint": "^9.39.2",
         "jest": "^30.2.0",
-        "prettier": "^3.6.2",
-        "ts-jest": "^29.4.5",
-        "typescript-eslint": "^8.48.0"
+        "prettier": "^3.7.4",
+        "ts-jest": "^29.4.6",
+        "typescript-eslint": "^8.50.0"
     }
 }
