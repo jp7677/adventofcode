@@ -66,8 +66,19 @@ local function copy(buttons)
     return c
 end
 
+local function unpack_buttons(buttons, buttons_unpacked, buttons_packed)
+    local c = {}
+    for i, b in ipairs(buttons_packed) do
+        for _, button in ipairs(buttons) do
+            if b == button then table.insert(c, buttons_unpacked[i]) end
+        end
+    end
+    return c
+end
+
 local function start_machine(machine)
     local min_pushes = math.maxinteger
+    local min_buttons = {}
     local states = { { lights = machine.lights_packed, tested_buttons = {} } }
 
     for pushes = 1, #machine.buttons do
@@ -89,6 +100,7 @@ local function start_machine(machine)
                 if lights == machine.diagram_packed then
                     table.insert(state.tested_buttons, v)
                     min_pushes = pushes
+                    min_buttons = unpack_buttons(state.tested_buttons, machine.buttons, machine.buttons_packed)
                     goto machine_started
                 else
                     local tested = copy(state.tested_buttons)
@@ -101,14 +113,15 @@ local function start_machine(machine)
     end
 
     ::machine_started::
-    return { pushes = min_pushes }
+    return { pushes = min_pushes, buttons = min_buttons }
 end
 
 local fn_day10_part1 = function()
     local machines = load_machines()
 
     local min_pushes = fun.foldl(function(acc, machine)
-        return acc + start_machine(machine).pushes
+        local state = start_machine(machine)
+        return acc + state.pushes
     end, 0, machines)
 
     bstd.assert.same(542, min_pushes)
