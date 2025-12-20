@@ -30,6 +30,14 @@ function util.stringsplit(str, delimiter)
     return res
 end
 
+function util.stringsplit1(str, delimiter)
+    local res = {}
+    for s in string.gmatch(str, '([^' .. delimiter .. ']+)') do
+        table.insert(res, tonumber(s))
+    end
+    return res
+end
+
 function util.stringtotable(str)
     local res = {}
     for i = 1, string.len(str) do

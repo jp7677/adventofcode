@@ -1,6 +1,7 @@
 local bstd = require "busted"
 local fun = require "fun"
 local util = require "util"
+local set = require "set"
 
 local function load_machines()
     local input = util.load_input("10")
@@ -127,4 +128,70 @@ local fn_day10_part1 = function()
     bstd.assert.same(542, min_pushes)
 end
 
+local function switch(lights, buttons)
+    local c = {}
+    for i = 1, #lights do
+        if fun.index(i - 1, buttons) then
+            c[i] = lights[i] + 1
+        else
+            c[i] = lights[i]
+        end
+    end
+    return c
+end
+
+local function equals(lights, joltages)
+    for i, v in ipairs(joltages) do
+        if lights[i] ~= v then return false end
+    end
+    return true
+end
+
+local function valid(lights, joltages)
+    for i, v in ipairs(joltages) do
+        if lights[i] > v then return false end
+    end
+    return true
+end
+
+local function configure_machine(machine)
+    local min_pushes = math.maxinteger
+    local states = {}
+    set.add(states, table.concat(machine.lights, '-'))
+
+    for pushes = 1, math.maxinteger do
+        local next_states = {}
+        for _, s in ipairs(set.values(states)) do
+            local state = util.stringsplit1(s, '-')
+            for _, buttons in ipairs(machine.buttons) do
+                local lights = switch(state, buttons)
+                if equals(lights, machine.joltages) then
+                    min_pushes = pushes
+                    goto machine_configured
+                elseif valid(lights, machine.joltages) then
+                    set.add(next_states, table.concat(lights, '-'))
+                end
+            end
+        end
+
+        if set.length(next_states) == 0 then error('no states left') end
+        states = next_states
+    end
+
+    ::machine_configured::
+    return { pushes = min_pushes }
+end
+
+local fn_day10_part2 = function()
+    local machines = load_machines()
+
+    local min_pushes = fun.foldl(function(acc, machine)
+        local state = configure_machine(machine)
+        return acc + state.pushes
+    end, 0, machines)
+
+    bstd.assert.same(0, min_pushes)
+end
+
 bstd.it("solves #day10 part 1", fn_day10_part1)
+bstd.it("solves #day10 part 2, #ignored because works only for small machines", fn_day10_part2)
