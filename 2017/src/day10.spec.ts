@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { readInput, repeat } from "./util";
 
 function hash(input: number[], rounds: number): number[] {
   const forEachIndex = (start: number, end: number, size: number, fn: (i: number) => void) => {
@@ -14,20 +14,20 @@ function hash(input: number[], rounds: number): number[] {
   const sparseHash = new Array(size);
   for (let i = 0; i < size; i++) sparseHash[i] = i;
 
-  let start = 0;
+  let position = 0;
   let skipSize = 0;
-  for (let r = 0; r < rounds; r++) {
+  repeat(rounds, () => {
     input.forEach((length) => {
-      const end = (start + length - 1) % size;
       if (length > 0) {
+        const end = (position + length - 1) % size;
         const selected = Array(length);
-        forEachIndex(start, end, size, (i) => selected.push(sparseHash[i]));
-        forEachIndex(start, end, size, (i) => (sparseHash[i] = selected.pop()));
+        forEachIndex(position, end, size, (i) => selected.push(sparseHash[i]));
+        forEachIndex(position, end, size, (i) => (sparseHash[i] = selected.pop()));
       }
-      start = (start + length + skipSize) % size;
+      position = (position + length + skipSize) % size;
       skipSize += 1;
     });
-  }
+  });
   return sparseHash;
 }
 

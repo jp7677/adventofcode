@@ -4,6 +4,10 @@ import path from "path";
 export const readInput = async (input: string) =>
   (await fs.promises.readFile(path.join(__dirname, `../data/${input}`))).toString().trimEnd().split("\n");
 
+export const repeat = (rounds: number, fn: (i: number) => void) => {
+  for (let r = 0; r < rounds; r++) fn(r);
+};
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Array<T> {
