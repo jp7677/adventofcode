@@ -17,20 +17,15 @@ async function readGroups() {
 }
 
 function discoverGroup(programs: Pipe[], id: number) {
-  let group = new Set<number>([id]);
-  let discoveredIds = new Set<number>([id]);
-  do {
+  const group = new Set<number>([id]);
+  let discoveredIds = [id];
+  while (discoveredIds.length !== 0) {
     discoveredIds = discoveredIds
-      .values()
-      .flatMap((id) => {
-        return programs.filter((p) => p.id === id).flatMap((v) => v.connectedIds.values().toArray());
-      })
-      .filter((id) => !group.has(id))
-      .toArray()
-      .toSet();
+      .flatMap((id) => programs.filter((p) => p.id === id).flatMap((v) => v.connectedIds.values().toArray()))
+      .filter((id) => !group.has(id));
 
-    group = group.union(discoveredIds);
-  } while (discoveredIds.size !== 0);
+    discoveredIds.forEach((id) => group.add(id));
+  }
   return group;
 }
 
@@ -38,16 +33,16 @@ describe("day 12", () => {
   test("part 1", async () => {
     const programs = await readGroups();
 
-    const zeroGroup = discoverGroup(programs, 0);
+    const group = discoverGroup(programs, 0);
 
-    expect(zeroGroup.size).toBe(115);
+    expect(group.size).toBe(115);
   });
 
   test("part 2", async () => {
     const programs = await readGroups();
 
     const groups = programs.reduce((acc, pipe) => {
-      const discoveredIds = new Set(acc.flatMap((p) => p.values().toArray()));
+      const discoveredIds = acc.flatMap((ids) => ids.values().toArray()).toSet();
       if (!discoveredIds.has(pipe.id)) acc.push(discoverGroup(programs, pipe.id));
       return acc;
     }, new Array<Set<number>>());
