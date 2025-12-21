@@ -9,13 +9,17 @@ export const repeat = (rounds: number, fn: (i: number) => void) => {
 };
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Array<T> {
+    toSet(): Set<T>;
     max(): number;
     min(): number;
     sum(): number;
   }
 }
+
+Array.prototype.toSet = function () {
+  return new Set(this);
+};
 
 Array.prototype.max = function () {
   return this.reduce((acc, it) => {

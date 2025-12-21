@@ -17,19 +17,20 @@ async function readGroups() {
 }
 
 function discoverGroup(programs: Pipe[], id: number) {
-  const group = new Set<number>([id]);
-  let discoveredIds = new Array<number>();
+  let group = new Set<number>([id]);
+  let discoveredIds = new Set<number>([id]);
   do {
-    discoveredIds = group
+    discoveredIds = discoveredIds
       .values()
       .flatMap((id) => {
         return programs.filter((p) => p.id === id).flatMap((v) => v.connectedIds.values().toArray());
       })
       .filter((id) => !group.has(id))
-      .toArray();
+      .toArray()
+      .toSet();
 
-    discoveredIds.forEach((id) => group.add(id));
-  } while (discoveredIds.length !== 0);
+    group = group.union(discoveredIds);
+  } while (discoveredIds.size !== 0);
   return group;
 }
 
