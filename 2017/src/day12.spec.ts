@@ -1,29 +1,22 @@
 import { describe, expect, test } from "@jest/globals";
 import { readInput } from "./util";
 
-interface Pipe {
-  id: number;
-  connectedIds: Set<number>;
-}
-
-async function readGroups() {
+async function readPrograms() {
   const input = await readInput("day12-input.txt");
-  return input.map((line) => {
+  return input.reduce((acc, line) => {
     const parts = line.split(" <-> ");
     const id = parseInt(parts[0]);
     const connectedIds = parts[1].split(", ").map((n) => parseInt(n));
-    return { id: id, connectedIds: new Set(connectedIds) } as Pipe;
-  });
+    acc.set(id, connectedIds);
+    return acc;
+  }, new Map<number, number[]>());
 }
 
-function discoverGroup(programs: Pipe[], id: number) {
-  const group = new Set<number>([id]);
+function discoverGroup(programs: Map<number, number[]>, id: number) {
+  const group = new Set([id]);
   let discoveredIds = [id];
   while (discoveredIds.length !== 0) {
-    discoveredIds = discoveredIds
-      .flatMap((id) => programs.filter((p) => p.id === id).flatMap((v) => v.connectedIds.values().toArray()))
-      .filter((id) => !group.has(id));
-
+    discoveredIds = discoveredIds.flatMap((id) => programs.get(id) ?? []).filter((id) => !group.has(id));
     discoveredIds.forEach((id) => group.add(id));
   }
   return group;
@@ -31,7 +24,7 @@ function discoverGroup(programs: Pipe[], id: number) {
 
 describe("day 12", () => {
   test("part 1", async () => {
-    const programs = await readGroups();
+    const programs = await readPrograms();
 
     const group = discoverGroup(programs, 0);
 
@@ -39,11 +32,11 @@ describe("day 12", () => {
   });
 
   test("part 2", async () => {
-    const programs = await readGroups();
+    const programs = await readPrograms();
 
-    const groups = programs.reduce((acc, pipe) => {
+    const groups = programs.keys().reduce((acc, id) => {
       const discoveredIds = acc.flatMap((ids) => ids.values().toArray()).toSet();
-      if (!discoveredIds.has(pipe.id)) acc.push(discoverGroup(programs, pipe.id));
+      if (!discoveredIds.has(id)) acc.push(discoverGroup(programs, id));
       return acc;
     }, new Array<Set<number>>());
 
