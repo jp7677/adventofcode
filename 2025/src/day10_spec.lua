@@ -1,7 +1,31 @@
 local bstd = require "busted"
 local fun = require "fun"
 local util = require "util"
-local set = require "set"
+
+local function copy(buttons)
+    local c = {}
+    for i, v in ipairs(buttons) do
+        c[i] = v
+    end
+    return c
+end
+
+-- from https://stackoverflow.com/a/59469841
+local function combinations(s, p, t, acc)
+    p = p or 1
+    acc = acc or {}
+    t = t or {}
+
+    if p == #s + 1 then
+        table.insert(acc, t)
+    else
+        combinations(s, p + 1, t, acc)
+        local t2 = copy(t)
+        table.insert(t2, s[p])
+        combinations(s, p + 1, t2, acc)
+    end
+    return acc
+end
 
 local function load_machines()
     local input = util.load_input("10")
@@ -41,6 +65,7 @@ local function load_machines()
                         end, 0)
                 end)
                 :totable()
+            local buttons_packed_combinations = combinations(buttons_packed)
 
             local joltages = fun.iter(util.stringsplit(string.sub(x, d2 + 1, #x - 1), ','))
                 :map(function(j) return tonumber(j) end)
@@ -53,18 +78,11 @@ local function load_machines()
                 lights_packed = lights_packed,
                 buttons = buttons,
                 buttons_packed = buttons_packed,
+                buttons_packed_combinations = buttons_packed_combinations,
                 joltages = joltages
             }
-        end, input)
+        end)
         :totable()
-end
-
-local function copy(buttons)
-    local c = {}
-    for i, v in ipairs(buttons) do
-        c[i] = v
-    end
-    return c
 end
 
 local function unpack_buttons(buttons, buttons_unpacked, buttons_packed)
@@ -77,121 +95,149 @@ local function unpack_buttons(buttons, buttons_unpacked, buttons_packed)
     return c
 end
 
-local function start_machine(machine)
-    local min_pushes = math.maxinteger
-    local min_buttons = {}
-    local states = { { lights = machine.lights_packed, tested_buttons = {} } }
-
-    for pushes = 1, #machine.buttons do
-        local next_states = {}
-        for _, state in ipairs(states) do
-            local untested_buttons = {}
-            for _, b in ipairs(machine.buttons_packed) do
-                for _, t in ipairs(state.tested_buttons) do
-                    if b == t then
-                        goto next
-                    end
-                end
-                table.insert(untested_buttons, b)
-                ::next::
-            end
-
-            for _, v in ipairs(untested_buttons) do
-                local lights = state.lights ~ v
-                if lights == machine.diagram_packed then
-                    table.insert(state.tested_buttons, v)
-                    min_pushes = pushes
-                    min_buttons = unpack_buttons(state.tested_buttons, machine.buttons, machine.buttons_packed)
-                    goto machine_started
-                else
-                    local tested = copy(state.tested_buttons)
-                    table.insert(tested, v)
-                    table.insert(next_states, { lights = lights, tested_buttons = tested })
-                end
-            end
+local function start_machine(machine, diagram_packed)
+    local configurations = {}
+    for _, buttons_packed in ipairs(machine.buttons_packed_combinations) do
+        local v = 0
+        for _, b in ipairs(buttons_packed) do
+            v = v ~ b
         end
-        states = next_states
+        if v == diagram_packed then
+            local buttons = unpack_buttons(buttons_packed, machine.buttons, machine.buttons_packed)
+            table.insert(configurations, { buttons_packed = buttons_packed, buttons = buttons })
+        end
     end
-
-    ::machine_started::
-    return { pushes = min_pushes, buttons = min_buttons }
+    return configurations
 end
 
 local fn_day10_part1 = function()
     local machines = load_machines()
 
     local min_pushes = fun.foldl(function(acc, machine)
-        local state = start_machine(machine)
-        return acc + state.pushes
+        local configurations = start_machine(machine, machine.diagram_packed)
+        local min_pushes = fun.iter(configurations)
+            :map(function(x) return #x.buttons end)
+            :min()
+        return acc + min_pushes
     end, 0, machines)
 
     bstd.assert.same(542, min_pushes)
 end
 
-local function switch(lights, buttons)
-    local c = {}
-    for i = 1, #lights do
-        if fun.index(i - 1, buttons) then
-            c[i] = lights[i] + 1
+local function concat(t1, v)
+    local t = copy(t1)
+    table.insert(t, 1, v)
+    return t
+end
+
+local function joltages_to_diagram(joltage)
+    local diagram = {}
+    for i = 1, #joltage do
+        if joltage[i] % 2 == 0 then
+            diagram[i] = false
         else
-            c[i] = lights[i]
+            diagram[i] = true
         end
     end
-    return c
+    local diagram_packed = 0
+    for _, v in ipairs(diagram) do
+        diagram_packed = (diagram_packed << 1) + (v and 1 or 0)
+    end
+    return diagram_packed
 end
 
-local function equals(lights, joltages)
-    for i, v in ipairs(joltages) do
-        if lights[i] ~= v then return false end
+local function buttons_to_joltages(machine, buttons)
+    local joltages = {}
+    for i = 1, #machine.joltages do joltages[i] = 0 end
+    for _, b in ipairs(buttons) do
+        for _, b1 in ipairs(b) do
+            joltages[b1 + 1] = joltages[b1 + 1] + 1
+        end
+    end
+    return joltages
+end
+
+local function diff_joltages(j1, j2)
+    local joltages = {}
+    for i, v in ipairs(j1) do
+        joltages[i] = v - j2[i]
+    end
+    return joltages
+end
+
+local function valid_and_even_joltages(joltages)
+    for _, v in ipairs(joltages) do
+        if v < 0 or v % 2 ~= 0 then return false end
     end
     return true
 end
 
-local function valid(lights, joltages)
-    for i, v in ipairs(joltages) do
-        if lights[i] > v then return false end
+local function halve_joltages(j1)
+    local joltages = {}
+    for i, v in ipairs(j1) do
+        joltages[i] = math.floor(v / 2)
+    end
+    return joltages
+end
+
+local function calc_total(pushes)
+    local total = 0
+    for _, v in ipairs(pushes) do
+        total = (total * 2) + v
+    end
+    return total
+end
+
+local function zero_joltages(joltages)
+    for _, v in ipairs(joltages) do
+        if v ~= 0 then return false end
     end
     return true
 end
 
-local function configure_machine(machine)
-    local min_pushes = math.maxinteger
-    local states = {}
-    set.add(states, table.concat(machine.lights, '-'))
+local function configure_machine(machine, joltages, pushes, total_pushes, cache)
+    if valid_and_even_joltages(joltages) then
+        configure_machine(machine, halve_joltages(joltages), concat(pushes, 0), total_pushes, cache)
+    end
 
-    for pushes = 1, math.maxinteger do
-        local next_states = {}
-        for _, s in ipairs(set.values(states)) do
-            local state = util.stringsplit1(s, '-')
-            for _, buttons in ipairs(machine.buttons) do
-                local lights = switch(state, buttons)
-                if equals(lights, machine.joltages) then
-                    min_pushes = pushes
-                    goto machine_configured
-                elseif valid(lights, machine.joltages) then
-                    set.add(next_states, table.concat(lights, '-'))
+    local diagram_packed = joltages_to_diagram(joltages)
+    local configurations = cache[diagram_packed]
+    if configurations == nil then
+        configurations = start_machine(machine, diagram_packed)
+        cache[diagram_packed] = configurations
+    end
+
+    for _, s in ipairs(configurations) do
+        local j = diff_joltages(joltages, buttons_to_joltages(machine, s.buttons))
+        if valid_and_even_joltages(j) then
+            j = halve_joltages(j)
+            local p = concat(pushes, #s.buttons)
+            local total = calc_total(p)
+            if total < total_pushes[1] then
+                if zero_joltages(j) then
+                    total_pushes[1] = total
+                else
+                    configure_machine(machine, j, p, total_pushes, cache)
                 end
             end
         end
-
-        if set.length(next_states) == 0 then error('no states left') end
-        states = next_states
     end
 
-    ::machine_configured::
-    return { pushes = min_pushes }
+    return total_pushes
 end
 
 local fn_day10_part2 = function()
     local machines = load_machines()
 
     local min_pushes = fun.foldl(function(acc, machine)
-        local state = configure_machine(machine)
-        return acc + state.pushes
+        local pushes = configure_machine(machine, machine.joltages, {}, { math.maxinteger }, {})
+        return acc + pushes[1]
     end, 0, machines)
 
-    bstd.assert.same(0, min_pushes)
+    bstd.assert.same(20871, min_pushes)
 end
 
 bstd.it("solves #day10 part 1", fn_day10_part1)
-bstd.it("solves #day10 part 2, #ignored because works only for small machines", fn_day10_part2)
+-- part 2 taken from
+-- https://www.reddit.com/r/adventofcode/comments/1pk87hl/2025_day_10_part_2_bifurcate_your_way_to_victory/
+bstd.it("solves #day10 part 2", fn_day10_part2)
