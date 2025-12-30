@@ -30,3 +30,9 @@ Use `./lua_modules/bin/busted --tags="day01"` for a specific day.
 
 - [https://marketplace.visualstudio.com/items?itemName=sumneko.lua]
 - [https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode]
+
+## Results
+
+Enjoying all the stars...
+
+![Final AoC map](https://github.com/jp7677/adventofcode/raw/main/2025/map.png)
