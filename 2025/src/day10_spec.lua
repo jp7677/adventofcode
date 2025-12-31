@@ -175,7 +175,7 @@ end
 local function halve_joltages(j1)
     local joltages = {}
     for i, v in ipairs(j1) do
-        joltages[i] = math.floor(v / 2)
+        joltages[i] = v // 2
     end
     return joltages
 end

@@ -47,7 +47,7 @@ end
 local fn_day00_part2 = function()
     local invalid = sum_of_invalid(function(y)
         local s = tostring(y)
-        for p = 1, math.floor(#s / 2) do
+        for p = 1, #s // 2 do
             if #s > 1 and #s % p == 0 then
                 local chuncks = chuncked(s, p)
                 local same = true
