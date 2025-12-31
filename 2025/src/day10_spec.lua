@@ -100,7 +100,7 @@ local function start_machine(machine, diagram_packed)
     for _, buttons_packed in ipairs(machine.buttons_packed_combinations) do
         local v = 0
         for _, b in ipairs(buttons_packed) do
-            v = v ~ b
+            v = v ~ b -- XOR
         end
         if v == diagram_packed then
             local buttons = unpack_buttons(buttons_packed, machine.buttons, machine.buttons_packed)
