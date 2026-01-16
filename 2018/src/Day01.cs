@@ -9,22 +9,21 @@ namespace aoc2018;
 public class Day01
 {
     [Fact]
-    public void Part01()
+    public async Task Part01()
     {
-        var result = Util.GetInputAsStrings("day01-input.txt")
-            .ToBlockingEnumerable()
-            .Sum(Convert.ToInt32);
+        var result = await Util.GetInputAsStrings("day01-input.txt")
+            .Select(s => Convert.ToInt32(s))
+            .SumAsync();
 
         Assert.Equal(500, result);
     }
 
     [Fact]
-    public void Part02()
+    public async Task Part02()
     {
-        var frequencyChanges = Util.GetInputAsStrings("day01-input.txt")
-            .ToBlockingEnumerable()
+        var frequencyChanges = await Util.GetInputAsStrings("day01-input.txt")
             .Select(f => Convert.ToInt32(f))
-            .ToList();
+            .ToListAsync();
 
         var frequencies = new HashSet<int>();
         var frequency = 0;

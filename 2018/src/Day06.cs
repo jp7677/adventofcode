@@ -14,9 +14,9 @@ public class Day06
     }
 
     [Fact]
-    public void Part01()
+    public async Task Part01()
     {
-        var coords = GetCoords();
+        var coords = await GetCoords();
         var (minX, minY, maxX, maxY) = GetMinMax(coords);
         var grid = BuildGrid(minY, maxY, minX, maxX);
 
@@ -60,9 +60,9 @@ public class Day06
     }
 
     [Fact]
-    public void Part02()
+    public async Task Part02()
     {
-        var coords = GetCoords();
+        var coords = await GetCoords();
         var (minX, minY, maxX, maxY) = GetMinMax(coords);
         var grid = BuildGrid(minY, maxY, minX, maxX);
 
@@ -96,13 +96,12 @@ public class Day06
         return (minX, minY, maxX, maxY);
     }
 
-    private static HashSet<Coord> GetCoords() =>
-        Util.GetInputAsStrings("day06-input.txt")
-            .ToBlockingEnumerable()
+    private static async Task<HashSet<Coord>> GetCoords() =>
+        await Util.GetInputAsStrings("day06-input.txt")
             .Select(line =>
             {
                 var p = line.Split(", ");
                 return new Coord(int.Parse(p[0]), int.Parse(p[1]));
             })
-            .ToHashSet();
+            .ToHashSetAsync();
 }

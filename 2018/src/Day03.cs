@@ -15,10 +15,10 @@ public class Day03
     private readonly Regex _regex = new("(\\d+)", RegexOptions.IgnoreCase);
 
     [Fact]
-    public void Part01()
+    public async Task Part01()
     {
         var claims = ReadClaims();
-        var positions = claims.SelectMany(claim => claim.Item2);
+        var positions = await claims.SelectMany(claim => claim.Item2).ToListAsync();
 
         var squares = positions.GroupBy(p => p).Count(g => g.Count() > 1);
 
@@ -26,9 +26,9 @@ public class Day03
     }
 
     [Fact]
-    public void Part02()
+    public async Task Part02()
     {
-        var claims = ReadClaims().ToList();
+        var claims = await ReadClaims().ToListAsync();
         var positions = claims.SelectMany(claim => claim.Item2);
 
         var intactSquares = positions
@@ -42,9 +42,8 @@ public class Day03
         Assert.Equal(504, intactClaimId);
     }
 
-    private IEnumerable<(int, IEnumerable<Position>)> ReadClaims() =>
+    private IAsyncEnumerable<(int, IEnumerable<Position>)> ReadClaims() =>
         Util.GetInputAsStrings("day03-input.txt")
-            .ToBlockingEnumerable()
             .Select(line => _regex.Matches(line).Select(m => int.Parse(m.Value)).ToList())
             .Select(n => new Claim(n[0], n[1], n[2], n[3], n[4]))
             .Select(claim =>

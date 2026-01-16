@@ -9,9 +9,9 @@ namespace aoc2018;
 public class Day05
 {
     [Fact]
-    public void Part01()
+    public async Task Part01()
     {
-        var polymer = Util.GetInputAsStrings("day05-input.txt").ToBlockingEnumerable().Single();
+        var polymer = await Util.GetInputAsStrings("day05-input.txt").SingleAsync();
 
         polymer = GetReactingPolymer(polymer);
 
@@ -19,9 +19,9 @@ public class Day05
     }
 
     [Fact]
-    public void Part02()
+    public async Task Part02()
     {
-        var polymer = Util.GetInputAsStrings("day05-input.txt").ToBlockingEnumerable().Single();
+        var polymer = await Util.GetInputAsStrings("day05-input.txt").SingleAsync();
         const string units = "abcdefghijklmnopqrstuvwxyz";
 
         var shortest = units

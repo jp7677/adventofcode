@@ -7,12 +7,11 @@ namespace aoc2018;
 public class Day02
 {
     [Fact]
-    public void Part01()
+    public async Task Part01()
     {
-        var ids = Util.GetInputAsStrings("day02-input.txt")
-            .ToBlockingEnumerable()
+        var ids = await Util.GetInputAsStrings("day02-input.txt")
             .Select(s => s.ToCharArray().GroupBy(c => c).ToDictionary(g => g.Key, g => g.Count()))
-            .ToList();
+            .ToListAsync();
 
         var twice = ids.Count(x => x.ContainsValue(2));
         var three = ids.Count(x => x.ContainsValue(3));
@@ -21,9 +20,9 @@ public class Day02
     }
 
     [Fact]
-    public void Part02()
+    public async Task Part02()
     {
-        var ids = Util.GetInputAsStrings("day02-input.txt").ToBlockingEnumerable().ToList();
+        var ids = await Util.GetInputAsStrings("day02-input.txt").ToListAsync();
 
         var prototypes = ids.Where(id1 =>
                 ids.Count(id2 =>

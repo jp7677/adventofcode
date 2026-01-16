@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace aoc2018;
@@ -69,10 +68,8 @@ public class Day04
         Assert.Equal(56901, guardId * minute);
     }
 
-    private List<GuardRecords> ReadGuardRecords()
-    {
-        var records = Util.GetInputAsStrings("day04-input.txt")
-            .ToBlockingEnumerable()
+    private List<GuardRecords> ReadGuardRecords() =>
+        Util.GetInputAsStrings("day04-input.txt")
             .Select(line =>
             {
                 var m = _regex.Matches(line).Select(m => int.Parse(m.Value)).ToList();
@@ -80,7 +77,7 @@ public class Day04
                 return (date, line[19..]);
             })
             .OrderBy(r => r.date.Ticks)
-            .Aggregate(
+            .AggregateAsync(
                 new List<GuardRecords>(),
                 (acc, it) =>
                 {
@@ -96,7 +93,7 @@ public class Day04
                     return acc;
                 }
             )
-            .Select(g =>
+            .Result.Select(g =>
                 g with
                 {
                     Records = g
@@ -108,6 +105,4 @@ public class Day04
                 }
             )
             .ToList();
-        return records;
-    }
 }
