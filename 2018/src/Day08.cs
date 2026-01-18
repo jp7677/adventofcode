@@ -7,26 +7,18 @@ namespace aoc2018;
 
 public class Day08
 {
-    private record Header(int Children, int Metadata);
-
     private record Node
     {
-        public readonly Header Header;
         public readonly List<Node> Children = [];
         public readonly List<int> Metadata = [];
 
-        public Node(int children, int metadata)
-        {
-            Header = new Header(children, metadata);
-        }
-
         public int MetadataSum() =>
-            Children.Select(c => c.MetadataSum()).Sum() + Metadata.Select(c => c).Sum();
+            Children.Select(c => c.MetadataSum()).Sum() + Metadata.Select(m => m).Sum();
 
         public int Value() =>
             Children.Count == 0
-                ? Metadata.Select(c => c).Sum()
-                : Metadata.Select(c => c > Children.Count ? 0 : Children[c - 1].Value()).Sum();
+                ? Metadata.Select(m => m).Sum()
+                : Metadata.Select(m => m > Children.Count ? 0 : Children[m - 1].Value()).Sum();
     }
 
     [Fact]
@@ -55,10 +47,13 @@ public class Day08
 
     private static Node ParseNode(int[] numbers, ref int idx)
     {
-        var node = new Node(numbers[++idx], numbers[++idx]);
-        foreach (var _ in Enumerable.Range(0, node.Header.Children))
+        var childrenCount = numbers[++idx];
+        var metadataCount = numbers[++idx];
+
+        var node = new Node();
+        foreach (var _ in Enumerable.Range(0, childrenCount))
             node.Children.Add(ParseNode(numbers, ref idx));
-        foreach (var _ in Enumerable.Range(0, node.Header.Metadata))
+        foreach (var _ in Enumerable.Range(0, metadataCount))
             node.Metadata.Add(numbers[++idx]);
 
         return node;
