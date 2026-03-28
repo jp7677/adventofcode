@@ -74,6 +74,7 @@ private fun List<Coord17>.maxX() = this.maxOf { it.x }
 private fun List<Coord17>.minY() = this.minOf { it.y }
 private fun List<Coord17>.maxY() = this.maxOf { it.y }
 
+@Suppress("unused")
 private fun List<Coord17>.debug() {
     (minY()..maxY()).forEach { y ->
         (minX()..maxX()).forEach { x -> if (this.any { it.x == x && it.y == y }) print("#") else print(".") }

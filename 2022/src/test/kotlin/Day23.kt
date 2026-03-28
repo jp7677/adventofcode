@@ -8,7 +8,7 @@ private data class Coord23(val x: Int, val y: Int) {
 private enum class Turn23(val value: Int) {
     NORTH(0), SOUTH(1), WEST(2), EAST(3);
     companion object {
-        fun from(value: Int) = values().single { it.value == value }
+        fun from(value: Int) = entries.single { it.value == value }
     }
 }
 

@@ -70,7 +70,7 @@ private fun Map<String, Monkey21>.hasHuman(name: String): Boolean {
 }
 
 private fun getMonkeys() = getPuzzleInput("day21-input.txt")
-    .map {
+    .associate {
         val s = it.split(": ")
         val name = s.first()
         val num = s.last().toLongOrNull()
@@ -89,4 +89,3 @@ private fun getMonkeys() = getPuzzleInput("day21-input.txt")
             }
         }
     }
-    .toMap()

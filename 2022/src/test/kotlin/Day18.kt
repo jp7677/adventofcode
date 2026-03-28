@@ -32,7 +32,7 @@ private data class Cocoon(val lava: Set<Cube>) {
         setOf(this) + adjacent
             .map { n -> Cube(x + n.x, y + n.y, z + n.z) }
             .filterNot {
-                it.x < minX || it.x > maxX || it.y < minY || it.y > maxY || it.z < minZ || it.z > maxZ ||
+                it.x !in minX..maxX || it.y !in minY..maxY || it.z !in minZ..maxZ ||
                     lava.contains(it) || visited.contains(it)
             }
             .onEach { visited.add(it) }

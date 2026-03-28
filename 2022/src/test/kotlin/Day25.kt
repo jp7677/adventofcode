@@ -5,8 +5,8 @@ import kotlin.math.pow
 class Day25 : StringSpec({
     "puzzle part 01" {
         val snafuNumber = getPuzzleInput("day25-input.txt")
-            .map { it.fromSnafuNumber() }
-            .sum().toSnafuNumber()
+            .sumOf { it.fromSnafuNumber() }
+            .toSnafuNumber()
 
         snafuNumber shouldBe "20=212=1-12=200=00-1"
     }
