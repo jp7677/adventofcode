@@ -15,10 +15,10 @@ Only Linux/gcc has been tested. Other platforms might just work though.
 
 ```bash
 ./build/make.sh
-./cmake-build-release/adventofcode
+./cmake-build-release/aoc2020
 ```
 
-The command line arguments from <https://github.com/catchorg/Catch2/blob/devel/docs/command-line.md#specifying-which-tests-to-run> apply to the executable, e.g. use `./cmake-build-release/adventofcode --success "Day 01 - Part 1*"` to run a single test only including showing verbose test results.
+The command line arguments from <https://github.com/catchorg/Catch2/blob/devel/docs/command-line.md#specifying-which-tests-to-run> apply to the executable, e.g. use `./cmake-build-release/aoc2020 --success "Day 01 - Part 1*"` to run a single test only including showing verbose test results.
 
 ## Recompile & run (Debug)
 

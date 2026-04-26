@@ -7,4 +7,4 @@ then
 fi
 
 cmake --build ./cmake-build-debug --target all -- -j 9
-./cmake-build-debug/adventofcode "$@"
+./cmake-build-debug/aoc2020 "$@"

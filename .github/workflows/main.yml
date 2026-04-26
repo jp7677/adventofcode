@@ -139,7 +139,7 @@ jobs:
         run: |
           cd 2020
           ./build/make.sh
-          time ./cmake-build-release/adventofcode
+          time ./cmake-build-release/aoc2020
 
   AoC-2021:
     runs-on: ubuntu-latest
