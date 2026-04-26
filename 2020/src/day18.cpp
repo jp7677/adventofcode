@@ -54,7 +54,7 @@ namespace day18 {
     ulong simpleEvaluateWithAdditionPrecedence(const string& expression) {
         static const auto re = regex(R"(\d+( \+ \d+)+)");
         auto bracedExpression = expression;
-        for (auto it = sregex_iterator(expression.begin(), expression.end(), re); it != sregex_iterator(); it++) {
+        for (auto it = sregex_iterator(expression.begin(), expression.end(), re); it != sregex_iterator(); ++it) {
             auto expr = it->str();
             bracedExpression = bracedExpression.replace(bracedExpression.find(expr), expr.length(), string("(").append(expr).append(")"));
         }
