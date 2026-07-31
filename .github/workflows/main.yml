@@ -75,7 +75,7 @@ jobs:
           cd 2017
           npm ci
           npm audit
-          npx eslint src/**/*
+          npx eslint
           npx prettier src/**/* --check
           npx jest
 
