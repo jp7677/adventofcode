@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
-    json (2.9.0)
+    json (2.19.9)
     language_server-protocol (3.17.0.3)
     minitest (5.25.4)
     mutex_m (0.2.0)
