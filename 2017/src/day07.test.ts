@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput } from "./util.ts";
 
 interface Program {
   name: string;
@@ -48,7 +49,7 @@ describe("day 07", () => {
 
     const bottom = findBottom(programs, programs[0].name);
 
-    expect(bottom).toBe("hmvwl");
+    equal(bottom, "hmvwl");
   });
 
   test("part 2", async () => {
@@ -83,6 +84,6 @@ describe("day 07", () => {
 
     const weight = wrong.weight - (wrong.totalWeight - correct.totalWeight);
 
-    expect(weight).toBe(1853);
+    equal(weight, 1853);
   });
 });

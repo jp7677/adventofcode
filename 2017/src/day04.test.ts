@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput } from "./util.ts";
 
 describe("day 04", () => {
   test("part 1", async () => {
@@ -8,7 +9,7 @@ describe("day 04", () => {
     const passphrases = input.map((p) => p.split(" "));
     const valid = passphrases.reduce((acc, it) => acc + (it.length == new Set(it).size ? 1 : 0), 0);
 
-    expect(valid).toBe(386);
+    equal(valid, 386);
   });
 
   test("part 2", async () => {
@@ -18,6 +19,6 @@ describe("day 04", () => {
 
     const valid = passphrases.reduce((acc, it) => acc + (it.length == new Set(it).size ? 1 : 0), 0);
 
-    expect(valid).toBe(208);
+    equal(valid, 208);
   });
 });

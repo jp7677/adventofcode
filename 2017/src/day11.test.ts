@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput } from "./util.ts";
 
 interface Coord {
   x: number;
@@ -55,7 +56,7 @@ describe("day 00", () => {
 
     const lastDistance = distance(path[path.length - 1]);
 
-    expect(lastDistance).toBe(805);
+    equal(lastDistance, 805);
   });
 
   test("part 2", async () => {
@@ -63,6 +64,6 @@ describe("day 00", () => {
 
     const maxDistance = path.map((location) => distance(location)).max();
 
-    expect(maxDistance).toBe(1535);
+    equal(maxDistance, 1535);
   });
 });

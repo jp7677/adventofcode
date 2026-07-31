@@ -12,5 +12,5 @@ Only Linux has been tested. Other platforms might just work though.
 
 ```bash
 npm ci
-npx jest
+node --test
 ```

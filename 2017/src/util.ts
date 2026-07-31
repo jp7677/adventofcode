@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 export const readInput = async (input: string) =>
-  (await fs.promises.readFile(path.join(__dirname, `../data/${input}`))).toString().trimEnd().split("\n");
+  (await fs.promises.readFile(path.join(import.meta.dirname, `../data/${input}`))).toString().trimEnd().split("\n");
 
 export const repeat = (rounds: number, fn: (i: number) => void) => {
   for (let r = 0; r < rounds; r++) fn(r);

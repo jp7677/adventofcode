@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput } from "./util.ts";
 
 describe("day 05", () => {
   async function runInstructions(includingDecrease: boolean) {
@@ -20,12 +21,12 @@ describe("day 05", () => {
   test("part 1", async () => {
     const steps = await runInstructions(false);
 
-    expect(steps).toBe(378980);
+    equal(steps, 378980);
   });
 
   test("part 2", async () => {
     const steps = await runInstructions(true);
 
-    expect(steps).toBe(26889114);
+    equal(steps, 26889114);
   });
 });

@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput } from "./util.ts";
 
 describe("day 01", () => {
   test("part 1", async () => {
@@ -11,7 +12,7 @@ describe("day 01", () => {
       else return acc;
     }, 0);
 
-    expect(sum).toBe(1029);
+    equal(sum, 1029);
   });
 
   test("part 2", async () => {
@@ -26,6 +27,6 @@ describe("day 01", () => {
       else return acc;
     }, 0);
 
-    expect(sum).toBe(1220);
+    equal(sum, 1220);
   });
 });

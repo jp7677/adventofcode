@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput } from "./util.ts";
 
 async function readPrograms() {
   const input = await readInput("day12-input.txt");
@@ -28,7 +29,7 @@ describe("day 12", () => {
 
     const group = discoverGroup(programs, 0);
 
-    expect(group.size).toBe(115);
+    equal(group.size, 115);
   });
 
   test("part 2", async () => {
@@ -40,6 +41,6 @@ describe("day 12", () => {
       return acc;
     }, new Array<Set<number>>());
 
-    expect(groups.length).toBe(221);
+    equal(groups.length, 221);
   });
 });

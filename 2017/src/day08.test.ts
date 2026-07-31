@@ -1,19 +1,24 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput } from "./util.ts";
 
-enum Op {
-  INC = "INC",
-  DEC = "DEC",
-}
+const Op = {
+  INC: "INC",
+  DEC: "DEC",
+} as const;
 
-enum Cond {
-  GREATER_THAN = "GREATER_THAN",
-  GREATER_THAN_OR_EQUAL = "GREATER_THAN_OR_EQUAL",
-  EQUALS = "EQUALS",
-  NOT_EQUALS = "NOT_EQUALS",
-  LESS_THAN = "LESS_THAN",
-  LESS_THAN_OR_EQUALS = "LESS_THAN_OR_EQUALS",
-}
+type Op = (typeof Op)[keyof typeof Op];
+
+const Cond = {
+  GREATER_THAN: "GREATER_THAN",
+  GREATER_THAN_OR_EQUAL: "GREATER_THAN_OR_EQUAL",
+  EQUALS: "EQUALS",
+  NOT_EQUALS: "NOT_EQUALS",
+  LESS_THAN: "LESS_THAN",
+  LESS_THAN_OR_EQUALS: "LESS_THAN_OR_EQUALS",
+} as const;
+
+type Cond = (typeof Cond)[keyof typeof Cond];
 
 class Operation {
   readonly register: string;
@@ -89,6 +94,8 @@ class Condition {
         return getValue(registers, this.register) < this.value;
       case Cond.LESS_THAN_OR_EQUALS:
         return getValue(registers, this.register) <= this.value;
+      default:
+        throw new RangeError();
     }
   }
 }
@@ -125,7 +132,7 @@ describe("day 08", () => {
       return registers.values().toArray().max();
     });
 
-    expect(largest[largest.length - 1]).toBe(6061);
-    expect(largest.max()).toBe(6696);
+    equal(largest[largest.length - 1], 6061);
+    equal(largest.max(), 6696);
   });
 });

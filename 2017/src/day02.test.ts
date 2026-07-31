@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput } from "./util.ts";
 
 describe("day 02", () => {
   test("part 1", async () => {
@@ -11,7 +12,7 @@ describe("day 02", () => {
 
     const checksum = spreadsheet.map((row) => row.max() - row.min()).sum();
 
-    expect(checksum).toBe(45158);
+    equal(checksum, 45158);
   });
 
   test("part 2", async () => {
@@ -38,6 +39,6 @@ describe("day 02", () => {
       })
       .sum();
 
-    expect(checksum).toBe(294);
+    equal(checksum, 294);
   });
 });

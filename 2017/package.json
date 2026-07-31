@@ -1,15 +1,14 @@
 {
-    "name": "aoc2017",
-    "version": "0.0.1",
-    "author": "jp7677",
-    "devDependencies": {
-        "@eslint/js": "^10.0.1",
-        "@jest/globals": "^30.3.0",
-        "@tsconfig/node22": "^22.0.5",
-        "eslint": "^10.1.0",
-        "jest": "^30.3.0",
-        "prettier": "^3.8.1",
-        "ts-jest": "^29.4.6",
-        "typescript-eslint": "^8.57.2"
-    }
+  "name": "aoc2017",
+  "version": "0.0.1",
+  "author": "jp7677",
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@tsconfig/node22": "^22.0.5",
+    "@types/node": "^26.1.2",
+    "eslint": "^10.8.0",
+    "prettier": "^3.9.6",
+    "typescript-eslint": "^8.65.0"
+  }
 }

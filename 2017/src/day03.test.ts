@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput } from "./util.ts";
 
 describe("day 03", () => {
   test("part 1", async () => {
@@ -13,7 +14,7 @@ describe("day 03", () => {
     const a = last.side / 2;
     const b = Math.abs(last.side / 2 - ((number - prev.start) % last.side));
 
-    expect(a + b).toBe(438);
+    equal(a + b, 438);
   });
 
   function* generateSteps(number: number) {
@@ -24,12 +25,14 @@ describe("day 03", () => {
     }
   }
 
-  enum Direction {
-    NORTH = 1,
-    EAST,
-    SOUTH,
-    WEST,
-  }
+  const Direction = {
+    NORTH: "NORTH",
+    EAST: "EAST",
+    SOUTH: "SOUTH",
+    WEST: "WEST",
+  } as const;
+
+  type Direction = (typeof Direction)[keyof typeof Direction];
 
   interface Coord {
     x: number;
@@ -46,7 +49,7 @@ describe("day 03", () => {
       step = seq.next();
     } while (!step.done && step.value < number);
 
-    expect(step.value).toBe(266330);
+    equal(step.value, 266330);
   });
 
   function* generateStressSteps() {
@@ -59,6 +62,7 @@ describe("day 03", () => {
       const next = move(current, coords);
       const sum = sumOfAdjacent(coords, next.coord);
       coords.set(JSON.stringify(next.coord), sum);
+      // @ts-expect-error avoid type error due to enums as objects
       current = next;
       yield sum;
     }
@@ -120,6 +124,8 @@ describe("day 03", () => {
             direction: Direction.NORTH,
           };
         }
+      default:
+        throw new RangeError();
     }
   }
 

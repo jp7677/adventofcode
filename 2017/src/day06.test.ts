@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput } from "./util.ts";
 
 function reallocate(memory: number[]) {
   const highest = memory.max();
@@ -26,7 +27,7 @@ describe("day 06", () => {
 
     const start = cycles.indexOf(cycles[cycles.length - 1]);
 
-    expect(cycles.length).toBe(7864);
-    expect(cycles.length - start - 1).toBe(1695);
+    equal(cycles.length, 7864);
+    equal(cycles.length - start - 1, 1695);
   });
 });

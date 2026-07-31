@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput } from "./util.ts";
 
 describe("day 09", () => {
   test("part 1 and 2", async () => {
@@ -31,7 +32,7 @@ describe("day 09", () => {
       }
     });
 
-    expect(score).toBe(10800);
-    expect(stream.length - (cleaned.length + removed * 2)).toBe(4522);
+    equal(score, 10800);
+    equal(stream.length - (cleaned.length + removed * 2), 4522);
   });
 });

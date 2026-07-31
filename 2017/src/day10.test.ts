@@ -1,5 +1,6 @@
-import { describe, expect, test } from "@jest/globals";
-import { readInput, repeat } from "./util";
+import { describe, test } from "node:test";
+import { equal } from "node:assert";
+import { readInput, repeat } from "./util.ts";
 
 function hash(input: number[], rounds: number): number[] {
   const forEachIndex = (start: number, end: number, size: number, fn: (i: number) => void) => {
@@ -38,7 +39,7 @@ describe("day 10", () => {
 
     const sparseHash = hash(lengths, 1);
 
-    expect(sparseHash[0] * sparseHash[1]).toBe(11413);
+    equal(sparseHash[0] * sparseHash[1], 11413);
   });
 
   test("part 2", async () => {
@@ -53,6 +54,6 @@ describe("day 10", () => {
     }, new Array<number>(16));
     const knotHash = denseHash.reduce((acc, v) => acc.concat(v.toString(16).padStart(2, "0")), "");
 
-    expect(knotHash).toBe("7adfd64c2a03a4968cf708d1b7fd418d");
+    equal(knotHash, "7adfd64c2a03a4968cf708d1b7fd418d");
   });
 });
