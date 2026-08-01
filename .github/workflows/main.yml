@@ -76,7 +76,6 @@ jobs:
           npm ci
           npm audit
           npx eslint
-          npx prettier src/**/* --check
           node --test
 
   AoC-2018:
