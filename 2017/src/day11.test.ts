@@ -39,6 +39,8 @@ async function walk() {
           acc.push({ x: last.x - 1, y: last.y + 0.5 });
           break;
         }
+        default:
+          throw new RangeError(v);
       }
       return acc;
     },
