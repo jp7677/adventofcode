@@ -50,7 +50,7 @@ function distance(location: Coord) {
   return Math.abs(location.x) + Math.max(Math.abs(location.y) - Math.abs(location.x) / 2, 0);
 }
 
-describe("day 00", () => {
+describe("day 11", () => {
   test("part 1", async () => {
     const path = await walk();
 
