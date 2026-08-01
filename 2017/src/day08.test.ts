@@ -2,23 +2,8 @@ import { describe, test } from "node:test";
 import { equal } from "node:assert";
 import { readInput } from "./util.ts";
 
-const Op = {
-  INC: "INC",
-  DEC: "DEC",
-} as const;
-
-type Op = (typeof Op)[keyof typeof Op];
-
-const Cond = {
-  GREATER_THAN: "GREATER_THAN",
-  GREATER_THAN_OR_EQUAL: "GREATER_THAN_OR_EQUAL",
-  EQUALS: "EQUALS",
-  NOT_EQUALS: "NOT_EQUALS",
-  LESS_THAN: "LESS_THAN",
-  LESS_THAN_OR_EQUALS: "LESS_THAN_OR_EQUALS",
-} as const;
-
-type Cond = (typeof Cond)[keyof typeof Cond];
+type Op = "inc" | "dec";
+type Cond = ">" | ">=" | "==" | "!=" | "<" | "<=";
 
 class Operation {
   readonly register: string;
@@ -27,26 +12,18 @@ class Operation {
 
   constructor(register: string, op: string, value: string) {
     this.register = register;
-    this.op = this.parseOp(op);
+    this.op = op as Op;
     this.value = parseInt(value);
-  }
-
-  private parseOp(value: string): Op {
-    switch (value) {
-      case "inc":
-        return Op.INC;
-      case "dec":
-        return Op.DEC;
-    }
-    throw new Error();
   }
 
   run(registers: Map<string, number>) {
     switch (this.op) {
-      case Op.INC:
+      case "inc":
         return registers.set(this.register, getValue(registers, this.register) + this.value);
-      case Op.DEC:
+      case "dec":
         return registers.set(this.register, getValue(registers, this.register) - this.value);
+      default:
+        throw new RangeError(this.op);
     }
   }
 }
@@ -58,44 +35,26 @@ class Condition {
 
   constructor(register: string, cond: string, value: string) {
     this.register = register;
-    this.cond = this.parseCond(cond);
+    this.cond = cond as Cond;
     this.value = parseInt(value);
-  }
-
-  parseCond(value: string): Cond {
-    switch (value) {
-      case ">":
-        return Cond.GREATER_THAN;
-      case ">=":
-        return Cond.GREATER_THAN_OR_EQUAL;
-      case "==":
-        return Cond.EQUALS;
-      case "!=":
-        return Cond.NOT_EQUALS;
-      case "<":
-        return Cond.LESS_THAN;
-      case "<=":
-        return Cond.LESS_THAN_OR_EQUALS;
-    }
-    throw new Error();
   }
 
   evaluate(registers: Map<string, number>): boolean {
     switch (this.cond) {
-      case Cond.GREATER_THAN:
+      case ">":
         return getValue(registers, this.register) > this.value;
-      case Cond.GREATER_THAN_OR_EQUAL:
+      case ">=":
         return getValue(registers, this.register) >= this.value;
-      case Cond.EQUALS:
+      case "==":
         return getValue(registers, this.register) == this.value;
-      case Cond.NOT_EQUALS:
+      case "!=":
         return getValue(registers, this.register) != this.value;
-      case Cond.LESS_THAN:
+      case "<":
         return getValue(registers, this.register) < this.value;
-      case Cond.LESS_THAN_OR_EQUALS:
+      case "<=":
         return getValue(registers, this.register) <= this.value;
       default:
-        throw new RangeError();
+        throw new RangeError(this.cond);
     }
   }
 }

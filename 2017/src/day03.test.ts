@@ -25,18 +25,16 @@ describe("day 03", () => {
     }
   }
 
-  const Direction = {
-    NORTH: "NORTH",
-    EAST: "EAST",
-    SOUTH: "SOUTH",
-    WEST: "WEST",
-  } as const;
-
-  type Direction = (typeof Direction)[keyof typeof Direction];
+  type Direction = "north" | "east" | "south" | "west";
 
   interface Coord {
     x: number;
     y: number;
+  }
+
+  interface Position {
+    coord: Coord;
+    direction: Direction;
   }
 
   test("part 2", async () => {
@@ -57,75 +55,68 @@ describe("day 03", () => {
     coords.set(JSON.stringify({ x: 0, y: 0 }), 1);
     coords.set(JSON.stringify({ x: 1, y: 0 }), 1);
 
-    let current = { coord: { x: 1, y: 0 }, direction: Direction.NORTH };
+    let current: Position = { coord: { x: 1, y: 0 }, direction: "north" };
     while (true) {
       const next = move(current, coords);
       const sum = sumOfAdjacent(coords, next.coord);
       coords.set(JSON.stringify(next.coord), sum);
-      // @ts-expect-error avoid type error due to enums as objects
       current = next;
       yield sum;
     }
   }
 
-  function move(
-    current: {
-      coord: Coord;
-      direction: Direction;
-    },
-    coords: Map<string, number>,
-  ) {
+  function move(current: Position, coords: Map<string, number>): Position {
     switch (current.direction) {
-      case Direction.NORTH:
+      case "north":
         if (coords.has(JSON.stringify({ x: current.coord.x - 1, y: current.coord.y }))) {
           return {
             coord: { x: current.coord.x, y: current.coord.y - 1 },
-            direction: Direction.NORTH,
+            direction: "north",
           };
         } else {
           return {
             coord: { x: current.coord.x - 1, y: current.coord.y },
-            direction: Direction.WEST,
+            direction: "west",
           };
         }
-      case Direction.WEST:
+      case "west":
         if (coords.has(JSON.stringify({ x: current.coord.x, y: current.coord.y + 1 }))) {
           return {
             coord: { x: current.coord.x - 1, y: current.coord.y },
-            direction: Direction.WEST,
+            direction: "west",
           };
         } else {
           return {
             coord: { x: current.coord.x, y: current.coord.y + 1 },
-            direction: Direction.SOUTH,
+            direction: "south",
           };
         }
-      case Direction.SOUTH:
+      case "south":
         if (coords.has(JSON.stringify({ x: current.coord.x + 1, y: current.coord.y }))) {
           return {
             coord: { x: current.coord.x, y: current.coord.y + 1 },
-            direction: Direction.SOUTH,
+            direction: "south",
           };
         } else {
           return {
             coord: { x: current.coord.x + 1, y: current.coord.y },
-            direction: Direction.EAST,
+            direction: "east",
           };
         }
-      case Direction.EAST:
+      case "east":
         if (coords.has(JSON.stringify({ x: current.coord.x, y: current.coord.y - 1 }))) {
           return {
             coord: { x: current.coord.x + 1, y: current.coord.y },
-            direction: Direction.EAST,
+            direction: "east",
           };
         } else {
           return {
             coord: { x: current.coord.x, y: current.coord.y - 1 },
-            direction: Direction.NORTH,
+            direction: "north",
           };
         }
       default:
-        throw new RangeError();
+        throw new RangeError(current.direction);
     }
   }
 
