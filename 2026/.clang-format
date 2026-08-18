@@ -1,0 +1,10 @@
+---
+Language:        Cpp
+ColumnLimit:     180
+IndentWidth: 4
+BreakBeforeBinaryOperators: NonAssignment
+AlignAfterOpenBracket: false
+PointerAlignment: Left
+BreakBinaryOperations: OnePerLine
+AlignOperands: DontAlign
+...

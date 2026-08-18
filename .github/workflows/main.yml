@@ -253,3 +253,37 @@ jobs:
           cd 2025
           ./lua_modules/bin/luacheck src
           ./lua_modules/bin/busted --exclude-tags="ignore"
+
+  AoC-2026:
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Update repositories
+        run: sudo apt update
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+      - name: Install Meson
+        run: python -m pip install meson==1.11 ninja
+      - name: Install Catch2
+        run: sudo apt install -y libcatch2-dev
+      - name: Install Vulkan SDK
+        uses: jakoch/install-vulkan-sdk-action@v1
+        with:
+          vulkan_version: 1.4.357.1
+          install_lavapipe: true
+      - name: Install GLM
+        run: sudo apt install -y libglm-dev
+      - name: Uzip data
+        env:
+          INPUT_DATA_PWD: ${{ secrets.INPUT_DATA_PWD }}
+        run: |
+          cd 2026
+          find . -name *input.txt.zip -exec unzip -P $INPUT_DATA_PWD -d .. {} \;
+      - name: Compile and run AoC 2026
+        run: |
+          cd 2026
+          meson setup --buildtype "release" buildDir
+          meson compile -C buildDir
+          DATA_PATH=./data SHADER_PATH=./buildDir/src/shaders ./buildDir/src/aoc2026
