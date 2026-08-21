@@ -4,7 +4,7 @@ shaderSrc = files([
 
 src = files([
   'main.cpp',
-  'day00.cpp',
+  'days.cpp',
 ])
 
 shaders = []

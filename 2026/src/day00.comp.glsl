@@ -1,4 +1,3 @@
-// compile with `glslangValidator -V add.comp.glsl -o add.comp.spv`
 #version 450
 #extension GL_EXT_debug_printf : enable
 
@@ -25,6 +24,6 @@ void main() {
             result += data[i];
         }
 
-        debugPrintfEXT("day00.comp: result is %i", result);
+        // debugPrintfEXT("day00.comp: result is %i", result);
     }
 }
