@@ -14,16 +14,15 @@ layout(push_constant) uniform PushConstants { uint n; }; // number of elements
 void main() {
     uint idx = gl_GlobalInvocationID.x;
     if (idx < n) {
-        data[gl_GlobalInvocationID.x] += 1;
+        data[idx] += 1;
     }
 
     barrier();
 
     if (idx == 0) {
-        for(int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             result += data[i];
         }
-
-        // debugPrintfEXT("day00.comp: result is %i", result);
+        //        debugPrintfEXT("day00-1.comp[%is]: result is %i", idx, result);
     }
 }

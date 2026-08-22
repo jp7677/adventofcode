@@ -1,5 +1,6 @@
 shaderSrc = files([
-  'day00.comp.glsl',
+  'day00-1.comp.glsl',
+  'day00-2.comp.glsl',
 ])
 
 src = files([

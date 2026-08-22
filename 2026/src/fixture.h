@@ -71,11 +71,15 @@ class Vulkan {
         vk::DeviceMemory outputMemory;
         createBuffer(physicalDevice_, device_, outputBuffer, outputSize, outputMemory);
 
-        INFO("Fill input buffers");
+        INFO("Fill input buffers and reset output buffer");
 
         auto input = device_.mapMemory2({.memory = inputMemory, .size = inputSize});
         std::memcpy(input, inputData, inputSize);
         device_.unmapMemory2({.memory = inputMemory});
+
+        auto output = device_.mapMemory2({.memory = outputMemory, .size = outputSize});
+        std::memset(output, 0, outputSize);
+        device_.unmapMemory2({.memory = outputMemory});
 
         INFO("Create compute pipeline");
 
@@ -169,7 +173,7 @@ class Vulkan {
 
         INFO("Get and validate output");
 
-        auto output = static_cast<glm::uint32*>(device_.mapMemory2({.memory = outputMemory, .size = outputSize}));
+        output = static_cast<glm::uint32*>(device_.mapMemory2({.memory = outputMemory, .size = outputSize}));
         std::memcpy(outputData, output, outputSize);
         device_.unmapMemory2({.memory = outputMemory});
 
